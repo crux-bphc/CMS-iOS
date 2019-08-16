@@ -1,0 +1,638 @@
+{
+  "total": 25,
+  "courses": [
+    {
+      "id": 4816,
+      "fullname": "CE F211 MECHANICS OF SOLIDS L1",
+      "displayname": "CE F211 MECHANICS OF SOLIDS L1",
+      "shortname": "CE F211 MECHANICS OF SOLIDS L1",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20149,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 101,
+          "fullname": "Dr Chandu Parimi ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 4817,
+      "fullname": "CE F211 MECHANICS OF SOLIDS T1",
+      "displayname": "CE F211 MECHANICS OF SOLIDS T1",
+      "shortname": "CE F211 MECHANICS OF SOLIDS T1",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20150,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 101,
+          "fullname": "Dr Chandu Parimi ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 4818,
+      "fullname": "CE F211 MECHANICS OF SOLIDS T2",
+      "displayname": "CE F211 MECHANICS OF SOLIDS T2",
+      "shortname": "CE F211 MECHANICS OF SOLIDS T2",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20151,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 101,
+          "fullname": "Dr Chandu Parimi ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 4886,
+      "fullname": "CHE F211 CHEMICAL PROCESS CALCULA L1",
+      "displayname": "CHE F211 CHEMICAL PROCESS CALCULA L1",
+      "shortname": "CHE F211 CHEMICAL PROCESS CALCULA L1",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20219,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 43,
+          "fullname": "Prof I Sreedhar ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 4887,
+      "fullname": "CHE F211 CHEMICAL PROCESS CALCULA T1",
+      "displayname": "CHE F211 CHEMICAL PROCESS CALCULA T1",
+      "shortname": "CHE F211 CHEMICAL PROCESS CALCULA T1",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20220,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 43,
+          "fullname": "Prof I Sreedhar ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5054,
+      "fullname": "ECE F211 ELECTRICAL MACHINES L1",
+      "displayname": "ECE F211 ELECTRICAL MACHINES L1",
+      "shortname": "ECE F211 ELECTRICAL MACHINES L1",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20396,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 112,
+          "fullname": "Dr Alivelu Manga Parimi ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5055,
+      "fullname": "ECE F211 ELECTRICAL MACHINES L2",
+      "displayname": "ECE F211 ELECTRICAL MACHINES L2",
+      "shortname": "ECE F211 ELECTRICAL MACHINES L2",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20397,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 3351,
+          "fullname": "Dr. Mithun Mondal"
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5056,
+      "fullname": "ECE F211 ELECTRICAL MACHINES P1",
+      "displayname": "ECE F211 ELECTRICAL MACHINES P1",
+      "shortname": "ECE F211 ELECTRICAL MACHINES P1",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20398,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 112,
+          "fullname": "Dr Alivelu Manga Parimi ."
+        },
+        {
+          "id": 5360,
+          "fullname": "P SHAMBHU PRASAD ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5057,
+      "fullname": "ECE F211 ELECTRICAL MACHINES P2",
+      "displayname": "ECE F211 ELECTRICAL MACHINES P2",
+      "shortname": "ECE F211 ELECTRICAL MACHINES P2",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20399,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 112,
+          "fullname": "Dr Alivelu Manga Parimi ."
+        },
+        {
+          "id": 5360,
+          "fullname": "P SHAMBHU PRASAD ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5058,
+      "fullname": "ECE F211 ELECTRICAL MACHINES P3",
+      "displayname": "ECE F211 ELECTRICAL MACHINES P3",
+      "shortname": "ECE F211 ELECTRICAL MACHINES P3",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20400,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 818,
+          "fullname": "SHRIMATHI H P"
+        },
+        {
+          "id": 3351,
+          "fullname": "Dr. Mithun Mondal"
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5059,
+      "fullname": "ECE F211 ELECTRICAL MACHINES P4",
+      "displayname": "ECE F211 ELECTRICAL MACHINES P4",
+      "shortname": "ECE F211 ELECTRICAL MACHINES P4",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20401,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 818,
+          "fullname": "SHRIMATHI H P"
+        },
+        {
+          "id": 3351,
+          "fullname": "Dr. Mithun Mondal"
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5060,
+      "fullname": "ECE F211 ELECTRICAL MACHINES P5",
+      "displayname": "ECE F211 ELECTRICAL MACHINES P5",
+      "shortname": "ECE F211 ELECTRICAL MACHINES P5",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20402,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 5385,
+          "fullname": "ENAGANTI PRASANTH KUMAR ."
+        },
+        {
+          "id": 199,
+          "fullname": "Sudha Radhika ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5061,
+      "fullname": "ECE F211 ELECTRICAL MACHINES P6",
+      "displayname": "ECE F211 ELECTRICAL MACHINES P6",
+      "shortname": "ECE F211 ELECTRICAL MACHINES P6",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20403,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 5385,
+          "fullname": "ENAGANTI PRASANTH KUMAR ."
+        },
+        {
+          "id": 199,
+          "fullname": "Sudha Radhika ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5062,
+      "fullname": "ECE F211 ELECTRICAL MACHINES P7",
+      "displayname": "ECE F211 ELECTRICAL MACHINES P7",
+      "shortname": "ECE F211 ELECTRICAL MACHINES P7",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20404,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 75,
+          "fullname": "Mr Syed Ershad Ahmed\r\n ."
+        },
+        {
+          "id": 3774,
+          "fullname": "Amar Verma"
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5063,
+      "fullname": "ECE F211 ELECTRICAL MACHINES P8",
+      "displayname": "ECE F211 ELECTRICAL MACHINES P8",
+      "shortname": "ECE F211 ELECTRICAL MACHINES P8",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20405,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 75,
+          "fullname": "Mr Syed Ershad Ahmed\r\n ."
+        },
+        {
+          "id": 3774,
+          "fullname": "Amar Verma"
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5064,
+      "fullname": "ECE F211 ELECTRICAL MACHINES T1",
+      "displayname": "ECE F211 ELECTRICAL MACHINES T1",
+      "shortname": "ECE F211 ELECTRICAL MACHINES T1",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20406,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 112,
+          "fullname": "Dr Alivelu Manga Parimi ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5065,
+      "fullname": "ECE F211 ELECTRICAL MACHINES T2",
+      "displayname": "ECE F211 ELECTRICAL MACHINES T2",
+      "shortname": "ECE F211 ELECTRICAL MACHINES T2",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20407,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 112,
+          "fullname": "Dr Alivelu Manga Parimi ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5066,
+      "fullname": "ECE F211 ELECTRICAL MACHINES T3",
+      "displayname": "ECE F211 ELECTRICAL MACHINES T3",
+      "shortname": "ECE F211 ELECTRICAL MACHINES T3",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20408,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 112,
+          "fullname": "Dr Alivelu Manga Parimi ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5067,
+      "fullname": "ECE F211 ELECTRICAL MACHINES T4",
+      "displayname": "ECE F211 ELECTRICAL MACHINES T4",
+      "shortname": "ECE F211 ELECTRICAL MACHINES T4",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20409,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 3351,
+          "fullname": "Dr. Mithun Mondal"
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5068,
+      "fullname": "ECE F211 ELECTRICAL MACHINES T5",
+      "displayname": "ECE F211 ELECTRICAL MACHINES T5",
+      "shortname": "ECE F211 ELECTRICAL MACHINES T5",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20410,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 3351,
+          "fullname": "Dr. Mithun Mondal"
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5069,
+      "fullname": "ECE F211 ELECTRICAL MACHINES T6",
+      "displayname": "ECE F211 ELECTRICAL MACHINES T6",
+      "shortname": "ECE F211 ELECTRICAL MACHINES T6",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20411,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 3351,
+          "fullname": "Dr. Mithun Mondal"
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5542,
+      "fullname": "PHA F211 PHARMACEUTICAL ANALYSIS L1",
+      "displayname": "PHA F211 PHARMACEUTICAL ANALYSIS L1",
+      "shortname": "PHA F211 PHARMACEUTICAL ANALYSIS L1",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20894,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 137,
+          "fullname": "Dr Balaram Ghosh ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5543,
+      "fullname": "PHA F211 PHARMACEUTICAL ANALYSIS P1",
+      "displayname": "PHA F211 PHARMACEUTICAL ANALYSIS P1",
+      "shortname": "PHA F211 PHARMACEUTICAL ANALYSIS P1",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20895,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 137,
+          "fullname": "Dr Balaram Ghosh ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5544,
+      "fullname": "PHA F211 PHARMACEUTICAL ANALYSIS P2",
+      "displayname": "PHA F211 PHARMACEUTICAL ANALYSIS P2",
+      "shortname": "PHA F211 PHARMACEUTICAL ANALYSIS P2",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20896,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 137,
+          "fullname": "Dr Balaram Ghosh ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    },
+    {
+      "id": 5545,
+      "fullname": "PHA F211 PHARMACEUTICAL ANALYSIS T1",
+      "displayname": "PHA F211 PHARMACEUTICAL ANALYSIS T1",
+      "shortname": "PHA F211 PHARMACEUTICAL ANALYSIS T1",
+      "categoryid": 13,
+      "categoryname": "Semester I 2019-20",
+      "sortorder": 20897,
+      "summary": "",
+      "summaryformat": 1,
+      "summaryfiles": [],
+      "overviewfiles": [],
+      "contacts": [
+        {
+          "id": 137,
+          "fullname": "Dr Balaram Ghosh ."
+        }
+      ],
+      "enrollmentmethods": [
+        "manual",
+        "self",
+        "database"
+      ]
+    }
+  ],
+  "warnings": []
+}

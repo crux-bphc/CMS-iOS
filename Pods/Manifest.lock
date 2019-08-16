@@ -1,0 +1,28 @@
+PODS:
+  - Alamofire (4.8.2)
+  - SideMenuSwift (2.0.0)
+  - SVProgressHUD (2.2.5)
+  - SwiftyJSON (5.0.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - SideMenuSwift
+  - SVProgressHUD
+  - SwiftyJSON
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - SideMenuSwift
+    - SVProgressHUD
+    - SwiftyJSON
+
+SPEC CHECKSUMS:
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  SideMenuSwift: 1bee5a0e54c6df7d8106f749b82567eae5c6d974
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
+
+PODFILE CHECKSUM: bb96c4dc9632654d5422ce92a999c191d3d5d035
+
+COCOAPODS: 1.7.1

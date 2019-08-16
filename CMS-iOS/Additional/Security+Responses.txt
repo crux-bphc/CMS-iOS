@@ -1,0 +1,28 @@
+Security Key &wstoken=222c47a04ea624cbf3d81f2db8131a84
+Userid 4626
+
+Response for login:
+URL = https://td.bits-hyderabad.ac.in/moodle/webservice/rest/server.php?wsfunction=core_webservice_get_site_info&moodlewsrestformat=json
+initLogin.json
+Parameters = wstoken
+
+Response for getUserCourses
+URL : https://td.bits-hyderabad.ac.in/moodle/webservice/rest/server.php?wsfunction=core_enrol_get_users_courses&moodlewsrestformat=json
+getUserCourses.json
+Parameters = wstoken, userid
+
+Response for getCourseDetails
+URL : https://td.bits-hyderabad.ac.in/moodle/webservice/rest/server.php?wsfunction=core_course_get_contents&moodlewsrestformat=json
+getCourseDetails.json
+Parameters = wstoken, courseid
+
+Response for searchCourses
+URL : https://td.bits-hyderabad.ac.in/moodle/webservice/rest/server.php?wsfunction=core_course_search_courses&moodlewsrestformat=json&criterianame=search
+searchCourses.json
+Parameters = wstoken, criteriavalue, page
+
+Response for selfEnrolUser
+URL : https://td.bits-hyderabad.ac.in/moodle/webservice/rest/server.php?wsfunction=enrol_self_enrol_user&moodlewsrestformat=json
+selfEnrolUser.json
+Parameters = wstoken, courseid
+

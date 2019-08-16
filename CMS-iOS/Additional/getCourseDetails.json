@@ -1,0 +1,115 @@
+[
+  {
+    "id": 27104,
+    "name": "General",
+    "visible": 1,
+    "summary": "",
+    "summaryformat": 1,
+    "section": 0,
+    "hiddenbynumsections": 0,
+    "uservisible": true,
+    "modules": [
+      {
+        "id": 22434,
+        "url": "https://td.bits-hyderabad.ac.in/moodle/mod/forum/view.php?id=22434",
+        "name": "Announcements",
+        "instance": 5239,
+        "visible": 1,
+        "uservisible": true,
+        "visibleoncoursepage": 1,
+        "modicon": "https://td.bits-hyderabad.ac.in/moodle/theme/image.php/boost/forum/1552800530/icon",
+        "modname": "forum",
+        "modplural": "Forums",
+        "indent": 0,
+        "onclick": "",
+        "afterlink": null,
+        "customdata": "\"\"",
+        "completion": 0
+      }
+    ]
+  },
+  {
+    "id": 27105,
+    "name": "Topic 1",
+    "visible": 1,
+    "summary": "",
+    "summaryformat": 1,
+    "section": 1,
+    "hiddenbynumsections": 0,
+    "uservisible": true,
+    "modules": [
+      {
+        "id": 23275,
+        "url": "https://td.bits-hyderabad.ac.in/moodle/mod/resource/view.php?id=23275",
+        "name": "HANDOUT",
+        "instance": 10064,
+        "visible": 1,
+        "uservisible": true,
+        "visibleoncoursepage": 1,
+        "modicon": "https://td.bits-hyderabad.ac.in/moodle/theme/image.php/boost/core/1552800530/f/document-24",
+        "modname": "resource",
+        "modplural": "Files",
+        "indent": 0,
+        "onclick": "",
+        "afterlink": null,
+        "customdata": "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "completion": 1,
+        "completiondata": {
+          "state": 0,
+          "timecompleted": 1565518709,
+          "overrideby": null
+        },
+        "contents": [
+          {
+            "type": "file",
+            "filename": "CE F211_2019.docx",
+            "filepath": "/",
+            "filesize": 892671,
+            "fileurl": "https://td.bits-hyderabad.ac.in/moodle/webservice/pluginfile.php/90412/mod_resource/content/1/CE%20F211_2019.docx?forcedownload=1",
+            "timecreated": 1564493110,
+            "timemodified": 1564493116,
+            "sortorder": 1,
+            "mimetype": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "isexternalfile": false,
+            "userid": 2,
+            "author": "Admin User",
+            "license": "allrightsreserved"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 27106,
+    "name": "Topic 2",
+    "visible": 1,
+    "summary": "",
+    "summaryformat": 1,
+    "section": 2,
+    "hiddenbynumsections": 0,
+    "uservisible": true,
+    "modules": []
+  },
+  {
+    "id": 27107,
+    "name": "Topic 3",
+    "visible": 1,
+    "summary": "",
+    "summaryformat": 1,
+    "section": 3,
+    "hiddenbynumsections": 0,
+    "uservisible": true,
+    "modules": []
+  },
+  {
+    "id": 27108,
+    "name": "Topic 4",
+    "visible": 1,
+    "summary": "",
+    "summaryformat": 1,
+    "section": 4,
+    "hiddenbynumsections": 0,
+    "uservisible": true,
+    "modules": []
+  }
+]

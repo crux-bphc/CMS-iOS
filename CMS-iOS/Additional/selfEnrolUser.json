@@ -1,0 +1,16 @@
+{
+  "status": false,
+  "warnings": [
+    {
+      "item": "instance",
+      "itemid": 15855,
+      "warningcode": "1",
+      "message": "Enrolment is disabled or inactive"
+    }
+  ]
+}
+
+{
+    "status": true,
+    "warnings": []
+}
