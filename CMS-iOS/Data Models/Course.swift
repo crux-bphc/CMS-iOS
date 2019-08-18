@@ -12,5 +12,6 @@ class Course {
     
     var displayname : String = ""
     var courseid : Int = 0
-    
+    var enrolled : Bool = false
+    var faculty : String = ""
 }

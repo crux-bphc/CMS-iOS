@@ -10,9 +10,8 @@ import UIKit
 import SwiftyJSON
 import Alamofire
 import SVProgressHUD
-import SideMenuSwift
 
-class DashboardViewController : SideMenuController, UITableViewDelegate, UITableViewDataSource {
+class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var welcomeLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
@@ -24,12 +23,13 @@ class DashboardViewController : SideMenuController, UITableViewDelegate, UITable
     var selectedCourseId : Int = 0
     var selectedCourseName : String = ""
     
+    
     override func viewDidLoad() {
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.isHidden = true
         tableView.reloadData()
-        SideMenuController.preferences.basic.statusBarBehavior = .slide
+        print("loaded")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,29 +38,18 @@ class DashboardViewController : SideMenuController, UITableViewDelegate, UITable
                 SVProgressHUD.dismiss()
             }
         }
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        self.navigationController?.navigationBar.isHidden = false
-        self.navigationItem.setHidesBackButton(true, animated: false)
         welcomeLabel.text = "Welcome, \(userDetails.name)"
         super.viewWillAppear(animated)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        if navigationController?.topViewController != self {
-            navigationController?.navigationBar.isHidden = false
-        }
-        super.viewWillDisappear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! CourseDetailsViewController
-        destinationVC.courseid = selectedCourseId
-        destinationVC.courseName = selectedCourseName
-    }
-    @IBAction func menuButtonPressed(_ sender: UIBarButtonItem) {
-        
-        self.sideMenuController?.revealMenu() 
-        
+        destinationVC.currentCourse.courseid = selectedCourseId
+        destinationVC.currentCourse.displayname = selectedCourseName
     }
     
     func getRegisteredCourses(completion: @escaping() -> Void) {
@@ -75,6 +64,7 @@ class DashboardViewController : SideMenuController, UITableViewDelegate, UITable
                     let currentCourse = Course()
                     currentCourse.courseid = courses[i]["id"].int!
                     currentCourse.displayname = courses[i]["displayname"].string!
+                    currentCourse.enrolled = true
 //                    print(courses[i]["displayname"])
                     self.courseList.append(currentCourse)
                 }
@@ -82,9 +72,6 @@ class DashboardViewController : SideMenuController, UITableViewDelegate, UITable
             self.tableView.reloadData()
             completion()
         }
-    }
-    @IBAction func searchButtonPressed(_ sender: UIButton) {
-        searchBar.isHidden = false        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

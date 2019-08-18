@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A2B472C23083C1A005879D6 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2B472B23083C1A005879D6 /* SearchViewController.swift */; };
 		0A3DEAF322FDCA69001B6BFD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3DEAF222FDCA69001B6BFD /* AppDelegate.swift */; };
 		0A3DEAF522FDCA69001B6BFD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3DEAF422FDCA69001B6BFD /* LoginViewController.swift */; };
 		0A3DEAF822FDCA69001B6BFD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A3DEAF622FDCA69001B6BFD /* Main.storyboard */; };
@@ -15,9 +16,9 @@
 		0A585453230168E7008FB370 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A585452230168E7008FB370 /* Constants.swift */; };
 		0A5ECD7C2306A98800723365 /* AboutPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5ECD7B2306A98800723365 /* AboutPageViewController.swift */; };
 		0A5ECD7E2306B23000723365 /* Discussion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5ECD7D2306B23000723365 /* Discussion.swift */; };
+		0A67E5DC23091B4700E18E99 /* EnrolmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A67E5DB23091B4700E18E99 /* EnrolmentViewController.swift */; };
 		0A7F90BC2300753E00683867 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F90BB2300753E00683867 /* DashboardViewController.swift */; };
 		0A8E02D72300207900724899 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8E02D62300207900724899 /* User.swift */; };
-		0AA70C7F2305D72C00EAEAC5 /* SidebarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA70C7E2305D72C00EAEAC5 /* SidebarController.swift */; };
 		0AC33B642302153C004AE385 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC33B632302153C004AE385 /* Course.swift */; };
 		0AC33B6723022453004AE385 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AC33B6623022453004AE385 /* Assets.xcassets */; };
 		0AC33B6923022B2C004AE385 /* CourseContentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC33B6823022B2C004AE385 /* CourseContentsViewController.swift */; };
@@ -29,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		0A2B03AF2305971900CC51A4 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		0A2B472B23083C1A005879D6 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		0A3DEAEF22FDCA69001B6BFD /* CMS-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CMS-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A3DEAF222FDCA69001B6BFD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A3DEAF422FDCA69001B6BFD /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -39,9 +41,9 @@
 		0A585452230168E7008FB370 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		0A5ECD7B2306A98800723365 /* AboutPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPageViewController.swift; sourceTree = "<group>"; };
 		0A5ECD7D2306B23000723365 /* Discussion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Discussion.swift; sourceTree = "<group>"; };
+		0A67E5DB23091B4700E18E99 /* EnrolmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnrolmentViewController.swift; sourceTree = "<group>"; };
 		0A7F90BB2300753E00683867 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		0A8E02D62300207900724899 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		0AA70C7E2305D72C00EAEAC5 /* SidebarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarController.swift; sourceTree = "<group>"; };
 		0AC33B632302153C004AE385 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		0AC33B6623022453004AE385 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0AC33B6823022B2C004AE385 /* CourseContentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseContentsViewController.swift; sourceTree = "<group>"; };
@@ -115,14 +117,31 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
+		0A67E5DD23094CA000E18E99 /* Dashboard Tab */ = {
+			isa = PBXGroup;
+			children = (
+				0A7F90BB2300753E00683867 /* DashboardViewController.swift */,
+				0AC33B6823022B2C004AE385 /* CourseContentsViewController.swift */,
+				0AC33B6E2304306C004AE385 /* ModuleViewController.swift */,
+			);
+			path = "Dashboard Tab";
+			sourceTree = "<group>";
+		};
+		0A67E5DE23094CB500E18E99 /* Search Tab */ = {
+			isa = PBXGroup;
+			children = (
+				0A67E5DB23091B4700E18E99 /* EnrolmentViewController.swift */,
+				0A2B472B23083C1A005879D6 /* SearchViewController.swift */,
+			);
+			path = "Search Tab";
+			sourceTree = "<group>";
+		};
 		0AC33B6023020669004AE385 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				0A3DEAF422FDCA69001B6BFD /* LoginViewController.swift */,
-				0A7F90BB2300753E00683867 /* DashboardViewController.swift */,
-				0AC33B6823022B2C004AE385 /* CourseContentsViewController.swift */,
-				0AC33B6E2304306C004AE385 /* ModuleViewController.swift */,
-				0AA70C7E2305D72C00EAEAC5 /* SidebarController.swift */,
+				0A67E5DD23094CA000E18E99 /* Dashboard Tab */,
+				0A67E5DE23094CB500E18E99 /* Search Tab */,
 				0A5ECD7B2306A98800723365 /* AboutPageViewController.swift */,
 			);
 			path = "View Controllers";
@@ -282,10 +301,11 @@
 				0AC33B6D2302EF18004AE385 /* Module.swift in Sources */,
 				0A3DEAF322FDCA69001B6BFD /* AppDelegate.swift in Sources */,
 				0A7F90BC2300753E00683867 /* DashboardViewController.swift in Sources */,
+				0A2B472C23083C1A005879D6 /* SearchViewController.swift in Sources */,
 				0A5ECD7C2306A98800723365 /* AboutPageViewController.swift in Sources */,
 				0A585453230168E7008FB370 /* Constants.swift in Sources */,
+				0A67E5DC23091B4700E18E99 /* EnrolmentViewController.swift in Sources */,
 				0AC33B6923022B2C004AE385 /* CourseContentsViewController.swift in Sources */,
-				0AA70C7F2305D72C00EAEAC5 /* SidebarController.swift in Sources */,
 				0AC33B6B2302EDD6004AE385 /* CourseSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

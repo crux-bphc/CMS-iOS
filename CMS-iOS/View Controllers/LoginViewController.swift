@@ -22,6 +22,7 @@ class LoginViewController: UIViewController {
     var currentUser = User()
     
     override func viewDidLoad() {
+        SVProgressHUD.dismiss()
 //        super.viewDidLoad()
 //        if defaults.string(forKey: "secret") != nil {
 //            performSegue(withIdentifier: "goToDashboard", sender: self)
@@ -33,10 +34,16 @@ class LoginViewController: UIViewController {
 //        if defaults.string(forKey: "secret") != nil {
 //            performSegue(withIdentifier: "goToDashboard", sender: self)
 //        }
-        self.navigationController?.navigationBar.isHidden = true
     }
     
-    func logIn(completion : @escaping (User) -> Void) {
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "goToDashboard" {
+//            let destinationVC = segue.destination as! Ta
+//            destinationVC.selectedCourseName = currentUser.name
+//        }
+//    }
+    
+    func logIn(completion : @escaping () -> Void) {
         
         let params : [String:String] = ["wstoken" : self.keyField.text ?? ""]
         let FINAL_URL = constant.BASE_URL + constant.LOGIN
@@ -54,25 +61,27 @@ class LoginViewController: UIViewController {
                     })
                     print("Enter the key again.")
                 } else {
-                    self.defaults.set(self.keyField.text, forKey: "secret")
                     self.currentUser.name = userData["firstname"].string!.capitalized
                     self.performSegue(withIdentifier: "goToDashboard", sender: self)
-                    completion(self.currentUser)
+                    completion()
                 }
             }
         }
-        SVProgressHUD.dismiss()
     }
+    
     
     @IBAction func loginButtonPressed(_ sender: UIButton) {
         print("click")
         if keyField.text != "" {
-            self.secretKey = keyField.text!
-            logIn { (userdeets) in
-                print(userdeets)
+            logIn {
+                print("Completed")
+                self.performSegue(withIdentifier: "goToDashboard", sender: self)
             }
         } else {
-            print("Enter a key")
+            let alert = UIAlertController(title: "Enter a key", message: "You have not entered a key. Please enter a valid key or press help.", preferredStyle: .alert)
+            let dismiss = UIAlertAction(title: "Dismisss", style: .default, handler: nil)
+            alert.addAction(dismiss)
+            present(alert, animated: true, completion: nil)
         }
     }
     

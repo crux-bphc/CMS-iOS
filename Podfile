@@ -9,6 +9,5 @@ target 'CMS-iOS' do
   pod 'Alamofire'
   pod 'SwiftyJSON'
   pod 'SVProgressHUD'
-  pod 'SideMenuSwift'
 
 end

@@ -16,13 +16,14 @@ class CourseDetailsViewController : UITableViewController {
     @IBOutlet var courseLabel: UITableView!
     
     var sectionArray = [CourseSection]()
-    var courseid : Int = 0
-    var courseName : String = ""
+    var currentCourse = Course()
     var selectedModule = Module()
     
     let constants = Constants.Global.self
     override func viewDidLoad() {
+        super.viewDidLoad()
         
+        SVProgressHUD.dismiss()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -41,7 +42,7 @@ class CourseDetailsViewController : UITableViewController {
     func getCourseContent(completion: @escaping ([CourseSection]) -> Void) {
         print("Function called")
         let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
-        let params : [String:Any] = ["wstoken" : constants.secret, "courseid" : courseid]
+        let params : [String:Any] = ["wstoken" : constants.secret, "courseid" : currentCourse.courseid]
         SVProgressHUD.show()
         
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
@@ -108,7 +109,7 @@ class CourseDetailsViewController : UITableViewController {
     
     func updateUI() {
         self.tableView.reloadData()
-        self.title = courseName
+        self.title = currentCourse.displayname
     }
     
 }
