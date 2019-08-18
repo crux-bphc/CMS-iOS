@@ -39,7 +39,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                     let course = Course()
                     course.courseid = searchResults["courses"][i]["id"].int!
                     course.displayname = searchResults["courses"][i]["displayname"].string!
-                    course.faculty = searchResults["courses"][i]["contacts"][0]["fullname"].string!
+                    course.faculty = searchResults["courses"][i]["contacts"][0]["fullname"].string ?? ""
                     self.resultArray.append(course)
                 }
             }

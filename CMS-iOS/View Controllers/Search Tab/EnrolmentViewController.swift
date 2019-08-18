@@ -21,7 +21,8 @@ class EnrolmentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        courseLabel.text = enrolmentCourse.displayname
+        instructorLabel.text = enrolmentCourse.faculty
         // Do any additional setup after loading the view.
     }
     
