@@ -25,6 +25,7 @@
 		0AC33B6B2302EDD6004AE385 /* CourseSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC33B6A2302EDD6004AE385 /* CourseSection.swift */; };
 		0AC33B6D2302EF18004AE385 /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC33B6C2302EF18004AE385 /* Module.swift */; };
 		0AC33B6F2304306C004AE385 /* ModuleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC33B6E2304306C004AE385 /* ModuleViewController.swift */; };
+		0AF20A2F230B2F17001C0CB1 /* ExtrasTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF20A2E230B2F17001C0CB1 /* ExtrasTableViewController.swift */; };
 		649FCDE4B93E8912895DD347 /* Pods_CMS_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31C21208967F224156EF5879 /* Pods_CMS_iOS.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		0AC33B6A2302EDD6004AE385 /* CourseSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSection.swift; sourceTree = "<group>"; };
 		0AC33B6C2302EF18004AE385 /* Module.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
 		0AC33B6E2304306C004AE385 /* ModuleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleViewController.swift; sourceTree = "<group>"; };
+		0AF20A2E230B2F17001C0CB1 /* ExtrasTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrasTableViewController.swift; sourceTree = "<group>"; };
 		31C21208967F224156EF5879 /* Pods_CMS_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CMS_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A0616D1A0AD1A26010181FE /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		7C300FD82B1EBA607DA3668E /* Pods-CMS-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.release.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -142,7 +144,7 @@
 				0A3DEAF422FDCA69001B6BFD /* LoginViewController.swift */,
 				0A67E5DD23094CA000E18E99 /* Dashboard Tab */,
 				0A67E5DE23094CB500E18E99 /* Search Tab */,
-				0A5ECD7B2306A98800723365 /* AboutPageViewController.swift */,
+				0AF20A30230B2F2A001C0CB1 /* Extras Tab */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -157,6 +159,15 @@
 				0AC33B6C2302EF18004AE385 /* Module.swift */,
 			);
 			path = "Data Models";
+			sourceTree = "<group>";
+		};
+		0AF20A30230B2F2A001C0CB1 /* Extras Tab */ = {
+			isa = PBXGroup;
+			children = (
+				0A5ECD7B2306A98800723365 /* AboutPageViewController.swift */,
+				0AF20A2E230B2F17001C0CB1 /* ExtrasTableViewController.swift */,
+			);
+			path = "Extras Tab";
 			sourceTree = "<group>";
 		};
 		CA6329F197F899A3DCF66141 /* Pods */ = {
@@ -306,6 +317,7 @@
 				0A585453230168E7008FB370 /* Constants.swift in Sources */,
 				0A67E5DC23091B4700E18E99 /* EnrolmentViewController.swift in Sources */,
 				0AC33B6923022B2C004AE385 /* CourseContentsViewController.swift in Sources */,
+				0AF20A2F230B2F17001C0CB1 /* ExtrasTableViewController.swift in Sources */,
 				0AC33B6B2302EDD6004AE385 /* CourseSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

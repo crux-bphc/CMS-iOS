@@ -48,7 +48,6 @@ class CourseDetailsViewController : UITableViewController {
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
                 let courseContent = JSON(response.value)
-                //                print(courseContent)
                 for i in 0 ..< courseContent.count {
                     if courseContent[i]["modules"].count > 0 {
                         let section = CourseSection()

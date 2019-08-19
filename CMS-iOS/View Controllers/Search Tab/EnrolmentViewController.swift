@@ -12,7 +12,7 @@ import SwiftyJSON
 import SVProgressHUD
 
 class EnrolmentViewController: UIViewController {
-
+    
     @IBOutlet weak var courseLabel: UILabel!
     @IBOutlet weak var instructorLabel: UILabel!
     
@@ -51,13 +51,16 @@ class EnrolmentViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinationVC = segue.destination as! CourseDetailsViewController
-        destinationVC.currentCourse = enrolmentCourse
+        if segue.identifier == "goToEnrolledCourse" {
+            let destinationVC = segue.destination as! CourseDetailsViewController
+            destinationVC.currentCourse = enrolmentCourse
+        }
     }
     
     @IBAction func enrolButtonPresses(_ sender: UIButton) {
         
         enrolCourse {
+            print("enrolled in course")
             SVProgressHUD.dismiss()
             self.performSegue(withIdentifier: "goToEnrolledCourse", sender: self)
         }
@@ -65,13 +68,13 @@ class EnrolmentViewController: UIViewController {
     }
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

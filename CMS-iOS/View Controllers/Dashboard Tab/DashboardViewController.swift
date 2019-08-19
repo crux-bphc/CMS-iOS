@@ -22,20 +22,26 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     var userDetails = User()
     var selectedCourseId : Int = 0
     var selectedCourseName : String = ""
-    
+    let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         tableView.delegate = self
         tableView.dataSource = self
+        
+        refreshControl.tintColor = .black
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        tableView.refreshControl = refreshControl
         searchBar.isHidden = true
         tableView.reloadData()
         print("loaded")
     }
     
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         if courseList.isEmpty {
             getRegisteredCourses {
-                SVProgressHUD.dismiss()
+                self.refreshControl.endRefreshing()
             }
         }
         welcomeLabel.text = "Welcome, \(userDetails.name)"
@@ -59,7 +65,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
             if courseData.result.isSuccess {
                 let courses = JSON(courseData.value)
-//                print(courses)
+                self.courseList.removeAll()
                 for i in 0 ..< courses.count{
                     let currentCourse = Course()
                     currentCourse.courseid = courses[i]["id"].int!
@@ -70,7 +76,16 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                 }
             }
             self.tableView.reloadData()
+            SVProgressHUD.dismiss()
             completion()
+        }
+    }
+    
+    @objc func refreshData() {
+        self.refreshControl.beginRefreshing()
+        getRegisteredCourses {
+            self.refreshControl.endRefreshing()
+            self.tableView.reloadData()
         }
     }
     

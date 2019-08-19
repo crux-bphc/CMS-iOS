@@ -62,6 +62,7 @@ class LoginViewController: UIViewController {
                     print("Enter the key again.")
                 } else {
                     self.currentUser.name = userData["firstname"].string!.capitalized
+                    self.keyField.text = ""
                     self.performSegue(withIdentifier: "goToDashboard", sender: self)
                     completion()
                 }
