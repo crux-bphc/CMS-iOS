@@ -18,6 +18,7 @@ class Constants: NSObject {
         static let GET_COURSE_CONTENT : String = "webservice/rest/server.php?wsfunction=core_course_get_contents&moodlewsrestformat=json"
         static let SEARCH_COURSES : String = "webservice/rest/server.php?wsfunction=core_course_search_courses&moodlewsrestformat=json&criterianame=search"
         static let SELF_ENROL_USER : String = "webservice/rest/server.php?wsfunction=enrol_self_enrol_user&moodlewsrestformat=json"
+        static let GET_SITE_NEWS : String = "webservice/rest/server.php?wsfunction=mod_forum_get_forum_discussions_paginated&moodlewsrestformat=json&forumid=1&sortby=timemodified&sortdirection=DESC"
         static let headers : HTTPHeaders = ["Accept" : "application/json"]
         static let secret : String = "222c47a04ea624cbf3d81f2db8131a84"
     }

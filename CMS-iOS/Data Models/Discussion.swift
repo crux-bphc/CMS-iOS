@@ -11,7 +11,6 @@ import UIKit
 class Discussion {
     
     var name : String = ""
-    var subject : String = ""
     var date : Int = 0
     var author : String = ""
     var message : String = ""
