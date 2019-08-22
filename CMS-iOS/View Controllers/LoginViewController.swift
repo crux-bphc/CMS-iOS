@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import SVProgressHUD
+import SwiftKeychainWrapper
 
 class LoginViewController: UIViewController {
     
@@ -23,33 +24,43 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         SVProgressHUD.dismiss()
-//        super.viewDidLoad()
-//        if defaults.string(forKey: "secret") != nil {
-//            performSegue(withIdentifier: "goToDashboard", sender: self)
-//        }
+        checkSavedPassword()
+        //        super.viewDidLoad()
+        //        if defaults.string(forKey: "secret") != nil {
+        //            performSegue(withIdentifier: "goToDashboard", sender: self)
+        //        }
         // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        if defaults.string(forKey: "secret") != nil {
-//            performSegue(withIdentifier: "goToDashboard", sender: self)
-//        }
+        //        if defaults.string(forKey: "secret") != nil {
+        //            performSegue(withIdentifier: "goToDashboard", sender: self)
+        //        }
     }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "goToDashboard" {
-//            let destinationVC = segue.destination as! Ta
-//            destinationVC.selectedCourseName = currentUser.name
-//        }
-//    }
+    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    //        if segue.identifier == "goToDashboard" {
+    //            let destinationVC = segue.destination as! Ta
+    //            destinationVC.selectedCourseName = currentUser.name
+    //        }
+    //    }
     
-    func logIn(completion : @escaping () -> Void) {
-        
-        let params : [String:String] = ["wstoken" : self.keyField.text ?? ""]
+    func checkSavedPassword() {
+        if let retrievedPassword: String = KeychainWrapper.standard.string(forKey: "userPassword") {
+            logIn (password: retrievedPassword, loggedin: true) {
+                print(retrievedPassword)
+                print("Password Retrieved. Logging in.")
+            }
+        }
+    }
+    
+    func logIn(password: String, loggedin: Bool, completion : @escaping () -> Void) {
+        print("Password used for request is: \(password)")
+        let params : [String:String] = ["wstoken" : password]
         let FINAL_URL = constant.BASE_URL + constant.LOGIN
         
         SVProgressHUD.show()
-        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (response) in
+        let req = Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (response) in
             if response.result.isSuccess {
                 let userData = JSON(response.value)
                 if (userData["exception"].string != nil) {
@@ -61,6 +72,12 @@ class LoginViewController: UIViewController {
                     })
                     print("Enter the key again.")
                 } else {
+                    if loggedin == false {
+                        let savedPassword : Bool = KeychainWrapper.standard.set(password, forKey: "userPassword")
+                        self.constant.secret = KeychainWrapper.standard.string(forKey: "userPassword")!
+                        print(savedPassword)
+                        
+                    }
                     self.currentUser.name = userData["firstname"].string!.capitalized
                     self.keyField.text = ""
                     self.performSegue(withIdentifier: "goToDashboard", sender: self)
@@ -68,17 +85,18 @@ class LoginViewController: UIViewController {
                 }
             }
         }
+        print(req)
     }
     
     
     @IBAction func loginButtonPressed(_ sender: UIButton) {
         print("click")
         if keyField.text != "" {
-            logIn {
-                print("Completed")
-                self.performSegue(withIdentifier: "goToDashboard", sender: self)
+            logIn(password: keyField.text!, loggedin: false) {
+                print("Continue")
             }
-        } else {
+        }
+        else {
             let alert = UIAlertController(title: "Enter a key", message: "You have not entered a key. Please enter a valid key or press help.", preferredStyle: .alert)
             let dismiss = UIAlertAction(title: "Dismisss", style: .default, handler: nil)
             alert.addAction(dismiss)

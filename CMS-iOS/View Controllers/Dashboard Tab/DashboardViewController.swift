@@ -10,6 +10,7 @@ import UIKit
 import SwiftyJSON
 import Alamofire
 import SVProgressHUD
+import SwiftKeychainWrapper
 
 class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -59,10 +60,11 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func getRegisteredCourses(completion: @escaping() -> Void) {
-        let params = ["wstoken" : constant.secret, "userid" : 4626] as [String : Any]
+        let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : 4626] as [String : Any]
+        print("The secret used was: " + KeychainWrapper.standard.string(forKey: "userPassword")!)
         let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
         SVProgressHUD.show()
-        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
+        let req = Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
             if courseData.result.isSuccess {
                 let courses = JSON(courseData.value)
                 self.courseList.removeAll()
@@ -79,6 +81,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             SVProgressHUD.dismiss()
             completion()
         }
+        print(req)
     }
     
     @objc func refreshData() {

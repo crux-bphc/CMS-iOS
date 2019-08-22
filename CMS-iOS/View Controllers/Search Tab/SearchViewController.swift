@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import SVProgressHUD
+import SwiftKeychainWrapper
 
 class SearchViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate {
     
@@ -29,7 +30,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     func searchRequest (keyword: String, completion: @escaping() -> Void) {
         
         SVProgressHUD.show()
-        let params : [String : Any] = ["wstoken" : constants.secret, "criteriavalue" : keyword, "page" : 1]
+        let params : [String : Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "criteriavalue" : keyword, "page" : 1]
         let FINAL_URL : String = constants.BASE_URL + constants.SEARCH_COURSES
         
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: self.constants.headers).responseJSON { (response) in

@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import SVProgressHUD
+import SwiftKeychainWrapper
 
 class CourseDetailsViewController : UITableViewController {
     
@@ -42,7 +43,7 @@ class CourseDetailsViewController : UITableViewController {
     func getCourseContent(completion: @escaping ([CourseSection]) -> Void) {
         print("Function called")
         let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
-        let params : [String:Any] = ["wstoken" : constants.secret, "courseid" : currentCourse.courseid]
+        let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
         SVProgressHUD.show()
         
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in

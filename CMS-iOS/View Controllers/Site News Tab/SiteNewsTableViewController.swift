@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import SVProgressHUD
+import SwiftKeychainWrapper
 
 class SiteNewsTableViewController: UITableViewController {
 
@@ -21,6 +22,7 @@ class SiteNewsTableViewController: UITableViewController {
         super.viewDidLoad()
 
         getSiteNews {
+            SVProgressHUD.dismiss()
             self.tableView.reloadData()
         }
         // Uncomment the following line to preserve selection between presentations
@@ -56,8 +58,10 @@ class SiteNewsTableViewController: UITableViewController {
     
     func getSiteNews(completion: @escaping () -> Void) {
         
-        let params : [String : String] = ["wstoken" : constants.secret]
+        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!]
         let FINAL_URL : String = constants.BASE_URL + constants.GET_SITE_NEWS
+        SVProgressHUD.show()
+        
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
                 let siteNews = JSON(response.value)
