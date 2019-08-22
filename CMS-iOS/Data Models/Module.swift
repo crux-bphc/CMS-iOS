@@ -12,7 +12,8 @@ class Module {
     
     var name : String = ""
     var modname : String = ""
+    var filename : String = ""
     var fileurl : String = ""
     var description : String = ""
-    
+    var mimetype : String = ""
 }

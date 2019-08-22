@@ -11,6 +11,7 @@ import Alamofire
 import SwiftyJSON
 import SVProgressHUD
 import SwiftKeychainWrapper
+import MobileCoreServices
 
 class CourseDetailsViewController : UITableViewController {
     
@@ -59,8 +60,16 @@ class CourseDetailsViewController : UITableViewController {
                             let moduleData = Module()
                             moduleData.modname = courseContent[i]["modules"][j]["modname"].string!
                             if moduleData.modname != "forum" {
-                                moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string! + "&token=\(self.constants.secret)")
-                                print(courseContent[i]["modules"][j]["contents"][0]["fileurl"].string! + "&token=\(self.constants.secret)")
+                                if (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("td.bits-hyderabad.ac.in") {
+                                moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string! +
+                                    "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
+                                    moduleData.mimetype = courseContent[i]["modules"][j]["contents"][0]["mimetype"].string!
+                                    moduleData.filename = courseContent[i]["modules"][j]["contents"][0]["filename"].string!
+                                }
+                                else {
+                                    moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!)
+                                }
+                                print(moduleData.fileurl)
                             }
                             moduleData.name = courseContent[i]["modules"][j]["name"].string!
                             if courseContent[i]["modules"][j]["description"].string != nil {
@@ -78,6 +87,8 @@ class CourseDetailsViewController : UITableViewController {
         }
     }
     
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! ModuleViewController
         destinationVC.selectedModule = self.selectedModule
@@ -90,6 +101,9 @@ class CourseDetailsViewController : UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCourse")
         cell.textLabel?.text = sectionArray[indexPath.section].modules[indexPath.row].name
+//        if sectionArray[indexPath.section].modules[indexPath.row].fileurl != "" {
+//            cell.accessoryType = .
+//        }
         return cell
     }
     

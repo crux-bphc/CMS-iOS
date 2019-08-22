@@ -74,7 +74,6 @@ class LoginViewController: UIViewController {
                 } else {
                     if loggedin == false {
                         let savedPassword : Bool = KeychainWrapper.standard.set(password, forKey: "userPassword")
-                        self.constant.secret = KeychainWrapper.standard.string(forKey: "userPassword")!
                         print(savedPassword)
                         
                     }
