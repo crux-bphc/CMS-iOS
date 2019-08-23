@@ -23,19 +23,26 @@ class LoginViewController: UIViewController {
     var currentUser = User()
     
     override func viewDidLoad() {
+        
         SVProgressHUD.dismiss()
+        if Reachability.isConnectedToNetwork() {
         checkSavedPassword()
-        //        super.viewDidLoad()
-        //        if defaults.string(forKey: "secret") != nil {
-        //            performSegue(withIdentifier: "goToDashboard", sender: self)
-        //        }
-        // Do any additional setup after loading the view.
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         //        if defaults.string(forKey: "secret") != nil {
         //            performSegue(withIdentifier: "goToDashboard", sender: self)
         //        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if !Reachability.isConnectedToNetwork() {
+        let alert = UIAlertController(title: "Unable to connect", message: "You are not connected to the internet. Please check your connection and relaunch the app.", preferredStyle: .alert)
+        let dismiss = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
+        alert.addAction(dismiss)
+        present(alert, animated: true, completion: nil)
+        }
     }
     
         override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
