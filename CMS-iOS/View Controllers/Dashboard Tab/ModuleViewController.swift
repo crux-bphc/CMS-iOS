@@ -72,6 +72,7 @@ class ModuleViewController : UIViewController {
                     let data = try! Data(contentsOf: viewURL)
                     let webView = UIWebView(frame: self.view.frame)
                     webView.load(data, mimeType: self.selectedModule.mimetype, textEncodingName: "", baseURL: viewURL.deletingLastPathComponent())
+                    webView.scalesPageToFit = true
                     let docVC = UIViewController()
                     docVC.view.addSubview(webView)
                     docVC.title = self.selectedModule.name
