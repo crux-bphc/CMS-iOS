@@ -38,12 +38,18 @@ class LoginViewController: UIViewController {
         //        }
     }
     
-    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    //        if segue.identifier == "goToDashboard" {
-    //            let destinationVC = segue.destination as! Ta
-    //            destinationVC.selectedCourseName = currentUser.name
-    //        }
-    //    }
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            let segueID = segue.identifier ?? ""
+            switch segueID {
+            case "goToDashboard":
+                let tabVC = segue.destination as! UITabBarController
+                let nextVC = tabVC.viewControllers![0] as! UINavigationController
+                let destinationVC = nextVC.topViewController as! DashboardViewController
+                destinationVC.userDetails = self.currentUser
+            default:
+                break
+            }
+        }
     
     func checkSavedPassword() {
         if let retrievedPassword: String = KeychainWrapper.standard.string(forKey: "userPassword") {

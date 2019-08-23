@@ -32,7 +32,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         refreshControl.tintColor = .black
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.refreshControl = refreshControl
-        searchBar.isHidden = true
         tableView.reloadData()
         print("loaded")
     }
@@ -73,7 +72,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                     currentCourse.courseid = courses[i]["id"].int!
                     currentCourse.displayname = courses[i]["displayname"].string!
                     currentCourse.enrolled = true
-//                    print(courses[i]["displayname"])
                     self.courseList.append(currentCourse)
                 }
             }
@@ -108,5 +106,4 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         self.selectedCourseName = courseList[indexPath.row].displayname
         performSegue(withIdentifier: "goToCourseContent", sender: self)
     }
-    
 }
