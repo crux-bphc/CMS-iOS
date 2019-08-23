@@ -96,6 +96,8 @@ class ModuleViewController : UIViewController {
                 
                 do {
                     try FileManager.default.copyItem(at: tempLocalUrl, to: localUrl)
+                    print("Saved")
+                    completion()
                 } catch (let writeError){
                     print("there was an error: \(writeError)")
                 }
