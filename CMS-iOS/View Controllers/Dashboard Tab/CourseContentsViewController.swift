@@ -20,12 +20,20 @@ class CourseDetailsViewController : UITableViewController {
     var sectionArray = [CourseSection]()
     var currentCourse = Course()
     var selectedModule = Module()
+    var discussionArray = [Discussion]()
+    let refreshController = UIRefreshControl()
     
     let constants = Constants.Global.self
     override func viewDidLoad() {
+        
+        refreshController.tintColor = .black
+        refreshController.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+        tableView.reloadData()
+        SVProgressHUD.dismiss()
         super.viewDidLoad()
         
-        SVProgressHUD.dismiss()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,7 +57,8 @@ class CourseDetailsViewController : UITableViewController {
         
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
-                let courseContent = JSON(response.value)
+                let courseContent = JSON(response.value as Any)
+                self.sectionArray.removeAll()
                 for i in 0 ..< courseContent.count {
                     if courseContent[i]["modules"].count > 0 {
                         let section = CourseSection()
@@ -61,8 +70,8 @@ class CourseDetailsViewController : UITableViewController {
                             moduleData.modname = courseContent[i]["modules"][j]["modname"].string!
                             if moduleData.modname != "forum" {
                                 if (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("td.bits-hyderabad.ac.in") {
-                                moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string! +
-                                    "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
+                                    moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string! +
+                                        "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
                                     moduleData.mimetype = courseContent[i]["modules"][j]["contents"][0]["mimetype"].string!
                                     moduleData.filename = courseContent[i]["modules"][j]["contents"][0]["filename"].string!
                                 }
@@ -70,7 +79,10 @@ class CourseDetailsViewController : UITableViewController {
                                     moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!)
                                 }
                                 print(moduleData.fileurl)
+                            } else if moduleData.modname == "forum" {
+                                moduleData.id = courseContent[i]["modules"][j]["instance"].int!
                             }
+                            
                             moduleData.name = courseContent[i]["modules"][j]["name"].string!
                             if courseContent[i]["modules"][j]["description"].string != nil {
                                 moduleData.description = courseContent[i]["modules"][j]["description"].string!
@@ -87,11 +99,23 @@ class CourseDetailsViewController : UITableViewController {
         }
     }
     
-    
+    @objc func refreshData() {
+        self.refreshControl!.beginRefreshing()
+        getCourseContent{ (courses) in
+            self.refreshControl!.endRefreshing()
+            self.tableView.reloadData()
+        }
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinationVC = segue.destination as! ModuleViewController
-        destinationVC.selectedModule = self.selectedModule
+        if segue.identifier == "goToAnnoucements" {
+            let destinationVC = segue.destination as! DiscussionTableViewController
+            destinationVC.currentModule = self.selectedModule
+        }
+        else {
+            let destinationVC = segue.destination as! ModuleViewController
+            destinationVC.selectedModule = self.selectedModule
+        }
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -101,9 +125,9 @@ class CourseDetailsViewController : UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCourse")
         cell.textLabel?.text = sectionArray[indexPath.section].modules[indexPath.row].name
-//        if sectionArray[indexPath.section].modules[indexPath.row].fileurl != "" {
-//            cell.accessoryType = .
-//        }
+        //        if sectionArray[indexPath.section].modules[indexPath.row].fileurl != "" {
+        //            cell.accessoryType = .
+        //        }
         return cell
     }
     
@@ -117,7 +141,11 @@ class CourseDetailsViewController : UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.selectedModule = sectionArray[indexPath.section].modules[indexPath.row]
-        performSegue(withIdentifier: "goToModule", sender: self)
+        if selectedModule.modname == "forum" {
+            performSegue(withIdentifier: "goToAnnoucements", sender: self)
+        } else {
+            performSegue(withIdentifier: "goToModule", sender: self)
+        }
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

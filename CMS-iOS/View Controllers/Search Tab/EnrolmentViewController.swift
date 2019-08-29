@@ -34,7 +34,7 @@ class EnrolmentViewController: UIViewController {
         SVProgressHUD.show()
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
-                let enrolmentData = JSON(response.value)
+                let enrolmentData = JSON(response.value as Any)
                 print(enrolmentData)
                 if enrolmentData["status"].bool! {
                     print("Enrolled Successfully")

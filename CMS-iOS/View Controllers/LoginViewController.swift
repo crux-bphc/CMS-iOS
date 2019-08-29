@@ -14,12 +14,9 @@ import SwiftKeychainWrapper
 
 class LoginViewController: UIViewController {
     
-    @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var keyField: UITextField!
     let constant = Constants.Global.self
-    let defaults = UserDefaults.standard
     
-    var secretKey = ""
     var currentUser = User()
     
     override func viewDidLoad() {
@@ -75,7 +72,7 @@ class LoginViewController: UIViewController {
         SVProgressHUD.show()
         let req = Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (response) in
             if response.result.isSuccess {
-                let userData = JSON(response.value)
+                let userData = JSON(response.value as Any)
                 if (userData["exception"].string != nil) {
                     let alert = UIAlertController(title: "Invalid key", message: "The key that you have entered is invalid. Please check and try again.", preferredStyle: .alert)
                     let dismiss = UIAlertAction(title: "Dismiss", style: .default, handler: nil)

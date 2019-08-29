@@ -16,4 +16,5 @@ class Module {
     var fileurl : String = ""
     var description : String = ""
     var mimetype : String = ""
+    var id : Int = 0
 }

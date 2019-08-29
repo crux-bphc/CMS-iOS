@@ -63,9 +63,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         print("The secret used was: " + KeychainWrapper.standard.string(forKey: "userPassword")!)
         let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
         SVProgressHUD.show()
-        let req = Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
+        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
             if courseData.result.isSuccess {
-                let courses = JSON(courseData.value)
+                let courses = JSON(courseData.value as Any)
                 self.courseList.removeAll()
                 for i in 0 ..< courses.count{
                     let currentCourse = Course()
@@ -79,7 +79,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             SVProgressHUD.dismiss()
             completion()
         }
-        print(req)
     }
     
     @objc func refreshData() {

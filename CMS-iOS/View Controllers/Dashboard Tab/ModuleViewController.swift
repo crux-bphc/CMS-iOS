@@ -13,6 +13,7 @@ import SVProgressHUD
 class ModuleViewController : UIViewController {
     
     var selectedModule = Module()
+    
 //    static let html: NSAttributedString.DocumentType
     
     @IBOutlet weak var descriptionText: UITextView!
@@ -33,25 +34,11 @@ class ModuleViewController : UIViewController {
         }
     }
     
-//    func getFileExtension(path: String) -> String {
-//        let mimeType: CFString = path as CFString
-//        guard
-//            let mimeUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, mimeType, nil)?.takeUnretainedValue()
-//            else { return "" }
-//
-//        guard
-//            let extUTI = UTTypeCopyPreferredTagWithClass(mimeUTI, kUTTagClassFilenameExtension)?.takeRetainedValue()
-//            else { return "" }
-//        //print(extUTI)
-//        return extUTI as String
-//    }
-    
     func saveFileToStorage(mime: String, downloadUrl: String, module: Module) {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         print(String(describing: documentsDirectory))
         let dataPath = documentsDirectory.absoluteURL
-//        let fileExists = FileManager().fileExists(atPath: dataPath.path)
-//        let extn = getFileExtension(path: mime)
+
         guard let url = URL(string: downloadUrl) else { return }
         let destination = dataPath.appendingPathComponent("\(module.filename)")
         if FileManager().fileExists(atPath: destination.path) {
@@ -108,32 +95,6 @@ class ModuleViewController : UIViewController {
         }
         task.resume()
     }
-    
-    
-//    @IBAction func openFileButtonPressed(_ sender: UIButton) {
-//        switch selectedModule.modname {
-//        case "url":
-//            UIApplication.shared.open(URL(string: self.selectedModule.fileurl)!, options: [:], completionHandler: nil)
-//            break
-//        case "resource":
-//            if let url = URL(string: selectedModule.fileurl) {
-//                let webView = UIWebView(frame: self.view.frame)
-//                webView.scalesPageToFit = true
-//                let urlRequest = URLRequest(url: url)
-//                webView.loadRequest(urlRequest as URLRequest)
-//
-//                let fileVC = UIViewController()
-//                fileVC.view.addSubview(webView)
-//                fileVC.title = self.selectedModule.name
-//                self.navigationController?.pushViewController(fileVC, animated: true)
-//            }
-//            break
-//        default:
-//            let alert = UIAlertController(title: "Error", message: "Unable to open attachment", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
-//            self.present(alert, animated: true, completion: nil)
-//        }
-//    }
     
     @IBAction func openFileButtonPressed(_ sender: UIButton) {
         switch selectedModule.modname {

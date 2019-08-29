@@ -35,7 +35,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: self.constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
-                let searchResults = JSON(response.value)
+                let searchResults = JSON(response.value as Any)
                 for i in 0 ..< searchResults["courses"].count {
                     let course = Course()
                     course.courseid = searchResults["courses"][i]["id"].int!

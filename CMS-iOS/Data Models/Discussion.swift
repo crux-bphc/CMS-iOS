@@ -15,5 +15,5 @@ class Discussion {
     var author : String = ""
     var message : String = ""
     var attachment : String = ""
-    
+    var id : Int = 0
 }
