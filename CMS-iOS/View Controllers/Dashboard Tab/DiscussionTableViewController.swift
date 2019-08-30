@@ -25,7 +25,6 @@ class DiscussionTableViewController: UITableViewController {
             self.tableView.reloadData()
             SVProgressHUD.dismiss()
         }
-        print(currentModule)
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -84,14 +83,18 @@ class DiscussionTableViewController: UITableViewController {
                 if siteNews["discussions"].count == 0 {
                     completion()
                 } else {
+//                    print(siteNews["discussions"])
                     for i in 0 ..< siteNews["discussions"].count {
                         let discussion = Discussion()
                         discussion.name = siteNews["discussions"][i]["name"].string ?? "No Name"
                         discussion.author = siteNews["discussions"][i]["userfullname"].string?.capitalized ?? ""
                         discussion.date = siteNews["discussions"][i]["created"].int!
                         discussion.message = siteNews["discussions"][i]["message"].string ?? "No Content"
-                        if siteNews["discussions"][i]["attachment"].int != nil {
-                            discussion.attachment = siteNews["discussions"][i]["attachments"][0]["fileurl"].string!
+                        if siteNews["discussions"][i]["attachment"].string! != "0" {
+                            discussion.attachment = siteNews["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
+                            print(discussion.attachment)
+                            discussion.filename = siteNews["discussions"][i]["attachments"][0]["filename"].string ?? ""
+                            discussion.mimetype = siteNews["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
                         }
                         self.discussionArray.append(discussion)
                     }

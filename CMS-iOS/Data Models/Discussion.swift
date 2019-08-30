@@ -14,6 +14,9 @@ class Discussion {
     var date : Int = 0
     var author : String = ""
     var message : String = ""
+    var filename : String = ""
+    var mimetype : String = ""
+    var modname : String = ""
     var attachment : String = ""
     var id : Int = 0
 }

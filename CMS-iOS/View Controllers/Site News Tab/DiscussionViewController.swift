@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class DiscussionViewController: UIViewController {
-
+    
     @IBOutlet weak var bodyTextView: UITextView!
     
     var selectedDiscussion = Discussion()
@@ -25,31 +26,95 @@ class DiscussionViewController: UIViewController {
             
             bodyTextView.isEditable = false
         }
-        }
-        // Do any additional setup after loading the view.
-    @IBAction func openAttachmentPressed(_ sender: Any) {
-        if let url = URL(string: selectedDiscussion.attachment) {
+    }
+    
+    func saveFileToStorage(mime: String, downloadUrl: String, discussion: Discussion) {
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        print(String(describing: documentsDirectory))
+        let dataPath = documentsDirectory.absoluteURL
+        
+        guard let url = URL(string: downloadUrl) else { return }
+        let destination = dataPath.appendingPathComponent("\(discussion.filename)")
+        if FileManager().fileExists(atPath: destination.path) {
+            let viewURL = destination as URL
+            let data = try! Data(contentsOf: viewURL)
             let webView = UIWebView(frame: self.view.frame)
+            webView.load(data, mimeType: self.selectedDiscussion.mimetype, textEncodingName: "", baseURL: viewURL.deletingLastPathComponent())
             webView.scalesPageToFit = true
-            let urlRequest = URLRequest(url: url)
-            webView.loadRequest(urlRequest as URLRequest)
-            
-            let fileVC = UIViewController()
-            fileVC.view.addSubview(webView)
-            fileVC.title = self.selectedDiscussion.name
-            self.navigationController?.pushViewController(fileVC, animated: true)
+            let docVC = UIViewController()
+            docVC.view.addSubview(webView)
+            docVC.title = self.selectedDiscussion.name
+            self.navigationController?.pushViewController(docVC, animated: true)
+        } else {
+            download(url: url, to: destination) {
+                SVProgressHUD.dismiss()
+                DispatchQueue.main.async {
+                    let viewURL = destination as URL
+                    let data = try! Data(contentsOf: viewURL)
+                    let webView = UIWebView(frame: self.view.frame)
+                    webView.load(data, mimeType: self.selectedDiscussion.mimetype, textEncodingName: "", baseURL: viewURL.deletingLastPathComponent())
+                    webView.scalesPageToFit = true
+                    let docVC = UIViewController()
+                    docVC.view.addSubview(webView)
+                    docVC.title = self.selectedDiscussion.name
+                    self.navigationController?.pushViewController(docVC, animated: true)
+                }
+            }
+        }
+    }
+    
+    func download(url: URL, to localUrl: URL, completion: @escaping () -> Void) {
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        SVProgressHUD.show()
+        
+        let task = session.downloadTask(with: request) {(tempLocalUrl, response, error) in
+            if let tempLocalUrl = tempLocalUrl, error == nil {
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                    print(statusCode)
+                }
+                
+                do {
+                    try FileManager.default.copyItem(at: tempLocalUrl, to: localUrl)
+                    print("Saved")
+                    completion()
+                } catch (let writeError){
+                    print("there was an error: \(writeError)")
+                }
+            } else {
+                print("failure")
+            }
+        }
+        task.resume()
+    }
+    
+    // Do any additional setup after loading the view.
+    @IBAction func openAttachmentPressed(_ sender: Any) {
+        print(selectedDiscussion.filename)
+        if selectedDiscussion.attachment != "" {
+            if selectedDiscussion.attachment.contains("td.bits-hyderabad.ac.in") {
+                saveFileToStorage(mime: self.selectedDiscussion.mimetype, downloadUrl: selectedDiscussion.attachment, discussion: selectedDiscussion)
+            } else {
+                UIApplication.shared.open(URL(string: self.selectedDiscussion.attachment)!, options: [:], completionHandler: nil)
+            }
+        } else {
+            let alert = UIAlertController(title: "Error", message: "Unable to open attachment", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
+            self.present(alert, animated: true, completion: nil)
         }
     }
 }
 
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+/*
+ // MARK: - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+ // Get the new view controller using segue.destination.
+ // Pass the selected object to the new view controller.
+ }
+ */
 
