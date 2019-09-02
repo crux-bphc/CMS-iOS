@@ -117,7 +117,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="IJh-Kh-fy2"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Dashboard" id="kUF-I0-q5T"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="kUF-I0-q5T"/>
                     <navigationItem key="navigationItem" title="Dashboard" id="ff5-Mx-dvp"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -254,7 +254,7 @@
             </objects>
             <point key="canvasLocation" x="3797.5999999999999" y="1969.9507389162563"/>
         </scene>
-        <!--Discussion Table View Controller-->
+        <!--Dashboard-->
         <scene sceneID="91e-yF-CMr">
             <objects>
                 <tableViewController id="aXd-S3-Oa1" customClass="DiscussionTableViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
@@ -277,6 +277,8 @@
                             <outlet property="delegate" destination="aXd-S3-Oa1" id="wG0-Mc-TeG"/>
                         </connections>
                     </tableView>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="24p-2C-Riq"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <segue destination="exB-Lj-j3Y" kind="show" identifier="goToDiscussionDetails" id="p9a-Sh-oWN"/>
                     </connections>
@@ -308,7 +310,7 @@
                             <outlet property="delegate" destination="fG0-QY-y8D" id="Ic4-ed-Xo2"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Dashboard" id="bJl-Yq-4eH"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="bJl-Yq-4eH"/>
                     <toolbarItems/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -363,7 +365,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NwF-hp-sQY"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Dashboard" id="2BU-HJ-rcN"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="2BU-HJ-rcN"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="descriptionText" destination="oO5-iM-2pS" id="MHa-PI-Alv"/>
@@ -378,7 +380,7 @@
         <scene sceneID="04p-9G-clS">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="P1D-vc-lDm" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Dashboard" selectedImage="success.png" id="5RC-GA-Zlk"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="5RC-GA-Zlk"/>
                     <toolbarItems/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="2uy-3g-nkH">
@@ -587,7 +589,9 @@
                             <outlet property="delegate" destination="Opn-i5-N4W" id="YhK-dP-Zzp"/>
                         </connections>
                     </tableView>
+                    <tabBarItem key="tabBarItem" title="Site News" image="folded-newspaper" selectedImage="folded-newspaper" id="8sY-3q-xrJ"/>
                     <navigationItem key="navigationItem" title="Site News" id="CkA-Q8-4wD"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <segue destination="exB-Lj-j3Y" kind="show" identifier="goToDiscussion" id="AhJ-kj-ro0"/>
                     </connections>
@@ -600,7 +604,7 @@
         <scene sceneID="KHO-WY-pSP">
             <objects>
                 <navigationController id="ocW-ZX-GbC" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Site News" id="KJR-XB-m0b"/>
+                    <tabBarItem key="tabBarItem" title="Site News" image="folded-newspaper" selectedImage="folded-newspaper" id="KJR-XB-m0b"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="hYT-ap-qoT">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
@@ -616,11 +620,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="dashboard" width="21.333333969116211" height="21.333333969116211"/>
+        <image name="folded-newspaper" width="21.333333969116211" height="21.333333969116211"/>
         <image name="logo" width="8000" height="8000"/>
-        <image name="success.png" width="28" height="28"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="enf-3I-Kaq"/>
-        <segue reference="p9a-Sh-oWN"/>
+        <segue reference="CoA-DR-f5i"/>
+        <segue reference="AhJ-kj-ro0"/>
     </inferredMetricsTieBreakers>
 </document>
