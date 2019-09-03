@@ -1,5 +1,0 @@
-${PODS_ROOT}/Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS-frameworks.sh
-${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
-${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework
-${BUILT_PRODUCTS_DIR}/SwiftKeychainWrapper/SwiftKeychainWrapper.framework
-${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework
