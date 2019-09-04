@@ -37,7 +37,6 @@ class CourseDetailsViewController : UITableViewController {
                 SVProgressHUD.dismiss()
             }
         }
-        
         super.viewDidLoad()
     }
     

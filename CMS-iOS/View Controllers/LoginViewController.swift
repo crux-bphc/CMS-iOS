@@ -27,12 +27,6 @@ class LoginViewController: UIViewController {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        //        if defaults.string(forKey: "secret") != nil {
-        //            performSegue(withIdentifier: "goToDashboard", sender: self)
-        //        }
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         if !Reachability.isConnectedToNetwork() {
         let alert = UIAlertController(title: "Unable to connect", message: "You are not connected to the internet. Please check your connection and relaunch the app.", preferredStyle: .alert)
@@ -57,9 +51,11 @@ class LoginViewController: UIViewController {
     
     func checkSavedPassword() {
         if let retrievedPassword: String = KeychainWrapper.standard.string(forKey: "userPassword") {
+            self.view.isUserInteractionEnabled = false
             logIn (password: retrievedPassword, loggedin: true) {
                 print(retrievedPassword)
                 print("Password Retrieved. Logging in.")
+                self.view.isUserInteractionEnabled = true
             }
         }
     }
@@ -70,7 +66,7 @@ class LoginViewController: UIViewController {
         let FINAL_URL = constant.BASE_URL + constant.LOGIN
         
         SVProgressHUD.show()
-        let req = Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (response) in
+        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (response) in
             if response.result.isSuccess {
                 let userData = JSON(response.value as Any)
                 if (userData["exception"].string != nil) {
@@ -94,14 +90,14 @@ class LoginViewController: UIViewController {
                 }
             }
         }
-        print(req)
     }
     
     
     @IBAction func loginButtonPressed(_ sender: UIButton) {
-        print("click")
         if keyField.text != "" {
+            self.view.isUserInteractionEnabled = false
             logIn(password: keyField.text!, loggedin: false) {
+                self.view.isUserInteractionEnabled = true
                 print("Continue")
             }
         }

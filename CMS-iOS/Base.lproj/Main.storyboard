@@ -39,10 +39,10 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oE3-QN-4De">
-                                <rect key="frame" x="171" y="427" width="32" height="30"/>
+                                <rect key="frame" x="166" y="427" width="43" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Halp">
+                                <state key="normal" title="Help">
                                     <color key="titleColor" red="0.92334232230000002" green="0.92334232230000002" blue="0.92334232230000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
@@ -74,7 +74,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <exit id="I0u-iS-F4i" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-305" y="838"/>
+            <point key="canvasLocation" x="-306.39999999999998" y="837.93103448275861"/>
         </scene>
         <!-- Dashboard-->
         <scene sceneID="lTJ-6n-erw">
