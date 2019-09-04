@@ -28,25 +28,17 @@ class CourseDetailsViewController : UITableViewController {
         
         refreshController.tintColor = .black
         refreshController.addTarget(self, action: #selector(refreshData), for: .valueChanged)
-        tableView.refreshControl = refreshControl
+        tableView.refreshControl = refreshController
         tableView.reloadData()
-        SVProgressHUD.dismiss()
-        super.viewDidLoad()
         
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
         if sectionArray.isEmpty {
             getCourseContent { (courses) in
                 self.updateUI()
-                for i in 0 ..< self.sectionArray.count {
-                    print(self.sectionArray[i].name)
-                }
                 SVProgressHUD.dismiss()
             }
         }
         
+        super.viewDidLoad()
     }
     
     func getCourseContent(completion: @escaping ([CourseSection]) -> Void) {
@@ -104,6 +96,7 @@ class CourseDetailsViewController : UITableViewController {
         getCourseContent{ (courses) in
             self.refreshControl!.endRefreshing()
             self.tableView.reloadData()
+            SVProgressHUD.dismiss()
         }
     }
     
@@ -151,7 +144,6 @@ class CourseDetailsViewController : UITableViewController {
     
     func updateUI() {
         self.tableView.reloadData()
-        self.title = currentCourse.displayname
-    }
+        self.title = currentCourse.displayname    }
     
 }

@@ -18,18 +18,18 @@ class SiteNewsTableViewController: UITableViewController {
     var discussionArray = [Discussion]()
     var currentDiscussion = Discussion()
     
+    let refreshController = UIRefreshControl()
+    
     override func viewDidLoad() {
-        super.viewDidLoad()
-
+        refreshController.tintColor = .black
+        refreshController.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        tableView.refreshControl = refreshController
+        
         getSiteNews {
             SVProgressHUD.dismiss()
             self.tableView.reloadData()
         }
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        super.viewDidLoad()
     }
 
     // MARK: - Table view data source
@@ -73,7 +73,6 @@ class SiteNewsTableViewController: UITableViewController {
                     discussion.message = siteNews["discussions"][i]["message"].string ?? "No Content"
                     if siteNews["discussions"][i]["attachment"].string! != "0" {
                         discussion.attachment = siteNews["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
-                        print(discussion.attachment)
                         discussion.filename = siteNews["discussions"][i]["attachments"][0]["filename"].string ?? ""
                         discussion.mimetype = siteNews["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
                     }
@@ -84,6 +83,15 @@ class SiteNewsTableViewController: UITableViewController {
             }
         }
         
+    }
+    
+    @objc func refreshData() {
+        self.refreshControl!.beginRefreshing()
+        getSiteNews{
+            self.refreshControl!.endRefreshing()
+            self.tableView.reloadData()
+            SVProgressHUD.dismiss()
+        }
     }
 
     /*
