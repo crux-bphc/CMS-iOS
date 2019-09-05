@@ -410,6 +410,7 @@
                     <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="2BU-HJ-rcN"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="attachmentButton" destination="pK6-fB-GCI" id="TQv-JD-CiC"/>
                         <outlet property="descriptionText" destination="oO5-iM-2pS" id="MHa-PI-Alv"/>
                         <outlet property="textConstraint" destination="g1i-ND-31S" id="NLp-PH-I48"/>
                     </connections>

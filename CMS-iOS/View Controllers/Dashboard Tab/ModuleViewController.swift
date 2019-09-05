@@ -14,15 +14,21 @@ class ModuleViewController : UIViewController {
     
     var selectedModule = Module()
     
-//    static let html: NSAttributedString.DocumentType
-    
     @IBOutlet weak var descriptionText: UITextView!
     @IBOutlet weak var textConstraint: NSLayoutConstraint!
+    @IBOutlet weak var attachmentButton: UIButton!
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print(selectedModule.modname)
+        if selectedModule.modname == "resource" || selectedModule.modname == "url" {
+            attachmentButton.isHidden = false
+        } else {
+            attachmentButton.isHidden = true
+        }
         if selectedModule.description != "" {
         do {
-            let formattedString = try NSAttributedString(data: ("<font size=\"+1.7\">\(selectedModule.description)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
+            let formattedString = try NSAttributedString(data: ("<font size=\"+2\">\(selectedModule.description)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
             descriptionText.attributedText = formattedString
         } catch let error {
             print("There was an error parsing HTML: \(error)")

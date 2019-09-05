@@ -21,6 +21,7 @@ class DiscussionTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        SVProgressHUD.dismiss()
         getSiteNews {
             self.tableView.reloadData()
             SVProgressHUD.dismiss()

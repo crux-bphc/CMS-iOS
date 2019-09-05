@@ -110,7 +110,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func helpButtonPressed(_ sender: UIButton) {
-        UIApplication.shared.open(URL(string: "https://docs.google.com/document/d/1FUMAdVXCWhrnFT18LpYdeIMwlWPAnOezRweKOE-CRtA/edit")!, options: [:], completionHandler: nil)
+        UIApplication.shared.open(URL(string: "https://docs.google.com/document/d/1F21bBNZ-h7MQh0HWM-rSbo6j2qKLoOaFY5Tl_If9C_0/edit?usp=sharing")!, options: [:], completionHandler: nil)
     }
     
     

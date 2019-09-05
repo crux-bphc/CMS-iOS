@@ -41,7 +41,6 @@ class CourseDetailsViewController : UITableViewController {
     }
     
     func getCourseContent(completion: @escaping ([CourseSection]) -> Void) {
-        print("Function called")
         let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
         let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
         SVProgressHUD.show()
@@ -133,6 +132,12 @@ class CourseDetailsViewController : UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.selectedModule = sectionArray[indexPath.section].modules[indexPath.row]
+        if self.selectedModule.modname == "assign" {
+            let alert = UIAlertController(title: "Unable to open assignment", message: "Assignments are not supported on the mobile version of CMS.", preferredStyle: .alert)
+            let action = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
+            alert.addAction(action)
+            present(alert, animated: true, completion: nil)
+        }
         if selectedModule.modname == "forum" {
             performSegue(withIdentifier: "goToAnnoucements", sender: self)
         } else {
