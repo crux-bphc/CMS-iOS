@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import RealmSwift
 
-class User {
-    var name : String = ""
-    var userid = 0
-    var email : String = ""
-    var token : String = ""
+class User : Object{
+    @objc dynamic var name : String = ""
+    @objc dynamic var userid = 0
+    @objc dynamic var email : String = ""
+    @objc dynamic var token : String = ""
 }

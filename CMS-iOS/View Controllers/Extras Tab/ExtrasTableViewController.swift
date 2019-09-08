@@ -7,11 +7,28 @@
 //
 
 import UIKit
-
+import RealmSwift
+import SwiftKeychainWrapper
 class ExtrasTableViewController: UITableViewController {
 
     let categoriesArray : [String] = ["Website", "About", "Logout"]
     let constants = Constants.Global.self
+    
+    
+    func logout(){
+        let realm = try! Realm()
+        let users = realm.objects(User.self)
+        
+        try! realm.write {
+            realm.delete(users)
+        }
+        
+        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
+        
+        
+    }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +63,8 @@ class ExtrasTableViewController: UITableViewController {
             break
         case 2:
             tabBarController?.dismiss(animated: true, completion: nil)
+            logout()
+            
             break
         default:
             break

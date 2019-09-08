@@ -11,6 +11,9 @@ import SwiftyJSON
 import Alamofire
 import SVProgressHUD
 import SwiftKeychainWrapper
+import RealmSwift
+
+
 
 class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -51,6 +54,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     override func viewDidAppear(_ animated: Bool) {
         SVProgressHUD.dismiss()
+        getRegisteredCourses {
+            
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -60,27 +66,103 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func getRegisteredCourses(completion: @escaping() -> Void) {
-        let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : 4626] as [String : Any]
-        print("The secret used was: " + KeychainWrapper.standard.string(forKey: "userPassword")!)
-        let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
-        SVProgressHUD.show()
-        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
-            if courseData.result.isSuccess {
-                let courses = JSON(courseData.value as Any)
-                self.courseList.removeAll()
-                for i in 0 ..< courses.count{
-                    let currentCourse = Course()
-                    currentCourse.courseid = courses[i]["id"].int!
-                    currentCourse.displayname = courses[i]["displayname"].string!
-                    currentCourse.enrolled = true
-                    self.courseList.append(currentCourse)
+        
+        
+        
+        let realm = try! Realm()
+        let realmCourses = realm.objects(Course.self)
+        
+        
+        if Reachability.isConnectedToNetwork(){
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
+            print("The secret used was: " + KeychainWrapper.standard.string(forKey: "userPassword")!)
+            let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
+            SVProgressHUD.show()
+            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
+                if courseData.result.isSuccess {
+                    
+                    
+                    if (realmCourses.count != 0){
+                        try! realm.write {
+                            realm.delete(realmCourses)
+                        }
+                    }
+                    
+                    let courses = JSON(courseData.value as Any)
+                    self.courseList.removeAll()
+                    print("number of courses = \(courses.count)")
+                    for i in 0 ..< courses.count{
+                        let currentCourse = Course()
+                        currentCourse.courseid = courses[i]["id"].int!
+                        
+                        
+                        currentCourse.displayname = courses[i]["displayname"].string!
+                        currentCourse.enrolled = true
+                        self.courseList.append(currentCourse)
+                        
+                        
+                        
+                        try! realm.write {
+                            realm.add(self.courseList[i])
+                        }
+                        
+                        
+                        
+                        
+                    }
+                    
+                    
+                    
                 }
+                
             }
-            self.tableView.reloadData()
-            SVProgressHUD.dismiss()
-            completion()
+            
+            
+        }else{
+            print("OFFLINE")
+            
+            let alert = UIAlertController(title: "Offline", message: "You are not connected to the internet, courses displayed may not be updated.", preferredStyle: .alert)
+            let action = UIAlertAction(title: "Ok", style: .default) { (_) in
+                self.refreshControl.endRefreshing()
+                
+            }
+            
+            alert.addAction(action)
+            self.present(alert, animated: true)
+            
+            courseList.removeAll()
+            
+            for x in 0..<realmCourses.count{
+                courseList.append(realmCourses[x])
+                
+            }
+            print(courseList.count)
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         }
+        self.tableView.reloadData()
+        SVProgressHUD.dismiss()
+        completion()
     }
+    
     
     @objc func refreshData() {
         self.refreshControl.beginRefreshing()

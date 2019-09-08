@@ -10,5 +10,6 @@ target 'CMS-iOS' do
   pod 'SwiftyJSON'
   pod 'SVProgressHUD'
   pod 'SwiftKeychainWrapper'
+  pod 'RealmSwift'
 
 end

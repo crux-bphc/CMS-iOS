@@ -11,7 +11,7 @@ import Alamofire
 import SwiftyJSON
 import SVProgressHUD
 import SwiftKeychainWrapper
-
+import RealmSwift
 class LoginViewController: UIViewController {
     
     @IBOutlet weak var keyField: UITextField!
@@ -23,31 +23,48 @@ class LoginViewController: UIViewController {
         
         SVProgressHUD.dismiss()
         if Reachability.isConnectedToNetwork() {
-        checkSavedPassword()
+            checkSavedPassword()
+        }else{
+            let realm = try! Realm()
+            let users = realm.objects(User.self)
+            
+            if let user = users.first{
+                currentUser = user
+                // segue
+
+//                self.performSegue(withIdentifier: "goToDashboard", sender: self)
+
+            }
+            
+
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         if !Reachability.isConnectedToNetwork() {
-        let alert = UIAlertController(title: "Unable to connect", message: "You are not connected to the internet. Please check your connection and relaunch the app.", preferredStyle: .alert)
-        let dismiss = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
-        alert.addAction(dismiss)
-        present(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "Unable to connect", message: "You are not connected to the internet. Please check your connection and relaunch the app.", preferredStyle: .alert)
+            let dismiss = UIAlertAction(title: "Dismiss", style: .default) { _ in
+                        self.performSegue(withIdentifier: "goToDashboard", sender: self)
+
+            }
+            alert.addAction(dismiss)
+            present(alert, animated: true, completion: nil)
         }
     }
     
-        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            let segueID = segue.identifier ?? ""
-            switch segueID {
-            case "goToDashboard":
-                let tabVC = segue.destination as! UITabBarController
-                let nextVC = tabVC.viewControllers![0] as! UINavigationController
-                let destinationVC = nextVC.topViewController as! DashboardViewController
-                destinationVC.userDetails = self.currentUser
-            default:
-                break
-            }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let segueID = segue.identifier ?? ""
+        switch segueID {
+        case "goToDashboard":
+            let tabVC = segue.destination as! UITabBarController
+            let nextVC = tabVC.viewControllers![0] as! UINavigationController
+            let destinationVC = nextVC.topViewController as! DashboardViewController
+
+            destinationVC.userDetails = self.currentUser
+        default:
+            break
         }
+    }
     
     func checkSavedPassword() {
         if let retrievedPassword: String = KeychainWrapper.standard.string(forKey: "userPassword") {
@@ -84,6 +101,19 @@ class LoginViewController: UIViewController {
                         
                     }
                     self.currentUser.name = userData["firstname"].string!.capitalized
+                    self.currentUser.userid = userData["userid"].int!
+                    
+                    let realm = try! Realm()
+                    let users = realm.objects(User.self)
+
+                    try! realm.write {
+                        realm.delete(users)
+                    }
+                    
+                    try! realm.write {
+                        realm.add(self.currentUser)
+                    }
+                    
                     self.keyField.text = ""
                     self.performSegue(withIdentifier: "goToDashboard", sender: self)
                     completion()
@@ -111,6 +141,7 @@ class LoginViewController: UIViewController {
     
     @IBAction func helpButtonPressed(_ sender: UIButton) {
         UIApplication.shared.open(URL(string: "https://docs.google.com/document/d/1F21bBNZ-h7MQh0HWM-rSbo6j2qKLoOaFY5Tl_If9C_0/edit?usp=sharing")!, options: [:], completionHandler: nil)
+
     }
     
     
