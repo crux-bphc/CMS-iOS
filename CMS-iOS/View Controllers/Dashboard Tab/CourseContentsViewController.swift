@@ -194,7 +194,10 @@ class CourseDetailsViewController : UITableViewController {
     }
     
     func updateUI() {
+        self.title = currentCourse.displayname
+
         self.tableView.reloadData()
-        self.title = currentCourse.displayname    }
+        
+    }
     
 }

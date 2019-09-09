@@ -18,6 +18,7 @@ class LoginViewController: UIViewController {
     let constant = Constants.Global.self
     
     var currentUser = User()
+    let realm = try! Realm()
     
     override func viewDidLoad() {
         
@@ -25,18 +26,15 @@ class LoginViewController: UIViewController {
         if Reachability.isConnectedToNetwork() {
             checkSavedPassword()
         }else{
-            let realm = try! Realm()
-            let users = realm.objects(User.self)
             
-            if let user = users.first{
-                currentUser = user
-                // segue
-
-//                self.performSegue(withIdentifier: "goToDashboard", sender: self)
-
+            // get user from realm
+            let realm = try! Realm()
+            if let realmUser = realm.objects(User.self).first{
+                currentUser = realmUser
             }
             
-
+            
+            
         }
     }
     
@@ -44,8 +42,17 @@ class LoginViewController: UIViewController {
         if !Reachability.isConnectedToNetwork() {
             let alert = UIAlertController(title: "Unable to connect", message: "You are not connected to the internet. Please check your connection and relaunch the app.", preferredStyle: .alert)
             let dismiss = UIAlertAction(title: "Dismiss", style: .default) { _ in
-                        self.performSegue(withIdentifier: "goToDashboard", sender: self)
+                
+                let realm = try! Realm()
+                let users = realm.objects(User.self)
+                if (users.count != 0){
+                    self.currentUser = users[0]
+                }
+                
+                self.performSegue(withIdentifier: "goToDashboard", sender: self)
 
+                
+                
             }
             alert.addAction(dismiss)
             present(alert, animated: true, completion: nil)
@@ -59,7 +66,7 @@ class LoginViewController: UIViewController {
             let tabVC = segue.destination as! UITabBarController
             let nextVC = tabVC.viewControllers![0] as! UINavigationController
             let destinationVC = nextVC.topViewController as! DashboardViewController
-
+            
             destinationVC.userDetails = self.currentUser
         default:
             break
@@ -100,19 +107,22 @@ class LoginViewController: UIViewController {
                         print(savedPassword)
                         
                     }
+                    
                     self.currentUser.name = userData["firstname"].string!.capitalized
                     self.currentUser.userid = userData["userid"].int!
                     
+                    let user = User()
+                    user.name = self.currentUser.name
+                    user.email = self.currentUser.email
+                    user.loggedIn = self.currentUser.loggedIn
+                    user.userid = self.currentUser.userid
                     let realm = try! Realm()
-                    let users = realm.objects(User.self)
-
                     try! realm.write {
-                        realm.delete(users)
+                        
+                        
+                        realm.add(user)
                     }
                     
-                    try! realm.write {
-                        realm.add(self.currentUser)
-                    }
                     
                     self.keyField.text = ""
                     self.performSegue(withIdentifier: "goToDashboard", sender: self)
@@ -133,7 +143,7 @@ class LoginViewController: UIViewController {
         }
         else {
             let alert = UIAlertController(title: "Enter a key", message: "You have not entered a key. Please enter a valid key or press help.", preferredStyle: .alert)
-            let dismiss = UIAlertAction(title: "Dismisss", style: .default, handler: nil)
+            let dismiss = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
             alert.addAction(dismiss)
             present(alert, animated: true, completion: nil)
         }
@@ -141,7 +151,7 @@ class LoginViewController: UIViewController {
     
     @IBAction func helpButtonPressed(_ sender: UIButton) {
         UIApplication.shared.open(URL(string: "https://docs.google.com/document/d/1F21bBNZ-h7MQh0HWM-rSbo6j2qKLoOaFY5Tl_If9C_0/edit?usp=sharing")!, options: [:], completionHandler: nil)
-
+        
     }
     
     

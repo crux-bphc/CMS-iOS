@@ -28,7 +28,7 @@ class ModuleViewController : UIViewController {
         }
         if selectedModule.description != "" {
         do {
-            let formattedString = try NSAttributedString(data: ("<font size=\"+2\">\(selectedModule.description)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
+            let formattedString = try NSAttributedString(data: ("<font size=\"+2\">\(selectedModule.moduleDescription)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
             descriptionText.attributedText = formattedString
         } catch let error {
             print("There was an error parsing HTML: \(error)")
