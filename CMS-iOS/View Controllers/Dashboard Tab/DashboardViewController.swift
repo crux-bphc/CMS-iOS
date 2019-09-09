@@ -130,14 +130,14 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         }else{
             print("OFFLINE")
             
-            let alert = UIAlertController(title: "Offline", message: "You are not connected to the internet, courses displayed may not be updated.", preferredStyle: .alert)
-            let action = UIAlertAction(title: "Ok", style: .default) { (_) in
-                self.refreshControl.endRefreshing()
-                
-            }
-            
-            alert.addAction(action)
-            self.present(alert, animated: true)
+//            let alert = UIAlertController(title: "Offline", message: "You are not connected to the internet, courses displayed may not be updated.", preferredStyle: .alert)
+//            let action = UIAlertAction(title: "Ok", style: .default) { (_) in
+//                self.refreshControl.endRefreshing()
+//
+//            }
+//
+//            alert.addAction(action)
+//            self.present(alert, animated: true)
             
             courseList.removeAll()
             

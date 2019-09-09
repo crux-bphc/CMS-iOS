@@ -31,6 +31,7 @@
 		0AF20A32230B3D9F001C0CB1 /* SiteNewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF20A31230B3D9F001C0CB1 /* SiteNewsTableViewController.swift */; };
 		0AF20A35230B48AD001C0CB1 /* DiscussionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF20A34230B48AD001C0CB1 /* DiscussionViewController.swift */; };
 		12CAF253EF7526514811430B /* Pods_CMS_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3256C2B7BECA1A62AA6FD98 /* Pods_CMS_iOS.framework */; };
+		E6C78DE32325302800387CF0 /* SampleJSONData.json in Resources */ = {isa = PBXBuildFile; fileRef = E6C78DE22325302800387CF0 /* SampleJSONData.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		0E0077FA2D35791ED66F6D2D /* Pods-CMS-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.release.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		5769DF31866AC1E1756B09EC /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		E3256C2B7BECA1A62AA6FD98 /* Pods_CMS_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CMS_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6C78DE22325302800387CF0 /* SampleJSONData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SampleJSONData.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				0A585452230168E7008FB370 /* Constants.swift */,
+				E6C78DE22325302800387CF0 /* SampleJSONData.json */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6C78DE32325302800387CF0 /* SampleJSONData.json in Resources */,
 				0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */,
 				0A3DEAF822FDCA69001B6BFD /* Main.storyboard in Resources */,
 				0AC33B6723022453004AE385 /* Assets.xcassets in Resources */,

@@ -1,0 +1,747 @@
+
+[
+  {
+    "visible" : 1,
+    "hiddenbynumsections" : 0,
+    "name" : "General",
+    "summary" : "",
+    "summaryformat" : 1,
+    "modules" : [
+      {
+        "modname" : "forum",
+        "visible" : 1,
+        "name" : "Announcements",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/forum\/view.php?id=22788",
+        "afterlink" : null,
+        "uservisible" : true,
+        "indent" : 0,
+        "customdata" : "\"\"",
+        "modplural" : "Forums",
+        "completion" : 0,
+        "id" : 22788,
+        "instance" : 5593,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/forum\/1552800530\/icon",
+        "visibleoncoursepage" : 1,
+        "onclick" : ""
+      }
+    ],
+    "id" : 28874,
+    "uservisible" : true,
+    "section" : 0
+  },
+  {
+    "visible" : 1,
+    "hiddenbynumsections" : 0,
+    "name" : "Topic 1",
+    "summary" : "",
+    "summaryformat" : 1,
+    "modules" : [
+      {
+        "contents" : [
+          {
+            "mimetype" : "application\/pdf",
+            "type" : "file",
+            "filepath" : "\/",
+            "sortorder" : 1,
+            "userid" : 199,
+            "filesize" : 351000,
+            "timemodified" : 1565693091,
+            "author" : "Sudha Radhika .",
+            "filename" : "Handout EEE F111.pdf",
+            "license" : "allrightsreserved",
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/96375\/mod_resource\/content\/1\/Handout%20EEE%20F111.pdf?forcedownload=1",
+            "isexternalfile" : false,
+            "timecreated" : 1565693084
+          }
+        ],
+        "modname" : "resource",
+        "visible" : 1,
+        "name" : "Handout EEE F111",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=23941",
+        "uservisible" : true,
+        "completiondata" : {
+          "timecompleted" : 0,
+          "state" : 0,
+          "overrideby" : null
+        },
+        "indent" : 0,
+        "afterlink" : null,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "modplural" : "Files",
+        "completion" : 1,
+        "id" : 23941,
+        "instance" : 10664,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "visibleoncoursepage" : 1,
+        "onclick" : ""
+      },
+      {
+        "contents" : [
+          {
+            "isexternalfile" : false,
+            "sortorder" : 1,
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/96377\/mod_resource\/content\/1\/ES%20Class%202%20Notes.pdf?forcedownload=1",
+            "author" : "Sudha Radhika .",
+            "license" : "allrightsreserved",
+            "filename" : "ES Class 2 Notes.pdf",
+            "mimetype" : "application\/pdf",
+            "userid" : 199,
+            "type" : "file",
+            "filesize" : 1461740,
+            "filepath" : "\/",
+            "timemodified" : 1565693124,
+            "timecreated" : 1565693122
+          }
+        ],
+        "modname" : "resource",
+        "visible" : 1,
+        "name" : "ES Class 2 Notes",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=23943",
+        "uservisible" : true,
+        "completiondata" : {
+          "timecompleted" : 0,
+          "state" : 0,
+          "overrideby" : null
+        },
+        "indent" : 0,
+        "afterlink" : null,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "modplural" : "Files",
+        "completion" : 1,
+        "id" : 23943,
+        "instance" : 10666,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "visibleoncoursepage" : 1,
+        "onclick" : ""
+      },
+      {
+        "contents" : [
+          {
+            "timemodified" : 1565693151,
+            "sortorder" : 1,
+            "userid" : 199,
+            "author" : "Sudha Radhika .",
+            "type" : "file",
+            "timecreated" : 1565693148,
+            "filename" : "ES Class 3 Notes.pdf",
+            "isexternalfile" : false,
+            "mimetype" : "application\/pdf",
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/96378\/mod_resource\/content\/1\/ES%20Class%203%20Notes.pdf?forcedownload=1",
+            "filesize" : 1946439,
+            "filepath" : "\/",
+            "license" : "allrightsreserved"
+          }
+        ],
+        "modname" : "resource",
+        "visible" : 1,
+        "name" : "ES Class 3 Notes",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=23944",
+        "uservisible" : true,
+        "completiondata" : {
+          "timecompleted" : 0,
+          "state" : 0,
+          "overrideby" : null
+        },
+        "indent" : 0,
+        "afterlink" : null,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "modplural" : "Files",
+        "completion" : 1,
+        "id" : 23944,
+        "instance" : 10667,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "visibleoncoursepage" : 1,
+        "onclick" : ""
+      },
+      {
+        "contents" : [
+          {
+            "timemodified" : 1565693180,
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/96379\/mod_resource\/content\/1\/ES%20Tutorial%201%20Questions.pdf?forcedownload=1",
+            "license" : "allrightsreserved",
+            "type" : "file",
+            "filepath" : "\/",
+            "filesize" : 561402,
+            "timecreated" : 1565693178,
+            "mimetype" : "application\/pdf",
+            "userid" : 199,
+            "isexternalfile" : false,
+            "filename" : "ES Tutorial 1 Questions.pdf",
+            "sortorder" : 1,
+            "author" : "Sudha Radhika ."
+          }
+        ],
+        "modname" : "resource",
+        "visible" : 1,
+        "name" : "ES Tutorial 1 Questions",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=23945",
+        "uservisible" : true,
+        "completiondata" : {
+          "timecompleted" : 0,
+          "state" : 0,
+          "overrideby" : null
+        },
+        "indent" : 0,
+        "afterlink" : null,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "modplural" : "Files",
+        "completion" : 1,
+        "id" : 23945,
+        "instance" : 10668,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "visibleoncoursepage" : 1,
+        "onclick" : ""
+      },
+      {
+        "contents" : [
+          {
+            "filepath" : "\/",
+            "author" : "Sudha Radhika .",
+            "type" : "file",
+            "timecreated" : 1565693207,
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/96380\/mod_resource\/content\/1\/ES%20Tutorial%201%20Answers.pdf?forcedownload=1",
+            "filename" : "ES Tutorial 1 Answers.pdf",
+            "mimetype" : "application\/pdf",
+            "userid" : 199,
+            "license" : "allrightsreserved",
+            "filesize" : 441807,
+            "timemodified" : 1565693210,
+            "isexternalfile" : false,
+            "sortorder" : 1
+          }
+        ],
+        "modname" : "resource",
+        "visible" : 1,
+        "name" : "ES Tutorial 1 Answers",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=23946",
+        "uservisible" : true,
+        "completiondata" : {
+          "timecompleted" : 0,
+          "state" : 0,
+          "overrideby" : null
+        },
+        "indent" : 0,
+        "afterlink" : null,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "modplural" : "Files",
+        "completion" : 1,
+        "id" : 23946,
+        "instance" : 10669,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "visibleoncoursepage" : 1,
+        "onclick" : ""
+      },
+      {
+        "contents" : [
+          {
+            "type" : "file",
+            "isexternalfile" : false,
+            "filename" : "ES Class 4 Notes.pdf",
+            "sortorder" : 1,
+            "filepath" : "\/",
+            "timemodified" : 1566196006,
+            "author" : "Sudha Radhika .",
+            "mimetype" : "application\/pdf",
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/98932\/mod_resource\/content\/1\/ES%20Class%204%20Notes.pdf?forcedownload=1",
+            "userid" : 199,
+            "timecreated" : 1566196003,
+            "license" : "allrightsreserved",
+            "filesize" : 1406133
+          }
+        ],
+        "modname" : "resource",
+        "visible" : 1,
+        "name" : "ES Class 4 Notes",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=24164",
+        "uservisible" : true,
+        "completiondata" : {
+          "timecompleted" : 0,
+          "state" : 0,
+          "overrideby" : null
+        },
+        "indent" : 0,
+        "afterlink" : null,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "modplural" : "Files",
+        "completion" : 1,
+        "id" : 24164,
+        "instance" : 10862,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "visibleoncoursepage" : 1,
+        "onclick" : ""
+      },
+      {
+        "contents" : [
+          {
+            "filesize" : 1106583,
+            "isexternalfile" : false,
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/98933\/mod_resource\/content\/1\/ES%20Class%205%20Notes.pdf?forcedownload=1",
+            "userid" : 199,
+            "mimetype" : "application\/pdf",
+            "timecreated" : 1566196038,
+            "type" : "file",
+            "filepath" : "\/",
+            "author" : "Sudha Radhika .",
+            "filename" : "ES Class 5 Notes.pdf",
+            "timemodified" : 1566196041,
+            "sortorder" : 1,
+            "license" : "allrightsreserved"
+          }
+        ],
+        "modname" : "resource",
+        "visible" : 1,
+        "name" : "ES Class 5 Notes",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=24165",
+        "uservisible" : true,
+        "completiondata" : {
+          "timecompleted" : 0,
+          "state" : 0,
+          "overrideby" : null
+        },
+        "indent" : 0,
+        "afterlink" : null,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "modplural" : "Files",
+        "completion" : 1,
+        "id" : 24165,
+        "instance" : 10863,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "visibleoncoursepage" : 1,
+        "onclick" : ""
+      },
+      {
+        "contents" : [
+          {
+            "filesize" : 1504331,
+            "filepath" : "\/",
+            "userid" : 199,
+            "author" : "Sudha Radhika .",
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/98934\/mod_resource\/content\/1\/ES%20Class%206%20Notes.pdf?forcedownload=1",
+            "timemodified" : 1566196068,
+            "timecreated" : 1566196066,
+            "filename" : "ES Class 6 Notes.pdf",
+            "type" : "file",
+            "mimetype" : "application\/pdf",
+            "license" : "allrightsreserved",
+            "sortorder" : 1,
+            "isexternalfile" : false
+          }
+        ],
+        "modname" : "resource",
+        "visible" : 1,
+        "name" : "ES Class 6 Notes",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=24166",
+        "uservisible" : true,
+        "completiondata" : {
+          "timecompleted" : 0,
+          "overrideby" : null,
+          "state" : 0
+        },
+        "indent" : 0,
+        "afterlink" : null,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "modplural" : "Files",
+        "completion" : 1,
+        "id" : 24166,
+        "instance" : 10864,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "visibleoncoursepage" : 1,
+        "onclick" : ""
+      },
+      {
+        "onclick" : "",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=24460",
+        "contents" : [
+          {
+            "license" : "allrightsreserved",
+            "type" : "file",
+            "filepath" : "\/",
+            "timecreated" : 1566546941,
+            "filesize" : 818726,
+            "filename" : "ES Tutorial 2 Questions.pdf",
+            "mimetype" : "application\/pdf",
+            "timemodified" : 1566546943,
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/100403\/mod_resource\/content\/1\/ES%20Tutorial%202%20Questions.pdf?forcedownload=1",
+            "sortorder" : 1,
+            "userid" : 199,
+            "author" : "Sudha Radhika .",
+            "isexternalfile" : false
+          }
+        ],
+        "visible" : 1,
+        "afterlink" : null,
+        "modname" : "resource",
+        "name" : "ES Tutorial 2 Questions",
+        "completiondata" : {
+          "timecompleted" : 0,
+          "overrideby" : null,
+          "state" : 0
+        },
+        "indent" : 0,
+        "uservisible" : true,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "visibleoncoursepage" : 1,
+        "completion" : 1,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "id" : 24460,
+        "instance" : 11122,
+        "modplural" : "Files"
+      },
+      {
+        "onclick" : "",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=24461",
+        "contents" : [
+          {
+            "mimetype" : "application\/pdf",
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/100404\/mod_resource\/content\/1\/ES%20Tutorial%202%20Answers.pdf?forcedownload=1",
+            "userid" : 199,
+            "sortorder" : 1,
+            "filesize" : 563898,
+            "isexternalfile" : false,
+            "license" : "allrightsreserved",
+            "author" : "Sudha Radhika .",
+            "timecreated" : 1566546968,
+            "filename" : "ES Tutorial 2 Answers.pdf",
+            "filepath" : "\/",
+            "type" : "file",
+            "timemodified" : 1566546970
+          }
+        ],
+        "visible" : 1,
+        "afterlink" : null,
+        "modname" : "resource",
+        "name" : "ES Tutorial 2 Answers",
+        "completiondata" : {
+          "timecompleted" : 0,
+          "overrideby" : null,
+          "state" : 0
+        },
+        "indent" : 0,
+        "uservisible" : true,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "visibleoncoursepage" : 1,
+        "completion" : 1,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "id" : 24461,
+        "instance" : 11123,
+        "modplural" : "Files"
+      },
+      {
+        "onclick" : "",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=24473",
+        "contents" : [
+          {
+            "isexternalfile" : false,
+            "timemodified" : 1566556789,
+            "mimetype" : "application\/pdf",
+            "filename" : "ES Class 7 Notes.pdf",
+            "filesize" : 1274757,
+            "timecreated" : 1566556785,
+            "filepath" : "\/",
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/100436\/mod_resource\/content\/1\/ES%20Class%207%20Notes.pdf?forcedownload=1",
+            "sortorder" : 1,
+            "author" : "Sudha Radhika .",
+            "license" : "allrightsreserved",
+            "userid" : 199,
+            "type" : "file"
+          }
+        ],
+        "visible" : 1,
+        "afterlink" : null,
+        "modname" : "resource",
+        "name" : "ES Class 7 Notes",
+        "completiondata" : {
+          "timecompleted" : 0,
+          "overrideby" : null,
+          "state" : 0
+        },
+        "indent" : 0,
+        "uservisible" : true,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "visibleoncoursepage" : 1,
+        "completion" : 1,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "id" : 24473,
+        "instance" : 11134,
+        "modplural" : "Files"
+      },
+      {
+        "onclick" : "",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=24474",
+        "contents" : [
+          {
+            "sortorder" : 1,
+            "author" : "Sudha Radhika .",
+            "isexternalfile" : false,
+            "license" : "allrightsreserved",
+            "timemodified" : 1566556864,
+            "filepath" : "\/",
+            "mimetype" : "application\/pdf",
+            "userid" : 199,
+            "filesize" : 1558387,
+            "timecreated" : 1566556813,
+            "filename" : "ES Class 8 Notes.pdf",
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/100437\/mod_resource\/content\/1\/ES%20Class%208%20Notes.pdf?forcedownload=1",
+            "type" : "file"
+          }
+        ],
+        "visible" : 1,
+        "afterlink" : null,
+        "modname" : "resource",
+        "name" : "ES Class 8 Notes",
+        "completiondata" : {
+          "timecompleted" : 0,
+          "overrideby" : null,
+          "state" : 0
+        },
+        "indent" : 0,
+        "uservisible" : true,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "visibleoncoursepage" : 1,
+        "completion" : 1,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "id" : 24474,
+        "instance" : 11135,
+        "modplural" : "Files"
+      },
+      {
+        "onclick" : "",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=24684",
+        "contents" : [
+          {
+            "isexternalfile" : false,
+            "filename" : "ES Tutorial 3 Questions.pdf",
+            "license" : "allrightsreserved",
+            "sortorder" : 1,
+            "timecreated" : 1566979260,
+            "mimetype" : "application\/pdf",
+            "filepath" : "\/",
+            "filesize" : 1811635,
+            "userid" : 199,
+            "type" : "file",
+            "author" : "Sudha Radhika .",
+            "timemodified" : 1566979262,
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/101000\/mod_resource\/content\/1\/ES%20Tutorial%203%20Questions.pdf?forcedownload=1"
+          }
+        ],
+        "visible" : 1,
+        "afterlink" : null,
+        "modname" : "resource",
+        "name" : "ES Tutorial 3 Questions",
+        "completiondata" : {
+          "timecompleted" : 0,
+          "overrideby" : null,
+          "state" : 0
+        },
+        "indent" : 0,
+        "uservisible" : true,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "visibleoncoursepage" : 1,
+        "completion" : 1,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "id" : 24684,
+        "instance" : 11312,
+        "modplural" : "Files"
+      },
+      {
+        "onclick" : "",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=24685",
+        "contents" : [
+          {
+            "timemodified" : 1566979295,
+            "timecreated" : 1566979290,
+            "type" : "file",
+            "filename" : "ES Tutorial 3 Answers.pdf",
+            "filepath" : "\/",
+            "filesize" : 374818,
+            "license" : "allrightsreserved",
+            "mimetype" : "application\/pdf",
+            "sortorder" : 1,
+            "isexternalfile" : false,
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/101001\/mod_resource\/content\/1\/ES%20Tutorial%203%20Answers.pdf?forcedownload=1",
+            "userid" : 199,
+            "author" : "Sudha Radhika ."
+          }
+        ],
+        "visible" : 1,
+        "afterlink" : null,
+        "modname" : "resource",
+        "name" : "ES Tutorial 3 Answers",
+        "completiondata" : {
+          "timecompleted" : 0,
+          "overrideby" : null,
+          "state" : 0
+        },
+        "indent" : 0,
+        "uservisible" : true,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "visibleoncoursepage" : 1,
+        "completion" : 1,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "id" : 24685,
+        "instance" : 11313,
+        "modplural" : "Files"
+      },
+      {
+        "afterlink" : null,
+        "completiondata" : {
+          "overrideby" : null,
+          "timecompleted" : 0,
+          "state" : 0
+        },
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=24697",
+        "onclick" : "",
+        "instance" : 11323,
+        "contents" : [
+          {
+            "filename" : "ES Class 9 Notes.pdf",
+            "license" : "allrightsreserved",
+            "filesize" : 1951376,
+            "sortorder" : 1,
+            "isexternalfile" : false,
+            "timecreated" : 1566991708,
+            "type" : "file",
+            "author" : "Sudha Radhika .",
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/101021\/mod_resource\/content\/1\/ES%20Class%209%20Notes.pdf?forcedownload=1",
+            "filepath" : "\/",
+            "mimetype" : "application\/pdf",
+            "userid" : 199,
+            "timemodified" : 1566991711
+          }
+        ],
+        "completion" : 1,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "uservisible" : true,
+        "indent" : 0,
+        "visibleoncoursepage" : 1,
+        "modplural" : "Files",
+        "visible" : 1,
+        "id" : 24697,
+        "modname" : "resource",
+        "name" : "ES Class 9 Notes",
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\""
+      },
+      {
+        "onclick" : "",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=24698",
+        "contents" : [
+          {
+            "filename" : "ES Class 10 Notes.pdf",
+            "filesize" : 1950022,
+            "sortorder" : 1,
+            "timecreated" : 1566991735,
+            "mimetype" : "application\/pdf",
+            "timemodified" : 1566991738,
+            "userid" : 199,
+            "license" : "allrightsreserved",
+            "filepath" : "\/",
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/101022\/mod_resource\/content\/1\/ES%20Class%2010%20Notes.pdf?forcedownload=1",
+            "type" : "file",
+            "author" : "Sudha Radhika .",
+            "isexternalfile" : false
+          }
+        ],
+        "visible" : 1,
+        "afterlink" : null,
+        "modname" : "resource",
+        "name" : "ES Class 10 Notes",
+        "completiondata" : {
+          "timecompleted" : 0,
+          "overrideby" : null,
+          "state" : 0
+        },
+        "indent" : 0,
+        "uservisible" : true,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "visibleoncoursepage" : 1,
+        "completion" : 1,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "id" : 24698,
+        "instance" : 11324,
+        "modplural" : "Files"
+      },
+      {
+        "onclick" : "",
+        "url" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/mod\/resource\/view.php?id=24747",
+        "contents" : [
+          {
+            "sortorder" : 1,
+            "timecreated" : 1567083560,
+            "filepath" : "\/",
+            "isexternalfile" : false,
+            "license" : "allrightsreserved",
+            "mimetype" : "application\/pdf",
+            "userid" : 199,
+            "filesize" : 748341,
+            "author" : "Sudha Radhika .",
+            "filename" : "Quiz 1 Answer Key.pdf",
+            "timemodified" : 1567083647,
+            "type" : "file",
+            "fileurl" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/webservice\/pluginfile.php\/101116\/mod_resource\/content\/1\/Quiz%201%20Answer%20Key.pdf?forcedownload=1"
+          }
+        ],
+        "visible" : 1,
+        "afterlink" : null,
+        "modname" : "resource",
+        "name" : "Quiz 1 Answer Key",
+        "completiondata" : {
+          "timecompleted" : 0,
+          "overrideby" : null,
+          "state" : 0
+        },
+        "indent" : 0,
+        "uservisible" : true,
+        "customdata" : "\"a:1:{s:10:\\\"printintro\\\";i:1;}\"",
+        "visibleoncoursepage" : 1,
+        "completion" : 1,
+        "modicon" : "https:\/\/td.bits-hyderabad.ac.in\/moodle\/theme\/image.php\/boost\/core\/1552800530\/f\/pdf-24",
+        "id" : 24747,
+        "instance" : 11369,
+        "modplural" : "Files"
+      }
+    ],
+    "id" : 28875,
+    "uservisible" : true,
+    "section" : 1
+  },
+  {
+    "summary" : "",
+    "modules" : [
+
+    ],
+    "hiddenbynumsections" : 0,
+    "uservisible" : true,
+    "section" : 2,
+    "id" : 28876,
+    "name" : "Topic 2",
+    "summaryformat" : 1,
+    "visible" : 1
+  },
+  {
+    "summary" : "",
+    "modules" : [
+
+    ],
+    "hiddenbynumsections" : 0,
+    "uservisible" : true,
+    "section" : 3,
+    "id" : 28877,
+    "name" : "Topic 3",
+    "summaryformat" : 1,
+    "visible" : 1
+  },
+  {
+    "summary" : "",
+    "modules" : [
+
+    ],
+    "hiddenbynumsections" : 0,
+    "uservisible" : true,
+    "section" : 4,
+    "id" : 28878,
+    "name" : "Topic 4",
+    "summaryformat" : 1,
+    "visible" : 1
+  }
+]
+
