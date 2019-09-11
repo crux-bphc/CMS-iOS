@@ -73,6 +73,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! CourseDetailsViewController
+        
         destinationVC.currentCourse.courseid = selectedCourseId
         destinationVC.currentCourse.displayname = selectedCourseName
     }
@@ -203,6 +204,13 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        if !searching{
+        self.selectedCourseId = courseList[indexPath.row].courseid
+        self.selectedCourseName = courseList[indexPath.row].displayname
+        }else{
+            self.selectedCourseId = filteredCourseList[indexPath.row].courseid
+            self.selectedCourseName = filteredCourseList[indexPath.row].displayname
+        }
         searchBar.endEditing(true)
         searchBar.text = ""
         searching = false
@@ -210,8 +218,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         searchBar.setShowsCancelButton(false, animated: true)
         
 
-        self.selectedCourseId = courseList[indexPath.row].courseid
-        self.selectedCourseName = courseList[indexPath.row].displayname
+        
         performSegue(withIdentifier: "goToCourseContent", sender: self)
         
     }
@@ -241,6 +248,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
+        searching = true
         
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
