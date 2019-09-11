@@ -204,10 +204,16 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         searchBar.endEditing(true)
+        searchBar.text = ""
+        searching = false
+        tableView.reloadData()
+        searchBar.setShowsCancelButton(false, animated: true)
         
+
         self.selectedCourseId = courseList[indexPath.row].courseid
         self.selectedCourseName = courseList[indexPath.row].displayname
         performSegue(withIdentifier: "goToCourseContent", sender: self)
+        
     }
     
     
