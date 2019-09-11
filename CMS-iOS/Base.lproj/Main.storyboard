@@ -125,7 +125,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="jOd-fE-aWr">
+                            <searchBar contentMode="redraw" text="" placeholder="Search" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jOd-fE-aWr">
                                 <rect key="frame" x="0.0" y="176" width="375" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
@@ -694,7 +694,7 @@
         <image name="logo" width="8000" height="8000"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="bDO-Ye-r9b"/>
+        <segue reference="CoA-DR-f5i"/>
         <segue reference="AhJ-kj-ro0"/>
     </inferredMetricsTieBreakers>
 </document>

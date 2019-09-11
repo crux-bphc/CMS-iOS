@@ -15,7 +15,10 @@ import RealmSwift
 
 
 
-class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource {
+class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
+    
+    
+    
     
     @IBOutlet weak var welcomeLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
@@ -23,15 +26,20 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     let constant = Constants.Global.self
     var courseList = [Course]()
+    var filteredCourseList = [Course]()
     var userDetails = User()
     var selectedCourseId : Int = 0
     var selectedCourseName : String = ""
     let refreshControl = UIRefreshControl()
-    
+    var searching : Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        searchBar.delegate = self
+        
+        searchBar.showsCancelButton = false
+        searchBar.resignFirstResponder()
         
         refreshControl.tintColor = .black
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
@@ -47,6 +55,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             getRegisteredCourses {
                 self.refreshControl.endRefreshing()
             }
+            
         }
         welcomeLabel.text = "Welcome, \(userDetails.name)"
         super.viewWillAppear(animated)
@@ -54,6 +63,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     override func viewDidAppear(_ animated: Bool) {
         SVProgressHUD.dismiss()
+        if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton{
+            cancelButton.isEnabled = true
+        }
         getRegisteredCourses {
             
         }
@@ -130,14 +142,14 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         }else{
             print("OFFLINE")
             
-//            let alert = UIAlertController(title: "Offline", message: "You are not connected to the internet, courses displayed may not be updated.", preferredStyle: .alert)
-//            let action = UIAlertAction(title: "Ok", style: .default) { (_) in
-//                self.refreshControl.endRefreshing()
-//
-//            }
-//
-//            alert.addAction(action)
-//            self.present(alert, animated: true)
+            //            let alert = UIAlertController(title: "Offline", message: "You are not connected to the internet, courses displayed may not be updated.", preferredStyle: .alert)
+            //            let action = UIAlertAction(title: "Ok", style: .default) { (_) in
+            //                self.refreshControl.endRefreshing()
+            //
+            //            }
+            //
+            //            alert.addAction(action)
+            //            self.present(alert, animated: true)
             
             courseList.removeAll()
             
@@ -173,19 +185,62 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return courseList.count
+        return searching ? filteredCourseList.count : courseList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "reuseCell")
-        cell.textLabel?.text = courseList[indexPath.row].displayname
+        if searching{
+            cell.textLabel?.text = filteredCourseList[indexPath.row].displayname
+        }else{
+            cell.textLabel?.text = courseList[indexPath.row].displayname
+            
+        }
+        
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        searchBar.endEditing(true)
+        
         self.selectedCourseId = courseList[indexPath.row].courseid
         self.selectedCourseName = courseList[indexPath.row].displayname
         performSegue(withIdentifier: "goToCourseContent", sender: self)
+    }
+    
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == ""{
+            searching = false
+        }else{
+            searching = true
+            
+            
+            filteredCourseList = courseList.filter(){$0.displayname.contains(searchText.uppercased())}
+            
+        }
+        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        searching = false
+        tableView.reloadData()
+        searchBar.setShowsCancelButton(false, animated: true)
+        
+        searchBar.endEditing(true)
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+        
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+        if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton{
+            cancelButton.isEnabled = true
+        }
     }
 }

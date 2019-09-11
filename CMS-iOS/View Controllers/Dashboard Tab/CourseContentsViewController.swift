@@ -131,6 +131,7 @@ class CourseDetailsViewController : UITableViewController {
                 }
             }
             
+            updateUI()
             
             
         }
