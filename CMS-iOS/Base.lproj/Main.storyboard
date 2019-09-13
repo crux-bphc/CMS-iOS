@@ -298,6 +298,38 @@
             </objects>
             <point key="canvasLocation" x="3797.5999999999999" y="1969.9507389162563"/>
         </scene>
+        <!--Folder Title-->
+        <scene sceneID="FtP-86-yAH">
+            <objects>
+                <tableViewController id="Aeb-vz-2Hs" customClass="FolderContentViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="m4w-Kt-yGF">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="reuseCell" id="oZh-9y-NJL">
+                                <rect key="frame" x="0.0" y="28" width="375" height="43.666667938232422"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oZh-9y-NJL" id="1AY-wy-ZRX">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.666667938232422"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Aeb-vz-2Hs" id="ibs-Mm-odK"/>
+                            <outlet property="delegate" destination="Aeb-vz-2Hs" id="q6e-TF-8pc"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Folder Title" id="mag-eC-Oh0"/>
+                    <connections>
+                        <segue destination="sHh-GJ-T8A" kind="show" identifier="goToFolderModule" id="OrM-jC-JFg"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BPD-3B-a8G" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5063" y="-1366"/>
+        </scene>
         <!--Dashboard-->
         <scene sceneID="91e-yF-CMr">
             <objects>
@@ -330,7 +362,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PQr-rC-BdL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4798" y="-873"/>
+            <point key="canvasLocation" x="5034" y="-714"/>
         </scene>
         <!--Dashboard-->
         <scene sceneID="4Oj-1c-0M3">
@@ -363,11 +395,12 @@
                         <outlet property="courseLabel" destination="moC-lT-cPs" id="Ujm-xC-3kp"/>
                         <segue destination="sHh-GJ-T8A" kind="show" identifier="goToModule" id="IgU-80-XSP"/>
                         <segue destination="aXd-S3-Oa1" kind="show" identifier="goToAnnoucements" id="r0O-gx-IAp"/>
+                        <segue destination="Aeb-vz-2Hs" kind="show" identifier="goToFolder" id="Xc1-RL-VNF"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JDM-AF-C55" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3838" y="-358"/>
+            <point key="canvasLocation" x="4018" y="-491"/>
         </scene>
         <!--Dashboard-->
         <scene sceneID="jgk-y6-roT">
@@ -422,7 +455,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eAb-nW-lZ8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4798" y="41"/>
+            <point key="canvasLocation" x="5116" y="297"/>
         </scene>
         <!--Dashboard-->
         <scene sceneID="04p-9G-clS">
@@ -694,7 +727,8 @@
         <image name="logo" width="8000" height="8000"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="CoA-DR-f5i"/>
-        <segue reference="AhJ-kj-ro0"/>
+        <segue reference="OrM-jC-JFg"/>
+        <segue reference="enf-3I-Kaq"/>
+        <segue reference="p9a-Sh-oWN"/>
     </inferredMetricsTieBreakers>
 </document>

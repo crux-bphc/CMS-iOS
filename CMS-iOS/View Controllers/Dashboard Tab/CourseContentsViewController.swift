@@ -54,6 +54,7 @@ class CourseDetailsViewController : UITableViewController {
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
 
+
                     
                     let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
                     if realmSections.count != 0{
@@ -87,6 +88,24 @@ class CourseDetailsViewController : UITableViewController {
                                     print(moduleData.fileurl)
                                 } else if moduleData.modname == "forum" {
                                     moduleData.id = courseContent[i]["modules"][j]["instance"].int!
+                                }else if moduleData.modname == "folder"{
+                                    
+
+                                    let itemCount = courseContent[i]["modules"][j]["contents"].count
+                                    for a in 0..<itemCount{
+                                        var newModule = Module()
+                                        newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
+                                        
+                                        if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
+                                            newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                        }
+                                        
+                                        
+                                        newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
+                                        
+                                        moduleData.fileModules.append(newModule)
+                                    }
+                                    
                                 }
                                 
                                 
@@ -150,10 +169,16 @@ class CourseDetailsViewController : UITableViewController {
         if segue.identifier == "goToAnnoucements" {
             let destinationVC = segue.destination as! DiscussionTableViewController
             destinationVC.currentModule = self.selectedModule
-        }
-        else {
+        }else if segue.identifier == "goToFolder"{
+
+            let destinationVC = segue.destination as! FolderContentViewController
+            destinationVC.currentModule = self.selectedModule
+            
+            
+        } else {
             let destinationVC = segue.destination as! ModuleViewController
             destinationVC.selectedModule = self.selectedModule
+        
         }
     }
     
@@ -164,9 +189,16 @@ class CourseDetailsViewController : UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCourse")
         cell.textLabel?.text = sectionArray[indexPath.section].modules[indexPath.row].name
+        
+        if sectionArray[indexPath.section].modules[indexPath.row].modname == "folder"{
+            print("Found a folder - \(sectionArray[indexPath.section].modules[indexPath.row].name)")
+            cell.imageView?.image = UIImage(named: "folder")
+        }
+        
         //        if sectionArray[indexPath.section].modules[indexPath.row].fileurl != "" {
         //            cell.accessoryType = .
         //        }
+        
         return cell
     }
     
@@ -188,7 +220,10 @@ class CourseDetailsViewController : UITableViewController {
         }
         if selectedModule.modname == "forum" {
             performSegue(withIdentifier: "goToAnnoucements", sender: self)
-        } else {
+        }else if selectedModule.modname == "folder"{
+            // set destination view controllers module as
+            performSegue(withIdentifier: "goToFolder", sender: self)
+        }else {
             performSegue(withIdentifier: "goToModule", sender: self)
         }
         tableView.deselectRow(at: indexPath, animated: true)
