@@ -17,13 +17,10 @@ import RealmSwift
 
 class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
     
-    
-    
-    
-    
     @IBOutlet weak var welcomeLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    
     let constant = Constants.Global.self
     var courseList = [Course]()
     var userDetails = User()
@@ -32,31 +29,28 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     var searching : Bool = false
     let refreshControl = UIRefreshControl()
     var filteredCourseList = [Course]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.delegate = self
         tableView.dataSource = self
+        
         searchBar.delegate = self
-        
-        
         searchBar.showsCancelButton = false
-        
         
         refreshControl.tintColor = .black
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        
         tableView.refreshControl = refreshControl
         tableView.reloadData()
-        print("loaded")
     }
-    
-    
     
     override func viewWillAppear(_ animated: Bool) {
         if courseList.isEmpty {
             getRegisteredCourses {
                 self.refreshControl.endRefreshing()
             }
-            
         }
         welcomeLabel.text = "Welcome, \(userDetails.name)"
         super.viewWillAppear(animated)
@@ -66,13 +60,11 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         SVProgressHUD.dismiss()
         if !searching{
             getRegisteredCourses {
-                
             }
         }
         
         tableView.reloadData()
 
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -84,21 +76,10 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     func getRegisteredCourses(completion: @escaping() -> Void) {
         
-        
-        
         let realm = try! Realm()
         let realmCourses = realm.objects(Course.self)
         
-        
         if Reachability.isConnectedToNetwork(){
-            
-            
-            
-            
-            
-            
-            
-            
             
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             print("The secret used was: " + KeychainWrapper.standard.string(forKey: "userPassword")!)
@@ -106,8 +87,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             SVProgressHUD.show()
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
                 if courseData.result.isSuccess {
-                    
-                    
                     if (realmCourses.count != 0){
                         try! realm.write {
                             realm.delete(realmCourses)
@@ -120,66 +99,29 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                     for i in 0 ..< courses.count{
                         let currentCourse = Course()
                         currentCourse.courseid = courses[i]["id"].int!
-                        
-                        
                         currentCourse.displayname = courses[i]["displayname"].string!
                         currentCourse.enrolled = true
                         self.courseList.append(currentCourse)
                         
-                        
-                        
                         try! realm.write {
                             realm.add(self.courseList[i])
                         }
-                        
-                        
-                        
-                        
                     }
-                    
-                    
-                    
                 }
-                
             }
-            
-            
-        }else{
+        }
+        else {
             print("OFFLINE")
-            
-            //            let alert = UIAlertController(title: "Offline", message: "You are not connected to the internet, courses displayed may not be updated.", preferredStyle: .alert)
-            //            let action = UIAlertAction(title: "Ok", style: .default) { (_) in
-            //                self.refreshControl.endRefreshing()
-            //
-            //            }
-            //
-            //            alert.addAction(action)
-            //            self.present(alert, animated: true)
-            
             courseList.removeAll()
-            
             for x in 0..<realmCourses.count{
                 courseList.append(realmCourses[x])
-                
             }
             print(courseList.count)
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
         }
         self.tableView.reloadData()
         SVProgressHUD.dismiss()
         completion()
     }
-    
     
     @objc func refreshData() {
         self.refreshControl.beginRefreshing()
@@ -200,14 +142,10 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         if searching {
             cell.textLabel?.text = filteredCourseList[indexPath.row].displayname
             
-        }else{
-            cell.textLabel?.text = courseList[indexPath.row].displayname
-            
         }
-        
-        
-        
-        
+        else {
+            cell.textLabel?.text = courseList[indexPath.row].displayname
+        }
         return cell
     }
     
@@ -216,25 +154,13 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         if searching {
             self.selectedCourseId = filteredCourseList[indexPath.row].courseid
             self.selectedCourseName = filteredCourseList[indexPath.row].displayname
-        }else{
+        }
+        else {
             self.selectedCourseId = courseList[indexPath.row].courseid
             self.selectedCourseName = courseList[indexPath.row].displayname
         }
-        
-        
-        
-        
-        
-        
         performSegue(withIdentifier: "goToCourseContent", sender: self)
-        
     }
-    
-    
-    
-    
-    
-    
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searching = false
@@ -244,9 +170,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         tableView.reloadData()
         
     }
+    
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
-        
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -256,11 +182,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         if searchText == ""{
             searching = false
         }
-        tableView.reloadData()
         
+        tableView.reloadData()
     }
-    
-    
-    
-    
 }

@@ -53,9 +53,6 @@ class CourseDetailsViewController : UITableViewController {
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
-
-
-                    
                     let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
                     if realmSections.count != 0{
                         try! realm.write {
@@ -90,24 +87,18 @@ class CourseDetailsViewController : UITableViewController {
                                     moduleData.id = courseContent[i]["modules"][j]["instance"].int!
                                 }else if moduleData.modname == "folder"{
                                     
-
                                     let itemCount = courseContent[i]["modules"][j]["contents"].count
                                     for a in 0..<itemCount{
-                                        var newModule = Module()
+                                        let newModule = Module()
                                         newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
                                         
                                         if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
                                             newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                         }
-                                        
-                                        
                                         newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
-                                        
                                         moduleData.fileModules.append(newModule)
                                     }
-                                    
                                 }
-                                
                                 
                                 moduleData.name = courseContent[i]["modules"][j]["name"].string!
                                 if courseContent[i]["modules"][j]["description"].string != nil {
@@ -116,15 +107,11 @@ class CourseDetailsViewController : UITableViewController {
                                 section.modules.append(moduleData)
                                 section.courseId = self.currentCourse.courseid
                                 print(moduleData.name)
-                                
-
-                                
                             }
                             self.sectionArray.append(section)
                             try! realm.write {
                                 realm.add(section)
                                 print("Added section to realm")
-                                
                             }
                         }
                     }
@@ -132,15 +119,11 @@ class CourseDetailsViewController : UITableViewController {
                 completion(self.sectionArray)
                 print("function complete")
             }
-            
         }
         else{
             // try to get modules from memory
             let realm = try! Realm()
-            
             let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
-            
-            
             
             if sections.count != 0{
                 sectionArray.removeAll()
@@ -149,10 +132,7 @@ class CourseDetailsViewController : UITableViewController {
                     print("Added to section array")
                 }
             }
-            
             updateUI()
-            
-            
         }
     }
     
@@ -170,7 +150,7 @@ class CourseDetailsViewController : UITableViewController {
             let destinationVC = segue.destination as! DiscussionTableViewController
             destinationVC.currentModule = self.selectedModule
         }else if segue.identifier == "goToFolder"{
-
+            
             let destinationVC = segue.destination as! FolderContentViewController
             destinationVC.currentModule = self.selectedModule
             
@@ -178,7 +158,7 @@ class CourseDetailsViewController : UITableViewController {
         } else {
             let destinationVC = segue.destination as! ModuleViewController
             destinationVC.selectedModule = self.selectedModule
-        
+            
         }
     }
     
@@ -194,11 +174,6 @@ class CourseDetailsViewController : UITableViewController {
             print("Found a folder - \(sectionArray[indexPath.section].modules[indexPath.row].name)")
             cell.imageView?.image = UIImage(named: "folder")
         }
-        
-        //        if sectionArray[indexPath.section].modules[indexPath.row].fileurl != "" {
-        //            cell.accessoryType = .
-        //        }
-        
         return cell
     }
     
@@ -213,7 +188,7 @@ class CourseDetailsViewController : UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.selectedModule = sectionArray[indexPath.section].modules[indexPath.row]
         if self.selectedModule.modname == "assign" {
-            let alert = UIAlertController(title: "Unable to open assignment", message: "Assignments are not supported on the mobile version of CMS.", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Assignments not supported", message: "Assignments are not supported on the mobile version of CMS.", preferredStyle: .alert)
             let action = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
             alert.addAction(action)
             present(alert, animated: true, completion: nil)
@@ -231,9 +206,6 @@ class CourseDetailsViewController : UITableViewController {
     
     func updateUI() {
         self.title = currentCourse.displayname
-
         self.tableView.reloadData()
-        
     }
-    
 }
