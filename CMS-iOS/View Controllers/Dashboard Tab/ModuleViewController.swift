@@ -9,6 +9,7 @@
 import UIKit
 import MobileCoreServices
 import SVProgressHUD
+import SwiftKeychainWrapper
 
 class ModuleViewController : UIViewController {
     
@@ -28,7 +29,7 @@ class ModuleViewController : UIViewController {
         }
         if selectedModule.description != "" {
         do {
-            let formattedString = try NSAttributedString(data: ("<font size=\"+2\">\(selectedModule.description)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
+            let formattedString = try NSAttributedString(data: ("<font size=\"+2\">\(selectedModule.moduleDescription)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
             descriptionText.attributedText = formattedString
         } catch let error {
             print("There was an error parsing HTML: \(error)")
@@ -55,7 +56,12 @@ class ModuleViewController : UIViewController {
             webView.scalesPageToFit = true
             let docVC = UIViewController()
             docVC.view.addSubview(webView)
-            docVC.title = self.selectedModule.name
+            if selectedModule.name != ""{
+                docVC.title = self.selectedModule.name
+
+            }else{
+                docVC.title = self.selectedModule.filename
+            }
             self.navigationController?.pushViewController(docVC, animated: true)
         } else {
             download(url: url, to: destination) {
@@ -78,9 +84,12 @@ class ModuleViewController : UIViewController {
     func download(url: URL, to localUrl: URL, completion: @escaping () -> Void) {
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
+        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
+    
         SVProgressHUD.show()
+        
         
         let task = session.downloadTask(with: request) {(tempLocalUrl, response, error) in
             if let tempLocalUrl = tempLocalUrl, error == nil {

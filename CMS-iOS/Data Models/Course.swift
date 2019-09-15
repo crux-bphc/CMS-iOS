@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import RealmSwift
 
-class Course {
+class Course : Object {
     
-    var displayname : String = ""
-    var courseid : Int = 0
-    var enrolled : Bool = false
-    var faculty : String = ""
+    @objc dynamic var displayname : String = ""
+    @objc dynamic var courseid : Int = 0
+    @objc dynamic var enrolled : Bool = false
+    @objc dynamic var faculty : String = ""
 }

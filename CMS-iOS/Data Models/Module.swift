@@ -7,14 +7,17 @@
 //
 
 import UIKit
+import RealmSwift
 
-class Module {
+class Module : Object {
     
-    var name : String = ""
-    var modname : String = ""
-    var filename : String = ""
-    var fileurl : String = ""
-    var description : String = ""
-    var mimetype : String = ""
-    var id : Int = 0
+    @objc dynamic var name : String = ""
+    @objc dynamic var modname : String = ""
+    @objc dynamic var filename : String = ""
+    @objc dynamic var fileurl : String = ""
+    @objc dynamic var moduleDescription : String = ""
+    @objc dynamic var mimetype : String = ""
+    @objc dynamic var id : Int = 0
+    var fileModules = RealmSwift.List<Module>();
+    
 }

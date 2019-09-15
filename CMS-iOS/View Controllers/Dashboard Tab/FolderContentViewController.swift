@@ -1,52 +1,19 @@
 //
-//  ExtrasTableViewController.swift
+//  FolderContentViewController.swift
 //  CMS-iOS
 //
-//  Created by Hridik Punukollu on 20/08/19.
+//  Created by Aryan Chaubal on 9/13/19.
 //  Copyright © 2019 Hridik Punukollu. All rights reserved.
 //
 
 import UIKit
 import RealmSwift
-import SwiftKeychainWrapper
-class ExtrasTableViewController: UITableViewController {
-    
-    let categoriesArray : [String] = ["Website", "About", "Logout"]
-    let constants = Constants.Global.self
-    
-    
-    func logout(){
 
-        
-
-        let realm = try! Realm()
-//        let users = realm.objects(User.self)
-
-
-
-        try! realm.write {
-//            realm.delete(users)
-            realm.deleteAll()
-
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
-        
-        
-    }
+class FolderContentViewController: UITableViewController {
     
-    
-    
+    var currentModule = Module()
+    var currentModuleContents = [Module]()
+    var folderSelectedModule = Module()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -54,39 +21,50 @@ class ExtrasTableViewController: UITableViewController {
         // self.clearsSelectionOnViewWillAppear = false
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem\
+        self.title = currentModule.name
+        
+        for i in 0..<currentModule.fileModules.count {
+            currentModuleContents.append(currentModule.fileModules[i])
+        }
     }
     
     // MARK: - Table view data source
     
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 3
+        return currentModuleContents.count
     }
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseCell", for: indexPath)
-        cell.textLabel?.text = categoriesArray[indexPath.row]
+        
+        
+        cell.textLabel?.text = currentModuleContents[indexPath.row].filename
+        
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.row {
-        case 0:
-            UIApplication.shared.open(URL(string: constants.BASE_URL)!, options: [:], completionHandler: nil)
-            break
-        case 1:
-            performSegue(withIdentifier: "showAboutPage", sender: self)
-            break
-        case 2:
-            tabBarController?.dismiss(animated: true, completion: nil)
-            logout()
+        folderSelectedModule = currentModuleContents[indexPath.row]
+        performSegue(withIdentifier: "goToFolderModule", sender: self)
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! ModuleViewController
+        let realm = try! Realm()
+        try! realm.write {
+            folderSelectedModule.modname = "resource"
             
-            break
-        default:
-            break
         }
-        tableView.deselectRow(at: indexPath, animated: true)
+        destinationVC.selectedModule = folderSelectedModule
     }
     
     /*

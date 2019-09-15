@@ -12,6 +12,7 @@ import SwiftyJSON
 import SVProgressHUD
 import SwiftKeychainWrapper
 import MobileCoreServices
+import RealmSwift
 
 class CourseDetailsViewController : UITableViewController {
     
@@ -41,51 +42,117 @@ class CourseDetailsViewController : UITableViewController {
     }
     
     func getCourseContent(completion: @escaping ([CourseSection]) -> Void) {
-        let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
-        let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
-        SVProgressHUD.show()
         
-        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
-            if response.result.isSuccess {
-                let courseContent = JSON(response.value as Any)
-                self.sectionArray.removeAll()
-                for i in 0 ..< courseContent.count {
-                    if courseContent[i]["modules"].count > 0 {
-                        let section = CourseSection()
-                        section.name = courseContent[i]["name"].string!
-                        print("module count is \(courseContent[i]["modules"].count)")
-                        
-                        for j in 0 ..< courseContent[i]["modules"].array!.count {
-                            let moduleData = Module()
-                            moduleData.modname = courseContent[i]["modules"][j]["modname"].string!
-                            if moduleData.modname == "resource" {
-                                if (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("td.bits-hyderabad.ac.in") {
-                                    moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string! +
-                                        "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
-                                    moduleData.mimetype = courseContent[i]["modules"][j]["contents"][0]["mimetype"].string!
-                                    moduleData.filename = courseContent[i]["modules"][j]["contents"][0]["filename"].string!
-                                }
-                                else {
-                                    moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!)
-                                }
-                                print(moduleData.fileurl)
-                            } else if moduleData.modname == "forum" {
-                                moduleData.id = courseContent[i]["modules"][j]["instance"].int!
-                            }
-                            
-                            moduleData.name = courseContent[i]["modules"][j]["name"].string!
-                            if courseContent[i]["modules"][j]["description"].string != nil {
-                                moduleData.description = courseContent[i]["modules"][j]["description"].string!
-                            }
-                            section.modules.append(moduleData)
-                            print(moduleData.name)
+        if Reachability.isConnectedToNetwork(){
+            
+            let realm = try! Realm()
+            let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
+            let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
+            SVProgressHUD.show()
+            
+            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
+                if response.result.isSuccess {
+                    let courseContent = JSON(response.value as Any)
+
+
+                    
+                    let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
+                    if realmSections.count != 0{
+                        try! realm.write {
+                            realm.delete(realmSections)
+                            // deleted
+                            print("deleted preexisting objects")
                         }
-                        self.sectionArray.append(section)
+                    }
+                    
+                    self.sectionArray.removeAll()
+                    for i in 0 ..< courseContent.count {
+                        if courseContent[i]["modules"].count > 0 {
+                            let section = CourseSection()
+                            section.name = courseContent[i]["name"].string!
+                            print("module count is \(courseContent[i]["modules"].count)")
+                            
+                            for j in 0 ..< courseContent[i]["modules"].array!.count {
+                                let moduleData = Module()
+                                moduleData.modname = courseContent[i]["modules"][j]["modname"].string!
+                                if moduleData.modname == "resource" {
+                                    if (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("td.bits-hyderabad.ac.in") {
+                                        moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string! +
+                                            "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
+                                        moduleData.mimetype = courseContent[i]["modules"][j]["contents"][0]["mimetype"].string!
+                                        moduleData.filename = courseContent[i]["modules"][j]["contents"][0]["filename"].string!
+                                    }
+                                    else {
+                                        moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!)
+                                    }
+                                    print(moduleData.fileurl)
+                                } else if moduleData.modname == "forum" {
+                                    moduleData.id = courseContent[i]["modules"][j]["instance"].int!
+                                }else if moduleData.modname == "folder"{
+                                    
+
+                                    let itemCount = courseContent[i]["modules"][j]["contents"].count
+                                    for a in 0..<itemCount{
+                                        var newModule = Module()
+                                        newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
+                                        
+                                        if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
+                                            newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                        }
+                                        
+                                        
+                                        newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
+                                        
+                                        moduleData.fileModules.append(newModule)
+                                    }
+                                    
+                                }
+                                
+                                
+                                moduleData.name = courseContent[i]["modules"][j]["name"].string!
+                                if courseContent[i]["modules"][j]["description"].string != nil {
+                                    moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
+                                }
+                                section.modules.append(moduleData)
+                                section.courseId = self.currentCourse.courseid
+                                print(moduleData.name)
+                                
+
+                                
+                            }
+                            self.sectionArray.append(section)
+                            try! realm.write {
+                                realm.add(section)
+                                print("Added section to realm")
+                                
+                            }
+                        }
                     }
                 }
+                completion(self.sectionArray)
+                print("function complete")
             }
-            completion(self.sectionArray)
-            print("function complete")
+            
+        }
+        else{
+            // try to get modules from memory
+            let realm = try! Realm()
+            
+            let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
+            
+            
+            
+            if sections.count != 0{
+                sectionArray.removeAll()
+                for i in 0..<sections.count{
+                    sectionArray.append(sections[i])
+                    print("Added to section array")
+                }
+            }
+            
+            updateUI()
+            
+            
         }
     }
     
@@ -102,10 +169,16 @@ class CourseDetailsViewController : UITableViewController {
         if segue.identifier == "goToAnnoucements" {
             let destinationVC = segue.destination as! DiscussionTableViewController
             destinationVC.currentModule = self.selectedModule
-        }
-        else {
+        }else if segue.identifier == "goToFolder"{
+
+            let destinationVC = segue.destination as! FolderContentViewController
+            destinationVC.currentModule = self.selectedModule
+            
+            
+        } else {
             let destinationVC = segue.destination as! ModuleViewController
             destinationVC.selectedModule = self.selectedModule
+        
         }
     }
     
@@ -116,9 +189,16 @@ class CourseDetailsViewController : UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCourse")
         cell.textLabel?.text = sectionArray[indexPath.section].modules[indexPath.row].name
+        
+        if sectionArray[indexPath.section].modules[indexPath.row].modname == "folder"{
+            print("Found a folder - \(sectionArray[indexPath.section].modules[indexPath.row].name)")
+            cell.imageView?.image = UIImage(named: "folder")
+        }
+        
         //        if sectionArray[indexPath.section].modules[indexPath.row].fileurl != "" {
         //            cell.accessoryType = .
         //        }
+        
         return cell
     }
     
@@ -140,14 +220,20 @@ class CourseDetailsViewController : UITableViewController {
         }
         if selectedModule.modname == "forum" {
             performSegue(withIdentifier: "goToAnnoucements", sender: self)
-        } else {
+        }else if selectedModule.modname == "folder"{
+            // set destination view controllers module as
+            performSegue(withIdentifier: "goToFolder", sender: self)
+        }else {
             performSegue(withIdentifier: "goToModule", sender: self)
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func updateUI() {
+        self.title = currentCourse.displayname
+
         self.tableView.reloadData()
-        self.title = currentCourse.displayname    }
+        
+    }
     
 }

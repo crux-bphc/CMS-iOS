@@ -7,10 +7,11 @@
 //
 
 import UIKit
-
-class CourseSection {
+import RealmSwift
+class CourseSection : Object{
     
-    var name : String = ""
-    var modules = [Module]()
+    @objc dynamic var name : String = ""
+    @objc dynamic var courseId : Int = 0
+    var modules = RealmSwift.List<Module>()
     
 }

@@ -6,9 +6,10 @@ target 'CMS-iOS' do
   use_frameworks!
 
   # Pods for CMS-iOS
-  pod 'Alamofire'
+pod 'Alamofire'
   pod 'SwiftyJSON'
   pod 'SVProgressHUD'
   pod 'SwiftKeychainWrapper'
+  pod 'RealmSwift'
 
 end
