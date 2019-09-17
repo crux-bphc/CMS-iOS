@@ -19,10 +19,13 @@ class DiscussionTableViewController: UITableViewController {
     var currentDiscussion = Discussion()
     var currentModule = Module()
     
+    @IBOutlet weak var addDiscussionButton: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         SVProgressHUD.dismiss()
-        getSiteNews {
+        canAddDiscussion()
+        getCourseDiscussions {
             self.tableView.reloadData()
             SVProgressHUD.dismiss()
         }
@@ -66,7 +69,7 @@ class DiscussionTableViewController: UITableViewController {
         }
     }
     
-    func getSiteNews(completion: @escaping () -> Void) {
+    func getCourseDiscussions(completion: @escaping () -> Void) {
         
         let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
         let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
@@ -74,20 +77,20 @@ class DiscussionTableViewController: UITableViewController {
         
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
-                let siteNews = JSON(response.value as Any)
-                if siteNews["discussions"].count == 0 {
+                let discussionResponse = JSON(response.value as Any)
+                if discussionResponse["discussions"].count == 0 {
                     completion()
                 } else {
-                    for i in 0 ..< siteNews["discussions"].count {
+                    for i in 0 ..< discussionResponse["discussions"].count {
                         let discussion = Discussion()
-                        discussion.name = siteNews["discussions"][i]["name"].string ?? "No Name"
-                        discussion.author = siteNews["discussions"][i]["userfullname"].string?.capitalized ?? ""
-                        discussion.date = siteNews["discussions"][i]["created"].int!
-                        discussion.message = siteNews["discussions"][i]["message"].string ?? "No Content"
-                        if siteNews["discussions"][i]["attachment"].string! != "0" {
-                            discussion.attachment = siteNews["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
-                            discussion.filename = siteNews["discussions"][i]["attachments"][0]["filename"].string ?? ""
-                            discussion.mimetype = siteNews["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
+                        discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
+                        discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
+                        discussion.date = discussionResponse["discussions"][i]["created"].int!
+                        discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
+                        if discussionResponse["discussions"][i]["attachment"].string! != "0" {
+                            discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
+                            discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
+                            discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
                         }
                         self.discussionArray.append(discussion)
                     }
@@ -97,4 +100,25 @@ class DiscussionTableViewController: UITableViewController {
         }
         
     }
+    
+    func canAddDiscussion() {
+        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
+        let headers = constants.headers
+        let FINAL_URL = constants.BASE_URL + constants.CAN_ADD_DISCUSSIONS
+        
+        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: headers).responseJSON { (response) in
+            if response.result.isSuccess {
+                let canAdd = JSON(response.value as Any)
+                if canAdd["status"].bool == false {
+//                    self.addDiscussionButton.width = 0.0
+                    self.addDiscussionButton.style = .plain
+                    self.addDiscussionButton.isEnabled = false
+                }
+            }
+        }
+    }
+    @IBAction func addDiscussionButtonPressed(_ sender: Any) {
+        performSegue(withIdentifier: "goToAddDiscussion", sender: self)
+    }
+    
 }
