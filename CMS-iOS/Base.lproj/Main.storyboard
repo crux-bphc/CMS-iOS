@@ -258,13 +258,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Description Text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="8nS-aw-8fA">
-                                <rect key="frame" x="16" y="104" width="343" height="575"/>
+                                <rect key="frame" x="16" y="60" width="343" height="668"/>
                                 <color key="backgroundColor" red="0.98072652279999994" green="0.98072652279999994" blue="0.98072652279999994" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OVG-jf-hSN">
-                                <rect key="frame" x="16" y="689" width="343" height="30"/>
+                                <rect key="frame" x="16" y="738" width="343" height="30"/>
                                 <color key="backgroundColor" red="0.88988083600000001" green="0.51419252159999995" blue="0.20537361500000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="wPD-2H-b6t"/>
@@ -374,10 +374,10 @@
             </objects>
             <point key="canvasLocation" x="5033" y="-695"/>
         </scene>
-        <!--View Controller-->
+        <!--Add Discussion View Controller-->
         <scene sceneID="xwG-EP-a5m">
             <objects>
-                <viewController id="JTN-Tg-TTI" sceneMemberID="viewController">
+                <viewController id="JTN-Tg-TTI" customClass="AddDiscussionViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4QJ-os-LE9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -411,18 +411,26 @@
                                 <state key="normal" title="Add">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="addButtonPressed:" destination="JTN-Tg-TTI" eventType="touchUpInside" id="arN-UM-9GH"/>
+                                </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KEz-eA-Fp7">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" keyboardDismissMode="interactive" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="PkW-qS-oSl">
                                 <rect key="frame" x="16" y="241" width="343" height="423"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="textColor" red="0.72156862745098038" green="0.72156862745098038" blue="0.72156862745098038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.98072652279999994" green="0.98072652279999994" blue="0.98072652279999994" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="S7c-SU-MuG"/>
                     </view>
+                    <connections>
+                        <outlet property="messageBodyTextField" destination="PkW-qS-oSl" id="Cte-p4-cu8"/>
+                        <outlet property="titleTextField" destination="4xV-zw-tAp" id="Gpa-w4-7Pc"/>
+                        <segue destination="aXd-S3-Oa1" kind="show" identifier="backToDiscussions" id="67r-4m-Wu4"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tHf-fp-oAz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -793,6 +801,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="OrM-jC-JFg"/>
         <segue reference="enf-3I-Kaq"/>
+        <segue reference="67r-4m-Wu4"/>
         <segue reference="p9a-Sh-oWN"/>
     </inferredMetricsTieBreakers>
 </document>

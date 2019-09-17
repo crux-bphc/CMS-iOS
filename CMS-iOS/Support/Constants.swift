@@ -21,6 +21,7 @@ class Constants: NSObject {
         static let GET_SITE_NEWS : String = "webservice/rest/server.php?wsfunction=mod_forum_get_forum_discussions_paginated&moodlewsrestformat=json&forumid=1&sortby=timemodified&sortdirection=DESC"
         static let GET_FORUM_DISCUSSIONS : String = "webservice/rest/server.php?wsfunction=mod_forum_get_forum_discussions_paginated&moodlewsrestformat=json&sortby=timemodified&sortdirection=DESC"
         static let CAN_ADD_DISCUSSIONS : String = "webservice/rest/server.php?moodlewsrestformat=json&wsfunction=mod_forum_can_add_discussion"
+        static let ADD_DISCUSSION : String = "webservice/rest/server.php?moodlewsrestformat=json&wsfunction=mod_forum_add_discussion"
         static let headers : HTTPHeaders = ["Accept" : "application/json"]
 }
 }
