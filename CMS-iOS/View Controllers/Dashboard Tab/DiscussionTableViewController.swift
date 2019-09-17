@@ -23,6 +23,7 @@ class DiscussionTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.addDiscussionButton.isEnabled = false
         SVProgressHUD.dismiss()
         canAddDiscussion()
         getCourseDiscussions {
@@ -116,6 +117,8 @@ class DiscussionTableViewController: UITableViewController {
 //                    self.addDiscussionButton.width = 0.0
                     self.addDiscussionButton.style = .plain
                     self.addDiscussionButton.isEnabled = false
+                } else {
+                    self.addDiscussionButton.isEnabled = true
                 }
             }
         }
