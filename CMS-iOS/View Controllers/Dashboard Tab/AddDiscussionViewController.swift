@@ -16,7 +16,6 @@ class AddDiscussionViewController: UIViewController {
     
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var messageBodyTextField: UITextView!
-    @IBOutlet weak var doneButton: UIBarButtonItem!
     
     let constants = Constants.Global.self
     var currentForum : String = ""
@@ -29,6 +28,10 @@ class AddDiscussionViewController: UIViewController {
         toolbar.setItems([flexSpace,doneButtonKeyBoard], animated: false)
         titleTextField.inputAccessoryView = toolbar
         messageBodyTextField.inputAccessoryView = toolbar
+        
+        messageBodyTextField.layer.borderColor = UIColor(red: 204.0/255.0, green:204.0/255.0, blue:204.0/255.0, alpha:1.0).cgColor
+        messageBodyTextField.layer.borderWidth = 0.25
+        messageBodyTextField.layer.cornerRadius = 5.0
         
     }
     
@@ -69,7 +72,7 @@ class AddDiscussionViewController: UIViewController {
                 self.navigationController?.popViewController(animated: true)
             }
         } else {
-            let alert = UIAlertController(title: "No Title/Body text", message: "Your title and/or body is empty. Please check them and try again.", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Empty Field(s)", message: "Your title and/or body is empty. Please check them and try again.", preferredStyle: .alert)
             let action = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
             alert.addAction(action)
             present(alert, animated: true, completion: nil)
