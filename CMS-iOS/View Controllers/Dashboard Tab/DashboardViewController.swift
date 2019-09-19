@@ -13,8 +13,6 @@ import SVProgressHUD
 import SwiftKeychainWrapper
 import RealmSwift
 
-
-
 class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
     
     @IBOutlet weak var welcomeLabel: UILabel!
@@ -29,9 +27,13 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     var searching : Bool = false
     let refreshControl = UIRefreshControl()
     var filteredCourseList = [Course]()
+    let realm = try! Realm()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let currentUser = realm.objects(User.self).first
+        userDetails = currentUser!
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -76,10 +78,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     func getRegisteredCourses(completion: @escaping() -> Void) {
         
-        let realm = try! Realm()
-        let realmCourses = realm.objects(Course.self)
-        
-        if Reachability.isConnectedToNetwork(){
+        let realmCourses = self.realm.objects(Course.self)
+        print("The device connection is: \(self.userDetails.isConnected)")
+        if self.userDetails.isConnected{
             
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             print("The secret used was: " + KeychainWrapper.standard.string(forKey: "userPassword")!)
@@ -88,8 +89,8 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
                 if courseData.result.isSuccess {
                     if (realmCourses.count != 0){
-                        try! realm.write {
-                            realm.delete(realmCourses)
+                        try! self.realm.write {
+                            self.realm.delete(realmCourses)
                         }
                     }
                     
@@ -103,15 +104,14 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                         currentCourse.enrolled = true
                         self.courseList.append(currentCourse)
                         
-                        try! realm.write {
-                            realm.add(self.courseList[i])
+                        try! self.realm.write {
+                            self.realm.add(self.courseList[i])
                         }
                     }
                 }
             }
         }
         else {
-            print("OFFLINE")
             courseList.removeAll()
             for x in 0..<realmCourses.count{
                 courseList.append(realmCourses[x])
