@@ -21,6 +21,7 @@
 		0A7F90BC2300753E00683867 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F90BB2300753E00683867 /* DashboardViewController.swift */; };
 		0A8E02D72300207900724899 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8E02D62300207900724899 /* User.swift */; };
 		0A8EFC6523100F9D00CD6BAD /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8EFC6423100F9D00CD6BAD /* Reachability.swift */; };
+		0A8F492B23313A3800E7A94C /* AddDiscussionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F492A23313A3800E7A94C /* AddDiscussionViewController.swift */; };
 		0AC33B642302153C004AE385 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC33B632302153C004AE385 /* Course.swift */; };
 		0AC33B6723022453004AE385 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AC33B6623022453004AE385 /* Assets.xcassets */; };
 		0AC33B6923022B2C004AE385 /* CourseContentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC33B6823022B2C004AE385 /* CourseContentsViewController.swift */; };
@@ -53,6 +54,7 @@
 		0A7F90BB2300753E00683867 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		0A8E02D62300207900724899 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		0A8EFC6423100F9D00CD6BAD /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		0A8F492A23313A3800E7A94C /* AddDiscussionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDiscussionViewController.swift; sourceTree = "<group>"; };
 		0AC33B632302153C004AE385 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		0AC33B6623022453004AE385 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0AC33B6823022B2C004AE385 /* CourseContentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseContentsViewController.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				0A03483523166C2D00552F69 /* DiscussionTableViewController.swift */,
 				0AC33B6E2304306C004AE385 /* ModuleViewController.swift */,
 				E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */,
+				0A8F492A23313A3800E7A94C /* AddDiscussionViewController.swift */,
 			);
 			path = "Dashboard Tab";
 			sourceTree = "<group>";
@@ -343,6 +346,7 @@
 				0A03483623166C2D00552F69 /* DiscussionTableViewController.swift in Sources */,
 				0AF20A35230B48AD001C0CB1 /* DiscussionViewController.swift in Sources */,
 				0A5ECD7C2306A98800723365 /* AboutPageViewController.swift in Sources */,
+				0A8F492B23313A3800E7A94C /* AddDiscussionViewController.swift in Sources */,
 				0A585453230168E7008FB370 /* Constants.swift in Sources */,
 				0A67E5DC23091B4700E18E99 /* EnrolmentViewController.swift in Sources */,
 				E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */,
@@ -509,7 +513,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ENABLE_BATCH_MODE = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -530,7 +534,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ENABLE_BATCH_MODE = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
