@@ -92,7 +92,12 @@ class DiscussionTableViewController: UITableViewController {
                         discussion.date = discussionResponse["discussions"][i]["created"].int!
                         discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
                         if discussionResponse["discussions"][i]["attachment"].string! != "0" {
-                            discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
+                            if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
+                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                            } else {
+                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
+                            }
+                            
                             discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
                             discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
                         }
