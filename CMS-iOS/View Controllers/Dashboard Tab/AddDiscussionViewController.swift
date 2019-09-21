@@ -22,12 +22,7 @@ class AddDiscussionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let toolbar = UIToolbar(frame: CGRect(origin: .zero, size: .init(width: view.frame.width, height: 37)))
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButtonKeyBoard = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonAction))
-        toolbar.setItems([flexSpace,doneButtonKeyBoard], animated: false)
-        titleTextField.inputAccessoryView = toolbar
-        messageBodyTextField.inputAccessoryView = toolbar
+
         
         messageBodyTextField.layer.borderColor = UIColor(red: 204.0/255.0, green:204.0/255.0, blue:204.0/255.0, alpha:1.0).cgColor
         messageBodyTextField.layer.borderWidth = 0.25

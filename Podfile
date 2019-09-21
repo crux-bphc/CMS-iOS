@@ -11,5 +11,5 @@ pod 'Alamofire'
   pod 'SVProgressHUD'
   pod 'SwiftKeychainWrapper'
   pod 'RealmSwift'
-
+  pod 'IQKeyboardManagerSwift'
 end
