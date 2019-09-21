@@ -124,10 +124,14 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     @objc func refreshData() {
-        self.refreshControl.beginRefreshing()
-        getRegisteredCourses {
+        if !searching{
+            self.refreshControl.beginRefreshing()
+            getRegisteredCourses {
+                self.refreshControl.endRefreshing()
+                self.tableView.reloadData()
+            }
+        }else{
             self.refreshControl.endRefreshing()
-            self.tableView.reloadData()
         }
     }
     

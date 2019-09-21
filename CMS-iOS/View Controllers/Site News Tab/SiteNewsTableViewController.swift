@@ -72,7 +72,7 @@ class SiteNewsTableViewController: UITableViewController {
                     discussion.date = siteNews["discussions"][i]["created"].int!
                     discussion.message = siteNews["discussions"][i]["message"].string ?? "No Content"
                     if siteNews["discussions"][i]["attachment"].string! != "0" {
-                        discussion.attachment = siteNews["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
+                        discussion.attachment = (siteNews["discussions"][i]["attachments"][0]["fileurl"].string ?? "") + "?token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                         discussion.filename = siteNews["discussions"][i]["attachments"][0]["filename"].string ?? ""
                         discussion.mimetype = siteNews["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
                     }

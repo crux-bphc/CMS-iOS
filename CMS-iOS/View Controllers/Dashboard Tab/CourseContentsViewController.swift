@@ -72,6 +72,7 @@ class CourseDetailsViewController : UITableViewController {
                             for j in 0 ..< courseContent[i]["modules"].array!.count {
                                 let moduleData = Module()
                                 moduleData.modname = courseContent[i]["modules"][j]["modname"].string!
+                                moduleData.id = courseContent[i]["modules"][j]["id"].int!
                                 if moduleData.modname == "resource" {
                                     if (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("td.bits-hyderabad.ac.in") {
                                         moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string! +
