@@ -21,6 +21,11 @@ class SiteNewsTableViewController: UITableViewController {
     let refreshController = UIRefreshControl()
     
     override func viewDidLoad() {
+        
+        super.viewDidLoad()
+        
+        setupNavBar()
+        
         refreshController.tintColor = .black
         refreshController.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.refreshControl = refreshController
@@ -29,7 +34,12 @@ class SiteNewsTableViewController: UITableViewController {
             SVProgressHUD.dismiss()
             self.tableView.reloadData()
         }
-        super.viewDidLoad()
+    }
+    
+    func setupNavBar() {
+        
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        
     }
 
     // MARK: - Table view data source

@@ -16,6 +16,7 @@ class DiscussionViewController: UIViewController {
     var selectedDiscussion = Discussion()
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.largeTitleDisplayMode = .never
         if selectedDiscussion.message != "" {
             do {
                 let formattedString = try NSAttributedString(data: ("<font size=\"+1.7\">\(selectedDiscussion.message)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
