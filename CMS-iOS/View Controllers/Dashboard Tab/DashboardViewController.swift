@@ -78,6 +78,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         
         navigationItem.searchController = self.searchController
         searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
     }
     

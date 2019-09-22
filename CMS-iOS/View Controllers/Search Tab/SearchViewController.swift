@@ -12,23 +12,37 @@ import SwiftyJSON
 import SVProgressHUD
 import SwiftKeychainWrapper
 
-class SearchViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate {
-    
+class SearchViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate , UISearchResultsUpdating{
     
     @IBOutlet weak var searchBar: UISearchBar!
     var searchValue : String = ""
     let constants = Constants.Global.self
     var resultArray = [Course]()
     var selectedCourse = Course()
+    let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.delegate = self
+//        searchBar.delegate = self
+//        searchBar.isHidden = true
+        setupNavBar()
         // Do any additional setup after loading the view.
     }
     
-    func searchRequest (keyword: String, completion: @escaping() -> Void) {
+    func setupNavBar() {
         
+        self.navigationItem.searchController = searchController
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        definesPresentationContext = true
+    }
+    
+    func searchRequest (keyword: String, completion: @escaping() -> Void) {
+        print("Made request to search for courses.")
         SVProgressHUD.show()
         let params : [String : Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "criteriavalue" : keyword, "page" : 1]
         let FINAL_URL : String = constants.BASE_URL + constants.SEARCH_COURSES
@@ -46,31 +60,40 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             }
             completion()
         }
-        
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        resultArray.removeAll()
+        self.tableView.reloadData()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if searchBar.text != "" {
+        if searchController.searchBar.text != "" {
             resultArray.removeAll()
-            searchRequest(keyword: searchBar.text!) {
+            searchRequest(keyword: searchController.searchBar.text!) {
                 self.tableView.reloadData()
                 SVProgressHUD.dismiss()
                 DispatchQueue.main.async {
-                    searchBar.resignFirstResponder()
+                    self.searchController.resignFirstResponder()
+                    self.searchController.searchBar.endEditing(true)
                 }
             }
         }
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar.text?.count == 0 {
-            resultArray.removeAll()
-            tableView.reloadData()
-            DispatchQueue.main.async {
-                searchBar.resignFirstResponder()
-            }
-        }
-    }
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        if searchBar.text?.count == 0 {
+//            resultArray.removeAll()
+//            tableView.reloadData()
+//            DispatchQueue.main.async {
+//                searchBar.resignFirstResponder()
+//            }
+//        }
+//    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCell")
@@ -87,7 +110,9 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return resultArray.count
+        
+        return (self.searchController.isActive ? resultArray.count : 0)
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

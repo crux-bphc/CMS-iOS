@@ -558,21 +558,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" id="9b5-Zn-5vG">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <textInputTraits key="textInputTraits"/>
-                        </searchBar>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="reuseCell" id="zOI-T9-Syk">
-                                <rect key="frame" x="0.0" y="72" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="zOI-T9-Syk" id="TLR-Nd-zXV">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="hc7-og-Syb" id="RZD-lL-pnN"/>
                             <outlet property="delegate" destination="hc7-og-Syb" id="sly-cR-zwt"/>
@@ -582,7 +567,6 @@
                     <navigationItem key="navigationItem" title="Search" id="CWT-L9-0rw"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="searchBar" destination="9b5-Zn-5vG" id="0jk-4M-FXI"/>
                         <outlet property="searchDisplayController" destination="LUL-Xg-zSQ" id="IQn-tF-3ob"/>
                         <segue destination="euS-wt-hGD" kind="show" identifier="goToEnrolment" id="FN7-kN-B9U"/>
                         <segue destination="fG0-QY-y8D" kind="show" identifier="goToCourseContent" id="enf-3I-Kaq"/>
@@ -782,7 +766,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="OrM-jC-JFg"/>
-        <segue reference="CoA-DR-f5i"/>
+        <segue reference="enf-3I-Kaq"/>
         <segue reference="67r-4m-Wu4"/>
         <segue reference="p9a-Sh-oWN"/>
     </inferredMetricsTieBreakers>

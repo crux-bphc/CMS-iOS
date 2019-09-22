@@ -24,6 +24,8 @@ class EnrolmentViewController: UIViewController {
         super.viewDidLoad()
         courseLabel.text = enrolmentCourse.displayname
         instructorLabel.text = enrolmentCourse.faculty
+        self.navigationItem.largeTitleDisplayMode = .never
+        self.title = "Course Details"
         // Do any additional setup after loading the view.
     }
     

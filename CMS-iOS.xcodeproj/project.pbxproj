@@ -151,8 +151,8 @@
 		0A67E5DE23094CB500E18E99 /* Search Tab */ = {
 			isa = PBXGroup;
 			children = (
-				0A67E5DB23091B4700E18E99 /* EnrolmentViewController.swift */,
 				0A2B472B23083C1A005879D6 /* SearchViewController.swift */,
+				0A67E5DB23091B4700E18E99 /* EnrolmentViewController.swift */,
 			);
 			path = "Search Tab";
 			sourceTree = "<group>";
