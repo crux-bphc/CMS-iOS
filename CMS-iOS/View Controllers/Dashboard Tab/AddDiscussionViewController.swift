@@ -23,7 +23,6 @@ class AddDiscussionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
         messageBodyTextField.layer.borderColor = UIColor(red: 204.0/255.0, green:204.0/255.0, blue:204.0/255.0, alpha:1.0).cgColor
         messageBodyTextField.layer.borderWidth = 0.25
         messageBodyTextField.layer.cornerRadius = 5.0
