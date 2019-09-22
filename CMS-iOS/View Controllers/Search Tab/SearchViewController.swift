@@ -13,9 +13,7 @@ import SVProgressHUD
 import SwiftKeychainWrapper
 
 class SearchViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate , UISearchResultsUpdating{
-    
-    @IBOutlet weak var searchBar: UISearchBar!
-    var searchValue : String = ""
+
     let constants = Constants.Global.self
     var resultArray = [Course]()
     var selectedCourse = Course()
@@ -84,16 +82,6 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             }
         }
     }
-    
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        if searchBar.text?.count == 0 {
-//            resultArray.removeAll()
-//            tableView.reloadData()
-//            DispatchQueue.main.async {
-//                searchBar.resignFirstResponder()
-//            }
-//        }
-//    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCell")
