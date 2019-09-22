@@ -184,8 +184,8 @@
 		0AF20A30230B2F2A001C0CB1 /* Extras Tab */ = {
 			isa = PBXGroup;
 			children = (
-				0A5ECD7B2306A98800723365 /* AboutPageViewController.swift */,
 				0AF20A2E230B2F17001C0CB1 /* ExtrasTableViewController.swift */,
+				0A5ECD7B2306A98800723365 /* AboutPageViewController.swift */,
 			);
 			path = "Extras Tab";
 			sourceTree = "<group>";
