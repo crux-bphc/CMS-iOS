@@ -47,7 +47,7 @@ class ModuleViewController : UIViewController {
         let dataPath = documentsDirectory.absoluteURL
 
         guard let url = URL(string: downloadUrl) else { return }
-        let destination = dataPath.appendingPathComponent("\(module.filename + String(module.id))")
+        let destination = dataPath.appendingPathComponent("\(String(module.id) + module.filename)")
         if FileManager().fileExists(atPath: destination.path) {
             let viewURL = destination as URL
             let data = try! Data(contentsOf: viewURL)

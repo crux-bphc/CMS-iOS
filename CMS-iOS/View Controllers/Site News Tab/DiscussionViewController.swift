@@ -35,7 +35,7 @@ class DiscussionViewController: UIViewController {
         let dataPath = documentsDirectory.absoluteURL
         
         guard let url = URL(string: downloadUrl) else { return }
-        let destination = dataPath.appendingPathComponent("\(discussion.filename)")
+        let destination = dataPath.appendingPathComponent("\(String(selectedDiscussion.id) + discussion.filename)")
         if FileManager().fileExists(atPath: destination.path) {
             let viewURL = destination as URL
             let data = try! Data(contentsOf: viewURL)
