@@ -29,6 +29,10 @@ class DiscussionViewController: UIViewController {
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
+    }
+    
     func saveFileToStorage(mime: String, downloadUrl: String, discussion: Discussion) {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         print(String(describing: documentsDirectory))

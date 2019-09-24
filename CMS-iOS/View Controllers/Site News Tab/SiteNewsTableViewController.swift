@@ -36,6 +36,10 @@ class SiteNewsTableViewController: UITableViewController {
         }
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
+    }
+    
     func setupNavBar() {
         
         self.navigationController?.navigationBar.prefersLargeTitles = true

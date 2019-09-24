@@ -27,6 +27,10 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         // Do any additional setup after loading the view.
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
+    }
+    
     func setupNavBar() {
         
         self.navigationItem.searchController = searchController

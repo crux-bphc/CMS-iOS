@@ -56,7 +56,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        SVProgressHUD.dismiss()
         if !searchController.isActive{
             getRegisteredCourses {
             }
@@ -64,6 +63,10 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         
         tableView.reloadData()
 
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

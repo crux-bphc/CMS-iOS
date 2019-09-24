@@ -29,6 +29,10 @@ class AddDiscussionViewController: UIViewController {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
+    }
+    
     func addDiscussion(completion: @escaping () -> Void) {
         
         let headers = constants.headers

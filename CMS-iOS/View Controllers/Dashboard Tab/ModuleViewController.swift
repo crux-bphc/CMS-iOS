@@ -19,8 +19,8 @@ class ModuleViewController : UIViewController {
     @IBOutlet weak var textConstraint: NSLayoutConstraint!
     @IBOutlet weak var attachmentButton: UIButton!
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         print(selectedModule.modname)
         if selectedModule.modname == "resource" || selectedModule.modname == "url" {
             attachmentButton.isHidden = false
@@ -28,17 +28,21 @@ class ModuleViewController : UIViewController {
             attachmentButton.isHidden = true
         }
         if selectedModule.description != "" {
-        do {
-            let formattedString = try NSAttributedString(data: ("<font size=\"+2\">\(selectedModule.moduleDescription)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
-            descriptionText.attributedText = formattedString
-        } catch let error {
-            print("There was an error parsing HTML: \(error)")
-        }
-        
-        descriptionText.isEditable = false
+            do {
+                let formattedString = try NSAttributedString(data: ("<font size=\"+2\">\(selectedModule.moduleDescription)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
+                descriptionText.attributedText = formattedString
+            } catch let error {
+                print("There was an error parsing HTML: \(error)")
+            }
+            
+            descriptionText.isEditable = false
         } else {
             self.textConstraint.constant = 0
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
     }
     
     func saveFileToStorage(mime: String, downloadUrl: String, module: Module) {

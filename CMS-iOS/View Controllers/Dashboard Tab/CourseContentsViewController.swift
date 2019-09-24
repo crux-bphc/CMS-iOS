@@ -43,6 +43,10 @@ class CourseDetailsViewController : UITableViewController {
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
+    }
+    
     func getCourseContent(completion: @escaping ([CourseSection]) -> Void) {
         
         if Reachability.isConnectedToNetwork(){

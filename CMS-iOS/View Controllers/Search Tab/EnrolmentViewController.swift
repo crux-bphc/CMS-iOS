@@ -29,6 +29,10 @@ class EnrolmentViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
+    }
+    
     func enrolCourse (completion: @escaping () -> Void) {
         
         let params : [String : Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : enrolmentCourse.courseid]
