@@ -18,7 +18,18 @@ class DiscussionViewController: UIViewController {
         super.viewDidLoad()
         if selectedDiscussion.message != "" {
             do {
-                let formattedString = try NSAttributedString(data: ("<font size=\"+1.7\">\(selectedDiscussion.message)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
+                var systemColor = String()
+                if #available(iOS 12.0, *) {
+                    if self.traitCollection.userInterfaceStyle == .dark{
+                        systemColor = "white"
+                    }else{
+                        systemColor = "black"
+                    }
+                } else {
+                    systemColor = "black"
+                }
+                
+                let formattedString = try NSAttributedString(data: ("<font size=\"+1.7\" color=\"\(systemColor)\">\(selectedDiscussion.message)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
                 bodyTextView.attributedText = formattedString
             } catch let error {
                 print("There was an error parsing HTML: \(error)")

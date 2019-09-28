@@ -79,7 +79,7 @@ class SiteNewsTableViewController: UITableViewController {
                     self.discussionArray.append(discussion)
                     completion()
                 }
-                
+                 
             }
         }
         
