@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina5_9" orientation="portrait" appearance="dark"/>
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
@@ -114,11 +114,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cIS-ep-aHO">
-                                <rect key="frame" x="0.0" y="232" width="375" height="497"/>
+                                <rect key="frame" x="0.0" y="219" width="375" height="510"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome, User!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RGO-rp-AUU">
-                                <rect key="frame" x="16" y="111" width="343" height="59"/>
+                                <rect key="frame" x="16" y="98" width="343" height="59"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="59" id="ieg-7K-spK"/>
                                 </constraints>
@@ -127,7 +127,8 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <searchBar contentMode="redraw" text="" placeholder="Search" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jOd-fE-aWr">
-                                <rect key="frame" x="0.0" y="176" width="375" height="56"/>
+                                <rect key="frame" x="0.0" y="163" width="375" height="56"/>
+                                <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="barTintColor" systemColor="secondarySystemBackgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
@@ -142,7 +143,7 @@
                             <constraint firstItem="cIS-ep-aHO" firstAttribute="top" secondItem="jOd-fE-aWr" secondAttribute="bottom" id="K5C-rX-Ty2"/>
                             <constraint firstItem="cIS-ep-aHO" firstAttribute="bottom" secondItem="IJh-Kh-fy2" secondAttribute="bottom" id="Npk-Pu-nl8"/>
                             <constraint firstItem="RGO-rp-AUU" firstAttribute="leading" secondItem="D51-nF-iPl" secondAttribute="leadingMargin" id="QPd-vE-dxo"/>
-                            <constraint firstItem="RGO-rp-AUU" firstAttribute="top" secondItem="IJh-Kh-fy2" secondAttribute="top" constant="23" id="crM-c0-G7g"/>
+                            <constraint firstItem="RGO-rp-AUU" firstAttribute="top" secondItem="IJh-Kh-fy2" secondAttribute="top" constant="10" id="crM-c0-G7g"/>
                             <constraint firstItem="IJh-Kh-fy2" firstAttribute="trailing" secondItem="RGO-rp-AUU" secondAttribute="trailing" constant="16" id="yXT-Y7-W0H"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="IJh-Kh-fy2"/>
@@ -808,7 +809,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="OrM-jC-JFg"/>
-        <segue reference="enf-3I-Kaq"/>
+        <segue reference="CoA-DR-f5i"/>
         <segue reference="67r-4m-Wu4"/>
         <segue reference="p9a-Sh-oWN"/>
     </inferredMetricsTieBreakers>
