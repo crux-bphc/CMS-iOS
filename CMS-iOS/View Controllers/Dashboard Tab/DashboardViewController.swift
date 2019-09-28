@@ -100,7 +100,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                     for i in 0 ..< courses.count{
                         let currentCourse = Course()
                         currentCourse.courseid = courses[i]["id"].int!
-                        currentCourse.displayname = String(htmlString: courses[i]["displayname"].string!)
+                        currentCourse.displayname = courses[i]["displayname"].string!
                         currentCourse.enrolled = true
                         self.courseList.append(currentCourse)
                         

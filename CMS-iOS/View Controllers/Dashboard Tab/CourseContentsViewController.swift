@@ -27,6 +27,7 @@ class CourseDetailsViewController : UITableViewController {
     let constants = Constants.Global.self
     override func viewDidLoad() {
         
+        self.title = currentCourse.displayname
         refreshController.tintColor = .black
         refreshController.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.refreshControl = refreshController
