@@ -15,18 +15,7 @@ class ModuleViewController : UIViewController {
     
     var selectedModule = Module()
     
-    @IBOutlet weak var descriptionText: UITextView!
-    @IBOutlet weak var textConstraint: NSLayoutConstraint!
-    @IBOutlet weak var attachmentButton: UIButton!
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print(selectedModule.modname)
-        if selectedModule.modname == "resource" || selectedModule.modname == "url" {
-            attachmentButton.isHidden = false
-        } else {
-            attachmentButton.isHidden = true
-        }
+    func setDescription(){
         if selectedModule.description != "" {
         do {
             print(selectedModule.moduleDescription)
@@ -52,6 +41,24 @@ class ModuleViewController : UIViewController {
             self.textConstraint.constant = 0
         }
     }
+    
+    @IBOutlet weak var descriptionText: UITextView!
+    @IBOutlet weak var textConstraint: NSLayoutConstraint!
+    @IBOutlet weak var attachmentButton: UIButton!
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print(selectedModule.modname)
+        if selectedModule.modname == "resource" || selectedModule.modname == "url" {
+            attachmentButton.isHidden = false
+        } else {
+            attachmentButton.isHidden = true
+        }
+        
+        setDescription()
+
+    }
+    
     
     func saveFileToStorage(mime: String, downloadUrl: String, module: Module) {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -136,5 +143,9 @@ class ModuleViewController : UIViewController {
             alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
             self.present(alert, animated: true, completion: nil)
         }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        setDescription()
     }
 }

@@ -12,10 +12,8 @@ import SVProgressHUD
 class DiscussionViewController: UIViewController {
     
     @IBOutlet weak var bodyTextView: UITextView!
-    
     var selectedDiscussion = Discussion()
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    func setMessage(){
         if selectedDiscussion.message != "" {
             do {
                 var systemColor = String()
@@ -37,6 +35,11 @@ class DiscussionViewController: UIViewController {
             
             bodyTextView.isEditable = false
         }
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setMessage()
+
     }
     
     func saveFileToStorage(mime: String, downloadUrl: String, discussion: Discussion) {
@@ -115,5 +118,8 @@ class DiscussionViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
             self.present(alert, animated: true, completion: nil)
         }
+    }
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        setMessage()
     }
 }
