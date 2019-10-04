@@ -14,6 +14,7 @@ class DiscussionViewController: UIViewController {
     @IBOutlet weak var bodyTextView: UITextView!
     var selectedDiscussion = Discussion()
     func setMessage(){
+        
         if selectedDiscussion.message != "" {
             do {
                 var systemColor = String()
@@ -39,7 +40,13 @@ class DiscussionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setMessage()
+        super.viewDidLoad()
+        self.navigationItem.largeTitleDisplayMode = .never
 
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
     }
     
     func saveFileToStorage(mime: String, downloadUrl: String, discussion: Discussion) {
@@ -48,7 +55,7 @@ class DiscussionViewController: UIViewController {
         let dataPath = documentsDirectory.absoluteURL
         
         guard let url = URL(string: downloadUrl) else { return }
-        let destination = dataPath.appendingPathComponent("\(discussion.filename)")
+        let destination = dataPath.appendingPathComponent("\(String(selectedDiscussion.id) + discussion.filename)")
         if FileManager().fileExists(atPath: destination.path) {
             let viewURL = destination as URL
             let data = try! Data(contentsOf: viewURL)

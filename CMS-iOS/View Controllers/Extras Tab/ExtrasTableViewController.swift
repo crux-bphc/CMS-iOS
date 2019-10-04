@@ -14,19 +14,25 @@ class ExtrasTableViewController: UITableViewController {
     let categoriesArray : [String] = ["Website", "About", "Logout"]
     let constants = Constants.Global.self
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupNavBar()
+    }
+    
+    func setupNavBar() {
+        
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        
+    }
     
     func logout(){
         let realm = try! Realm()
-
+        
         try! realm.write {
             realm.deleteAll()
-
+            
         }
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
     }
     
     // MARK: - Table view data source

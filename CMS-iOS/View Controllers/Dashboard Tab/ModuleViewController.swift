@@ -46,8 +46,8 @@ class ModuleViewController : UIViewController {
     @IBOutlet weak var textConstraint: NSLayoutConstraint!
     @IBOutlet weak var attachmentButton: UIButton!
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         print(selectedModule.modname)
         if selectedModule.modname == "resource" || selectedModule.modname == "url" {
             attachmentButton.isHidden = false
@@ -59,6 +59,11 @@ class ModuleViewController : UIViewController {
 
     }
     
+       
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
+    }
     
     func saveFileToStorage(mime: String, downloadUrl: String, module: Module) {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -66,7 +71,7 @@ class ModuleViewController : UIViewController {
         let dataPath = documentsDirectory.absoluteURL
 
         guard let url = URL(string: downloadUrl) else { return }
-        let destination = dataPath.appendingPathComponent("\(module.filename + String(module.id))")
+        let destination = dataPath.appendingPathComponent("\(String(module.id) + module.filename)")
         if FileManager().fileExists(atPath: destination.path) {
             let viewURL = destination as URL
             let data = try! Data(contentsOf: viewURL)

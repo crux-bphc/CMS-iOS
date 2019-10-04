@@ -26,6 +26,9 @@ class CourseDetailsViewController : UITableViewController {
     
     let constants = Constants.Global.self
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        navigationItem.largeTitleDisplayMode = .never
         
         self.title = currentCourse.displayname
         refreshController.tintColor = .black
@@ -39,7 +42,10 @@ class CourseDetailsViewController : UITableViewController {
                 SVProgressHUD.dismiss()
             }
         }
-        super.viewDidLoad()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
     }
     
     func getCourseContent(completion: @escaping ([CourseSection]) -> Void) {
