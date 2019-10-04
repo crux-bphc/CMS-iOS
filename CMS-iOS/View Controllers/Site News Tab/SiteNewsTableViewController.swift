@@ -26,7 +26,13 @@ class SiteNewsTableViewController: UITableViewController {
         
         setupNavBar()
         
-        refreshController.tintColor = .black
+        if #available(iOS 13.0, *) {
+            refreshController.tintColor = .label
+        } else {
+            // Fallback on earlier versions
+            refreshController.tintColor = .black
+
+        }
         refreshController.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.refreshControl = refreshController
         

@@ -39,7 +39,13 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         tableView.delegate = self
         tableView.dataSource = self
         
-        refreshControl.tintColor = .black
+        if #available(iOS 13.0, *) {
+            refreshControl.tintColor = .label
+        } else {
+            // Fallback on earlier versions
+            refreshControl.tintColor = .black
+
+        }
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         
         tableView.refreshControl = refreshControl

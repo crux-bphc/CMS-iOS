@@ -31,7 +31,13 @@ class CourseDetailsViewController : UITableViewController {
         navigationItem.largeTitleDisplayMode = .never
         
         self.title = currentCourse.displayname
-        refreshController.tintColor = .black
+        if #available(iOS 13.0, *) {
+            refreshControl?.tintColor = .label
+        } else {
+            // Fallback on earlier versions
+            refreshControl?.tintColor = .black
+
+        }
         refreshController.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.refreshControl = refreshController
         tableView.reloadData()
