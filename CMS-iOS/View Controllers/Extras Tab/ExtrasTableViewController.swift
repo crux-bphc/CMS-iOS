@@ -56,8 +56,16 @@ class ExtrasTableViewController: UITableViewController {
             performSegue(withIdentifier: "showAboutPage", sender: self)
             break
         case 2:
-            tabBarController?.dismiss(animated: true, completion: nil)
-            logout()
+            let warning = UIAlertController(title: "Confirmation", message: "Are you sure you want to log out?", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            warning.addAction(cancelAction)
+            let logOutAction = UIAlertAction(title: "Yes", style: .destructive) { (_) in
+                self.logout()
+                self.tabBarController?.dismiss(animated: true, completion: nil)
+
+            }
+            warning.addAction(logOutAction)
+            self.present(warning, animated: true, completion: nil)
             
             break
         default:
