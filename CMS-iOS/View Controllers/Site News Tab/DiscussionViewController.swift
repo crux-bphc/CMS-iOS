@@ -17,19 +17,17 @@ class DiscussionViewController: UIViewController {
         
         if selectedDiscussion.message != "" {
             do {
-                var systemColor = String()
-                if #available(iOS 12.0, *) {
-                    if self.traitCollection.userInterfaceStyle == .dark{
-                        systemColor = "white"
-                    }else{
-                        systemColor = "black"
-                    }
-                } else {
-                    systemColor = "black"
+                let formattedString = try NSAttributedString(data: ("<font size=\"+1.7\">\(selectedDiscussion.message)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
+                var attributedStringName = [NSAttributedString.Key : Any]()
+                if #available(iOS 13.0, *) {
+                    attributedStringName = [.foregroundColor: UIColor.label]
+                }else{
+                    attributedStringName = [.foregroundColor: UIColor.black]
+
                 }
-                
-                let formattedString = try NSAttributedString(data: ("<font size=\"+1.7\" color=\"\(systemColor)\">\(selectedDiscussion.message)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
-                bodyTextView.attributedText = formattedString
+                let string = NSMutableAttributedString(attributedString: formattedString)
+                string.addAttributes(attributedStringName, range: NSRange(location: 0, length: formattedString.length))
+                bodyTextView.attributedText = string
             } catch let error {
                 print("There was an error parsing HTML: \(error)")
             }
