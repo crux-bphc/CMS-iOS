@@ -15,6 +15,33 @@ class ModuleViewController : UIViewController {
     
     var selectedModule = Module()
     
+    func setDescription(){
+        if selectedModule.description != "" {
+        do {
+            print(selectedModule.moduleDescription)
+            var systemColor = String()
+            if #available(iOS 12.0, *) {
+                if self.traitCollection.userInterfaceStyle == .dark{
+                    systemColor = "white"
+                }else{
+                    systemColor = "black"
+                }
+            } else {
+                systemColor = "black"
+            }
+            
+            let formattedString = try NSAttributedString(data: ("<font size=\"+2\" color=\"\(systemColor)\">\(selectedModule.moduleDescription)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
+            descriptionText.attributedText = formattedString
+        } catch let error {
+            print("There was an error parsing HTML: \(error)")
+        }
+        
+        descriptionText.isEditable = false
+        } else {
+            self.textConstraint.constant = 0
+        }
+    }
+    
     @IBOutlet weak var descriptionText: UITextView!
     @IBOutlet weak var textConstraint: NSLayoutConstraint!
     @IBOutlet weak var attachmentButton: UIButton!
@@ -27,19 +54,12 @@ class ModuleViewController : UIViewController {
         } else {
             attachmentButton.isHidden = true
         }
-        if selectedModule.description != "" {
-            do {
-                let formattedString = try NSAttributedString(data: ("<font size=\"+2\">\(selectedModule.moduleDescription)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
-                descriptionText.attributedText = formattedString
-            } catch let error {
-                print("There was an error parsing HTML: \(error)")
-            }
-            
-            descriptionText.isEditable = false
-        } else {
-            self.textConstraint.constant = 0
-        }
+        
+        setDescription()
+
     }
+    
+       
     
     override func viewWillDisappear(_ animated: Bool) {
         SVProgressHUD.dismiss()
@@ -128,5 +148,9 @@ class ModuleViewController : UIViewController {
             alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
             self.present(alert, animated: true, completion: nil)
         }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        setDescription()
     }
 }

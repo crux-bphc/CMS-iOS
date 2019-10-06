@@ -12,14 +12,23 @@ import SVProgressHUD
 class DiscussionViewController: UIViewController {
     
     @IBOutlet weak var bodyTextView: UITextView!
-    
     var selectedDiscussion = Discussion()
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.navigationItem.largeTitleDisplayMode = .never
+    func setMessage(){
+        
         if selectedDiscussion.message != "" {
             do {
-                let formattedString = try NSAttributedString(data: ("<font size=\"+1.7\">\(selectedDiscussion.message)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
+                var systemColor = String()
+                if #available(iOS 12.0, *) {
+                    if self.traitCollection.userInterfaceStyle == .dark{
+                        systemColor = "white"
+                    }else{
+                        systemColor = "black"
+                    }
+                } else {
+                    systemColor = "black"
+                }
+                
+                let formattedString = try NSAttributedString(data: ("<font size=\"+1.7\" color=\"\(systemColor)\">\(selectedDiscussion.message)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
                 bodyTextView.attributedText = formattedString
             } catch let error {
                 print("There was an error parsing HTML: \(error)")
@@ -27,6 +36,13 @@ class DiscussionViewController: UIViewController {
             
             bodyTextView.isEditable = false
         }
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setMessage()
+        super.viewDidLoad()
+        self.navigationItem.largeTitleDisplayMode = .never
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -109,5 +125,8 @@ class DiscussionViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "Dismiss", style: .default))
             self.present(alert, animated: true, completion: nil)
         }
+    }
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        setMessage()
     }
 }

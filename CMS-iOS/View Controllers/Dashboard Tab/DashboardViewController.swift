@@ -39,7 +39,13 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         tableView.delegate = self
         tableView.dataSource = self
         
-        refreshControl.tintColor = .black
+        if #available(iOS 13.0, *) {
+            refreshControl.tintColor = .label
+        } else {
+            // Fallback on earlier versions
+            refreshControl.tintColor = .black
+
+        }
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         
         tableView.refreshControl = refreshControl
@@ -159,15 +165,16 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "reuseCell")
-        
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCell")
         
         if searchController.isActive {
             cell.textLabel?.text = filteredCourseList[indexPath.row].displayname
+            cell.detailTextLabel?.text = filteredCourseList[indexPath.row].faculty
             
         }
         else {
             cell.textLabel?.text = courseList[indexPath.row].displayname
+            cell.detailTextLabel?.text = courseList[indexPath.row].faculty
         }
         return cell
     }

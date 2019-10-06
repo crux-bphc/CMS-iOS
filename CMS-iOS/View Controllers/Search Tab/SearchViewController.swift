@@ -39,7 +39,6 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.dimsBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = false
         definesPresentationContext = true
     }
     
