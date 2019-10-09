@@ -1,3 +1,2 @@
-/Pods/*
-*.lock
+Pods/
 Podfile.lock
