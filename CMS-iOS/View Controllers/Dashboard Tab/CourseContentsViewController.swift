@@ -345,4 +345,7 @@ class CourseDetailsViewController : UITableViewController {
         self.title = currentCourse.displayname
         self.tableView.reloadData()
     }
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        updateUI()
+    }
 }
