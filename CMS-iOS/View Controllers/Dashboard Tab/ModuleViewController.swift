@@ -15,6 +15,32 @@ class ModuleViewController : UIViewController {
     
     var selectedModule = Module()
     
+    func setDescription(){
+        if selectedModule.description != "" {
+        do {
+            print(selectedModule.moduleDescription)
+            
+            let formattedString = try NSAttributedString(data: ("<font size=\"+2\">\(selectedModule.moduleDescription)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
+            var attributedStringName = [NSAttributedString.Key : Any]()
+            if #available(iOS 13.0, *) {
+                attributedStringName = [.foregroundColor: UIColor.label]
+            }else{
+                attributedStringName = [.foregroundColor: UIColor.black]
+
+            }
+            let string = NSMutableAttributedString(attributedString: formattedString)
+            string.addAttributes(attributedStringName, range: NSRange(location: 0, length: formattedString.length))
+            descriptionText.attributedText = string
+        } catch let error {
+            print("There was an error parsing HTML: \(error)")
+        }
+        
+        descriptionText.isEditable = false
+        } else {
+            self.textConstraint.constant = 0
+        }
+    }
+    
     @IBOutlet weak var descriptionText: UITextView!
     @IBOutlet weak var textConstraint: NSLayoutConstraint!
     @IBOutlet weak var attachmentButton: UIButton!
@@ -31,31 +57,6 @@ class ModuleViewController : UIViewController {
         setDescription()
     }
     
-    func setDescription(){
-        if selectedModule.moduleDescription != "" {
-            do {
-                var systemColor = String()
-                if #available(iOS 12.0, *) {
-                    if self.traitCollection.userInterfaceStyle == .dark{
-                        systemColor = "white"
-                    }else{
-                        systemColor = "black"
-                    }
-                } else {
-                    systemColor = "black"
-                }
-                
-                let formattedString = try NSAttributedString(data: ("<font size=\"+2\" color=\"\(systemColor)\">\(selectedModule.moduleDescription)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
-                descriptionText.attributedText = formattedString
-            } catch let error {
-                print("There was an error parsing HTML: \(error)")
-            }
-            
-            descriptionText.isEditable = false
-        } else {
-            self.textConstraint.constant = 0
-        }
-    }
     
     override func viewWillDisappear(_ animated: Bool) {
         SVProgressHUD.dismiss()

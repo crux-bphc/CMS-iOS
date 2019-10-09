@@ -7,10 +7,12 @@
     },
     {
       "idiom" : "universal",
+      "filename" : "icons8-powerpoint-1.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "icons8-powerpoint.png",
       "scale" : "3x"
     }
   ],
