@@ -16,7 +16,7 @@ class ModuleViewController : UIViewController {
     var selectedModule = Module()
     
     func setDescription(){
-        if selectedModule.description != "" {
+        if selectedModule.moduleDescription != "" {
         do {
             print(selectedModule.moduleDescription)
             
