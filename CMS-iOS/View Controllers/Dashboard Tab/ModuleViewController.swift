@@ -57,31 +57,6 @@ class ModuleViewController : UIViewController {
         setDescription()
     }
     
-//    func setDescription(){
-//        if selectedModule.moduleDescription != "" {
-//            do {
-//                var systemColor = String()
-//                if #available(iOS 12.0, *) {
-//                    if self.traitCollection.userInterfaceStyle == .dark{
-//                        systemColor = "white"
-//                    }else{
-//                        systemColor = "black"
-//                    }
-//                } else {
-//                    systemColor = "black"
-//                }
-//
-//                let formattedString = try NSAttributedString(data: ("<font size=\"+2\" color=\"\(systemColor)\">\(selectedModule.moduleDescription)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
-//                descriptionText.attributedText = formattedString
-//            } catch let error {
-//                print("There was an error parsing HTML: \(error)")
-//            }
-//
-//            descriptionText.isEditable = false
-//        } else {
-//            self.textConstraint.constant = 0
-//        }
-//    }
     
     override func viewWillDisappear(_ animated: Bool) {
         SVProgressHUD.dismiss()
