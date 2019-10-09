@@ -38,10 +38,37 @@ class FolderContentViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseCell", for: indexPath)
-        
-        
         cell.textLabel?.text = currentModuleContents[indexPath.row].filename
         
+        switch currentModuleContents[indexPath.row].mimetype {
+        case "application/pdf":
+            cell.imageView?.image = UIImage(named: "pdf")
+            break
+        case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+            cell.imageView?.image = UIImage(named: "doc")
+            break
+        case "text/plain":
+            cell.imageView?.image = UIImage(named: "txt")
+            break
+        case "image/jpeg":
+            cell.imageView?.image = UIImage(named: "jpg")
+            break
+        case "image/png":
+            cell.imageView?.image = UIImage(named: "png")
+            break
+        case "application/vnd.ms-excel":
+            cell.imageView?.image = UIImage(named: "xls")
+            break
+        case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+            cell.imageView?.image = UIImage(named: "xls")
+            break
+        case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+            cell.imageView?.image = UIImage(named: "ppt")
+            break
+        default:
+            cell.imageView?.image = UIImage(named: "raw")
+            break
+        }
         return cell
     }
     
