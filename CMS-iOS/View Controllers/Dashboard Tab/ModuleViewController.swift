@@ -55,10 +55,33 @@ class ModuleViewController : UIViewController {
         }
         
         setDescription()
-
     }
     
-       
+//    func setDescription(){
+//        if selectedModule.moduleDescription != "" {
+//            do {
+//                var systemColor = String()
+//                if #available(iOS 12.0, *) {
+//                    if self.traitCollection.userInterfaceStyle == .dark{
+//                        systemColor = "white"
+//                    }else{
+//                        systemColor = "black"
+//                    }
+//                } else {
+//                    systemColor = "black"
+//                }
+//
+//                let formattedString = try NSAttributedString(data: ("<font size=\"+2\" color=\"\(systemColor)\">\(selectedModule.moduleDescription)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
+//                descriptionText.attributedText = formattedString
+//            } catch let error {
+//                print("There was an error parsing HTML: \(error)")
+//            }
+//
+//            descriptionText.isEditable = false
+//        } else {
+//            self.textConstraint.constant = 0
+//        }
+//    }
     
     override func viewWillDisappear(_ animated: Bool) {
         SVProgressHUD.dismiss()
@@ -68,7 +91,7 @@ class ModuleViewController : UIViewController {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         print(String(describing: documentsDirectory))
         let dataPath = documentsDirectory.absoluteURL
-
+        
         guard let url = URL(string: downloadUrl) else { return }
         let destination = dataPath.appendingPathComponent("\(String(module.id) + module.filename)")
         if FileManager().fileExists(atPath: destination.path) {
@@ -81,8 +104,8 @@ class ModuleViewController : UIViewController {
             docVC.view.addSubview(webView)
             if selectedModule.name != ""{
                 docVC.title = self.selectedModule.name
-
-            }else{
+                
+            } else{
                 docVC.title = self.selectedModule.filename
             }
             self.navigationController?.pushViewController(docVC, animated: true)
@@ -110,9 +133,8 @@ class ModuleViewController : UIViewController {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-    
-        SVProgressHUD.show()
         
+        SVProgressHUD.show()
         
         let task = session.downloadTask(with: request) {(tempLocalUrl, response, error) in
             if let tempLocalUrl = tempLocalUrl, error == nil {
