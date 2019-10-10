@@ -32,9 +32,15 @@ class LoginViewController: UIViewController {
             if let realmUser = realm.objects(User.self).first{
                 currentUser = realmUser
             }
-            
-            
-            
+        }
+        if #available(iOS 12.0, *) {
+            if traitCollection.userInterfaceStyle == .dark{
+                SVProgressHUD.setDefaultStyle(.dark)
+            }else{
+                SVProgressHUD.setDefaultStyle(.light)
+            }
+        } else {
+            SVProgressHUD.setDefaultStyle(.dark)
         }
     }
     
