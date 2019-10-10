@@ -11,10 +11,11 @@ import MobileCoreServices
 import SVProgressHUD
 import SwiftKeychainWrapper
 
-class ModuleViewController : UIViewController {
+class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
     
     var selectedModule = Module()
-    
+    var destinationURL = URL(string: "")
+    var locationToCopy = URL(string: "")
     @IBOutlet weak var descriptionText: UITextView!
     @IBOutlet weak var textConstraint: NSLayoutConstraint!
     @IBOutlet weak var attachmentButton: UIButton!
@@ -85,20 +86,8 @@ class ModuleViewController : UIViewController {
             self.navigationController?.pushViewController(docVC, animated: true)
         } else {
             if Reachability.isConnectedToNetwork() {
-                download(url: url, to: destination) {
-                    SVProgressHUD.dismiss()
-                    DispatchQueue.main.async {
-                        let viewURL = destination as URL
-                        let data = try! Data(contentsOf: viewURL)
-                        let webView = UIWebView(frame: self.view.frame)
-                        webView.load(data, mimeType: self.selectedModule.mimetype, textEncodingName: "", baseURL: viewURL.deletingLastPathComponent())
-                        webView.scalesPageToFit = true
-                        let docVC = UIViewController()
-                        docVC.view.addSubview(webView)
-                        docVC.title = self.selectedModule.name
-                        self.navigationController?.pushViewController(docVC, animated: true)
-                    }
-                }
+                destinationURL = destination
+                download(url: url, to: destination)
             } else {
                 let alert = UIAlertController(title: "Unable to download", message: "The file cannot be downloaded as the device is offline.", preferredStyle: .alert)
                 let action = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
@@ -108,32 +97,25 @@ class ModuleViewController : UIViewController {
         }
     }
     
-    func download(url: URL, to localUrl: URL, completion: @escaping () -> Void) {
+    func openFile(){
+        let data = try! Data(contentsOf: destinationURL!)
+        let webView = UIWebView(frame: self.view.frame)
+        webView.load(data, mimeType: self.selectedModule.mimetype, textEncodingName: "", baseURL: destinationURL!.deletingLastPathComponent())
+        webView.scalesPageToFit = true
+        let docVC = UIViewController()
+        docVC.view.addSubview(webView)
+        docVC.title = self.selectedModule.name
+        self.navigationController?.pushViewController(docVC, animated: true)
+    }
+    func download(url: URL, to localUrl: URL) {
+        locationToCopy = localUrl
         let sessionConfig = URLSessionConfiguration.default
-        let session = URLSession(configuration: sessionConfig)
+        let session = URLSession(configuration: sessionConfig, delegate: self, delegateQueue: OperationQueue.main)
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        
-        SVProgressHUD.show()
-        
-        let task = session.downloadTask(with: request) {(tempLocalUrl, response, error) in
-            if let tempLocalUrl = tempLocalUrl, error == nil {
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                    print(statusCode)
-                }
-                
-                do {
-                    try FileManager.default.copyItem(at: tempLocalUrl, to: localUrl)
-                    print("Saved")
-                    completion()
-                } catch (let writeError){
-                    print("there was an error: \(writeError)")
-                }
-            } else {
-                print("failure")
-            }
-        }
+        let task = session.downloadTask(with: request)
+        SVProgressHUD.showProgress(0)
         task.resume()
     }
     
@@ -155,4 +137,21 @@ class ModuleViewController : UIViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         setDescription()
     }
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        do {
+            try FileManager.default.copyItem(at: location, to: locationToCopy!)
+            print("Saved")
+            openFile()
+        } catch (let writeError){
+            print("there was an error: \(writeError)")
+        }
+    }
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+            let downloadProgress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+            SVProgressHUD.showProgress(Float((downloadProgress)))
+        
+        
+    }
+    
 }
