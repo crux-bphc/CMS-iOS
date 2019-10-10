@@ -106,11 +106,11 @@
 		0A3DEAF122FDCA69001B6BFD /* CMS-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
+				E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */,
 				0A58544F230163E9008FB370 /* Support */,
 				0A3DEB0422FDCCDA001B6BFD /* Font */,
 				0A3DEAF222FDCA69001B6BFD /* AppDelegate.swift */,
-				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
-				E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */,
 				0AC33B6023020669004AE385 /* View Controllers */,
 				0AC33B6523021591004AE385 /* Data Models */,
 				0A3DEAFB22FDCA6A001B6BFD /* LaunchScreen.storyboard */,
