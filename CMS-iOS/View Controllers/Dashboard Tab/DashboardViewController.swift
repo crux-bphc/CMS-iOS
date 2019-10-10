@@ -56,24 +56,20 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if courseList.isEmpty {
-            getRegisteredCourses {
-                self.refreshControl.endRefreshing()
-            }
+            refreshData()
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         if !searchController.isActive{
-            getRegisteredCourses {
-            }
+            refreshData()
         }
-        
         tableView.reloadData()
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         SVProgressHUD.dismiss()
+        refreshControl.endRefreshing()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -111,7 +107,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             print("The secret used was: " + KeychainWrapper.standard.string(forKey: "userPassword")!)
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
-            SVProgressHUD.show()
+//            SVProgressHUD.show()
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
                 if courseData.result.isSuccess {
                     if (realmCourses.count != 0){
