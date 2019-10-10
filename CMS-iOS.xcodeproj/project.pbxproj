@@ -30,6 +30,8 @@
 		0AF20A2F230B2F17001C0CB1 /* ExtrasTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF20A2E230B2F17001C0CB1 /* ExtrasTableViewController.swift */; };
 		0AF20A32230B3D9F001C0CB1 /* SiteNewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF20A31230B3D9F001C0CB1 /* SiteNewsTableViewController.swift */; };
 		0AF20A35230B48AD001C0CB1 /* DiscussionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF20A34230B48AD001C0CB1 /* DiscussionViewController.swift */; };
+		0AF805C5234F43A3008D9B25 /* CourseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */; };
+		0AF805C6234F43A3008D9B25 /* CourseTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */; };
 		9BCC1CC2C94658257C7F89AE /* Pods_CMS_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E75E90651C644F9862ACA5C0 /* Pods_CMS_iOS.framework */; };
 		E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */; };
 		E6510CAE233FD49B009FCF0D /* HTMLStringDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */; };
@@ -64,6 +66,8 @@
 		0AF20A2E230B2F17001C0CB1 /* ExtrasTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrasTableViewController.swift; sourceTree = "<group>"; };
 		0AF20A31230B3D9F001C0CB1 /* SiteNewsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteNewsTableViewController.swift; sourceTree = "<group>"; };
 		0AF20A34230B48AD001C0CB1 /* DiscussionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionViewController.swift; sourceTree = "<group>"; };
+		0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CourseTableViewCell.xib; sourceTree = SOURCE_ROOT; };
 		A59470A9C8966A1BC963F37A /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		D3068BDF339E49E6F0EA5C2F /* Pods-CMS-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.release.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderContentViewController.swift; sourceTree = "<group>"; };
@@ -117,6 +121,8 @@
 				E6A556F123479C41005A1A33 /* Main.storyboard */,
 				0AC33B6623022453004AE385 /* Assets.xcassets */,
 				0A3DEAFE22FDCA6A001B6BFD /* Info.plist */,
+				0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */,
+				0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */,
 			);
 			path = "CMS-iOS";
 			sourceTree = "<group>";
@@ -280,6 +286,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AF805C6234F43A3008D9B25 /* CourseTableViewCell.xib in Resources */,
 				E6C78DE32325302800387CF0 /* SampleJSONData.json in Resources */,
 				E6A556F223479C41005A1A33 /* Main.storyboard in Resources */,
 				0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */,
@@ -343,6 +350,7 @@
 				0AC33B642302153C004AE385 /* Course.swift in Sources */,
 				E6510CAE233FD49B009FCF0D /* HTMLStringDecoder.swift in Sources */,
 				0A3DEAF522FDCA69001B6BFD /* LoginViewController.swift in Sources */,
+				0AF805C5234F43A3008D9B25 /* CourseTableViewCell.swift in Sources */,
 				0AC33B6D2302EF18004AE385 /* Module.swift in Sources */,
 				0A3DEAF322FDCA69001B6BFD /* AppDelegate.swift in Sources */,
 				0A7F90BC2300753E00683867 /* DashboardViewController.swift in Sources */,
