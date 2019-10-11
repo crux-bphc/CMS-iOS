@@ -23,7 +23,4 @@ class CourseTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
-    @IBAction func didSelectOptionButton(_ sender: UIButton) {
-    }
 }

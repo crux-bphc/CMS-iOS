@@ -140,6 +140,7 @@ class ModuleViewController : UIViewController {
     @IBAction func openFileButtonPressed(_ sender: UIButton) {
         switch selectedModule.modname {
         case "url":
+            print(self.selectedModule.fileurl)
             UIApplication.shared.open(URL(string: self.selectedModule.fileurl)!, options: [:], completionHandler: nil)
             break
         case "resource":

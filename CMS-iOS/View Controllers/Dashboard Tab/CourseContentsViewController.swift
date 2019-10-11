@@ -97,7 +97,7 @@ class CourseDetailsViewController : UITableViewController {
                                     else {
                                         moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!)
                                     }
-                                    print(moduleData.fileurl)
+                                    print("The url of the resource is: \(moduleData.fileurl)")
                                 } else if moduleData.modname == "forum" {
                                     moduleData.id = courseContent[i]["modules"][j]["instance"].int!
                                 }else if moduleData.modname == "folder"{
@@ -113,6 +113,9 @@ class CourseDetailsViewController : UITableViewController {
                                         newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
                                         moduleData.fileModules.append(newModule)
                                     }
+                                } else if moduleData.modname == "url" {
+                                    moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!)
+                                    print("The url of the resource is: \(moduleData.fileurl)")
                                 }
                                 
                                 moduleData.name = courseContent[i]["modules"][j]["name"].string!
