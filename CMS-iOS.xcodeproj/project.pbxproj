@@ -66,8 +66,8 @@
 		0AF20A2E230B2F17001C0CB1 /* ExtrasTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrasTableViewController.swift; sourceTree = "<group>"; };
 		0AF20A31230B3D9F001C0CB1 /* SiteNewsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteNewsTableViewController.swift; sourceTree = "<group>"; };
 		0AF20A34230B48AD001C0CB1 /* DiscussionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionViewController.swift; sourceTree = "<group>"; };
-		0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseTableViewCell.swift; sourceTree = SOURCE_ROOT; };
-		0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CourseTableViewCell.xib; sourceTree = SOURCE_ROOT; };
+		0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseTableViewCell.swift; path = "CMS-iOS/New Group/CourseTableViewCell.swift"; sourceTree = SOURCE_ROOT; };
+		0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CourseTableViewCell.xib; path = "CMS-iOS/New Group/CourseTableViewCell.xib"; sourceTree = SOURCE_ROOT; };
 		A59470A9C8966A1BC963F37A /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		D3068BDF339E49E6F0EA5C2F /* Pods-CMS-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.release.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderContentViewController.swift; sourceTree = "<group>"; };
@@ -110,8 +110,7 @@
 		0A3DEAF122FDCA69001B6BFD /* CMS-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */,
-				0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */,
+				0AC43B562350B11700A4ED1B /* New Group */,
 				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
 				E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */,
 				0A58544F230163E9008FB370 /* Support */,
@@ -188,6 +187,15 @@
 				0AC33B6C2302EF18004AE385 /* Module.swift */,
 			);
 			path = "Data Models";
+			sourceTree = "<group>";
+		};
+		0AC43B562350B11700A4ED1B /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */,
+				0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */,
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 		0AF20A30230B2F2A001C0CB1 /* Extras Tab */ = {
