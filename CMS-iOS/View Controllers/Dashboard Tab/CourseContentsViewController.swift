@@ -312,6 +312,16 @@ class CourseDetailsViewController : UITableViewController {
                     break
                 }
             }
+        } else if sectionArray[indexPath.section].modules[indexPath.row].modname == "url" {
+            if #available(iOS 12.0, *) {
+                if self.traitCollection.userInterfaceStyle == .dark {
+            cell.imageView?.image = UIImage(named: "web_dark")
+                } else {
+                    cell.imageView?.image = UIImage(named: "web")
+                }
+            } else {
+                cell.imageView?.image = UIImage(named: "web")
+            }
         }
         
         return cell
