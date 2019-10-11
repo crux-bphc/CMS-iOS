@@ -33,6 +33,15 @@ class LoginViewController: UIViewController {
                 currentUser = realmUser
             }
         }
+        if #available(iOS 12.0, *) {
+            if traitCollection.userInterfaceStyle == .dark{
+                SVProgressHUD.setDefaultStyle(.dark)
+            }else{
+                SVProgressHUD.setDefaultStyle(.light)
+            }
+        } else {
+            SVProgressHUD.setDefaultStyle(.dark)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
