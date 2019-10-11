@@ -110,6 +110,8 @@
 		0A3DEAF122FDCA69001B6BFD /* CMS-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */,
+				0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */,
 				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
 				E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */,
 				0A58544F230163E9008FB370 /* Support */,
@@ -121,8 +123,6 @@
 				E6A556F123479C41005A1A33 /* Main.storyboard */,
 				0AC33B6623022453004AE385 /* Assets.xcassets */,
 				0A3DEAFE22FDCA6A001B6BFD /* Info.plist */,
-				0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */,
-				0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */,
 			);
 			path = "CMS-iOS";
 			sourceTree = "<group>";
