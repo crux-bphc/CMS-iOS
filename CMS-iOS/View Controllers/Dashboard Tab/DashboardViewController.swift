@@ -66,9 +66,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     override func viewDidAppear(_ animated: Bool) {
-//        if !searchController.isActive{
-//            refreshData()
-//        }
+        //        if !searchController.isActive{
+        //            refreshData()
+        //        }
         tableView.reloadData()
     }
     
@@ -98,11 +98,25 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         if indexPath == nil {
             print("Tap on the row, not the tableview.")
         } else if longPressGesture.state == UIGestureRecognizer.State.began {
-            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            var actionSheet = UIAlertController()
+            if searchController.isActive{
+                if let rowNo = indexPath?.row{
+                    actionSheet = UIAlertController(title: filteredCourseList[rowNo].displayname, message: nil, preferredStyle: .actionSheet)
+                }
+            }else{
+                if let rowNo = indexPath?.row{
+                    actionSheet = UIAlertController(title: courseList[rowNo].displayname, message: nil, preferredStyle: .actionSheet)
+                }
+            }
             let downloadAction = UIAlertAction(title: "Download Course", style: .default) { (action) in
                 print("Download Button Clicked for cell at \(indexPath ?? [69,69])")
+                var courseToDownload = Course()
+                if let rowNo = indexPath?.row{
+                    courseToDownload = self.searchController.isActive ? self.filteredCourseList[rowNo] : self.courseList[rowNo]
+//                    downloadCourse(courseToDownload)
+                }
             }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             actionSheet.addAction(downloadAction)
             actionSheet.addAction(cancelAction)
             present(actionSheet, animated: true, completion: nil)
@@ -128,7 +142,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             print("The secret used was: " + KeychainWrapper.standard.string(forKey: "userPassword")!)
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
-            //            SVProgressHUD.show()
+            SVProgressHUD.show()
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
                 if courseData.result.isSuccess {
                     if (realmCourses.count != 0){
