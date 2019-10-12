@@ -23,6 +23,7 @@ class CourseDetailsViewController : UITableViewController {
     var selectedModule = Module()
     var discussionArray = [Discussion]()
     let refreshController = UIRefreshControl()
+    let realm = try! Realm()
     
     let constants = Constants.Global.self
     override func viewDidLoad() {
@@ -57,8 +58,6 @@ class CourseDetailsViewController : UITableViewController {
     func getCourseContent(completion: @escaping ([CourseSection]) -> Void) {
         
         if Reachability.isConnectedToNetwork(){
-            
-            let realm = try! Realm()
             let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
             let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
             SVProgressHUD.show()
@@ -66,10 +65,10 @@ class CourseDetailsViewController : UITableViewController {
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
-                    let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
+                    let realmSections = self.realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
                     if realmSections.count != 0{
-                        try! realm.write {
-                            realm.delete(realmSections)
+                        try! self.realm.write {
+                            self.realm.delete(realmSections)
                             // deleted
                             print("deleted preexisting objects")
                         }
@@ -127,8 +126,8 @@ class CourseDetailsViewController : UITableViewController {
                                 print(moduleData.name)
                             }
                             self.sectionArray.append(section)
-                            try! realm.write {
-                                realm.add(section)
+                            try! self.realm.write {
+                                self.realm.add(section)
                                 print("Added section to realm")
                             }
                         }
@@ -140,8 +139,8 @@ class CourseDetailsViewController : UITableViewController {
         }
         else{
             // try to get modules from memory
-            let realm = try! Realm()
-            let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
+            
+            let sections = self.realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
             
             if sections.count != 0{
                 sectionArray.removeAll()
@@ -185,8 +184,12 @@ class CourseDetailsViewController : UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("Read?: \(sectionArray[indexPath.section].modules[indexPath.row].read)")
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCourse")
         cell.textLabel?.text = sectionArray[indexPath.section].modules[indexPath.row].name
+        if !sectionArray[indexPath.section].modules[indexPath.row].read {
+            cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        }
         
         if sectionArray[indexPath.section].modules[indexPath.row].modname == "folder"{
             if #available(iOS 12.0, *) {
@@ -212,7 +215,7 @@ class CourseDetailsViewController : UITableViewController {
         } else if sectionArray[indexPath.section].modules[indexPath.row].modname == "url" {
             if #available(iOS 12.0, *) {
                 if self.traitCollection.userInterfaceStyle == .dark {
-            cell.imageView?.image = UIImage(named: "web_dark")
+                    cell.imageView?.image = UIImage(named: "web_dark")
                 } else {
                     cell.imageView?.image = UIImage(named: "web")
                 }
@@ -233,6 +236,11 @@ class CourseDetailsViewController : UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let realmModule = realm.objects(Module.self)[indexPath.row]
+        try! realm.write {
+            realmModule.read = true
+        }
+        
         self.selectedModule = sectionArray[indexPath.section].modules[indexPath.row]
         if self.selectedModule.modname == "assign" {
             let alert = UIAlertController(title: "Assignments not supported", message: "Assignments are not supported on the mobile version of CMS.", preferredStyle: .alert)
