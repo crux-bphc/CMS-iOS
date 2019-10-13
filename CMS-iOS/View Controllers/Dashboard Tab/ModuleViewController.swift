@@ -89,6 +89,8 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
                 destinationURL = destination
                 download(url: url, to: destination)
             } else {
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.error)
                 let alert = UIAlertController(title: "Unable to download", message: "The file cannot be downloaded as the device is offline.", preferredStyle: .alert)
                 let action = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
                 alert.addAction(action)
@@ -98,6 +100,8 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
     }
     
     func openFile(){
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
         let data = try! Data(contentsOf: destinationURL!)
         let webView = UIWebView(frame: self.view.frame)
         webView.load(data, mimeType: self.selectedModule.mimetype, textEncodingName: "", baseURL: destinationURL!.deletingLastPathComponent())
@@ -149,7 +153,7 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-            let downloadProgress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
-            SVProgressHUD.showProgress(Float((downloadProgress)))   
+        let downloadProgress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+        SVProgressHUD.showProgress(Float((downloadProgress)))
     }    
 }
