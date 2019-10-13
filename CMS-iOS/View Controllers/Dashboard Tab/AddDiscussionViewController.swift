@@ -16,17 +16,19 @@ class AddDiscussionViewController: UIViewController {
     
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var messageBodyTextField: UITextView!
+    @IBOutlet weak var addButton: UIButton!
     
     let constants = Constants.Global.self
     var currentForum : String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         messageBodyTextField.layer.borderColor = UIColor(red: 204.0/255.0, green:204.0/255.0, blue:204.0/255.0, alpha:1.0).cgColor
         messageBodyTextField.layer.borderWidth = 0.25
         messageBodyTextField.layer.cornerRadius = 5.0
         
+        changeButtonColour()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -58,6 +60,21 @@ class AddDiscussionViewController: UIViewController {
         }
     }
     
+    func changeButtonColour() {
+        if #available(iOS 12.0, *) {
+            if self.traitCollection.userInterfaceStyle == .dark {
+                addButton.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
+                addButton.setTitleColor(UIColor(white: 0.0, alpha: 1.0), for: .normal)
+            } else {
+                addButton.backgroundColor = UIColor(white: 0.0, alpha: 1.0)
+                addButton.setTitleColor(UIColor(white: 1.0, alpha: 1.0), for: .normal)
+            }
+        } else {
+            addButton.backgroundColor = UIColor(white: 0.0, alpha: 1.0)
+            addButton.setTitleColor(UIColor(white: 1.0, alpha: 1.0), for: .normal)
+        }
+    }
+    
     @objc func doneButtonAction() {
         self.view.endEditing(true)
     }
@@ -75,5 +92,9 @@ class AddDiscussionViewController: UIViewController {
             alert.addAction(action)
             present(alert, animated: true, completion: nil)
         }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        changeButtonColour()
     }
 }

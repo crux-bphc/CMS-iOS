@@ -13,7 +13,7 @@ import SVProgressHUD
 import SwiftKeychainWrapper
 import RealmSwift
 
-class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating {
+class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -44,35 +44,36 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         } else {
             // Fallback on earlier versions
             refreshControl.tintColor = .black
-
+            
         }
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         
         tableView.refreshControl = refreshControl
         tableView.reloadData()
+        tableView.register(UINib(nibName: "CourseTableViewCell", bundle: nil), forCellReuseIdentifier: "CourseTableViewCell")
+        
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        longPressGesture.minimumPressDuration = 0.5
+        longPressGesture.delegate = self
+        self.tableView.addGestureRecognizer(longPressGesture)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if courseList.isEmpty {
-            getRegisteredCourses {
-                self.refreshControl.endRefreshing()
-            }
+            refreshData()
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        if !searchController.isActive{
-            getRegisteredCourses {
-            }
-        }
-        
+//        if !searchController.isActive{
+//            refreshData()
+//        }
         tableView.reloadData()
-
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        SVProgressHUD.dismiss()
+        refreshControl.endRefreshing()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -89,6 +90,23 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
+    }
+    
+    @objc func handleLongPress(longPressGesture: UILongPressGestureRecognizer) {
+        let pressLocation = longPressGesture.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: pressLocation)
+        if indexPath == nil {
+            print("Tap on the row, not the tableview.")
+        } else if longPressGesture.state == UIGestureRecognizer.State.began {
+            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            let downloadAction = UIAlertAction(title: "Download Course", style: .default) { (action) in
+                print("Download Button Clicked for cell at \(indexPath ?? [69,69])")
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
+            actionSheet.addAction(downloadAction)
+            actionSheet.addAction(cancelAction)
+            present(actionSheet, animated: true, completion: nil)
+        }
     }
     
     func filterCoursesForSearch(string: String) {
@@ -110,7 +128,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             print("The secret used was: " + KeychainWrapper.standard.string(forKey: "userPassword")!)
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
-            SVProgressHUD.show()
+            //            SVProgressHUD.show()
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
                 if courseData.result.isSuccess {
                     if (realmCourses.count != 0){
@@ -127,6 +145,8 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                         currentCourse.courseid = courses[i]["id"].int!
                         currentCourse.displayname = courses[i]["displayname"].string!
                         currentCourse.enrolled = true
+                        currentCourse.progress = 0.01 * Float(courses[i]["progress"].int ?? 0)
+                        //                        print("The progress of the course is: \(currentCourse.progress)")
                         self.courseList.append(currentCourse)
                         
                         try! self.realm.write {
@@ -165,21 +185,26 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
         
         if searchController.isActive {
-            cell.textLabel?.text = filteredCourseList[indexPath.row].displayname
-            cell.detailTextLabel?.text = filteredCourseList[indexPath.row].faculty
             
-        }
-        else {
-            cell.textLabel?.text = courseList[indexPath.row].displayname
-            cell.detailTextLabel?.text = courseList[indexPath.row].faculty
+            cell.courseName.text = filteredCourseList[indexPath.row].displayname
+            cell.courseProgress.progress = Float(filteredCourseList[indexPath.row].progress)
+            
+        } else {
+            cell.courseName.text = courseList[indexPath.row].displayname
+            cell.courseProgress.progress = Float(courseList[indexPath.row].progress)
         }
         return cell
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
         if searchController.isActive {
             self.selectedCourseId = filteredCourseList[indexPath.row].courseid

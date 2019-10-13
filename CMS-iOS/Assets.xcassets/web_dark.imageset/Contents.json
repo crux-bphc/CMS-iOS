@@ -2,25 +2,22 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "dashboard (2).png",
+      "filename" : "web3x_dark.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "dashboard (1).png",
+      "filename" : "web2x_dark.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "dashboard.png",
+      "filename" : "web_dark.png",
       "scale" : "3x"
     }
   ],
   "info" : {
     "version" : 1,
     "author" : "xcode"
-  },
-  "properties" : {
-    "template-rendering-intent" : "template"
   }
 }

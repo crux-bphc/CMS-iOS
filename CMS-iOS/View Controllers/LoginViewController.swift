@@ -32,9 +32,15 @@ class LoginViewController: UIViewController {
             if let realmUser = realm.objects(User.self).first{
                 currentUser = realmUser
             }
-            
-            
-            
+        }
+        if #available(iOS 12.0, *) {
+            if traitCollection.userInterfaceStyle == .dark{
+                SVProgressHUD.setDefaultStyle(.dark)
+            }else{
+                SVProgressHUD.setDefaultStyle(.light)
+            }
+        } else {
+            SVProgressHUD.setDefaultStyle(.dark)
         }
     }
     
@@ -48,11 +54,7 @@ class LoginViewController: UIViewController {
                 if (users.count != 0){
                     self.currentUser = users[0]
                 }
-                
                 self.performSegue(withIdentifier: "goToDashboard", sender: self)
-
-                
-                
             }
             alert.addAction(dismiss)
             present(alert, animated: true, completion: nil)
@@ -60,13 +62,12 @@ class LoginViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let segueID = segue.identifier ?? ""
-        switch segueID {
+        
+        switch segue.identifier! {
         case "goToDashboard":
             let tabVC = segue.destination as! UITabBarController
             let nextVC = tabVC.viewControllers![0] as! UINavigationController
             let destinationVC = nextVC.topViewController as! DashboardViewController
-            
             destinationVC.userDetails = self.currentUser
         default:
             break
@@ -119,10 +120,8 @@ class LoginViewController: UIViewController {
                     let realm = try! Realm()
                     try! realm.write {
                         
-                        
                         realm.add(user)
                     }
-                    
                     
                     self.keyField.text = ""
                     self.performSegue(withIdentifier: "goToDashboard", sender: self)
