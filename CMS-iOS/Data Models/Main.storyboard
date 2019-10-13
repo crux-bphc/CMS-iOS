@@ -72,9 +72,28 @@
                                     <action selector="helpButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Xsl-hc-iRf"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xzD-4z-MOW">
+                                <rect key="frame" x="30" y="496" width="315" height="40"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Mey-4I-KHj"/>
+                                </constraints>
+                                <state key="normal" title="Log In with Google">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="googleLoginPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="G5e-nX-gvM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="xzD-4z-MOW" firstAttribute="top" secondItem="oE3-QN-4De" secondAttribute="bottom" constant="10" id="7dF-eU-hav"/>
                             <constraint firstItem="kKf-Di-Hws" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-40" id="9Ow-92-4He"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="oE3-QN-4De" secondAttribute="trailing" id="Ar5-Ha-84Q"/>
                             <constraint firstItem="oE3-QN-4De" firstAttribute="top" secondItem="tlq-OC-Qqh" secondAttribute="bottom" constant="10" id="BfZ-ia-aOn"/>
@@ -84,10 +103,12 @@
                             <constraint firstItem="kKf-Di-Hws" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="QXE-A6-gz1"/>
                             <constraint firstItem="XP7-0H-shN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="UJu-lg-Ejr"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kKf-Di-Hws" secondAttribute="trailing" id="Ub0-Se-aij"/>
+                            <constraint firstItem="xzD-4z-MOW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="VJd-UE-9wA"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="XP7-0H-shN" secondAttribute="bottom" constant="-34" id="ZbL-qv-nNI"/>
                             <constraint firstItem="oE3-QN-4De" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bc8-AK-bKm"/>
                             <constraint firstItem="oE3-QN-4De" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="lQ6-0q-7kU"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="tlq-OC-Qqh" secondAttribute="trailing" id="nKZ-03-VlM"/>
+                            <constraint firstItem="xzD-4z-MOW" firstAttribute="centerX" secondItem="XP7-0H-shN" secondAttribute="centerX" id="p97-mz-gQY"/>
                             <constraint firstItem="XP7-0H-shN" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="rKt-Mg-UbU"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="XP7-0H-shN" secondAttribute="trailing" id="tLI-Pd-5vZ"/>
                             <constraint firstItem="tlq-OC-Qqh" firstAttribute="top" secondItem="kKf-Di-Hws" secondAttribute="bottom" constant="10" id="v4Y-m8-AL0"/>

@@ -12,6 +12,7 @@ import SwiftyJSON
 import SVProgressHUD
 import SwiftKeychainWrapper
 import RealmSwift
+import SafariServices
 class LoginViewController: UIViewController {
     
     @IBOutlet weak var keyField: UITextField!
@@ -131,6 +132,21 @@ class LoginViewController: UIViewController {
         }
     }
     
+    func loginWithGoogle(input: String){
+        let base64String = input.replacingOccurrences(of: "token=", with: "")
+        let decodedData = Data(base64Encoded: base64String)!
+        let decodedString = String(data: decodedData, encoding: .utf8)!
+        print("decoded string = \(decodedString)")
+        let start = decodedString.index(decodedString.startIndex, offsetBy: 35)
+        let end = decodedString.index(decodedString.startIndex, offsetBy: 67)
+        let decodedUserIDSub = (decodedString[start..<end])
+        let decodedUserID = String(decodedUserIDSub)
+        print("decoded = \(decodedUserID)")
+        logIn (password: decodedUserID, loggedin: false) {
+            print("Password Retrieved. Logging in.")
+            self.view.isUserInteractionEnabled = true
+        }
+    }
     
     @IBAction func loginButtonPressed(_ sender: UIButton) {
         if keyField.text != "" {
@@ -153,6 +169,12 @@ class LoginViewController: UIViewController {
         
     }
     
+    @IBAction func googleLoginPressed(_ sender: UIButton) {
+        self.view.isUserInteractionEnabled = false
+        UIApplication.shared.open(URL(string: "https://td.bits-hyderabad.ac.in/moodle/admin/tool/mobile/launch.php?service=moodle_mobile_app&passport=144.05993500117754&urlscheme=cruxcmsios&oauthsso=1")!, options: [:], completionHandler: nil)
+        
+    }
     
 }
+
 
