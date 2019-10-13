@@ -170,8 +170,6 @@ class CourseDetailsViewController : UITableViewController {
             
             let destinationVC = segue.destination as! FolderContentViewController
             destinationVC.currentModule = self.selectedModule
-            
-            
         } else {
             let destinationVC = segue.destination as! ModuleViewController
             destinationVC.selectedModule = self.selectedModule

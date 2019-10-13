@@ -529,7 +529,7 @@
         <scene sceneID="04p-9G-clS">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="P1D-vc-lDm" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="5RC-GA-Zlk"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="course" selectedImage="course" id="5RC-GA-Zlk"/>
                     <toolbarItems/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="2uy-3g-nkH">
@@ -775,6 +775,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="course" width="30" height="30"/>
         <image name="dashboard" width="21.333333969116211" height="21.333333969116211"/>
         <image name="folded-newspaper" width="21.333333969116211" height="21.333333969116211"/>
         <image name="logo" width="8000" height="8000"/>
