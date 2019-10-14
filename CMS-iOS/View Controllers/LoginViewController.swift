@@ -16,6 +16,9 @@ import SafariServices
 class LoginViewController: UIViewController {
     
     @IBOutlet weak var keyField: UITextField!
+    
+    @IBOutlet weak var googleLoginBtn: UIButton!
+    
     let constant = Constants.Global.self
     
     var currentUser = User()
@@ -23,6 +26,8 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         
+//        googleLoginBtn.setImage(UIImage(named: "google_icon"), for: .normal)
+//        googleLoginBtn.imageEdgeInsets = UIEdgeInsets(top: 10, left: 200, bottom: 10, right: 300)
         SVProgressHUD.dismiss()
         if Reachability.isConnectedToNetwork() {
             checkSavedPassword()

@@ -72,12 +72,13 @@
                                     <action selector="helpButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Xsl-hc-iRf"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xzD-4z-MOW">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xzD-4z-MOW">
                                 <rect key="frame" x="30" y="496" width="315" height="40"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Mey-4I-KHj"/>
                                 </constraints>
+                                <inset key="imageEdgeInsets" minX="20" minY="10" maxX="300" maxY="10"/>
                                 <state key="normal" title="Log In with Google">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -90,6 +91,13 @@
                                     <action selector="googleLoginPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="G5e-nX-gvM"/>
                                 </connections>
                             </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="google_icon" translatesAutoresizingMaskIntoConstraints="NO" id="pEm-EK-WBF">
+                                <rect key="frame" x="50" y="506" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="20" id="bnp-9G-dvs"/>
+                                    <constraint firstAttribute="height" constant="20" id="v3u-xc-MPq"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -101,9 +109,11 @@
                             <constraint firstItem="kKf-Di-Hws" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="IS9-GB-h6v"/>
                             <constraint firstItem="tlq-OC-Qqh" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="JCn-oH-Ll2"/>
                             <constraint firstItem="kKf-Di-Hws" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="QXE-A6-gz1"/>
+                            <constraint firstItem="pEm-EK-WBF" firstAttribute="centerY" secondItem="xzD-4z-MOW" secondAttribute="centerY" id="R6P-hV-nvi"/>
                             <constraint firstItem="XP7-0H-shN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="UJu-lg-Ejr"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kKf-Di-Hws" secondAttribute="trailing" id="Ub0-Se-aij"/>
                             <constraint firstItem="xzD-4z-MOW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="VJd-UE-9wA"/>
+                            <constraint firstItem="xzD-4z-MOW" firstAttribute="leading" secondItem="pEm-EK-WBF" secondAttribute="trailing" constant="-40" id="WaI-DR-ola"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="XP7-0H-shN" secondAttribute="bottom" constant="-34" id="ZbL-qv-nNI"/>
                             <constraint firstItem="oE3-QN-4De" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bc8-AK-bKm"/>
                             <constraint firstItem="oE3-QN-4De" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="lQ6-0q-7kU"/>
@@ -117,6 +127,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="ORU-4P-dAR"/>
                     <connections>
+                        <outlet property="googleLoginBtn" destination="xzD-4z-MOW" id="0kn-Rp-n4q"/>
                         <outlet property="keyField" destination="kKf-Di-Hws" id="thH-oS-IZf"/>
                         <segue destination="PKq-G8-IPd" kind="presentation" identifier="goToDashboard" modalPresentationStyle="fullScreen" id="TzI-QU-Ggw"/>
                     </connections>
@@ -124,7 +135,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <exit id="I0u-iS-F4i" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-306.39999999999998" y="837.93103448275861"/>
+            <point key="canvasLocation" x="-307.24637681159425" y="837.72321428571422"/>
         </scene>
         <!-- Dashboard-->
         <scene sceneID="lTJ-6n-erw">
@@ -798,6 +809,7 @@
     <resources>
         <image name="dashboard" width="21.333333969116211" height="21.333333969116211"/>
         <image name="folded-newspaper" width="21.333333969116211" height="21.333333969116211"/>
+        <image name="google_icon" width="20" height="20"/>
         <image name="logo" width="8000" height="8000"/>
     </resources>
     <inferredMetricsTieBreakers>
