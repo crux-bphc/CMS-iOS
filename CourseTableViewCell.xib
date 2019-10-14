@@ -40,7 +40,7 @@
                 <outlet property="courseName" destination="jb8-52-F4v" id="SKD-a7-xld"/>
                 <outlet property="courseProgress" destination="fY1-Nu-RQt" id="ex6-bJ-8ey"/>
             </connections>
-            <point key="canvasLocation" x="140.57971014492756" y="121.875"/>
+            <point key="canvasLocation" x="140.57971014492756" y="118.52678571428571"/>
         </tableViewCell>
     </objects>
 </document>
