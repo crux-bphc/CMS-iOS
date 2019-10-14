@@ -68,7 +68,34 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
         let dataPath = documentsDirectory.absoluteURL
         
         guard let url = URL(string: downloadUrl) else { return }
-        let destination = dataPath.appendingPathComponent("\(String(module.id) + module.filename)")
+        var destination1 : URL = dataPath
+        var isDir : ObjCBool = false
+        if FileManager.default.fileExists(atPath: dataPath.appendingPathComponent(module.coursename).path, isDirectory: &isDir) {
+            if isDir.boolValue  {
+                //                Directory exists
+                destination1 = dataPath.appendingPathComponent(module.coursename)
+                print(module.coursename)
+                print("Changed destination1 to \(destination1)")
+            } else {
+                do {
+                    try FileManager.default.createDirectory(atPath: dataPath.appendingPathComponent(module.coursename).path, withIntermediateDirectories: true, attributes: nil)
+                    destination1 = dataPath.appendingPathComponent(module.coursename)
+                    print("Changed destination1 to \(destination1)")
+                } catch {
+                    print("There was an error in making the directory at path: \(dataPath.appendingPathComponent(module.coursename))")
+                }
+            }
+        } else {
+            do {
+                try FileManager.default.createDirectory(atPath: dataPath.appendingPathComponent(module.coursename).path, withIntermediateDirectories: true, attributes: nil)
+                destination1 = dataPath.appendingPathComponent(module.coursename)
+                print("Changed destination1 to \(destination1)")
+            } catch {
+                print("There was an error in making the directory at path: \(dataPath.appendingPathComponent(module.coursename))")
+            }
+        }
+        
+        let destination = destination1.appendingPathComponent("\(String(module.id) + module.filename)")
         if FileManager().fileExists(atPath: destination.path) {
             let viewURL = destination as URL
             let data = try! Data(contentsOf: viewURL)

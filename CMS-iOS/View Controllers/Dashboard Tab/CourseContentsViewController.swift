@@ -104,6 +104,7 @@ class CourseDetailsViewController : UITableViewController {
                                     let itemCount = courseContent[i]["modules"][j]["contents"].count
                                     for a in 0..<itemCount{
                                         let newModule = Module()
+                                        newModule.coursename = self.currentCourse.displayname
                                         newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
                                         
                                         if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
@@ -121,6 +122,7 @@ class CourseDetailsViewController : UITableViewController {
                                 if courseContent[i]["modules"][j]["description"].string != nil {
                                     moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
                                 }
+                                moduleData.coursename = self.currentCourse.displayname
                                 section.modules.append(moduleData)
                                 section.courseId = self.currentCourse.courseid
                                 print(moduleData.name)
