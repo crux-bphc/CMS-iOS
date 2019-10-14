@@ -123,6 +123,7 @@ class LoginViewController: UIViewController {
                     user.email = self.currentUser.email
                     user.loggedIn = self.currentUser.loggedIn
                     user.userid = self.currentUser.userid
+                    user.isConnected = true
                     let realm = try! Realm()
                     try! realm.write {
                         

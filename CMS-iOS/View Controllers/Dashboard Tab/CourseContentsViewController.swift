@@ -158,7 +158,6 @@ class CourseDetailsViewController : UITableViewController {
         self.refreshControl!.beginRefreshing()
         getCourseContent{ (courses) in
             self.refreshControl!.endRefreshing()
-            self.tableView.reloadData()
             SVProgressHUD.dismiss()
         }
     }

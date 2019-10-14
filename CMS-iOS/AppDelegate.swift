@@ -26,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if Reachability.isConnectedToNetwork() {
             try! realm.write {
                 realmUser?.isConnected = true
+                print("successfully set connected = true")
             }
         } else {
             try! realm.write {
