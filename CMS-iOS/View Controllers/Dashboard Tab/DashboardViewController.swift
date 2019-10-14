@@ -113,7 +113,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                 var courseToDownload = Course()
                 if let rowNo = indexPath?.row{
                     courseToDownload = self.searchController.isActive ? self.filteredCourseList[rowNo] : self.courseList[rowNo]
-//                    downloadCourse(courseToDownload)
+                    //                    downloadCourse(courseToDownload)
                 }
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -167,18 +167,19 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                             self.realm.add(self.courseList[i])
                         }
                     }
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                        SVProgressHUD.dismiss()
+                    }
                 }
             }
-        }
-        else {
+        }else{
             courseList.removeAll()
             for x in 0..<realmCourses.count{
                 courseList.append(realmCourses[x])
             }
             print(courseList.count)
         }
-        self.tableView.reloadData()
-        SVProgressHUD.dismiss()
         completion()
     }
     
