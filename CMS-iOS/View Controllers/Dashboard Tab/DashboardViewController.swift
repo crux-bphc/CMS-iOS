@@ -13,7 +13,7 @@ import SVProgressHUD
 import SwiftKeychainWrapper
 import RealmSwift
 
-class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate {
+class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate, URLSessionDownloadDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -27,6 +27,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     var filteredCourseList = [Course]()
     let realm = try! Realm()
     let searchController = UISearchController(searchResultsController: nil)
+    var locationToCopy = URL(string: "")
+    var downloadArray : [URL] = []
+    var localURLArray : [URL] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,7 +116,10 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                 var courseToDownload = Course()
                 if let rowNo = indexPath?.row{
                     courseToDownload = self.searchController.isActive ? self.filteredCourseList[rowNo] : self.courseList[rowNo]
-                    //                    downloadCourse(courseToDownload)
+                    self.downloadCourseData(course: courseToDownload) {
+                        print("Download to be called")
+                        self.download(downloadArray: self.downloadArray, to: self.localURLArray)
+                    }
                 }
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -131,6 +137,116 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     func updateSearchResults(for searchController: UISearchController) {
         self.filterCoursesForSearch(string: searchController.searchBar.text!)
+    }
+    
+    func downloadCourseData(course: Course, completion: @escaping() -> Void) {
+        
+        let params : [String:String] = ["courseid": String(course.courseid), "wstoken": KeychainWrapper.standard.string(forKey: "userPassword")!]
+        
+        Alamofire.request((constant.BASE_URL + constant.GET_COURSE_CONTENT), method: .get, parameters: params, headers: constant.headers).responseJSON { (response) in
+            if response.result.isSuccess {
+                let courseData = JSON(response.value as Any)
+                for i in 0 ..< courseData.count {
+                    print("This is i: \(i)")
+                    for j in 0 ..< courseData[i]["modules"].count {
+                        print("This is j: \(j)")
+                        if courseData[i]["modules"][j]["modname"].string! == "resource" {
+                            let downloadUrl = courseData[i]["modules"][j]["contents"][0]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                            let moduleToDownload = Module()
+                            moduleToDownload.coursename = course.displayname
+                            moduleToDownload.id = courseData[i]["modules"][j]["id"].int!
+                            moduleToDownload.filename = courseData[i]["modules"][j]["contents"][0]["filename"].string!
+                            self.saveFileToStorage(mime: courseData[i]["modules"][j]["contents"][0]["mimetype"].string!, downloadUrl: downloadUrl, module: moduleToDownload)
+                        }
+                    }
+                    print("Download course data finished \(i+1) times")
+                }
+            }
+            self.download(downloadArray: self.downloadArray, to: self.localURLArray)
+        }
+    }
+    
+    func download(downloadArray: [URL], to localUrl: [URL]) {
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        for k in 0 ..< downloadArray.count {
+            locationToCopy = localUrl[k]
+            let sessionConfig = URLSessionConfiguration.default
+            let session = URLSession(configuration: sessionConfig, delegate: self, delegateQueue: OperationQueue.main)
+            
+            let operation = DownloadOperation(session: session, downloadTaskURL: downloadArray[k]) { (localURL, response, error) in
+                print("finished downloading \(downloadArray[k]) to \(String(describing: localURL))")
+                do {
+                    try FileManager.default.copyItem(at: localURL!, to: self.localURLArray[k])
+                } catch {
+                    print("There was an error in copying the item")
+                }
+            }
+            
+            queue.addOperation(operation)
+        }
+    }
+    
+    func saveFileToStorage(mime: String, downloadUrl: String, module: Module) {
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        //        print(String(describing: documentsDirectory))
+        let dataPath = documentsDirectory.absoluteURL
+        
+        guard let url = URL(string: downloadUrl) else { return }
+        var destination1 : URL = dataPath
+        var isDir : ObjCBool = false
+        if FileManager.default.fileExists(atPath: dataPath.appendingPathComponent(module.coursename).path, isDirectory: &isDir) {
+            if isDir.boolValue  {
+                //                Directory exists
+                destination1 = dataPath.appendingPathComponent(module.coursename)
+                print(module.coursename)
+                print("Directory exists")
+            } else {
+                do {
+                    try FileManager.default.createDirectory(atPath: dataPath.appendingPathComponent(module.coursename).path, withIntermediateDirectories: true, attributes: nil)
+                    destination1 = dataPath.appendingPathComponent(module.coursename)
+                    print("Changed destination2 to \(destination1)")
+                } catch {
+                    print("There was an error in making the directory at path: \(dataPath.appendingPathComponent(module.coursename))")
+                }
+            }
+        } else {
+            do {
+                try FileManager.default.createDirectory(atPath: dataPath.appendingPathComponent(module.coursename).path, withIntermediateDirectories: true, attributes: nil)
+                destination1 = dataPath.appendingPathComponent(module.coursename)
+                print("Changed destination3 to \(destination1)")
+            } catch {
+                print("There was an error in making the directory at path: \(dataPath.appendingPathComponent(module.coursename))")
+            }
+        }
+        
+        let destination = destination1.appendingPathComponent("\(String(module.id) + module.filename)")
+        if Reachability.isConnectedToNetwork() {
+            //                download(url: url, to: destination)
+            downloadArray.append(url)
+            localURLArray.append(destination)
+        } else {
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.error)
+            let alert = UIAlertController(title: "Unable to download", message: "The file cannot be downloaded as the device is offline.", preferredStyle: .alert)
+            let action = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
+            alert.addAction(action)
+            present(alert, animated: true) {
+                //                    break
+            }
+        }
+    }
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        do {
+            try FileManager.default.copyItem(at: location, to: locationToCopy!)
+            print("Saved")
+            print("This is the location to copy: \(locationToCopy)")
+            //            locationToCopy = URL(string: "")
+            //            try FileManager.default.removeItem(at: locationToCopy!)
+        } catch (let writeError){
+            print("there was an error: \(writeError)")
+        }
     }
     
     func getRegisteredCourses(completion: @escaping() -> Void) {
