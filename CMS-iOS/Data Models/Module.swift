@@ -18,6 +18,8 @@ class Module : Object {
     @objc dynamic var moduleDescription : String = ""
     @objc dynamic var mimetype : String = ""
     @objc dynamic var id : Int = 0
+    @objc dynamic var read : Bool = false
+    @objc dynamic var coursename : String = ""
     var fileModules = RealmSwift.List<Module>();
     
 }

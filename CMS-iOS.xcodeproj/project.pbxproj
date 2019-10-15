@@ -30,6 +30,7 @@
 		0AF20A2F230B2F17001C0CB1 /* ExtrasTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF20A2E230B2F17001C0CB1 /* ExtrasTableViewController.swift */; };
 		0AF20A32230B3D9F001C0CB1 /* SiteNewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF20A31230B3D9F001C0CB1 /* SiteNewsTableViewController.swift */; };
 		0AF20A35230B48AD001C0CB1 /* DiscussionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF20A34230B48AD001C0CB1 /* DiscussionViewController.swift */; };
+		0AF7F52C23558A50005F2016 /* DownloadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF7F52B23558A50005F2016 /* DownloadOperation.swift */; };
 		0AF805C5234F43A3008D9B25 /* CourseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */; };
 		0AF805C6234F43A3008D9B25 /* CourseTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */; };
 		9BCC1CC2C94658257C7F89AE /* Pods_CMS_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E75E90651C644F9862ACA5C0 /* Pods_CMS_iOS.framework */; };
@@ -66,6 +67,7 @@
 		0AF20A2E230B2F17001C0CB1 /* ExtrasTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrasTableViewController.swift; sourceTree = "<group>"; };
 		0AF20A31230B3D9F001C0CB1 /* SiteNewsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteNewsTableViewController.swift; sourceTree = "<group>"; };
 		0AF20A34230B48AD001C0CB1 /* DiscussionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionViewController.swift; sourceTree = "<group>"; };
+		0AF7F52B23558A50005F2016 /* DownloadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadOperation.swift; sourceTree = "<group>"; };
 		0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseTableViewCell.swift; path = "CMS-iOS/New Group/CourseTableViewCell.swift"; sourceTree = SOURCE_ROOT; };
 		0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CourseTableViewCell.xib; path = "CMS-iOS/New Group/CourseTableViewCell.xib"; sourceTree = SOURCE_ROOT; };
 		A59470A9C8966A1BC963F37A /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -110,9 +112,9 @@
 		0A3DEAF122FDCA69001B6BFD /* CMS-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				0AC43B562350B11700A4ED1B /* New Group */,
 				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
 				E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */,
+				0AC43B562350B11700A4ED1B /* New Group */,
 				0A58544F230163E9008FB370 /* Support */,
 				0A3DEB0422FDCCDA001B6BFD /* Font */,
 				0A3DEAF222FDCA69001B6BFD /* AppDelegate.swift */,
@@ -137,6 +139,7 @@
 		0A58544F230163E9008FB370 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				0AF7F52B23558A50005F2016 /* DownloadOperation.swift */,
 				0A585452230168E7008FB370 /* Constants.swift */,
 				E6C78DE22325302800387CF0 /* SampleJSONData.json */,
 			);
@@ -363,6 +366,7 @@
 				0A3DEAF322FDCA69001B6BFD /* AppDelegate.swift in Sources */,
 				0A7F90BC2300753E00683867 /* DashboardViewController.swift in Sources */,
 				0A2B472C23083C1A005879D6 /* SearchViewController.swift in Sources */,
+				0AF7F52C23558A50005F2016 /* DownloadOperation.swift in Sources */,
 				0A03483623166C2D00552F69 /* DiscussionTableViewController.swift in Sources */,
 				0AF20A35230B48AD001C0CB1 /* DiscussionViewController.swift in Sources */,
 				0A5ECD7C2306A98800723365 /* AboutPageViewController.swift in Sources */,
@@ -514,14 +518,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = P773Z36HNN;
+				DEVELOPMENT_TEAM = 8GWNHA8Z3U;
 				INFOPLIST_FILE = "CMS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.cruxbphc.CMS-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.crux-bphc.CMS-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ENABLE_BATCH_MODE = NO;
 				SWIFT_VERSION = 5.0;
@@ -535,14 +539,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = P773Z36HNN;
+				DEVELOPMENT_TEAM = 8GWNHA8Z3U;
 				INFOPLIST_FILE = "CMS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.cruxbphc.CMS-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.crux-bphc.CMS-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ENABLE_BATCH_MODE = NO;
 				SWIFT_VERSION = 5.0;

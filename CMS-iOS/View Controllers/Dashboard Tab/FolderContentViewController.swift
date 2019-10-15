@@ -42,115 +42,12 @@ class FolderContentViewController: UITableViewController {
         
         if #available(iOS 12.0, *) {
             if self.traitCollection.userInterfaceStyle == .dark {
-                switch currentModuleContents[indexPath.row].mimetype {
-                case "application/pdf":
-                    cell.imageView?.image = UIImage(named: "pdf_dark")
-                    break
-                case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                    cell.imageView?.image = UIImage(named: "doc_dark")
-                    break
-                case "text/plain":
-                    cell.imageView?.image = UIImage(named: "txt_dark")
-                    break
-                case "image/jpeg":
-                    cell.imageView?.image = UIImage(named: "img_dark")
-                    break
-                case "image/png":
-                    cell.imageView?.image = UIImage(named: "img_dark")
-                    break
-                case "application/vnd.ms-excel":
-                    cell.imageView?.image = UIImage(named: "xls_dark")
-                    break
-                case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-                    cell.imageView?.image = UIImage(named: "xls_dark")
-                    break
-                case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-                    cell.imageView?.image = UIImage(named: "ppt_dark")
-                    break
-                case "application/zip":
-                    cell.imageView?.image = UIImage(named: "zip_dark")
-                    break
-                case "application/x-rar-compressed":
-                    cell.imageView?.image = UIImage(named: "zip_dark")
-                    break
-                default:
-                    cell.imageView?.image = UIImage(named: "raw_dark")
-                    break
-                }
+                changeImage(mode: "_dark", cell: cell, module: currentModuleContents, indexPath: indexPath)
             } else {
-                switch currentModuleContents[indexPath.row].mimetype {
-                case "application/pdf":
-                    cell.imageView?.image = UIImage(named: "pdf")
-                    break
-                case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                    cell.imageView?.image = UIImage(named: "doc")
-                    break
-                case "text/plain":
-                    cell.imageView?.image = UIImage(named: "txt")
-                    break
-                case "image/jpeg":
-                    cell.imageView?.image = UIImage(named: "img")
-                    break
-                case "image/png":
-                    cell.imageView?.image = UIImage(named: "img")
-                    break
-                case "application/vnd.ms-excel":
-                    cell.imageView?.image = UIImage(named: "xls")
-                    break
-                case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-                    cell.imageView?.image = UIImage(named: "xls")
-                    break
-                case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-                    cell.imageView?.image = UIImage(named: "ppt")
-                    break
-                case "application/zip":
-                    cell.imageView?.image = UIImage(named: "zip")
-                    break
-                case "application/x-rar-compressed":
-                    cell.imageView?.image = UIImage(named: "zip")
-                    break
-                default:
-                    cell.imageView?.image = UIImage(named: "raw")
-                    break
-                }
+                changeImage(mode: "", cell: cell, module: currentModuleContents, indexPath: indexPath)
             }
         } else {
-            // Fallback on earlier versions
-            switch currentModuleContents[indexPath.row].mimetype {
-            case "application/pdf":
-                cell.imageView?.image = UIImage(named: "pdf")
-                break
-            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                cell.imageView?.image = UIImage(named: "doc")
-                break
-            case "text/plain":
-                cell.imageView?.image = UIImage(named: "txt")
-                break
-            case "image/jpeg":
-                cell.imageView?.image = UIImage(named: "img")
-                break
-            case "image/png":
-                cell.imageView?.image = UIImage(named: "img")
-                break
-            case "application/vnd.ms-excel":
-                cell.imageView?.image = UIImage(named: "xls")
-                break
-            case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-                cell.imageView?.image = UIImage(named: "xls")
-                break
-            case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-                cell.imageView?.image = UIImage(named: "ppt")
-                break
-            case "application/zip":
-                cell.imageView?.image = UIImage(named: "zip")
-                break
-            case "application/x-rar-compressed":
-                cell.imageView?.image = UIImage(named: "zip")
-                break
-            default:
-                cell.imageView?.image = UIImage(named: "raw")
-                break
-            }
+            changeImage(mode: "", cell: cell, module: currentModuleContents, indexPath: indexPath)
         }
         return cell
     }
@@ -170,4 +67,43 @@ class FolderContentViewController: UITableViewController {
         }
         destinationVC.selectedModule = folderSelectedModule
     }
+    
+    func changeImage(mode: String, cell: UITableViewCell, module: [Module], indexPath: IndexPath) {
+        switch module[indexPath.row].mimetype {
+        case "application/pdf":
+            cell.imageView?.image = UIImage(named: "pdf\(mode)")
+            break
+        case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+            cell.imageView?.image = UIImage(named: "doc\(mode)")
+            break
+        case "text/plain":
+            cell.imageView?.image = UIImage(named: "txt\(mode)")
+            break
+        case "image/jpeg":
+            cell.imageView?.image = UIImage(named: "img\(mode)")
+            break
+        case "image/png":
+            cell.imageView?.image = UIImage(named: "img\(mode)")
+            break
+        case "application/vnd.ms-excel":
+            cell.imageView?.image = UIImage(named: "xls\(mode)")
+            break
+        case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+            cell.imageView?.image = UIImage(named: "xls\(mode)")
+            break
+        case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+            cell.imageView?.image = UIImage(named: "ppt\(mode)")
+            break
+        case "application/zip":
+            cell.imageView?.image = UIImage(named: "zip\(mode)")
+            break
+        case "application/x-rar-compressed":
+            cell.imageView?.image = UIImage(named: "zip\(mode)")
+            break
+        default:
+            cell.imageView?.image = UIImage(named: "raw\(mode)")
+            break
+        }
+    }
+    
 }

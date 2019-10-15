@@ -23,6 +23,7 @@ class CourseDetailsViewController : UITableViewController {
     var selectedModule = Module()
     var discussionArray = [Discussion]()
     let refreshController = UIRefreshControl()
+    let realm = try! Realm()
     
     let constants = Constants.Global.self
     override func viewDidLoad() {
@@ -57,8 +58,6 @@ class CourseDetailsViewController : UITableViewController {
     func getCourseContent(completion: @escaping ([CourseSection]) -> Void) {
         
         if Reachability.isConnectedToNetwork(){
-            
-            let realm = try! Realm()
             let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
             let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
             SVProgressHUD.show()
@@ -66,10 +65,10 @@ class CourseDetailsViewController : UITableViewController {
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
-                    let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
+                    let realmSections = self.realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
                     if realmSections.count != 0{
-                        try! realm.write {
-                            realm.delete(realmSections)
+                        try! self.realm.write {
+                            self.realm.delete(realmSections)
                             // deleted
                             print("deleted preexisting objects")
                         }
@@ -105,6 +104,7 @@ class CourseDetailsViewController : UITableViewController {
                                     let itemCount = courseContent[i]["modules"][j]["contents"].count
                                     for a in 0..<itemCount{
                                         let newModule = Module()
+                                        newModule.coursename = self.currentCourse.displayname
                                         newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
                                         
                                         if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
@@ -122,13 +122,14 @@ class CourseDetailsViewController : UITableViewController {
                                 if courseContent[i]["modules"][j]["description"].string != nil {
                                     moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
                                 }
+                                moduleData.coursename = self.currentCourse.displayname
                                 section.modules.append(moduleData)
                                 section.courseId = self.currentCourse.courseid
                                 print(moduleData.name)
                             }
                             self.sectionArray.append(section)
-                            try! realm.write {
-                                realm.add(section)
+                            try! self.realm.write {
+                                self.realm.add(section)
                                 print("Added section to realm")
                             }
                         }
@@ -140,8 +141,8 @@ class CourseDetailsViewController : UITableViewController {
         }
         else{
             // try to get modules from memory
-            let realm = try! Realm()
-            let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
+            
+            let sections = self.realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
             
             if sections.count != 0{
                 sectionArray.removeAll()
@@ -170,8 +171,6 @@ class CourseDetailsViewController : UITableViewController {
             
             let destinationVC = segue.destination as! FolderContentViewController
             destinationVC.currentModule = self.selectedModule
-            
-            
         } else {
             let destinationVC = segue.destination as! ModuleViewController
             destinationVC.selectedModule = self.selectedModule
@@ -184,8 +183,12 @@ class CourseDetailsViewController : UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("Read?: \(sectionArray[indexPath.section].modules[indexPath.row].read)")
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCourse")
         cell.textLabel?.text = sectionArray[indexPath.section].modules[indexPath.row].name
+        if !sectionArray[indexPath.section].modules[indexPath.row].read {
+            cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        }
         
         if sectionArray[indexPath.section].modules[indexPath.row].modname == "folder"{
             if #available(iOS 12.0, *) {
@@ -201,115 +204,22 @@ class CourseDetailsViewController : UITableViewController {
         } else if sectionArray[indexPath.section].modules[indexPath.row].modname == "resource" {
             if #available(iOS 12.0, *) {
                 if self.traitCollection.userInterfaceStyle == .dark {
-                    switch sectionArray[indexPath.section].modules[indexPath.row].mimetype {
-                    case "application/pdf":
-                        cell.imageView?.image = UIImage(named: "pdf_dark")
-                        break
-                    case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                        cell.imageView?.image = UIImage(named: "doc_dark")
-                        break
-                    case "text/plain":
-                        cell.imageView?.image = UIImage(named: "txt_dark")
-                        break
-                    case "image/jpeg":
-                        cell.imageView?.image = UIImage(named: "img_dark")
-                        break
-                    case "image/png":
-                        cell.imageView?.image = UIImage(named: "img_dark")
-                        break
-                    case "application/vnd.ms-excel":
-                        cell.imageView?.image = UIImage(named: "xls_dark")
-                        break
-                    case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-                        cell.imageView?.image = UIImage(named: "xls_dark")
-                        break
-                    case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-                        cell.imageView?.image = UIImage(named: "ppt_dark")
-                        break
-                    case "application/zip":
-                        cell.imageView?.image = UIImage(named: "zip_dark")
-                        break
-                    case "application/x-rar-compressed":
-                        cell.imageView?.image = UIImage(named: "zip_dark")
-                        break
-                    default:
-                        cell.imageView?.image = UIImage(named: "raw_dark")
-                        break
-                    }
+                    changeImage(mode: "_dark", cell: cell, sectionArray: sectionArray, indexPath: indexPath)
                 } else {
-                    switch sectionArray[indexPath.section].modules[indexPath.row].mimetype {
-                    case "application/pdf":
-                        cell.imageView?.image = UIImage(named: "pdf")
-                        break
-                    case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                        cell.imageView?.image = UIImage(named: "doc")
-                        break
-                    case "text/plain":
-                        cell.imageView?.image = UIImage(named: "txt")
-                        break
-                    case "image/jpeg":
-                        cell.imageView?.image = UIImage(named: "img")
-                        break
-                    case "image/png":
-                        cell.imageView?.image = UIImage(named: "img")
-                        break
-                    case "application/vnd.ms-excel":
-                        cell.imageView?.image = UIImage(named: "xls")
-                        break
-                    case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-                        cell.imageView?.image = UIImage(named: "xls")
-                        break
-                    case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-                        cell.imageView?.image = UIImage(named: "ppt")
-                        break
-                    case "application/zip":
-                        cell.imageView?.image = UIImage(named: "zip")
-                        break
-                    case "application/x-rar-compressed":
-                        cell.imageView?.image = UIImage(named: "zip")
-                        break
-                    default:
-                        cell.imageView?.image = UIImage(named: "raw")
-                        break
-                    }
+                    changeImage(mode: "", cell: cell, sectionArray: sectionArray, indexPath: indexPath)
                 }
             } else {
-                // Fallback on earlier versions
-                switch sectionArray[indexPath.section].modules[indexPath.row].mimetype {
-                case "application/pdf":
-                    cell.imageView?.image = UIImage(named: "pdf")
-                    break
-                case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                    cell.imageView?.image = UIImage(named: "doc")
-                    break
-                case "text/plain":
-                    cell.imageView?.image = UIImage(named: "txt")
-                    break
-                case "image/jpeg":
-                    cell.imageView?.image = UIImage(named: "img")
-                    break
-                case "image/png":
-                    cell.imageView?.image = UIImage(named: "img")
-                    break
-                case "application/vnd.ms-excel":
-                    cell.imageView?.image = UIImage(named: "xls")
-                    break
-                case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-                    cell.imageView?.image = UIImage(named: "xls")
-                    break
-                case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-                    cell.imageView?.image = UIImage(named: "ppt")
-                    break
-                case "application/zip":
-                    cell.imageView?.image = UIImage(named: "zip")
-                    break
-                case "application/x-rar-compressed":
-                    cell.imageView?.image = UIImage(named: "zip")
-                    break
-                default:
-                    cell.imageView?.image = UIImage(named: "raw")
-                    break
+                changeImage(mode: "", cell: cell, sectionArray: sectionArray, indexPath: indexPath)
+            }
+        } else if sectionArray[indexPath.section].modules[indexPath.row].modname == "url" {
+            if #available(iOS 12.0, *) {
+                if self.traitCollection.userInterfaceStyle == .dark {
+                    cell.imageView?.image = UIImage(named: "web_dark")
+                } else {
+                    cell.imageView?.image = UIImage(named: "web")
                 }
+            } else {
+                cell.imageView?.image = UIImage(named: "web")
             }
         }
         
@@ -325,6 +235,11 @@ class CourseDetailsViewController : UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let realmModule = realm.objects(Module.self)[indexPath.row]
+        try! realm.write {
+            realmModule.read = true
+        }
+        
         self.selectedModule = sectionArray[indexPath.section].modules[indexPath.row]
         if self.selectedModule.modname == "assign" {
             let alert = UIAlertController(title: "Assignments not supported", message: "Assignments are not supported on the mobile version of CMS.", preferredStyle: .alert)
@@ -347,6 +262,45 @@ class CourseDetailsViewController : UITableViewController {
         self.title = currentCourse.displayname
         self.tableView.reloadData()
     }
+    
+    func changeImage(mode: String, cell: UITableViewCell, sectionArray: [CourseSection], indexPath: IndexPath) {
+        switch sectionArray[indexPath.section].modules[indexPath.row].mimetype {
+        case "application/pdf":
+            cell.imageView?.image = UIImage(named: "pdf\(mode)")
+            break
+        case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+            cell.imageView?.image = UIImage(named: "doc\(mode)")
+            break
+        case "text/plain":
+            cell.imageView?.image = UIImage(named: "txt\(mode)")
+            break
+        case "image/jpeg":
+            cell.imageView?.image = UIImage(named: "img\(mode)")
+            break
+        case "image/png":
+            cell.imageView?.image = UIImage(named: "img\(mode)")
+            break
+        case "application/vnd.ms-excel":
+            cell.imageView?.image = UIImage(named: "xls\(mode)")
+            break
+        case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+            cell.imageView?.image = UIImage(named: "xls\(mode)")
+            break
+        case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+            cell.imageView?.image = UIImage(named: "ppt\(mode)")
+            break
+        case "application/zip":
+            cell.imageView?.image = UIImage(named: "zip\(mode)")
+            break
+        case "application/x-rar-compressed":
+            cell.imageView?.image = UIImage(named: "zip\(mode)")
+            break
+        default:
+            cell.imageView?.image = UIImage(named: "raw\(mode)")
+            break
+        }
+    }
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         updateUI()
     }

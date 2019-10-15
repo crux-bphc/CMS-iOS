@@ -10,16 +10,25 @@ import UIKit
 import Realm
 import RealmSwift
 import IQKeyboardManagerSwift
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
+    let notificationCenter = UNUserNotificationCenter.current()
     let realm = try! Realm()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let options : UNAuthorizationOptions = [.alert, .sound, .badge]
+        notificationCenter.requestAuthorization(options: options) { (didAllow, error) in
+            if !didAllow {
+                print("The user denied notification permission.")
+            }
+        }
         
         IQKeyboardManager.shared.enable = true
         let realmUser = realm.objects(User.self).first

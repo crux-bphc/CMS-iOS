@@ -124,6 +124,7 @@ class DiscussionTableViewController: UITableViewController {
                 let canAdd = JSON(response.value as Any)
                 if canAdd["status"].bool == false {
 //                    self.addDiscussionButton.width = 0.0
+                    self.addDiscussionButton.tintColor = UIColor.clear
                     self.addDiscussionButton.style = .plain
                     self.addDiscussionButton.isEnabled = false
                 } else {
