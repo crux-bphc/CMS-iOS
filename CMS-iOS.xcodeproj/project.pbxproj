@@ -112,9 +112,9 @@
 		0A3DEAF122FDCA69001B6BFD /* CMS-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				0AC43B562350B11700A4ED1B /* New Group */,
 				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
 				E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */,
+				0AC43B562350B11700A4ED1B /* New Group */,
 				0A58544F230163E9008FB370 /* Support */,
 				0A3DEB0422FDCCDA001B6BFD /* Font */,
 				0A3DEAF222FDCA69001B6BFD /* AppDelegate.swift */,

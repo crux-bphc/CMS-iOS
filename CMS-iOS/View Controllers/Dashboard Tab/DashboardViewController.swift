@@ -12,6 +12,7 @@ import Alamofire
 import SVProgressHUD
 import SwiftKeychainWrapper
 import RealmSwift
+import UserNotifications
 
 class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate, URLSessionDownloadDelegate {
     
@@ -112,14 +113,43 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                 }
             }
             let downloadAction = UIAlertAction(title: "Download Course", style: .default) { (action) in
-                print("Download Button Clicked for cell at \(indexPath ?? [69,69])")
-                var courseToDownload = Course()
-                if let rowNo = indexPath?.row{
-                    courseToDownload = self.searchController.isActive ? self.filteredCourseList[rowNo] : self.courseList[rowNo]
-                    self.downloadCourseData(course: courseToDownload) {
-                        print("Download to be called")
-                        self.download(downloadArray: self.downloadArray, to: self.localURLArray)
+                
+                if Reachability.isConnectedToNetwork() {
+                    
+                    var courseToDownload = Course()
+                    if let rowNo = indexPath?.row{
+                        courseToDownload = self.searchController.isActive ? self.filteredCourseList[rowNo] : self.courseList[rowNo]
+                        self.downloadCourseData(course: courseToDownload) {
+                            print("Download to be called")
+                            self.download(downloadArray: self.downloadArray, to: self.localURLArray) {
+//                                print("completion inside didPressButton called")
+//                                let state = UIApplication.shared.applicationState
+//                                if state == .active {
+//                                    SVProgressHUD.showSuccess(withStatus: "Downloaded course contents")
+//                                    SVProgressHUD.dismiss(withDelay: 0.5)
+//                                } else if state == .background || state == .inactive {
+//                                    let content = UNMutableNotificationContent()
+//                                    content.title = "Download Successful"
+//                                    content.body = "The course \(actionSheet.title ?? "") was successfully downloaded.)"
+//                                    content.sound = UNNotificationSound.default
+//                                    content.badge = 1
+//                                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+//                                    let request = UNNotificationRequest(identifier: "DownloadCompelte", content: content, trigger: trigger)
+//                                    let center = UNUserNotificationCenter.current()
+//                                    center.add(request) { (error) in
+//                                        print("There was an error in sending the notification. \(String(describing: error))")
+//                                    }
+//                                }
+                            }
+                        }
                     }
+                } else {
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.error)
+                    let alert = UIAlertController(title: "Unable to download", message: "The course cannot be downloaded as the device is offline.", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
+                    alert.addAction(action)
+                    self.present(alert, animated: true)
                 }
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -147,9 +177,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             if response.result.isSuccess {
                 let courseData = JSON(response.value as Any)
                 for i in 0 ..< courseData.count {
-                    print("This is i: \(i)")
                     for j in 0 ..< courseData[i]["modules"].count {
-                        print("This is j: \(j)")
                         if courseData[i]["modules"][j]["modname"].string! == "resource" {
                             let downloadUrl = courseData[i]["modules"][j]["contents"][0]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                             let moduleToDownload = Module()
@@ -159,14 +187,16 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                             self.saveFileToStorage(mime: courseData[i]["modules"][j]["contents"][0]["mimetype"].string!, downloadUrl: downloadUrl, module: moduleToDownload)
                         }
                     }
-                    print("Download course data finished \(i+1) times")
                 }
             }
-            self.download(downloadArray: self.downloadArray, to: self.localURLArray)
+            self.download(downloadArray: self.downloadArray, to: self.localURLArray) {
+                print("completion inside downloadCourseData called")
+            }
         }
+        completion()
     }
     
-    func download(downloadArray: [URL], to localUrl: [URL]) {
+    func download(downloadArray: [URL], to localUrl: [URL], completion: @escaping() -> Void) {
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
         for k in 0 ..< downloadArray.count {
@@ -175,14 +205,12 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             let session = URLSession(configuration: sessionConfig, delegate: self, delegateQueue: OperationQueue.main)
             
             let operation = DownloadOperation(session: session, downloadTaskURL: downloadArray[k]) { (localURL, response, error) in
-                print("finished downloading \(downloadArray[k]) to \(String(describing: localURL))")
                 do {
                     try FileManager.default.copyItem(at: localURL!, to: self.localURLArray[k])
                 } catch {
                     print("There was an error in copying the item")
                 }
             }
-            
             queue.addOperation(operation)
         }
     }
@@ -221,29 +249,13 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         }
         
         let destination = destination1.appendingPathComponent("\(String(module.id) + module.filename)")
-        if Reachability.isConnectedToNetwork() {
-            //                download(url: url, to: destination)
-            downloadArray.append(url)
-            localURLArray.append(destination)
-        } else {
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.error)
-            let alert = UIAlertController(title: "Unable to download", message: "The file cannot be downloaded as the device is offline.", preferredStyle: .alert)
-            let action = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
-            alert.addAction(action)
-            present(alert, animated: true) {
-                //                    break
-            }
-        }
+        downloadArray.append(url)
+        localURLArray.append(destination)
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         do {
             try FileManager.default.copyItem(at: location, to: locationToCopy!)
-            print("Saved")
-            print("This is the location to copy: \(locationToCopy)")
-            //            locationToCopy = URL(string: "")
-            //            try FileManager.default.removeItem(at: locationToCopy!)
         } catch (let writeError){
             print("there was an error: \(writeError)")
         }
