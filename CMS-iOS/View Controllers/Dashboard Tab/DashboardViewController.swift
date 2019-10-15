@@ -21,8 +21,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     let constant = Constants.Global.self
     var courseList = [Course]()
     var userDetails = User()
-    var selectedCourseId : Int = 0
-    var selectedCourseName : String = ""
+    var selectedCourse = Course()
     var searching : Bool = false
     let refreshControl = UIRefreshControl()
     var filteredCourseList = [Course]()
@@ -82,9 +81,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! CourseDetailsViewController
-        
-        destinationVC.currentCourse.courseid = selectedCourseId
-        destinationVC.currentCourse.displayname = selectedCourseName
+        destinationVC.currentCourse = selectedCourse
     }
     
     func setupNavBar() {
@@ -359,12 +356,10 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         print(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
         if searchController.isActive {
-            self.selectedCourseId = filteredCourseList[indexPath.row].courseid
-            self.selectedCourseName = filteredCourseList[indexPath.row].displayname
+            self.selectedCourse = filteredCourseList[indexPath.row]
         }
         else {
-            self.selectedCourseId = courseList[indexPath.row].courseid
-            self.selectedCourseName = courseList[indexPath.row].displayname
+            self.selectedCourse = courseList[indexPath.row]
         }
         performSegue(withIdentifier: "goToCourseContent", sender: self)
     }
