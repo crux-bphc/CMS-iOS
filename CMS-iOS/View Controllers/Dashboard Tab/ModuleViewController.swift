@@ -153,7 +153,9 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        let downloadProgress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
-        SVProgressHUD.showProgress(Float((downloadProgress)))
+        DispatchQueue.main.async {
+            let downloadProgress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+            SVProgressHUD.showProgress(Float((downloadProgress)))
+        }
     }    
 }
