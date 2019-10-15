@@ -185,6 +185,15 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                             moduleToDownload.id = courseData[i]["modules"][j]["id"].int!
                             moduleToDownload.filename = courseData[i]["modules"][j]["contents"][0]["filename"].string!
                             self.saveFileToStorage(mime: courseData[i]["modules"][j]["contents"][0]["mimetype"].string!, downloadUrl: downloadUrl, module: moduleToDownload)
+                        } else if courseData[i]["modules"][j]["modname"].string! == "folder" {
+                            for u in 0 ..< courseData[i]["modules"][j]["contents"].count {
+                                let moduleToDownload = Module()
+                                let downloadUrl = courseData[i]["modules"][j]["contents"][j]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                moduleToDownload.coursename = course.displayname
+                                moduleToDownload.id = u
+                                moduleToDownload.filename = courseData[i]["modules"][j]["contents"][u]["filename"].string!
+                                self.saveFileToStorage(mime: courseData[i]["modules"][j]["contents"][u]["mimetype"].string!, downloadUrl: downloadUrl, module: moduleToDownload)
+                            }
                         }
                     }
                 }
