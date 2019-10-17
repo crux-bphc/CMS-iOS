@@ -18,12 +18,17 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEST F111 TEST COURSE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jb8-52-F4v">
+<<<<<<< HEAD:CMS-iOS/New Group/CourseTableViewCell.xib
                         <rect key="frame" x="16" y="11" width="195" height="21"/>
+=======
+                        <rect key="frame" x="20" y="29.5" width="195" height="21"/>
+>>>>>>> changed loginUI and added cellpadding:CourseTableViewCell.xib
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="fY1-Nu-RQt">
+<<<<<<< HEAD:CMS-iOS/New Group/CourseTableViewCell.xib
                         <rect key="frame" x="16" y="40" width="150" height="2"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="150" id="N1p-uC-hDo"/>
@@ -35,6 +40,17 @@
                     <constraint firstItem="jb8-52-F4v" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="JiT-PP-R3X"/>
                     <constraint firstItem="fY1-Nu-RQt" firstAttribute="top" secondItem="jb8-52-F4v" secondAttribute="bottom" constant="8" id="TId-Bo-mGj"/>
                     <constraint firstItem="fY1-Nu-RQt" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="upo-HL-YX9"/>
+=======
+                        <rect key="frame" x="20" y="60.5" width="254" height="2"/>
+                    </progressView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="jb8-52-F4v" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="7XL-h3-RWP"/>
+                    <constraint firstItem="jb8-52-F4v" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="JiT-PP-R3X"/>
+                    <constraint firstItem="fY1-Nu-RQt" firstAttribute="top" secondItem="jb8-52-F4v" secondAttribute="bottom" constant="10" id="OnQ-3i-jm5"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="fY1-Nu-RQt" secondAttribute="trailing" constant="30" id="Urh-Lb-pqX"/>
+                    <constraint firstItem="fY1-Nu-RQt" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="upo-HL-YX9"/>
+>>>>>>> changed loginUI and added cellpadding:CourseTableViewCell.xib
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

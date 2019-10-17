@@ -18,7 +18,7 @@
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XP7-0H-shN">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                                <color key="backgroundColor" red="1" green="0.53045744294455188" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.96424888959390864" green="0.57755350391383642" blue="0.21958573023432545" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </imageView>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Secret Key" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kKf-Di-Hws">
                                 <rect key="frame" x="30" y="346" width="315" height="40"/>
@@ -26,6 +26,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="HJD-0i-bwM"/>
                                 </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <userDefinedRuntimeAttributes>
@@ -36,11 +37,12 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tlq-OC-Qqh">
-                                <rect key="frame" x="30" y="396" width="315" height="40"/>
+                                <rect key="frame" x="30" y="456" width="315" height="40"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="H2P-ly-Vfv"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="Log In">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -54,11 +56,12 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oE3-QN-4De">
-                                <rect key="frame" x="30" y="446" width="315" height="40"/>
+                                <rect key="frame" x="30" y="506" width="315" height="40"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="iZh-16-7iz"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="Help">
                                     <color key="titleColor" red="0.92334232230000002" green="0.92334232230000002" blue="0.92334232230000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -121,7 +124,7 @@
                             <constraint firstItem="xzD-4z-MOW" firstAttribute="centerX" secondItem="XP7-0H-shN" secondAttribute="centerX" id="p97-mz-gQY"/>
                             <constraint firstItem="XP7-0H-shN" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="rKt-Mg-UbU"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="XP7-0H-shN" secondAttribute="trailing" id="tLI-Pd-5vZ"/>
-                            <constraint firstItem="tlq-OC-Qqh" firstAttribute="top" secondItem="kKf-Di-Hws" secondAttribute="bottom" constant="10" id="v4Y-m8-AL0"/>
+                            <constraint firstItem="tlq-OC-Qqh" firstAttribute="top" secondItem="kKf-Di-Hws" secondAttribute="bottom" constant="70" id="v4Y-m8-AL0"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

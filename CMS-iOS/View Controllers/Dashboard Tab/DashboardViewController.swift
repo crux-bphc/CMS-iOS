@@ -318,8 +318,31 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return searchController.isActive ? filteredCourseList.count : courseList.count
+    }
+    
+    /*
+     old code
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchController.isActive ? filteredCourseList.count : courseList.count
+    }
+    */
+    
+    //making sure there is 1 row per section
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    //row padding
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = UIColor.clear
+        return headerView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -327,19 +350,31 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         
         if searchController.isActive {
             
-            cell.courseName.text = filteredCourseList[indexPath.row].displayname
-            cell.courseProgress.progress = Float(filteredCourseList[indexPath.row].progress)
+            cell.courseName.text = filteredCourseList[indexPath.section].displayname
+            cell.courseProgress.progress = Float(filteredCourseList[indexPath.section].progress)
             
         } else {
-            cell.courseName.text = courseList[indexPath.row].displayname
-            cell.courseProgress.progress = Float(courseList[indexPath.row].progress)
+            cell.courseName.text = courseList[indexPath.section].displayname
+            cell.courseProgress.progress = Float(courseList[indexPath.section].progress)
         }
+        
+        //changing cell appearence
+        
+        cell.layer.borderColor = UIColor.black.cgColor
+        cell.layer.borderWidth = 0.25
+        cell.layer.cornerRadius = 20
+        cell.clipsToBounds = true
+        
+        
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
+    
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
