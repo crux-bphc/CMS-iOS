@@ -21,11 +21,17 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
     @IBOutlet weak var textConstraint: NSLayoutConstraint!
     @IBOutlet weak var attachmentButton: UIButton!
     @IBOutlet weak var progressBar: UIProgressView!
-    
+    @IBOutlet weak var openButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var downloadProgressLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
+        openButton.isEnabled = true
+        if selectedModule.name != ""{
+            self.title = selectedModule.name
+        }else{
+            self.title = selectedModule.filename
+        }
         print(selectedModule.modname)
         if selectedModule.modname == "resource" || selectedModule.modname == "url" {
             attachmentButton.isHidden = false
@@ -40,9 +46,13 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        task.cancel()
         self.progressBar.isHidden = true
         self.downloadProgressLabel.isHidden = true
         self.cancelButton.isHidden = true
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        openButton.isEnabled = true
     }
     
     func setDescription(){
@@ -159,6 +169,7 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
     }
     
     @IBAction func openFileButtonPressed(_ sender: UIButton) {
+        sender.isEnabled = false
         switch selectedModule.modname {
         case "url":
             print(self.selectedModule.fileurl)
@@ -209,8 +220,10 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
     }    
     @IBAction func cancelDownloadButtonPressed(_ sender: UIButton) {
         task.cancel()
+        openButton.isEnabled = true
         self.progressBar.isHidden = true
         self.downloadProgressLabel.isHidden = true
         self.cancelButton.isHidden = true
+        
     }
 }

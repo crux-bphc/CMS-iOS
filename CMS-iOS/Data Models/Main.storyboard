@@ -576,6 +576,7 @@
                         <outlet property="cancelButton" destination="PVp-gD-KVi" id="jW5-pM-ilX"/>
                         <outlet property="descriptionText" destination="oO5-iM-2pS" id="MHa-PI-Alv"/>
                         <outlet property="downloadProgressLabel" destination="A70-xz-0Ej" id="Rgh-7m-B6N"/>
+                        <outlet property="openButton" destination="pK6-fB-GCI" id="t2Y-gy-Jr2"/>
                         <outlet property="progressBar" destination="QIT-Nq-QKW" id="pLT-cG-3mn"/>
                         <outlet property="textConstraint" destination="g1i-ND-31S" id="NLp-PH-I48"/>
                     </connections>
