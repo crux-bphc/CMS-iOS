@@ -22,19 +22,22 @@ class LoginViewController: UIViewController {
     let constant = Constants.Global.self
     
     var currentUser = User()
+    var canLogIn : Bool = false
     let realm = try! Realm()
     
     override func viewDidLoad() {
-        
-//        googleLoginBtn.setImage(UIImage(named: "google_icon"), for: .normal)
-//        googleLoginBtn.imageEdgeInsets = UIEdgeInsets(top: 10, left: 200, bottom: 10, right: 300)
         SVProgressHUD.dismiss()
         if Reachability.isConnectedToNetwork() {
-            checkSavedPassword()
-        }else{
-            
-            // get user from realm
-            let realm = try! Realm()
+            if realm.objects(User.self).count != 0 {
+                print("User already logged in.")
+                if let user = self.realm.objects(User.self).first {
+                    self.currentUser = user
+                    canLogIn = true
+                }
+            } else {
+                checkSavedPassword()
+            }
+        } else{
             if let realmUser = realm.objects(User.self).first{
                 currentUser = realmUser
             }
@@ -51,12 +54,14 @@ class LoginViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        self.view.isUserInteractionEnabled = true
+        if canLogIn {
+            self.performSegue(withIdentifier: "goToDashboard", sender: self)
+        }
         if !Reachability.isConnectedToNetwork() {
             let alert = UIAlertController(title: "Unable to connect", message: "You are not connected to the internet. Please check your connection and relaunch the app.", preferredStyle: .alert)
             let dismiss = UIAlertAction(title: "Dismiss", style: .default) { _ in
-                
-                let realm = try! Realm()
-                let users = realm.objects(User.self)
+                let users = self.realm.objects(User.self)
                 if (users.count != 0){
                     self.currentUser = users[0]
                 }
@@ -65,6 +70,10 @@ class LoginViewController: UIViewController {
             alert.addAction(dismiss)
             present(alert, animated: true, completion: nil)
         }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.view.isUserInteractionEnabled = true
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -84,8 +93,6 @@ class LoginViewController: UIViewController {
         if let retrievedPassword: String = KeychainWrapper.standard.string(forKey: "userPassword") {
             self.view.isUserInteractionEnabled = false
             logIn (password: retrievedPassword, loggedin: true) {
-                print(retrievedPassword)
-                print("Password Retrieved. Logging in.")
                 self.view.isUserInteractionEnabled = true
             }
         }

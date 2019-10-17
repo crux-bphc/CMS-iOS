@@ -182,10 +182,10 @@
             </objects>
             <point key="canvasLocation" x="2856.8000000000002" y="-895.56650246305423"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Bubble Tab Bar Controller-->
         <scene sceneID="tH7-yD-jyj">
             <objects>
-                <tabBarController id="PKq-G8-IPd" sceneMemberID="viewController">
+                <tabBarController id="PKq-G8-IPd" customClass="BubbleTabBarController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="ytW-2U-uqX"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Ke4-Vn-te4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
@@ -589,7 +589,7 @@
         <scene sceneID="04p-9G-clS">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="P1D-vc-lDm" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Dashboard" image="course" selectedImage="course" id="5RC-GA-Zlk"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="Dashboard" selectedImage="Dashboard" id="5RC-GA-Zlk"/>
                     <toolbarItems/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="2uy-3g-nkH">
@@ -605,11 +605,11 @@
             </objects>
             <point key="canvasLocation" x="1908" y="-895"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Search-->
         <scene sceneID="Zox-Ao-BPe">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Opq-8y-v9e" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="search" id="wDi-tZ-1g4"/>
+                    <tabBarItem key="tabBarItem" title="Search" image="Search" selectedImage="Search" id="wDi-tZ-1g4"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Uyy-H1-9vg">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
@@ -727,11 +727,11 @@
             </objects>
             <point key="canvasLocation" x="3800.8000000000002" y="420.44334975369458"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--More-->
         <scene sceneID="bec-Lh-5Rj">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="yGr-rz-pvF" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="more" id="sRd-cz-ecZ"/>
+                    <tabBarItem key="tabBarItem" title="More" image="More" selectedImage="More" id="sRd-cz-ecZ"/>
                     <toolbarItems/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="e5L-Ge-Gbo">
@@ -819,7 +819,7 @@
         <scene sceneID="KHO-WY-pSP">
             <objects>
                 <navigationController id="ocW-ZX-GbC" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Site News" image="folded-newspaper" selectedImage="folded-newspaper" id="KJR-XB-m0b"/>
+                    <tabBarItem key="tabBarItem" title="Site News" image="Site News" selectedImage="Site News" id="KJR-XB-m0b"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="hYT-ap-qoT">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
@@ -835,7 +835,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="course" width="30" height="30"/>
+        <image name="Dashboard" width="30" height="30"/>
+        <image name="More" width="30" height="30"/>
+        <image name="Search" width="30" height="30"/>
+        <image name="Site News" width="30" height="30"/>
         <image name="dashboard" width="21.333333969116211" height="21.333333969116211"/>
         <image name="folded-newspaper" width="21.333333969116211" height="21.333333969116211"/>
         <image name="google_icon" width="20" height="20"/>

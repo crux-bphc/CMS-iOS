@@ -22,8 +22,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     let constant = Constants.Global.self
     var courseList = [Course]()
     var userDetails = User()
-    var selectedCourseId : Int = 0
-    var selectedCourseName : String = ""
+    var selectedCourse = Course()
     var searching : Bool = false
     let refreshControl = UIRefreshControl()
     var filteredCourseList = [Course]()
@@ -83,9 +82,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! CourseDetailsViewController
-        
-        destinationVC.currentCourse.courseid = selectedCourseId
-        destinationVC.currentCourse.displayname = selectedCourseName
+        destinationVC.currentCourse = selectedCourse
     }
     
     func setupNavBar() {
@@ -101,7 +98,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         let pressLocation = longPressGesture.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: pressLocation)
         if indexPath == nil {
-            print("Tap on the row, not the tableview.")
         } else if longPressGesture.state == UIGestureRecognizer.State.began {
             var actionSheet = UIAlertController()
             if searchController.isActive{
@@ -121,7 +117,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                     if let rowNo = indexPath?.row{
                         courseToDownload = self.searchController.isActive ? self.filteredCourseList[rowNo] : self.courseList[rowNo]
                         self.downloadCourseData(course: courseToDownload) {
-                            print("Download to be called")
                             self.download(downloadArray: self.downloadArray, to: self.localURLArray) {
 //                                print("completion inside didPressButton called")
 //                                let state = UIApplication.shared.applicationState
@@ -189,7 +184,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                         } else if courseData[i]["modules"][j]["modname"].string! == "folder" {
                             for u in 0 ..< courseData[i]["modules"][j]["contents"].count {
                                 let moduleToDownload = Module()
-                                let downloadUrl = courseData[i]["modules"][j]["contents"][j]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                let downloadUrl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                 moduleToDownload.coursename = course.displayname
                                 moduleToDownload.id = u
                                 moduleToDownload.filename = courseData[i]["modules"][j]["contents"][u]["filename"].string!
@@ -200,7 +195,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                 }
             }
             self.download(downloadArray: self.downloadArray, to: self.localURLArray) {
-                print("completion inside downloadCourseData called")
             }
         }
         completion()
@@ -237,13 +231,10 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             if isDir.boolValue  {
                 //                Directory exists
                 destination1 = dataPath.appendingPathComponent(module.coursename)
-                print(module.coursename)
-                print("Directory exists")
             } else {
                 do {
                     try FileManager.default.createDirectory(atPath: dataPath.appendingPathComponent(module.coursename).path, withIntermediateDirectories: true, attributes: nil)
                     destination1 = dataPath.appendingPathComponent(module.coursename)
-                    print("Changed destination2 to \(destination1)")
                 } catch {
                     print("There was an error in making the directory at path: \(dataPath.appendingPathComponent(module.coursename))")
                 }
@@ -252,7 +243,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             do {
                 try FileManager.default.createDirectory(atPath: dataPath.appendingPathComponent(module.coursename).path, withIntermediateDirectories: true, attributes: nil)
                 destination1 = dataPath.appendingPathComponent(module.coursename)
-                print("Changed destination3 to \(destination1)")
             } catch {
                 print("There was an error in making the directory at path: \(dataPath.appendingPathComponent(module.coursename))")
             }
@@ -278,7 +268,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         if self.userDetails.isConnected{
             
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
-            print("The secret used was: " + KeychainWrapper.standard.string(forKey: "userPassword")!)
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
             SVProgressHUD.show()
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
@@ -291,14 +280,12 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                     
                     let courses = JSON(courseData.value as Any)
                     self.courseList.removeAll()
-                    print("number of courses = \(courses.count)")
                     for i in 0 ..< courses.count{
                         let currentCourse = Course()
                         currentCourse.courseid = courses[i]["id"].int!
                         currentCourse.displayname = courses[i]["displayname"].string!
                         currentCourse.enrolled = true
                         currentCourse.progress = 0.01 * Float(courses[i]["progress"].int ?? 0)
-                        //                        print("The progress of the course is: \(currentCourse.progress)")
                         self.courseList.append(currentCourse)
                         
                         try! self.realm.write {
@@ -316,7 +303,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             for x in 0..<realmCourses.count{
                 courseList.append(realmCourses[x])
             }
-            print(courseList.count)
         }
         completion()
     }
@@ -361,15 +347,13 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        
         tableView.deselectRow(at: indexPath, animated: true)
         if searchController.isActive {
-            self.selectedCourseId = filteredCourseList[indexPath.row].courseid
-            self.selectedCourseName = filteredCourseList[indexPath.row].displayname
+            self.selectedCourse = filteredCourseList[indexPath.row]
         }
         else {
-            self.selectedCourseId = courseList[indexPath.row].courseid
-            self.selectedCourseName = courseList[indexPath.row].displayname
+            self.selectedCourse = courseList[indexPath.row]
         }
         performSegue(withIdentifier: "goToCourseContent", sender: self)
     }
