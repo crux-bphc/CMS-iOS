@@ -50,20 +50,6 @@ public class CBTabBarButton: UIControl {
     
     private var currentImage: UIImage? {
         var maybeImage: UIImage?
-//        if _isSelected {
-//            maybeImage = item?.selectedImage ?? item?.image
-//        } else {
-//            if #available(iOS 12.0, *) {
-//                if self.traitCollection.userInterfaceStyle == .dark {
-//                    print("\(String(describing: item?.title))_dark")
-//                    maybeImage = UIImage(named: "\(String(describing: item?.title))_dark")
-//                } else {
-//                    maybeImage = item?.image
-//                }
-//            } else {
-//                maybeImage = item?.image
-//            }
-//        }
         if _isSelected {
             maybeImage = item?.selectedImage ?? item?.image
             print("\(item?.title ?? "No title")")
@@ -172,7 +158,15 @@ public class CBTabBarButton: UIControl {
             self.tabLabel.alpha = 0.0
         }
         UIView.transition(with: tabImage, duration: duration, options: [.transitionCrossDissolve], animations: {
-            self.tabImage.tintColor = .black
+            if #available(iOS 12.0, *) {
+                if self.traitCollection.userInterfaceStyle == .dark {
+                    self.tabImage.tintColor = .white
+                } else {
+                    self.tabImage.tintColor = .black
+                }
+            } else {
+                self.tabImage.tintColor = .black
+            }
         }, completion: nil)
         
     }
@@ -214,18 +208,27 @@ public class CBTabBarButton: UIControl {
                 //                self.tabBg.backgroundColor = UIColor(white: 0, alpha: 1.0)
                 tabBg.backgroundColor = UIColor.darkGray.withAlphaComponent(0.4)
                 if !_isSelected {
-//                    item?.image = UIImage(named: "\(String(describing: item?.title))_dark")
-                    tabImage.image = UIImage(named: "\(String(describing: item?.title))")
+                    tabImage.tintColor = .white
                 } else {
-                tabImage.image = UIImage(named: "\(String(describing: item?.title))")
+                    tabImage.tintColor = tintColor
                 }
             } else {
                 tabBg.backgroundColor = tintColor.withAlphaComponent(0.2)
-                tabImage.image = UIImage(named: "\(String(describing: item?.title))")
+                if !_isSelected {
+                    print("\(item?.title ?? "")_dark")
+                    tabImage.tintColor = .black
+                } else {
+                    tabImage.tintColor = tintColor
+                }
             }
         } else {
             // Fallback on earlier versions
-            tabImage.image = UIImage(named: "\(String(describing: item?.title))")
+            if !_isSelected {
+                print("\(item?.title ?? "")_dark")
+                tabImage.tintColor = .black
+            } else {
+                tabImage.tintColor = tintColor
+            }
             tabBg.backgroundColor = tintColor.withAlphaComponent(0.2)
         }
     }
