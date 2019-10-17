@@ -78,6 +78,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Mey-4I-KHj"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <inset key="imageEdgeInsets" minX="20" minY="10" maxX="300" maxY="10"/>
                                 <state key="normal" title="Log In with Google">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
