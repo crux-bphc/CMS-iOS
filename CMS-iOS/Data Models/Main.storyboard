@@ -43,7 +43,7 @@
                                     <constraint firstAttribute="height" constant="50" id="H2P-ly-Vfv"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                <state key="normal" title="LOG IN">
+                                <state key="normal" title="Log In">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -82,7 +82,7 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                 <inset key="imageEdgeInsets" minX="20" minY="10" maxX="300" maxY="10"/>
-                                <state key="normal" title="LOG IN WITH GOOGLE">
+                                <state key="normal" title="Log In with Google">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -831,10 +831,10 @@
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="loginUI googleLogin">
-            <color red="0.10808336986338689" green="0.23687402546803843" blue="0.40660691624365486" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.13099999725818634" green="0.28600001335144043" blue="0.49099999666213989" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="loginUI loginButton">
-            <color red="0.1235505044" green="0.1229536421" blue="0.12414736680000001" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.22599999606609344" green="0.22699999809265137" blue="0.23000000417232513" alpha="0.69999998807907104" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
