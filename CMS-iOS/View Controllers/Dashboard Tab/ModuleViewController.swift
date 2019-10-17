@@ -16,10 +16,14 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
     var selectedModule = Module()
     var destinationURL = URL(string: "")
     var locationToCopy = URL(string: "")
+    var task = URLSessionDownloadTask()
     @IBOutlet weak var descriptionText: UITextView!
     @IBOutlet weak var textConstraint: NSLayoutConstraint!
     @IBOutlet weak var attachmentButton: UIButton!
+    @IBOutlet weak var progressBar: UIProgressView!
     
+    @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var downloadProgressLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         print(selectedModule.modname)
@@ -30,10 +34,15 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
         }
         
         setDescription()
+        progressBar.isHidden = true
+        downloadProgressLabel.isHidden = true
+        cancelButton.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        SVProgressHUD.dismiss()
+        self.progressBar.isHidden = true
+        self.downloadProgressLabel.isHidden = true
+        self.cancelButton.isHidden = true
     }
     
     func setDescription(){
@@ -145,8 +154,7 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        let task = session.downloadTask(with: request)
-        SVProgressHUD.showProgress(0)
+        task = session.downloadTask(with: request)
         task.resume()
     }
     
@@ -174,6 +182,11 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
             try FileManager.default.copyItem(at: location, to: locationToCopy!)
             print("Saved")
             openFile()
+            DispatchQueue.main.async {
+                self.progressBar.isHidden = true
+                self.downloadProgressLabel.isHidden = true
+                self.cancelButton.isHidden = true
+            }
         } catch (let writeError){
             print("there was an error: \(writeError)")
         }
@@ -181,8 +194,23 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         DispatchQueue.main.async {
+            if self.progressBar.isHidden{
+                self.progressBar.isHidden = false
+                self.downloadProgressLabel.isHidden = false
+                self.cancelButton.isHidden = false
+                
+            }
             let downloadProgress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
-            SVProgressHUD.showProgress(Float((downloadProgress)))
+            self.progressBar.progress = Float(downloadProgress)
+            self.downloadProgressLabel.text = "Downloading... \(Int(downloadProgress*100))%"
+           
+//            SVProgressHUD.showProgress(Float((downloadProgress)))
         }
     }    
+    @IBAction func cancelDownloadButtonPressed(_ sender: UIButton) {
+        task.cancel()
+        self.progressBar.isHidden = true
+        self.downloadProgressLabel.isHidden = true
+        self.cancelButton.isHidden = true
+    }
 }

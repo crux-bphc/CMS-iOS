@@ -533,13 +533,36 @@
                                     <action selector="openFileButtonPressed:" destination="sHh-GJ-T8A" eventType="touchUpInside" id="zlN-da-WDY"/>
                                 </connections>
                             </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="QIT-Nq-QKW">
+                                <rect key="frame" x="16" y="294" width="343" height="2"/>
+                            </progressView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Downloading... 50%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A70-xz-0Ej">
+                                <rect key="frame" x="16" y="304" width="153" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PVp-gD-KVi">
+                                <rect key="frame" x="311" y="300" width="48" height="30"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancelDownloadButtonPressed:" destination="sHh-GJ-T8A" eventType="touchUpInside" id="RUh-BE-QWH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="QIT-Nq-QKW" firstAttribute="leading" secondItem="1Bu-Qw-jml" secondAttribute="leadingMargin" id="3X2-gO-fXW"/>
                             <constraint firstItem="NwF-hp-sQY" firstAttribute="trailing" secondItem="pK6-fB-GCI" secondAttribute="trailing" constant="16" id="9Kt-IV-bM0"/>
                             <constraint firstItem="pK6-fB-GCI" firstAttribute="leading" secondItem="NwF-hp-sQY" secondAttribute="leading" constant="16" id="D3E-xO-cMP"/>
+                            <constraint firstItem="A70-xz-0Ej" firstAttribute="top" secondItem="QIT-Nq-QKW" secondAttribute="bottom" constant="8" id="Kj6-5x-IEr"/>
+                            <constraint firstItem="QIT-Nq-QKW" firstAttribute="top" secondItem="pK6-fB-GCI" secondAttribute="bottom" constant="16" id="KyH-ub-M2M"/>
                             <constraint firstItem="NwF-hp-sQY" firstAttribute="trailing" secondItem="oO5-iM-2pS" secondAttribute="trailing" constant="16" id="M5z-xp-Fsd"/>
+                            <constraint firstItem="PVp-gD-KVi" firstAttribute="top" secondItem="QIT-Nq-QKW" secondAttribute="bottom" constant="4" id="Nj2-hf-qFQ"/>
+                            <constraint firstItem="A70-xz-0Ej" firstAttribute="leading" secondItem="NwF-hp-sQY" secondAttribute="leading" constant="16" id="aZG-Ox-EVw"/>
                             <constraint firstItem="oO5-iM-2pS" firstAttribute="top" secondItem="NwF-hp-sQY" secondAttribute="top" constant="16" id="eHK-9M-VOF"/>
+                            <constraint firstItem="QIT-Nq-QKW" firstAttribute="trailing" secondItem="1Bu-Qw-jml" secondAttribute="trailingMargin" id="ekf-v8-XJT"/>
+                            <constraint firstItem="NwF-hp-sQY" firstAttribute="trailing" secondItem="PVp-gD-KVi" secondAttribute="trailing" constant="16" id="hBp-pr-tRs"/>
                             <constraint firstItem="oO5-iM-2pS" firstAttribute="leading" secondItem="NwF-hp-sQY" secondAttribute="leading" constant="16" id="soz-j2-rsj"/>
                             <constraint firstItem="pK6-fB-GCI" firstAttribute="top" secondItem="oO5-iM-2pS" secondAttribute="bottom" constant="16" id="uf7-B6-GAz"/>
                         </constraints>
@@ -550,13 +573,16 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="attachmentButton" destination="pK6-fB-GCI" id="TQv-JD-CiC"/>
+                        <outlet property="cancelButton" destination="PVp-gD-KVi" id="jW5-pM-ilX"/>
                         <outlet property="descriptionText" destination="oO5-iM-2pS" id="MHa-PI-Alv"/>
+                        <outlet property="downloadProgressLabel" destination="A70-xz-0Ej" id="Rgh-7m-B6N"/>
+                        <outlet property="progressBar" destination="QIT-Nq-QKW" id="pLT-cG-3mn"/>
                         <outlet property="textConstraint" destination="g1i-ND-31S" id="NLp-PH-I48"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eAb-nW-lZ8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5033" y="-192"/>
+            <point key="canvasLocation" x="5032.8000000000002" y="-192.11822660098522"/>
         </scene>
         <!--Dashboard-->
         <scene sceneID="04p-9G-clS">
