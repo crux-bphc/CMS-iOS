@@ -10,18 +10,31 @@ import UIKit
 import MobileCoreServices
 import SVProgressHUD
 import SwiftKeychainWrapper
+import QuickLook
 
-class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
-    
+class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPreviewControllerDataSource{
+    var quickLookController = QLPreviewController()
+
     var selectedModule = Module()
     var destinationURL = URL(string: "")
     var locationToCopy = URL(string: "")
+    var task = URLSessionDownloadTask()
     @IBOutlet weak var descriptionText: UITextView!
     @IBOutlet weak var textConstraint: NSLayoutConstraint!
     @IBOutlet weak var attachmentButton: UIButton!
-    
+    @IBOutlet weak var progressBar: UIProgressView!
+    @IBOutlet weak var openButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var downloadProgressLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
+        quickLookController.dataSource = self
+        openButton.isEnabled = true
+        if selectedModule.name != ""{
+            self.title = selectedModule.name
+        }else{
+            self.title = selectedModule.filename
+        }
         print(selectedModule.modname)
         if selectedModule.modname == "resource" || selectedModule.modname == "url" {
             attachmentButton.isHidden = false
@@ -30,10 +43,19 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
         }
         
         setDescription()
+        progressBar.isHidden = true
+        downloadProgressLabel.isHidden = true
+        cancelButton.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        SVProgressHUD.dismiss()
+        task.cancel()
+        self.progressBar.isHidden = true
+        self.downloadProgressLabel.isHidden = true
+        self.cancelButton.isHidden = true
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        openButton.isEnabled = true
     }
     
     func setDescription(){
@@ -76,6 +98,7 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
                 destination1 = dataPath.appendingPathComponent(module.coursename)
                 print(module.coursename)
                 print("Changed destination1 to \(destination1)")
+
             } else {
                 do {
                     try FileManager.default.createDirectory(atPath: dataPath.appendingPathComponent(module.coursename).path, withIntermediateDirectories: true, attributes: nil)
@@ -97,20 +120,8 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
         
         let destination = destination1.appendingPathComponent("\(String(module.id) + module.filename)")
         if FileManager().fileExists(atPath: destination.path) {
-            let viewURL = destination as URL
-            let data = try! Data(contentsOf: viewURL)
-            let webView = UIWebView(frame: self.view.frame)
-            webView.load(data, mimeType: self.selectedModule.mimetype, textEncodingName: "", baseURL: viewURL.deletingLastPathComponent())
-            webView.scalesPageToFit = true
-            let docVC = UIViewController()
-            docVC.view.addSubview(webView)
-            if selectedModule.name != ""{
-                docVC.title = self.selectedModule.name
-                
-            } else{
-                docVC.title = self.selectedModule.filename
-            }
-            self.navigationController?.pushViewController(docVC, animated: true)
+            locationToCopy = destination as URL
+            openWithQL()
         } else {
             if Reachability.isConnectedToNetwork() {
                 destinationURL = destination
@@ -129,14 +140,7 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
     func openFile(){
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
-        let data = try! Data(contentsOf: destinationURL!)
-        let webView = UIWebView(frame: self.view.frame)
-        webView.load(data, mimeType: self.selectedModule.mimetype, textEncodingName: "", baseURL: destinationURL!.deletingLastPathComponent())
-        webView.scalesPageToFit = true
-        let docVC = UIViewController()
-        docVC.view.addSubview(webView)
-        docVC.title = self.selectedModule.name
-        self.navigationController?.pushViewController(docVC, animated: true)
+        openWithQL()
     }
     func download(url: URL, to localUrl: URL) {
         locationToCopy = localUrl
@@ -145,12 +149,12 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        let task = session.downloadTask(with: request)
-        SVProgressHUD.showProgress(0)
+        task = session.downloadTask(with: request)
         task.resume()
     }
     
     @IBAction func openFileButtonPressed(_ sender: UIButton) {
+        sender.isEnabled = false
         switch selectedModule.modname {
         case "url":
             print(self.selectedModule.fileurl)
@@ -174,13 +178,53 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate{
             try FileManager.default.copyItem(at: location, to: locationToCopy!)
             print("Saved")
             openFile()
+            DispatchQueue.main.async {
+                self.progressBar.isHidden = true
+                self.downloadProgressLabel.isHidden = true
+                self.cancelButton.isHidden = true
+            }
         } catch (let writeError){
             print("there was an error: \(writeError)")
         }
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        let downloadProgress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
-        SVProgressHUD.showProgress(Float((downloadProgress)))
+        DispatchQueue.main.async {
+            if self.progressBar.isHidden{
+                self.progressBar.isHidden = false
+                self.downloadProgressLabel.isHidden = false
+                self.cancelButton.isHidden = false
+                
+            }
+            let downloadProgress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+            self.progressBar.progress = Float(downloadProgress)
+            self.downloadProgressLabel.text = "Downloading... \(Int(downloadProgress*100))%"
+           
+//            SVProgressHUD.showProgress(Float((downloadProgress)))
+        }
     }    
+    @IBAction func cancelDownloadButtonPressed(_ sender: UIButton) {
+        task.cancel()
+        openButton.isEnabled = true
+        self.progressBar.isHidden = true
+        self.downloadProgressLabel.isHidden = true
+        self.cancelButton.isHidden = true
+        
+    }
+    
+    func openWithQL(){
+        self.present(quickLookController, animated: true) {
+            // completion
+        }
+    }
+    
+    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+        return 1
+    }
+    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+        let item = PreviewItem()
+        item.previewItemURL = locationToCopy!
+        item.previewItemTitle = selectedModule.name
+        return item
+    }
 }

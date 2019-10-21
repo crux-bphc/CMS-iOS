@@ -12,4 +12,6 @@ pod 'Alamofire'
   pod 'SwiftKeychainWrapper'
   pod 'RealmSwift'
   pod 'IQKeyboardManagerSwift'
+  pod 'NotificationBannerSwift'
+
 end

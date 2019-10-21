@@ -13,11 +13,12 @@ import SVProgressHUD
 import SwiftKeychainWrapper
 import RealmSwift
 import UserNotifications
+import NotificationBannerSwift
 
 class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate, URLSessionDownloadDelegate {
     
     @IBOutlet weak var tableView: UITableView!
-    
+    let banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
     let constant = Constants.Global.self
     var courseList = [Course]()
     var userDetails = User()
@@ -317,6 +318,10 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         }else{
             self.refreshControl.endRefreshing()
         }
+        
+        if !Reachability.isConnectedToNetwork(){
+            showOfflineMessage()
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -352,5 +357,14 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             self.selectedCourse = courseList[indexPath.row]
         }
         performSegue(withIdentifier: "goToCourseContent", sender: self)
+    }
+    
+    func showOfflineMessage(){
+        banner.show()
+        self.perform(#selector(dismissOfflineBanner), with: nil, afterDelay: 1)
+    }
+    
+    @objc func dismissOfflineBanner(){
+        banner.dismiss()
     }
 }
