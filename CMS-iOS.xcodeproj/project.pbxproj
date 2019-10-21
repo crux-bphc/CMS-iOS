@@ -36,6 +36,7 @@
 		0AF7F52C23558A50005F2016 /* DownloadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF7F52B23558A50005F2016 /* DownloadOperation.swift */; };
 		0AF805C5234F43A3008D9B25 /* CourseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */; };
 		0AF805C6234F43A3008D9B25 /* CourseTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */; };
+		3B34F1132358B3B300F59536 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B34F1122358B3B300F59536 /* Colors.xcassets */; };
 		9BCC1CC2C94658257C7F89AE /* Pods_CMS_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E75E90651C644F9862ACA5C0 /* Pods_CMS_iOS.framework */; };
 		E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */; };
 		E6510CAE233FD49B009FCF0D /* HTMLStringDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */; };
@@ -77,6 +78,7 @@
 		0AF7F52B23558A50005F2016 /* DownloadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadOperation.swift; sourceTree = "<group>"; };
 		0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseTableViewCell.swift; path = "CMS-iOS/New Group/CourseTableViewCell.swift"; sourceTree = SOURCE_ROOT; };
 		0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CourseTableViewCell.xib; path = "CMS-iOS/New Group/CourseTableViewCell.xib"; sourceTree = SOURCE_ROOT; };
+		3B34F1122358B3B300F59536 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		A59470A9C8966A1BC963F37A /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		D3068BDF339E49E6F0EA5C2F /* Pods-CMS-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.release.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderContentViewController.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				E6A556F123479C41005A1A33 /* Main.storyboard */,
 				0AC33B6623022453004AE385 /* Assets.xcassets */,
 				0A3DEAFE22FDCA6A001B6BFD /* Info.plist */,
+				3B34F1122358B3B300F59536 /* Colors.xcassets */,
 			);
 			path = "CMS-iOS";
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */,
 				0AC33B6723022453004AE385 /* Assets.xcassets in Resources */,
 				0A3DEB0622FDCD26001B6BFD /* SF-Pro-Display-Heavy.otf in Resources */,
+				3B34F1132358B3B300F59536 /* Colors.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

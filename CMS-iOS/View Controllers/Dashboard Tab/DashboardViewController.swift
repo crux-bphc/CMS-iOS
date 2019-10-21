@@ -35,8 +35,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let currentUser = realm.objects(User.self).first
-        userDetails = currentUser!
+        if let currentUser = realm.objects(User.self).first {
+            userDetails = currentUser
+        }
         
         setupNavBar()
         
@@ -118,24 +119,24 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                         courseToDownload = self.searchController.isActive ? self.filteredCourseList[rowNo] : self.courseList[rowNo]
                         self.downloadCourseData(course: courseToDownload) {
                             self.download(downloadArray: self.downloadArray, to: self.localURLArray) {
-//                                print("completion inside didPressButton called")
-//                                let state = UIApplication.shared.applicationState
-//                                if state == .active {
-//                                    SVProgressHUD.showSuccess(withStatus: "Downloaded course contents")
-//                                    SVProgressHUD.dismiss(withDelay: 0.5)
-//                                } else if state == .background || state == .inactive {
-//                                    let content = UNMutableNotificationContent()
-//                                    content.title = "Download Successful"
-//                                    content.body = "The course \(actionSheet.title ?? "") was successfully downloaded.)"
-//                                    content.sound = UNNotificationSound.default
-//                                    content.badge = 1
-//                                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-//                                    let request = UNNotificationRequest(identifier: "DownloadCompelte", content: content, trigger: trigger)
-//                                    let center = UNUserNotificationCenter.current()
-//                                    center.add(request) { (error) in
-//                                        print("There was an error in sending the notification. \(String(describing: error))")
-//                                    }
-//                                }
+                                //                                print("completion inside didPressButton called")
+                                //                                let state = UIApplication.shared.applicationState
+                                //                                if state == .active {
+                                //                                    SVProgressHUD.showSuccess(withStatus: "Downloaded course contents")
+                                //                                    SVProgressHUD.dismiss(withDelay: 0.5)
+                                //                                } else if state == .background || state == .inactive {
+                                //                                    let content = UNMutableNotificationContent()
+                                //                                    content.title = "Download Successful"
+                                //                                    content.body = "The course \(actionSheet.title ?? "") was successfully downloaded.)"
+                                //                                    content.sound = UNNotificationSound.default
+                                //                                    content.badge = 1
+                                //                                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                                //                                    let request = UNNotificationRequest(identifier: "DownloadCompelte", content: content, trigger: trigger)
+                                //                                    let center = UNUserNotificationCenter.current()
+                                //                                    center.add(request) { (error) in
+                                //                                        print("There was an error in sending the notification. \(String(describing: error))")
+                                //                                    }
+                                //                                }
                             }
                         }
                     }
