@@ -41,7 +41,7 @@
 		E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */; };
 		E6510CAE233FD49B009FCF0D /* HTMLStringDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */; };
 		E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */; };
-		E6A556F223479C41005A1A33 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6A556F123479C41005A1A33 /* Main.storyboard */; };
+		E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6C61630235DA91F00FFC2E4 /* Main.storyboard */; };
 		E6C78DE32325302800387CF0 /* SampleJSONData.json in Resources */ = {isa = PBXBuildFile; fileRef = E6C78DE22325302800387CF0 /* SampleJSONData.json */; };
 /* End PBXBuildFile section */
 
@@ -84,7 +84,7 @@
 		E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderContentViewController.swift; sourceTree = "<group>"; };
 		E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLStringDecoder.swift; sourceTree = "<group>"; };
 		E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLPreviewItemSubclass.swift; sourceTree = "<group>"; };
-		E6A556F123479C41005A1A33 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = "Data Models/Main.storyboard"; sourceTree = "<group>"; };
+		E6C61630235DA91F00FFC2E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		E6C78DE22325302800387CF0 /* SampleJSONData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SampleJSONData.json; sourceTree = "<group>"; };
 		E75E90651C644F9862ACA5C0 /* Pods_CMS_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CMS_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -132,10 +132,10 @@
 				0AC33B6023020669004AE385 /* View Controllers */,
 				0AC33B6523021591004AE385 /* Data Models */,
 				0A3DEAFB22FDCA6A001B6BFD /* LaunchScreen.storyboard */,
-				E6A556F123479C41005A1A33 /* Main.storyboard */,
 				0AC33B6623022453004AE385 /* Assets.xcassets */,
 				0A3DEAFE22FDCA6A001B6BFD /* Info.plist */,
 				3B34F1122358B3B300F59536 /* Colors.xcassets */,
+				E6C61630235DA91F00FFC2E4 /* Main.storyboard */,
 			);
 			path = "CMS-iOS";
 			sourceTree = "<group>";
@@ -320,9 +320,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */,
 				0AF805C6234F43A3008D9B25 /* CourseTableViewCell.xib in Resources */,
 				E6C78DE32325302800387CF0 /* SampleJSONData.json in Resources */,
-				E6A556F223479C41005A1A33 /* Main.storyboard in Resources */,
 				0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */,
 				0AC33B6723022453004AE385 /* Assets.xcassets in Resources */,
 				0A3DEB0622FDCD26001B6BFD /* SF-Pro-Display-Heavy.otf in Resources */,
