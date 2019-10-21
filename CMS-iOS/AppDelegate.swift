@@ -31,18 +31,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         IQKeyboardManager.shared.enable = true
-        let realmUser = realm.objects(User.self).first
-        if Reachability.isConnectedToNetwork() {
-            try! realm.write {
-                realmUser?.isConnected = true
-                print("successfully set connected = true")
+        if let realmUser = realm.objects(User.self).first {
+            if Reachability.isConnectedToNetwork() {
+                try! realm.write {
+                    realmUser.isConnected = true
+                    print("successfully set connected = true")
+                }
+            } else {
+                try! realm.write {
+                    realmUser.isConnected = false
+                }
             }
-        } else {
-            try! realm.write {
-                realmUser?.isConnected = false
-            }
+            print(realmUser.isConnected as Any)
         }
-        print(realmUser?.isConnected as Any)
         return true
     }
     
@@ -59,17 +60,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         
-        let realmUser = realm.objects(User.self).first
-        if Reachability.isConnectedToNetwork() {
-            try! realm.write {
-                realmUser?.isConnected = true
+        if let realmUser = realm.objects(User.self).first {
+            if Reachability.isConnectedToNetwork() {
+                try! realm.write {
+                    realmUser.isConnected = true
+                }
+            } else {
+                try! realm.write {
+                    realmUser.isConnected = false
+                }
             }
-        } else {
-            try! realm.write {
-                realmUser?.isConnected = false
-            }
+            print(realmUser.isConnected as Any)
         }
-        print(realmUser?.isConnected as Any)
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -85,12 +87,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let message = url.host
         let loginViewController = self.window?.rootViewController as! LoginViewController
         loginViewController.loginWithGoogle(input: message!)
-//        let alertController = UIAlertController(title: "Checking google login", message: message, preferredStyle: .alert)
-//        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-//        alertController.addAction(okAction)
-//
-//        window?.rootViewController?.present(alertController, animated: true, completion: nil)
-//
+        //        let alertController = UIAlertController(title: "Checking google login", message: message, preferredStyle: .alert)
+        //        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        //        alertController.addAction(okAction)
+        //
+        //        window?.rootViewController?.present(alertController, animated: true, completion: nil)
+        //
         return true
     }
     
