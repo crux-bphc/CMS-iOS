@@ -21,6 +21,9 @@
 		0A8E02D72300207900724899 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8E02D62300207900724899 /* User.swift */; };
 		0A8EFC6523100F9D00CD6BAD /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8EFC6423100F9D00CD6BAD /* Reachability.swift */; };
 		0A8F492B23313A3800E7A94C /* AddDiscussionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8F492A23313A3800E7A94C /* AddDiscussionViewController.swift */; };
+		0A9A960B23572E93004ABB2F /* CBTabBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9A960823572E93004ABB2F /* CBTabBarButton.swift */; };
+		0A9A960C23572E93004ABB2F /* BubbleTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9A960923572E93004ABB2F /* BubbleTabBar.swift */; };
+		0A9A960D23572E93004ABB2F /* BubbleTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9A960A23572E93004ABB2F /* BubbleTabBarController.swift */; };
 		0AC33B642302153C004AE385 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC33B632302153C004AE385 /* Course.swift */; };
 		0AC33B6723022453004AE385 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AC33B6623022453004AE385 /* Assets.xcassets */; };
 		0AC33B6923022B2C004AE385 /* CourseContentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC33B6823022B2C004AE385 /* CourseContentsViewController.swift */; };
@@ -33,6 +36,7 @@
 		0AF7F52C23558A50005F2016 /* DownloadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF7F52B23558A50005F2016 /* DownloadOperation.swift */; };
 		0AF805C5234F43A3008D9B25 /* CourseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */; };
 		0AF805C6234F43A3008D9B25 /* CourseTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */; };
+		3B34F1132358B3B300F59536 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B34F1122358B3B300F59536 /* Colors.xcassets */; };
 		9BCC1CC2C94658257C7F89AE /* Pods_CMS_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E75E90651C644F9862ACA5C0 /* Pods_CMS_iOS.framework */; };
 		E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */; };
 		E6510CAE233FD49B009FCF0D /* HTMLStringDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */; };
@@ -58,6 +62,9 @@
 		0A8E02D62300207900724899 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		0A8EFC6423100F9D00CD6BAD /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		0A8F492A23313A3800E7A94C /* AddDiscussionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDiscussionViewController.swift; sourceTree = "<group>"; };
+		0A9A960823572E93004ABB2F /* CBTabBarButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBTabBarButton.swift; sourceTree = "<group>"; };
+		0A9A960923572E93004ABB2F /* BubbleTabBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubbleTabBar.swift; sourceTree = "<group>"; };
+		0A9A960A23572E93004ABB2F /* BubbleTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubbleTabBarController.swift; sourceTree = "<group>"; };
 		0AC33B632302153C004AE385 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		0AC33B6623022453004AE385 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0AC33B6823022B2C004AE385 /* CourseContentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseContentsViewController.swift; sourceTree = "<group>"; };
@@ -70,6 +77,7 @@
 		0AF7F52B23558A50005F2016 /* DownloadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadOperation.swift; sourceTree = "<group>"; };
 		0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseTableViewCell.swift; path = "CMS-iOS/New Group/CourseTableViewCell.swift"; sourceTree = SOURCE_ROOT; };
 		0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CourseTableViewCell.xib; path = "CMS-iOS/New Group/CourseTableViewCell.xib"; sourceTree = SOURCE_ROOT; };
+		3B34F1122358B3B300F59536 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		A59470A9C8966A1BC963F37A /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		D3068BDF339E49E6F0EA5C2F /* Pods-CMS-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.release.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderContentViewController.swift; sourceTree = "<group>"; };
@@ -112,6 +120,7 @@
 		0A3DEAF122FDCA69001B6BFD /* CMS-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				0A9A960723572D62004ABB2F /* BubbleTabBar */,
 				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
 				E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */,
 				0AC43B562350B11700A4ED1B /* New Group */,
@@ -124,6 +133,7 @@
 				E6A556F123479C41005A1A33 /* Main.storyboard */,
 				0AC33B6623022453004AE385 /* Assets.xcassets */,
 				0A3DEAFE22FDCA6A001B6BFD /* Info.plist */,
+				3B34F1122358B3B300F59536 /* Colors.xcassets */,
 			);
 			path = "CMS-iOS";
 			sourceTree = "<group>";
@@ -166,6 +176,16 @@
 				0A67E5DB23091B4700E18E99 /* EnrolmentViewController.swift */,
 			);
 			path = "Search Tab";
+			sourceTree = "<group>";
+		};
+		0A9A960723572D62004ABB2F /* BubbleTabBar */ = {
+			isa = PBXGroup;
+			children = (
+				0A9A960923572E93004ABB2F /* BubbleTabBar.swift */,
+				0A9A960A23572E93004ABB2F /* BubbleTabBarController.swift */,
+				0A9A960823572E93004ABB2F /* CBTabBarButton.swift */,
+			);
+			path = BubbleTabBar;
 			sourceTree = "<group>";
 		};
 		0AC33B6023020669004AE385 /* View Controllers */ = {
@@ -303,6 +323,7 @@
 				0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */,
 				0AC33B6723022453004AE385 /* Assets.xcassets in Resources */,
 				0A3DEB0622FDCD26001B6BFD /* SF-Pro-Display-Heavy.otf in Resources */,
+				3B34F1132358B3B300F59536 /* Colors.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,10 +381,12 @@
 				0A8E02D72300207900724899 /* User.swift in Sources */,
 				0AC33B642302153C004AE385 /* Course.swift in Sources */,
 				E6510CAE233FD49B009FCF0D /* HTMLStringDecoder.swift in Sources */,
+				0A9A960C23572E93004ABB2F /* BubbleTabBar.swift in Sources */,
 				0A3DEAF522FDCA69001B6BFD /* LoginViewController.swift in Sources */,
 				0AF805C5234F43A3008D9B25 /* CourseTableViewCell.swift in Sources */,
 				0AC33B6D2302EF18004AE385 /* Module.swift in Sources */,
 				0A3DEAF322FDCA69001B6BFD /* AppDelegate.swift in Sources */,
+				0A9A960D23572E93004ABB2F /* BubbleTabBarController.swift in Sources */,
 				0A7F90BC2300753E00683867 /* DashboardViewController.swift in Sources */,
 				0A2B472C23083C1A005879D6 /* SearchViewController.swift in Sources */,
 				0AF7F52C23558A50005F2016 /* DownloadOperation.swift in Sources */,
@@ -374,6 +397,7 @@
 				0A585453230168E7008FB370 /* Constants.swift in Sources */,
 				0A67E5DC23091B4700E18E99 /* EnrolmentViewController.swift in Sources */,
 				E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */,
+				0A9A960B23572E93004ABB2F /* CBTabBarButton.swift in Sources */,
 				0AC33B6923022B2C004AE385 /* CourseContentsViewController.swift in Sources */,
 				0A8EFC6523100F9D00CD6BAD /* Reachability.swift in Sources */,
 				0AF20A2F230B2F17001C0CB1 /* ExtrasTableViewController.swift in Sources */,
