@@ -121,24 +121,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                         courseToDownload = self.searchController.isActive ? self.filteredCourseList[rowNo] : self.courseList[rowNo]
                         self.downloadCourseData(course: courseToDownload) {
                             self.download(downloadArray: self.downloadArray, to: self.localURLArray) {
-                                //                                print("completion inside didPressButton called")
-                                //                                let state = UIApplication.shared.applicationState
-                                //                                if state == .active {
-                                //                                    SVProgressHUD.showSuccess(withStatus: "Downloaded course contents")
-                                //                                    SVProgressHUD.dismiss(withDelay: 0.5)
-                                //                                } else if state == .background || state == .inactive {
-                                //                                    let content = UNMutableNotificationContent()
-                                //                                    content.title = "Download Successful"
-                                //                                    content.body = "The course \(actionSheet.title ?? "") was successfully downloaded.)"
-                                //                                    content.sound = UNNotificationSound.default
-                                //                                    content.badge = 1
-                                //                                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                                //                                    let request = UNNotificationRequest(identifier: "DownloadCompelte", content: content, trigger: trigger)
-                                //                                    let center = UNUserNotificationCenter.current()
-                                //                                    center.add(request) { (error) in
-                                //                                        print("There was an error in sending the notification. \(String(describing: error))")
-                                //                                    }
-                                //                                }
+                                
                             }
                         }
                     }
@@ -216,6 +199,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                     try FileManager.default.copyItem(at: localURL!, to: self.localURLArray[k])
                 } catch {
                     print("There was an error in copying the item")
+                }
+                if (k==downloadArray.count-1){
+                    self.downloadCompletion()
                 }
             }
             queue.addOperation(operation)
@@ -332,8 +318,8 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.contentView.layer.masksToBounds = true
-        let radius = cell.contentView.layer.cornerRadius
-        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: radius).cgPath
+//        let radius = cell.contentView.layer.cornerRadius
+//        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: radius).cgPath
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -341,11 +327,21 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         
         cell.containView.layer.shadowOffset = CGSize(width: 0, height: 2)
         cell.containView.layer.cornerRadius = 15
-        cell.contentView.layer.backgroundColor = UIColor(white: 1, alpha: 1).cgColor
-        cell.containView.layer.shadowColor = UIColor.black.cgColor
-        cell.containView.layer.shadowOpacity = 0.3
-        cell.containView.layer.backgroundColor = UIColor(white: 0.99, alpha: 1).cgColor
-        
+        cell.courseProgress.layer.masksToBounds = true
+        cell.containView.clipsToBounds = true
+        if #available(iOS 13.0, *) {
+            cell.contentView.layer.backgroundColor = UIColor.systemBackground.cgColor
+        } else {
+            cell.contentView.layer.backgroundColor = UIColor.white.cgColor
+        }
+//        cell.layer.shadowColor = UIColor.black.cgColor
+//        cell.layer.shadowOpacity = 0.3
+        if #available(iOS 13.0, *) {
+            cell.containView.layer.backgroundColor = UIColor.secondarySystemBackground.cgColor
+        } else {
+            cell.containView.layer.backgroundColor = UIColor.white.cgColor
+            
+        }
         if searchController.isActive {
             
             cell.courseName.text = filteredCourseList[indexPath.row].displayname
@@ -382,6 +378,26 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     @objc func dismissOfflineBanner(){
         banner.dismiss()
     }
+    func downloadCompletion(){
+        print("completion inside didPressButton called")
+        let state = UIApplication.shared.applicationState
+        if state == .active {
+            SVProgressHUD.showSuccess(withStatus: "Downloaded course contents")
+            SVProgressHUD.dismiss(withDelay: 0.5)
+        } else if state == .background || state == .inactive {
+            let content = UNMutableNotificationContent()
+            content.title = "Download Successful"
+            content.body = "The course \(selectedCourse.displayname) was successfully downloaded."
+            content.sound = UNNotificationSound.default
+            content.badge = 1
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+            let request = UNNotificationRequest(identifier: "DownloadCompelte", content: content, trigger: trigger)
+            let center = UNUserNotificationCenter.current()
+            center.add(request) { (error) in
+                print("There was an error in sending the notification. \(String(describing: error))")
+            }
+        }
+    }
     
     func animateTable() {
         tableView.reloadData()
@@ -402,5 +418,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             index+=1
         }
     }
-    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        tableView.reloadData()
+    }
 }
