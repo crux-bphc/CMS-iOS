@@ -12,6 +12,7 @@ class CourseTableViewCell: UITableViewCell {
 
     @IBOutlet weak var courseName: UILabel!
     @IBOutlet weak var courseProgress: UIProgressView!
+    @IBOutlet weak var containView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

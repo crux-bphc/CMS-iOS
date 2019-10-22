@@ -43,6 +43,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.separatorStyle = .none
         
         if #available(iOS 13.0, *) {
             refreshControl.tintColor = .label
@@ -75,6 +76,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         //            refreshData()
         //        }
         tableView.reloadData()
+        animateTable()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -314,9 +316,32 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         return searchController.isActive ? filteredCourseList.count : courseList.count
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.contentView.layer.masksToBounds = true
+//        let radius = cell.contentView.layer.cornerRadius
+//        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: radius).cgPath
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
         
+        cell.containView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        cell.containView.layer.cornerRadius = 15
+        cell.courseProgress.layer.masksToBounds = true
+        cell.containView.clipsToBounds = true
+        if #available(iOS 13.0, *) {
+            cell.contentView.layer.backgroundColor = UIColor.systemBackground.cgColor
+        } else {
+            cell.contentView.layer.backgroundColor = UIColor.white.cgColor
+        }
+//        cell.layer.shadowColor = UIColor.black.cgColor
+//        cell.layer.shadowOpacity = 0.3
+        if #available(iOS 13.0, *) {
+            cell.containView.layer.backgroundColor = UIColor.secondarySystemBackground.cgColor
+        } else {
+            cell.containView.layer.backgroundColor = UIColor.white.cgColor
+            
+        }
         if searchController.isActive {
             
             cell.courseName.text = filteredCourseList[indexPath.row].displayname
@@ -330,7 +355,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return 100
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -372,5 +397,28 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                 print("There was an error in sending the notification. \(String(describing: error))")
             }
         }
+    }
+    
+    func animateTable() {
+        tableView.reloadData()
+        let cells = tableView.visibleCells
+        let tableHeight = tableView.bounds.size.height
+        
+        for i in cells {
+            let cell: UITableViewCell = i as UITableViewCell
+            cell.transform = CGAffineTransform(translationX: 0, y: tableHeight)
+        }
+        
+        var index = 0
+        for m in cells {
+            let cell: UITableViewCell = m as UITableViewCell
+            UIView.animate(withDuration: 1.0, delay: 0.05*Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [], animations: {
+                cell.transform = CGAffineTransform.identity;
+            }, completion: nil)
+            index+=1
+        }
+    }
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        tableView.reloadData()
     }
 }
