@@ -331,8 +331,10 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         cell.containView.clipsToBounds = true
         if #available(iOS 13.0, *) {
             cell.contentView.layer.backgroundColor = UIColor.systemBackground.cgColor
+            cell.courseProgress.tintColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
         } else {
             cell.contentView.layer.backgroundColor = UIColor.white.cgColor
+            cell.courseProgress.tintColor = #colorLiteral(red: 0.9372549057, green: 0.5625251839, blue: 0.3577104232, alpha: 1)
         }
 //        cell.layer.shadowColor = UIColor.black.cgColor
 //        cell.layer.shadowOpacity = 0.3
@@ -351,6 +353,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             cell.courseName.text = courseList[indexPath.row].displayname
             cell.courseProgress.progress = Float(courseList[indexPath.row].progress)
         }
+        cell.downloadIndicatorLabel.isHidden = true
+        cell.activityIndicator.isHidden = true
+        cell.courseName.adjustsFontSizeToFitWidth = true
         return cell
     }
     
