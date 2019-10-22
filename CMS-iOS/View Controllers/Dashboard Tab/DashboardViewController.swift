@@ -43,6 +43,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.separatorStyle = .none
         
         if #available(iOS 13.0, *) {
             refreshControl.tintColor = .label
@@ -328,8 +329,21 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         return searchController.isActive ? filteredCourseList.count : courseList.count
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.contentView.layer.masksToBounds = true
+        let radius = cell.contentView.layer.cornerRadius
+        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: radius).cgPath
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
+        
+        cell.containView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        cell.containView.layer.cornerRadius = 15
+        cell.contentView.layer.backgroundColor = UIColor(white: 1, alpha: 1).cgColor
+        cell.containView.layer.shadowColor = UIColor.black.cgColor
+        cell.containView.layer.shadowOpacity = 0.3
+        cell.containView.layer.backgroundColor = UIColor(white: 0.99, alpha: 1).cgColor
         
         if searchController.isActive {
             
@@ -344,7 +358,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return 100
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

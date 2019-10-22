@@ -206,7 +206,7 @@ public class CBTabBarButton: UIControl {
         if #available(iOS 12.0, *) {
             if self.traitCollection.userInterfaceStyle == .dark {
                 //                self.tabBg.backgroundColor = UIColor(white: 0, alpha: 1.0)
-                tabBg.backgroundColor = UIColor.darkGray.withAlphaComponent(0.4)
+                tabBg.backgroundColor = tintColor.withAlphaComponent(0.2)
                 if !_isSelected {
                     tabImage.tintColor = .white
                 } else {
