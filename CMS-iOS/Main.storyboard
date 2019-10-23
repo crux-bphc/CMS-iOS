@@ -680,57 +680,64 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="id9-sG-gXX">
-                                <rect key="frame" x="30" y="436" width="315" height="40"/>
+                                <rect key="frame" x="16" y="433" width="343" height="40"/>
                                 <color key="backgroundColor" red="0.63186275960000005" green="0.11029412600000001" blue="0.1289215833" alpha="1" colorSpace="custom" customColorSpace="adobeRGB1998"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="LXO-W5-hG7"/>
+                                    <constraint firstAttribute="height" constant="40" id="baj-og-34p"/>
                                 </constraints>
-                                <state key="normal" title="Enrol me">
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <state key="normal" title="Enrol Me">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <action selector="enrolButtonPresses:" destination="euS-wt-hGD" eventType="touchUpInside" id="bD8-kX-b3n"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Instructor" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5oc-8M-tOs">
-                                <rect key="frame" x="30" y="158" width="315" height="40"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Course" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bUg-oG-RKg" customClass="MarqueeLabel" customModule="MarqueeLabel">
+                                <rect key="frame" x="16" y="179" width="343" height="29"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="ImC-sq-iBw"/>
+                                    <constraint firstAttribute="height" constant="29" id="cDf-Ss-FOX"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fadeLength">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="animationDelay">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Course" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bUg-oG-RKg">
-                                <rect key="frame" x="30" y="108" width="315" height="40"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Instructor" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5oc-8M-tOs">
+                                <rect key="frame" x="16" y="216" width="343" height="22"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="gE1-rO-aMX"/>
+                                    <constraint firstAttribute="height" constant="22" id="sPf-0z-IxA"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="id9-sG-gXX" firstAttribute="centerY" secondItem="KaF-1f-OgI" secondAttribute="centerY" constant="50" id="31e-gu-bWa"/>
-                            <constraint firstItem="bUg-oG-RKg" firstAttribute="leading" secondItem="kzh-ck-lYF" secondAttribute="leading" constant="30" id="CoX-lw-eg7"/>
-                            <constraint firstItem="kzh-ck-lYF" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="5oc-8M-tOs" secondAttribute="trailing" id="PTF-dP-CjO"/>
-                            <constraint firstItem="bUg-oG-RKg" firstAttribute="centerX" secondItem="KaF-1f-OgI" secondAttribute="centerX" id="Rou-U5-2Lz"/>
-                            <constraint firstItem="kzh-ck-lYF" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="id9-sG-gXX" secondAttribute="trailing" id="SYU-QB-Mi3"/>
-                            <constraint firstItem="5oc-8M-tOs" firstAttribute="top" secondItem="bUg-oG-RKg" secondAttribute="bottom" constant="10" id="YKb-Cn-4bl"/>
-                            <constraint firstItem="kzh-ck-lYF" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bUg-oG-RKg" secondAttribute="trailing" id="YUT-gx-bsk"/>
-                            <constraint firstItem="5oc-8M-tOs" firstAttribute="centerX" secondItem="KaF-1f-OgI" secondAttribute="centerX" id="YrV-TI-e3h"/>
-                            <constraint firstItem="id9-sG-gXX" firstAttribute="centerX" secondItem="KaF-1f-OgI" secondAttribute="centerX" id="bu1-sm-gtL"/>
-                            <constraint firstItem="5oc-8M-tOs" firstAttribute="leading" secondItem="kzh-ck-lYF" secondAttribute="leading" constant="30" id="dAq-gf-op1"/>
-                            <constraint firstItem="bUg-oG-RKg" firstAttribute="top" secondItem="kzh-ck-lYF" secondAttribute="top" constant="20" id="dQP-Yf-VX1"/>
-                            <constraint firstItem="id9-sG-gXX" firstAttribute="leading" secondItem="kzh-ck-lYF" secondAttribute="leading" constant="30" id="vEF-g5-9bV"/>
+                            <constraint firstItem="id9-sG-gXX" firstAttribute="leading" secondItem="kzh-ck-lYF" secondAttribute="leading" constant="16" id="5M1-cx-TVG"/>
+                            <constraint firstItem="5oc-8M-tOs" firstAttribute="top" secondItem="bUg-oG-RKg" secondAttribute="bottom" constant="8" id="6Pe-5i-Eoi"/>
+                            <constraint firstItem="5oc-8M-tOs" firstAttribute="centerX" secondItem="id9-sG-gXX" secondAttribute="centerX" id="Aao-a9-Qh3"/>
+                            <constraint firstItem="bUg-oG-RKg" firstAttribute="trailing" secondItem="5oc-8M-tOs" secondAttribute="trailing" id="KL3-sG-kYv"/>
+                            <constraint firstItem="bUg-oG-RKg" firstAttribute="trailing" secondItem="KaF-1f-OgI" secondAttribute="trailingMargin" id="Qoq-nR-Kl7"/>
+                            <constraint firstItem="bUg-oG-RKg" firstAttribute="leading" secondItem="KaF-1f-OgI" secondAttribute="leadingMargin" id="jSy-ex-FqQ"/>
+                            <constraint firstItem="bUg-oG-RKg" firstAttribute="leading" secondItem="5oc-8M-tOs" secondAttribute="leading" id="lNh-Gz-Rid"/>
+                            <constraint firstItem="bUg-oG-RKg" firstAttribute="top" secondItem="kzh-ck-lYF" secondAttribute="top" constant="91" id="oZx-95-YnP"/>
+                            <constraint firstItem="kzh-ck-lYF" firstAttribute="bottom" secondItem="id9-sG-gXX" secondAttribute="bottom" constant="256" id="t9y-pr-D6b"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kzh-ck-lYF"/>
                     </view>
                     <navigationItem key="navigationItem" id="pg1-iQ-IWN"/>
                     <connections>
                         <outlet property="courseLabel" destination="bUg-oG-RKg" id="nFp-ff-iGs"/>
+                        <outlet property="enrolButton" destination="id9-sG-gXX" id="TER-qP-MLT"/>
                         <outlet property="instructorLabel" destination="5oc-8M-tOs" id="bW5-Ex-4Tj"/>
                         <segue destination="fG0-QY-y8D" kind="show" identifier="goToEnrolledCourse" id="bDO-Ye-r9b"/>
                     </connections>
@@ -867,7 +874,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="IgU-80-XSP"/>
-        <segue reference="enf-3I-Kaq"/>
+        <segue reference="bDO-Ye-r9b"/>
         <segue reference="67r-4m-Wu4"/>
         <segue reference="p9a-Sh-oWN"/>
     </inferredMetricsTieBreakers>
