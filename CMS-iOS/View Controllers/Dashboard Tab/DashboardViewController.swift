@@ -20,6 +20,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var tableView: UITableView!
     let banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
     let constant = Constants.Global.self
+    var animated = false
     var courseList = [Course]()
     var userDetails = User()
     var selectedCourse = Course()
@@ -76,7 +77,10 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         //            refreshData()
         //        }
         tableView.reloadData()
-        animateTable()
+        if !animated{
+            animateTable()
+            self.animated = true
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -102,6 +106,8 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         let indexPath = self.tableView.indexPathForRow(at: pressLocation)
         if indexPath == nil {
         } else if longPressGesture.state == UIGestureRecognizer.State.began {
+            let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+            selectionFeedbackGenerator.selectionChanged()
             var actionSheet = UIAlertController()
             if searchController.isActive{
                 if let rowNo = indexPath?.row{

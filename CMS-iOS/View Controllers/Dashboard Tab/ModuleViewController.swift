@@ -28,6 +28,8 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
     @IBOutlet weak var downloadProgressLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
+        descriptionText.layer.cornerRadius = 10
+        openButton.layer.cornerRadius = 10
         quickLookController.dataSource = self
         openButton.isEnabled = true
         if selectedModule.name != ""{

@@ -8,11 +8,15 @@
 
 import UIKit
 import SVProgressHUD
+import QuickLook
 
-class DiscussionViewController: UIViewController {
+class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
     
+    var quickLookController = QLPreviewController()
     @IBOutlet weak var bodyTextView: UITextView!
+    @IBOutlet weak var openButton: UIButton!
     var selectedDiscussion = Discussion()
+    var qlLocation = URL(string: "")
     func setMessage(){
         
         if selectedDiscussion.message != "" {
@@ -37,6 +41,9 @@ class DiscussionViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        quickLookController.dataSource = self
+        openButton.layer.cornerRadius = 10
+        bodyTextView.layer.cornerRadius = 10
         setMessage()
         super.viewDidLoad()
         self.navigationItem.largeTitleDisplayMode = .never
@@ -55,28 +62,14 @@ class DiscussionViewController: UIViewController {
         guard let url = URL(string: downloadUrl) else { return }
         let destination = dataPath.appendingPathComponent("\(String(selectedDiscussion.id) + discussion.filename)")
         if FileManager().fileExists(atPath: destination.path) {
-            let viewURL = destination as URL
-            let data = try! Data(contentsOf: viewURL)
-            let webView = UIWebView(frame: self.view.frame)
-            webView.load(data, mimeType: self.selectedDiscussion.mimetype, textEncodingName: "", baseURL: viewURL.deletingLastPathComponent())
-            webView.scalesPageToFit = true
-            let docVC = UIViewController()
-            docVC.view.addSubview(webView)
-            docVC.title = self.selectedDiscussion.name
-            self.navigationController?.pushViewController(docVC, animated: true)
+            qlLocation = destination as URL
+            openWithQL()
         } else {
             download(url: url, to: destination) {
                 SVProgressHUD.dismiss()
                 DispatchQueue.main.async {
-                    let viewURL = destination as URL
-                    let data = try! Data(contentsOf: viewURL)
-                    let webView = UIWebView(frame: self.view.frame)
-                    webView.load(data, mimeType: self.selectedDiscussion.mimetype, textEncodingName: "", baseURL: viewURL.deletingLastPathComponent())
-                    webView.scalesPageToFit = true
-                    let docVC = UIViewController()
-                    docVC.view.addSubview(webView)
-                    docVC.title = self.selectedDiscussion.name
-                    self.navigationController?.pushViewController(docVC, animated: true)
+                    self.qlLocation = destination as URL
+                    self.openWithQL()
                 }
             }
         }
@@ -126,5 +119,20 @@ class DiscussionViewController: UIViewController {
     }
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         setMessage()
+    }
+    func openWithQL(){
+        self.present(quickLookController, animated: true) {
+            // completion
+        }
+    }
+    
+    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+        return 1
+    }
+    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+        let item = PreviewItem()
+        item.previewItemURL = qlLocation!
+        item.previewItemTitle = selectedDiscussion.filename
+        return item
     }
 }

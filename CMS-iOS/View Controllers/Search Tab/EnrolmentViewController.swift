@@ -16,12 +16,13 @@ class EnrolmentViewController: UIViewController {
     
     @IBOutlet weak var courseLabel: UILabel!
     @IBOutlet weak var instructorLabel: UILabel!
-    
+    @IBOutlet weak var enrolButton: UIButton!
     let constants = Constants.Global.self
     var enrolmentCourse = Course()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        enrolButton.layer.cornerRadius = 10
         courseLabel.text = enrolmentCourse.displayname
         instructorLabel.text = enrolmentCourse.faculty
         self.navigationItem.largeTitleDisplayMode = .never
