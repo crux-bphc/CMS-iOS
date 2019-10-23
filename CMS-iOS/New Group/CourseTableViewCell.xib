@@ -18,41 +18,41 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="In3-Lu-Tqa" userLabel="Container View">
-                        <rect key="frame" x="5" y="4.5" width="310" height="91"/>
+                        <rect key="frame" x="7" y="4.5" width="306" height="91"/>
                         <subviews>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="fY1-Nu-RQt">
-                                <rect key="frame" x="0.0" y="86" width="310" height="6"/>
+                                <rect key="frame" x="0.0" y="86" width="306" height="6"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="5" id="eDQ-gX-2dx"/>
                                 </constraints>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEST F111 TEST COURSE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jb8-52-F4v">
-                                <rect key="frame" x="8" y="11" width="294" height="22"/>
+                                <rect key="frame" x="10" y="11" width="288" height="22"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Downloaded" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3cS-Sj-Eo5">
-                                <rect key="frame" x="8" y="34" width="96" height="21"/>
+                                <rect key="frame" x="11" y="35" width="96" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="0Di-gb-zIi">
-                                <rect key="frame" x="282" y="35.5" width="20" height="20"/>
+                                <rect key="frame" x="278" y="60" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="jb8-52-F4v" firstAttribute="leading" secondItem="In3-Lu-Tqa" secondAttribute="leading" constant="8" id="03I-eZ-8PJ"/>
+                            <constraint firstItem="jb8-52-F4v" firstAttribute="leading" secondItem="In3-Lu-Tqa" secondAttribute="leading" constant="10" id="03I-eZ-8PJ"/>
                             <constraint firstItem="fY1-Nu-RQt" firstAttribute="leading" secondItem="In3-Lu-Tqa" secondAttribute="leading" id="E1y-nw-eQT"/>
+                            <constraint firstItem="fY1-Nu-RQt" firstAttribute="top" secondItem="0Di-gb-zIi" secondAttribute="bottom" constant="6" id="Hup-1V-pED"/>
                             <constraint firstAttribute="bottom" secondItem="fY1-Nu-RQt" secondAttribute="bottom" id="IKX-l7-OWn"/>
                             <constraint firstItem="jb8-52-F4v" firstAttribute="top" secondItem="In3-Lu-Tqa" secondAttribute="top" constant="11" id="ItQ-7e-8Ul"/>
                             <constraint firstAttribute="trailing" secondItem="jb8-52-F4v" secondAttribute="trailing" constant="8" id="KGe-w7-FXx"/>
                             <constraint firstAttribute="trailing" secondItem="0Di-gb-zIi" secondAttribute="trailing" constant="8" id="Tvh-nJ-3A2"/>
                             <constraint firstAttribute="trailing" secondItem="fY1-Nu-RQt" secondAttribute="trailing" id="kIf-c8-72u"/>
-                            <constraint firstItem="0Di-gb-zIi" firstAttribute="centerY" secondItem="In3-Lu-Tqa" secondAttribute="centerY" id="xxL-uR-nCw"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -61,13 +61,15 @@
                 <constraint firstItem="In3-Lu-Tqa" firstAttribute="centerY" secondItem="njF-e1-oar" secondAttribute="centerY" id="4fz-Or-jyg"/>
                 <constraint firstItem="In3-Lu-Tqa" firstAttribute="height" secondItem="njF-e1-oar" secondAttribute="height" constant="-9" id="Rqn-jx-Zls"/>
                 <constraint firstItem="In3-Lu-Tqa" firstAttribute="centerX" secondItem="njF-e1-oar" secondAttribute="centerX" id="Ulp-V0-DYv"/>
-                <constraint firstItem="In3-Lu-Tqa" firstAttribute="width" secondItem="njF-e1-oar" secondAttribute="width" constant="-10" id="gqh-TC-fsR"/>
+                <constraint firstItem="In3-Lu-Tqa" firstAttribute="width" secondItem="njF-e1-oar" secondAttribute="width" constant="-14" id="gqh-TC-fsR"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="activityIndicator" destination="0Di-gb-zIi" id="2cD-Ne-APK"/>
                 <outlet property="containView" destination="In3-Lu-Tqa" id="gkE-Di-g0i"/>
                 <outlet property="courseName" destination="jb8-52-F4v" id="g0d-bS-Wz1"/>
                 <outlet property="courseProgress" destination="fY1-Nu-RQt" id="glT-or-dqV"/>
+                <outlet property="downloadIndicatorLabel" destination="3cS-Sj-Eo5" id="FWl-7r-iC3"/>
             </connections>
             <point key="canvasLocation" x="140.57971014492756" y="115.17857142857142"/>
         </tableViewCell>
