@@ -216,7 +216,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     func saveFileToStorage(mime: String, downloadUrl: String, module: Module) {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        //        print(String(describing: documentsDirectory))
         let dataPath = documentsDirectory.absoluteURL
         
         guard let url = URL(string: downloadUrl) else { return }
@@ -281,9 +280,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                         currentCourse.displayname = courses[i]["displayname"].string!
                         currentCourse.courseCode = Regex.match(pattern: "(..|...|....)\\s[A-Z][0-9][0-9][0-9]", text: currentCourse.displayname).first ?? ""
                         currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
-                        print(currentCourse.courseName)
                         currentCourse.enrolled = true
-                        currentCourse.progress = 0.01 * Float(courses[i]["progress"].int ?? 0)
                         self.courseList.append(currentCourse)
                         
                         try! self.realm.write {
@@ -327,8 +324,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.contentView.layer.masksToBounds = true
-        //        let radius = cell.contentView.layer.cornerRadius
-        //        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: radius).cgPath
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -337,11 +332,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         if searchController.isActive {
             cell.courseName.text = filteredCourseList[indexPath.row].courseCode
             cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
-            //            cell.courseProgress.progress = Float(filteredCourseList[indexPath.row].progress)
         } else {
             cell.courseName.text = courseList[indexPath.row].courseCode
             cell.courseFullName.text = courseList[indexPath.row].courseName
-            //            cell.courseProgress.progress = Float(courseList[indexPath.row].progress)
         }
         return cell
     }
