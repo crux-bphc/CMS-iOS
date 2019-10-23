@@ -290,18 +290,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Description Text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="8nS-aw-8fA">
-                                <rect key="frame" x="16" y="16" width="343" height="658"/>
+                                <rect key="frame" x="16" y="16" width="343" height="648"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OVG-jf-hSN">
-                                <rect key="frame" x="16" y="684" width="343" height="30"/>
+                                <rect key="frame" x="16" y="674" width="343" height="40"/>
                                 <color key="backgroundColor" red="0.88988083600000001" green="0.51419252159999995" blue="0.20537361500000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="wPD-2H-b6t"/>
+                                    <constraint firstAttribute="height" constant="40" id="wPD-2H-b6t"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                 <state key="normal" title="Open Attachment">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -327,6 +328,7 @@
                     <navigationItem key="navigationItem" id="Bee-do-18O"/>
                     <connections>
                         <outlet property="bodyTextView" destination="8nS-aw-8fA" id="PMD-bp-q0p"/>
+                        <outlet property="openButton" destination="OVG-jf-hSN" id="zna-rr-azs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mx8-5f-YdU" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -873,7 +875,7 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="IgU-80-XSP"/>
+        <segue reference="OrM-jC-JFg"/>
         <segue reference="bDO-Ye-r9b"/>
         <segue reference="67r-4m-Wu4"/>
         <segue reference="p9a-Sh-oWN"/>
