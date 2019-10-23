@@ -15,6 +15,7 @@ class CourseTableViewCell: UITableViewCell {
     @IBOutlet weak var containView: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var downloadIndicatorLabel: UILabel!
+    @IBOutlet weak var courseFullName: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

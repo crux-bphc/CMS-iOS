@@ -17,4 +17,6 @@ class Course : Object {
     @objc dynamic var faculty : String = ""
     @objc dynamic var canMakeDiscussion : Bool = false
     @objc dynamic var progress : Float = 0
+    @objc dynamic var courseCode : String = ""
+    @objc dynamic var courseName : String = ""
 }

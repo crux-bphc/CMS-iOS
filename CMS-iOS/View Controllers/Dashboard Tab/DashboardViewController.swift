@@ -277,6 +277,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                         let currentCourse = Course()
                         currentCourse.courseid = courses[i]["id"].int!
                         currentCourse.displayname = courses[i]["displayname"].string!
+                        currentCourse.courseCode = Regex.match(pattern: "(..|...|....)\\s[A-Z][0-9][0-9][0-9]", text: currentCourse.displayname).first ?? ""
+                        currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
+                        print(currentCourse.courseName)
                         currentCourse.enrolled = true
                         currentCourse.progress = 0.01 * Float(courses[i]["progress"].int ?? 0)
                         self.courseList.append(currentCourse)
@@ -322,8 +325,8 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.contentView.layer.masksToBounds = true
-//        let radius = cell.contentView.layer.cornerRadius
-//        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: radius).cgPath
+        //        let radius = cell.contentView.layer.cornerRadius
+        //        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: radius).cgPath
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -335,13 +338,19 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         cell.containView.clipsToBounds = true
         if #available(iOS 13.0, *) {
             cell.contentView.layer.backgroundColor = UIColor.systemBackground.cgColor
-            cell.courseProgress.tintColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
+            switch traitCollection.userInterfaceStyle {
+            case .dark:
+                cell.courseProgress.tintColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
+                break
+            default:
+                cell.courseProgress.tintColor = #colorLiteral(red: 0.9372549057, green: 0.5625251839, blue: 0.3577104232, alpha: 1)
+            }
         } else {
             cell.contentView.layer.backgroundColor = UIColor.white.cgColor
             cell.courseProgress.tintColor = #colorLiteral(red: 0.9372549057, green: 0.5625251839, blue: 0.3577104232, alpha: 1)
         }
-//        cell.layer.shadowColor = UIColor.black.cgColor
-//        cell.layer.shadowOpacity = 0.3
+        //        cell.layer.shadowColor = UIColor.black.cgColor
+        //        cell.layer.shadowOpacity = 0.3
         if #available(iOS 13.0, *) {
             cell.containView.layer.backgroundColor = UIColor.secondarySystemBackground.cgColor
         } else {
@@ -350,16 +359,19 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         }
         if searchController.isActive {
             
-            cell.courseName.text = filteredCourseList[indexPath.row].displayname
-            cell.courseProgress.progress = Float(filteredCourseList[indexPath.row].progress)
+            cell.courseName.text = filteredCourseList[indexPath.row].courseCode
+            cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
+            //            cell.courseProgress.progress = Float(filteredCourseList[indexPath.row].progress)
             
         } else {
-            cell.courseName.text = courseList[indexPath.row].displayname
-            cell.courseProgress.progress = Float(courseList[indexPath.row].progress)
+            cell.courseName.text = courseList[indexPath.row].courseCode
+            cell.courseFullName.text = courseList[indexPath.row].courseName
+            //            cell.courseProgress.progress = Float(courseList[indexPath.row].progress)
         }
+        cell.courseProgress.progress = 1.0
         cell.downloadIndicatorLabel.isHidden = true
         cell.activityIndicator.isHidden = true
-        cell.courseName.adjustsFontSizeToFitWidth = true
+        cell.courseFullName.adjustsFontSizeToFitWidth = true
         return cell
     }
     
@@ -421,7 +433,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         var index = 0
         for m in cells {
             let cell: UITableViewCell = m as UITableViewCell
-            UIView.animate(withDuration: 1.0, delay: 0.05*Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [], animations: {
+            UIView.animate(withDuration: 0.8, delay: 0.05*Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [], animations: {
                 cell.transform = CGAffineTransform.identity;
             }, completion: nil)
             index+=1
