@@ -327,47 +327,16 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
-        
-        cell.containView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        cell.containView.layer.cornerRadius = 15
-        cell.courseProgress.layer.masksToBounds = true
-        cell.containView.clipsToBounds = true
-        if #available(iOS 13.0, *) {
-            cell.contentView.layer.backgroundColor = UIColor.systemBackground.cgColor
-            switch traitCollection.userInterfaceStyle {
-            case .dark:
-                cell.courseProgress.tintColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
-                break
-            default:
-                cell.courseProgress.tintColor = #colorLiteral(red: 0.9372549057, green: 0.5625251839, blue: 0.3577104232, alpha: 1)
-            }
-        } else {
-            cell.contentView.layer.backgroundColor = UIColor.white.cgColor
-            cell.courseProgress.tintColor = #colorLiteral(red: 0.9372549057, green: 0.5625251839, blue: 0.3577104232, alpha: 1)
-        }
-        //        cell.layer.shadowColor = UIColor.black.cgColor
-        //        cell.layer.shadowOpacity = 0.3
-        if #available(iOS 13.0, *) {
-            cell.containView.layer.backgroundColor = UIColor.secondarySystemBackground.cgColor
-        } else {
-            cell.containView.layer.backgroundColor = UIColor.white.cgColor
-            
-        }
+
         if searchController.isActive {
-            
             cell.courseName.text = filteredCourseList[indexPath.row].courseCode
             cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
             //            cell.courseProgress.progress = Float(filteredCourseList[indexPath.row].progress)
-            
         } else {
             cell.courseName.text = courseList[indexPath.row].courseCode
             cell.courseFullName.text = courseList[indexPath.row].courseName
             //            cell.courseProgress.progress = Float(courseList[indexPath.row].progress)
         }
-        cell.courseProgress.progress = 1.0
-        cell.downloadIndicatorLabel.isHidden = true
-        cell.activityIndicator.isHidden = true
-        cell.courseFullName.adjustsFontSizeToFitWidth = true
         return cell
     }
     
