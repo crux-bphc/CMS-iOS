@@ -108,7 +108,7 @@ public class CBTabBarButton: UIControl {
         tabImage.contentMode = .center
         tabImage.translatesAutoresizingMaskIntoConstraints = false
         tabLabel.translatesAutoresizingMaskIntoConstraints = false
-        tabLabel.font = UIFont.systemFont(ofSize: 14)
+        tabLabel.font = UIFont.boldSystemFont(ofSize: 14)
         tabLabel.adjustsFontSizeToFitWidth = true
         tabBg.translatesAutoresizingMaskIntoConstraints = false
         tabBg.isUserInteractionEnabled = false
@@ -215,7 +215,6 @@ public class CBTabBarButton: UIControl {
             } else {
                 tabBg.backgroundColor = tintColor.withAlphaComponent(0.2)
                 if !_isSelected {
-                    print("\(item?.title ?? "")_dark")
                     tabImage.tintColor = .black
                 } else {
                     tabImage.tintColor = tintColor
@@ -224,7 +223,6 @@ public class CBTabBarButton: UIControl {
         } else {
             // Fallback on earlier versions
             if !_isSelected {
-                print("\(item?.title ?? "")_dark")
                 tabImage.tintColor = .black
             } else {
                 tabImage.tintColor = tintColor
