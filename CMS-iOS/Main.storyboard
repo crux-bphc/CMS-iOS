@@ -532,11 +532,12 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pK6-fB-GCI">
-                                <rect key="frame" x="16" y="248" width="343" height="30"/>
+                                <rect key="frame" x="16" y="248" width="343" height="40"/>
                                 <color key="backgroundColor" red="0.88988083600000001" green="0.51419252159999995" blue="0.20537361500000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="GbU-3h-eyM"/>
+                                    <constraint firstAttribute="height" constant="40" id="GbU-3h-eyM"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                 <state key="normal" title="Open Attachment">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -545,16 +546,16 @@
                                 </connections>
                             </button>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="QIT-Nq-QKW">
-                                <rect key="frame" x="16" y="294" width="343" height="2"/>
+                                <rect key="frame" x="16" y="304" width="343" height="2"/>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Downloading... 50%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A70-xz-0Ej">
-                                <rect key="frame" x="16" y="304" width="153" height="21"/>
+                                <rect key="frame" x="16" y="314" width="153" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PVp-gD-KVi">
-                                <rect key="frame" x="311" y="300" width="48" height="30"/>
+                                <rect key="frame" x="311" y="310" width="48" height="30"/>
                                 <state key="normal" title="Cancel"/>
                                 <connections>
                                     <action selector="cancelDownloadButtonPressed:" destination="sHh-GJ-T8A" eventType="touchUpInside" id="RUh-BE-QWH"/>
