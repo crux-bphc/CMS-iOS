@@ -49,14 +49,14 @@ class ExtrasTableViewController: UITableViewController {
         if #available(iOS 13.0, *) {
             switch traitCollection.userInterfaceStyle {
             case .dark:
-                cell.progressTint.tintColor = UIColor.red
+                cell.progressTint.tintColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
                 break
             default:
-                cell.progressTint.tintColor = UIColor.magenta
+                cell.progressTint.tintColor = #colorLiteral(red: 0.9372549057, green: 0.5625251839, blue: 0.3577104232, alpha: 1)
                 break
             }
         } else {
-            cell.progressTint.tintColor = UIColor.magenta
+            cell.progressTint.tintColor = #colorLiteral(red: 0.9372549057, green: 0.5625251839, blue: 0.3577104232, alpha: 1)
         }
         return cell
     }

@@ -23,9 +23,15 @@ class ExtrasTableViewCell: UITableViewCell {
         if #available(iOS 13.0, *) {
             layer.backgroundColor = UIColor.secondarySystemBackground.cgColor
             self.contentView.layer.backgroundColor = UIColor.systemBackground.cgColor
+            if traitCollection.userInterfaceStyle == .dark {
+                self.progressTint.tintColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
+            } else {
+                self.progressTint.tintColor = #colorLiteral(red: 0.9372549057, green: 0.5625251839, blue: 0.3577104232, alpha: 1)
+            }
         } else {
             layer.backgroundColor = UIColor.white.cgColor
             self.contentView.layer.backgroundColor = UIColor.white.cgColor
+            self.progressTint.tintColor = #colorLiteral(red: 0.9372549057, green: 0.5625251839, blue: 0.3577104232, alpha: 1)
         }
         // Initialization code
     }
@@ -40,9 +46,15 @@ class ExtrasTableViewCell: UITableViewCell {
         if #available(iOS 13.0, *) {
             layer.backgroundColor = UIColor.secondarySystemBackground.cgColor
             self.contentView.layer.backgroundColor = UIColor.systemBackground.cgColor
+            if traitCollection.userInterfaceStyle == .dark {
+                self.progressTint.tintColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
+            } else {
+                self.progressTint.tintColor = #colorLiteral(red: 0.9372549057, green: 0.5625251839, blue: 0.3577104232, alpha: 1)
+            }
         } else {
             layer.backgroundColor = UIColor.white.cgColor
             self.contentView.layer.backgroundColor = UIColor.white.cgColor
+            self.progressTint.tintColor = #colorLiteral(red: 0.9372549057, green: 0.5625251839, blue: 0.3577104232, alpha: 1)
         }
     }
     
