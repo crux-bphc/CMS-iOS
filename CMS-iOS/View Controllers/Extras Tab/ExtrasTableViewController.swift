@@ -17,6 +17,7 @@ class ExtrasTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavBar()
+        tableView.register(UINib(nibName: "ExtrasTableViewCell", bundle: nil), forCellReuseIdentifier: "ExtraTableViewCell")
     }
     
     func setupNavBar() {
@@ -42,9 +43,26 @@ class ExtrasTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseCell", for: indexPath)
-        cell.textLabel?.text = categoriesArray[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ExtraTableViewCell", for: indexPath) as! ExtrasTableViewCell
+        cell.optionLabel.text = categoriesArray[indexPath.row]
+        cell.progressTint.progress = 1.0
+        if #available(iOS 13.0, *) {
+            switch traitCollection.userInterfaceStyle {
+            case .dark:
+                cell.progressTint.tintColor = UIColor.red
+                break
+            default:
+                cell.progressTint.tintColor = UIColor.magenta
+                break
+            }
+        } else {
+            cell.progressTint.tintColor = UIColor.magenta
+        }
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 90
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

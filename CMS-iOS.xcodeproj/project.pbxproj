@@ -10,6 +10,8 @@
 		0A03483623166C2D00552F69 /* DiscussionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A03483523166C2D00552F69 /* DiscussionTableViewController.swift */; };
 		0A2B472C23083C1A005879D6 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2B472B23083C1A005879D6 /* SearchViewController.swift */; };
 		0A2FD035236059A800917BE7 /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2FD034236059A800917BE7 /* Regex.swift */; };
+		0A2FD03823619E9A00917BE7 /* ExtrasTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2FD03623619E9A00917BE7 /* ExtrasTableViewCell.swift */; };
+		0A2FD03923619E9A00917BE7 /* ExtrasTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FD03723619E9A00917BE7 /* ExtrasTableViewCell.xib */; };
 		0A3DEAF322FDCA69001B6BFD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3DEAF222FDCA69001B6BFD /* AppDelegate.swift */; };
 		0A3DEAF522FDCA69001B6BFD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3DEAF422FDCA69001B6BFD /* LoginViewController.swift */; };
 		0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A3DEAFB22FDCA6A001B6BFD /* LaunchScreen.storyboard */; };
@@ -51,6 +53,8 @@
 		0A2B03AF2305971900CC51A4 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		0A2B472B23083C1A005879D6 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		0A2FD034236059A800917BE7 /* Regex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Regex.swift; sourceTree = "<group>"; };
+		0A2FD03623619E9A00917BE7 /* ExtrasTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrasTableViewCell.swift; sourceTree = "<group>"; };
+		0A2FD03723619E9A00917BE7 /* ExtrasTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExtrasTableViewCell.xib; sourceTree = "<group>"; };
 		0A3DEAEF22FDCA69001B6BFD /* CMS-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CMS-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A3DEAF222FDCA69001B6BFD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A3DEAF422FDCA69001B6BFD /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -221,6 +225,8 @@
 		0AC43B562350B11700A4ED1B /* New Group */ = {
 			isa = PBXGroup;
 			children = (
+				0A2FD03623619E9A00917BE7 /* ExtrasTableViewCell.swift */,
+				0A2FD03723619E9A00917BE7 /* ExtrasTableViewCell.xib */,
 				0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */,
 				0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */,
 			);
@@ -325,6 +331,7 @@
 			files = (
 				E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */,
 				0AF805C6234F43A3008D9B25 /* CourseTableViewCell.xib in Resources */,
+				0A2FD03923619E9A00917BE7 /* ExtrasTableViewCell.xib in Resources */,
 				E6C78DE32325302800387CF0 /* SampleJSONData.json in Resources */,
 				0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */,
 				0AC33B6723022453004AE385 /* Assets.xcassets in Resources */,
@@ -406,6 +413,7 @@
 				0A67E5DC23091B4700E18E99 /* EnrolmentViewController.swift in Sources */,
 				E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */,
 				0A9A960B23572E93004ABB2F /* CBTabBarButton.swift in Sources */,
+				0A2FD03823619E9A00917BE7 /* ExtrasTableViewCell.swift in Sources */,
 				0AC33B6923022B2C004AE385 /* CourseContentsViewController.swift in Sources */,
 				0A8EFC6523100F9D00CD6BAD /* Reachability.swift in Sources */,
 				0AF20A2F230B2F17001C0CB1 /* ExtrasTableViewController.swift in Sources */,
