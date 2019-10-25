@@ -44,7 +44,6 @@
 		E6510CAE233FD49B009FCF0D /* HTMLStringDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */; };
 		E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */; };
 		E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6C61630235DA91F00FFC2E4 /* Main.storyboard */; };
-		E6C78DE32325302800387CF0 /* SampleJSONData.json in Resources */ = {isa = PBXBuildFile; fileRef = E6C78DE22325302800387CF0 /* SampleJSONData.json */; };
 		EC45A93B835D1DC23E363971 /* Pods_CMS_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E272A54CE72C78892BB1FFB6 /* Pods_CMS_iOS.framework */; };
 /* End PBXBuildFile section */
 
@@ -92,7 +91,6 @@
 		E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLStringDecoder.swift; sourceTree = "<group>"; };
 		E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLPreviewItemSubclass.swift; sourceTree = "<group>"; };
 		E6C61630235DA91F00FFC2E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		E6C78DE22325302800387CF0 /* SampleJSONData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SampleJSONData.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,7 +158,6 @@
 				E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */,
 				0AF7F52B23558A50005F2016 /* DownloadOperation.swift */,
 				0A585452230168E7008FB370 /* Constants.swift */,
-				E6C78DE22325302800387CF0 /* SampleJSONData.json */,
 				0A2FD034236059A800917BE7 /* Regex.swift */,
 			);
 			path = Support;
@@ -332,7 +329,6 @@
 				E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */,
 				0AF805C6234F43A3008D9B25 /* CourseTableViewCell.xib in Resources */,
 				0A2FD03923619E9A00917BE7 /* ExtrasTableViewCell.xib in Resources */,
-				E6C78DE32325302800387CF0 /* SampleJSONData.json in Resources */,
 				0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */,
 				0AC33B6723022453004AE385 /* Assets.xcassets in Resources */,
 				0A3DEB0622FDCD26001B6BFD /* SF-Pro-Display-Heavy.otf in Resources */,
