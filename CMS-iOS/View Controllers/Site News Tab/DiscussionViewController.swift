@@ -9,6 +9,7 @@
 import UIKit
 import SVProgressHUD
 import QuickLook
+import SDDownloadManager
 
 class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
     
@@ -17,6 +18,7 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
     @IBOutlet weak var openButton: UIButton!
     var selectedDiscussion = Discussion()
     var qlLocation = URL(string: "")
+    let downloadManager = SDDownloadManager.shared
     func setMessage(){
         
         if selectedDiscussion.message != "" {
@@ -56,50 +58,62 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
     
     func saveFileToStorage(mime: String, downloadUrl: String, discussion: Discussion) {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        print(String(describing: documentsDirectory))
         let dataPath = documentsDirectory.absoluteURL
         
         guard let url = URL(string: downloadUrl) else { return }
-        let destination = dataPath.appendingPathComponent("\(String(selectedDiscussion.id) + discussion.filename)")
+        let folderDestination = dataPath.appendingPathComponent("Site_News")
+        var destination : URL = dataPath
+        var isDir : ObjCBool = false
+        if FileManager().fileExists(atPath: folderDestination.path, isDirectory: &isDir) {
+            if isDir.boolValue {
+                destination = folderDestination.appendingPathComponent("\(String(selectedDiscussion.id) + discussion.filename)")
+            } else {
+                do {
+                    try FileManager.default.createDirectory(at: folderDestination, withIntermediateDirectories: true, attributes: nil)
+                    destination = folderDestination.appendingPathComponent("\(String(selectedDiscussion.id) + discussion.filename)")
+                } catch {
+                    print("There was an error in making the directory: \(error)")
+                }
+            }
+        } else {
+            do {
+                try FileManager.default.createDirectory(at: folderDestination, withIntermediateDirectories: true, attributes: nil)
+                destination = folderDestination.appendingPathComponent("\(String(selectedDiscussion.id) + discussion.filename)")
+            } catch {
+                print("There was an error in making the directory: \(error)")
+            }
+        }
         if FileManager().fileExists(atPath: destination.path) {
-            qlLocation = destination as URL
+            qlLocation = destination
             openWithQL()
         } else {
-            download(url: url, to: destination) {
+            downloadFile(from: url, to: destination) {
                 SVProgressHUD.dismiss()
                 DispatchQueue.main.async {
-                    self.qlLocation = destination as URL
+                    self.qlLocation = destination
                     self.openWithQL()
                 }
             }
         }
     }
     
-    func download(url: URL, to localUrl: URL, completion: @escaping () -> Void) {
-        let sessionConfig = URLSessionConfiguration.default
-        let session = URLSession(configuration: sessionConfig)
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+    func downloadFile(from : URL, to: URL, completionHanadler: @escaping () -> Void ) {
         SVProgressHUD.show()
-        
-        let task = session.downloadTask(with: request) {(tempLocalUrl, response, error) in
-            if let tempLocalUrl = tempLocalUrl, error == nil {
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                    print(statusCode)
-                }
-                
-                do {
-                    try FileManager.default.copyItem(at: tempLocalUrl, to: localUrl)
-                    print("Saved")
-                    completion()
-                } catch (let writeError){
-                    print("there was an error: \(writeError)")
-                }
+        let request = URLRequest(url: from)
+        let _ = self.downloadManager.downloadFile(withRequest: request, shouldDownloadInBackground: true) { (error, url) in
+            if error != nil {
+                print("There was an error in downloading the file: \(error!)")
             } else {
-                print("failure")
+                print("The file was downloaded to: \(String(describing: url))")
+                do {
+                    try FileManager.default.copyItem(at: url!, to: to)
+                    try FileManager.default.removeItem(at: url!)
+                    completionHanadler()
+                } catch {
+                    print("There was an error in copying/removing the file from/to the location.")
+                }
             }
         }
-        task.resume()
     }
     
     // Do any additional setup after loading the view.
