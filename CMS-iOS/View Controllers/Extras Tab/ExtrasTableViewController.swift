@@ -17,6 +17,7 @@ class ExtrasTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavBar()
+        tableView.separatorStyle = .none
         tableView.register(UINib(nibName: "ExtrasTableViewCell", bundle: nil), forCellReuseIdentifier: "ExtraTableViewCell")
     }
     
@@ -90,5 +91,9 @@ class ExtrasTableViewController: UITableViewController {
             break
         }
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        tableView.reloadData()
     }
 }

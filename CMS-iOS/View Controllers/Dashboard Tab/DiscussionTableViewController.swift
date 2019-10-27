@@ -60,8 +60,11 @@ class DiscussionTableViewController: UITableViewController {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "reuseCell")
         if discussionArray.count == 0 {
             cell.textLabel?.text = "No discussions"
+            cell.textLabel?.textAlignment = .center
+            self.tableView.separatorStyle = .none
         } else {
             cell.textLabel?.text = discussionArray[indexPath.row].name
+            self.tableView.separatorStyle = .singleLine
         }
         return cell
     }
