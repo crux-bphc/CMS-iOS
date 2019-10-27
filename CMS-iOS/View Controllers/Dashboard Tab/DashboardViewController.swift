@@ -131,12 +131,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                         }
                     }
                 } else {
-//                    let generator = UINotificationFeedbackGenerator()
-//                    generator.notificationOccurred(.error)
-//                    let alert = UIAlertController(title: "Unable to download", message: "The course cannot be downloaded as the device is offline.", preferredStyle: .alert)
-//                    let action = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
-//                    alert.addAction(action)
-//                    self.present(alert, animated: true)
                     self.showOfflineMessage()
                 }
             }
@@ -186,17 +180,29 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                     }
                 }
             }
-            self.downloadFiles(downloadArray: self.downloadArray, localURLArray: self.localURLArray)
+            self.downloadFiles(downloadArray: self.downloadArray, localURLArray: self.localURLArray, courseName: course.courseCode) {
+                let successBanner = NotificationBanner(title: "Download Complete", subtitle: "All files from the course have been downloaded.", style: .success)
+                successBanner.dismissOnSwipeUp = true
+                successBanner.show()
+            }
         }
         completion()
     }
     
-    func downloadFiles(downloadArray: [URL], localURLArray: [URL]) {
+    func downloadFiles(downloadArray: [URL], localURLArray: [URL], courseName: String, didFinishDownload: @escaping () -> Void) {
+//        let progress = UIProgressView()
+//        let downloadingBanner = NotificationBanner(title: "Downloading..", rightView: progress, style: .customView)
+//        downloadingBanner.dismissOnSwipeUp = false
+//        downloadingBanner.autoDismiss = false
+//        downloadingBanner.dismissOnTap = false
+//        downloadingBanner.autoDismiss = false
+//        downloadingBanner.show()
         for i in 0 ..< downloadArray.count {
+//            progress.progress = (Float(i+1/downloadArray.count))
             let request = URLRequest(url: downloadArray[i])
             self.downloadManager.showLocalNotificationOnBackgroundDownloadDone = true
-            self.downloadManager.localNotificationText = "Contents of the course have been downloaded."
-            let downloadKey = self.downloadManager.downloadFile(withRequest: request) { (error, localFileURL) in
+            self.downloadManager.localNotificationText = "Files for \(courseName) downloaded."
+            let downloadKey = self.downloadManager.downloadFile(withRequest: request, shouldDownloadInBackground: true) { (error, localFileURL) in
                 if error != nil {
                     print("There was an error while downloading the file. \(String(describing: error))")
                 } else {
@@ -207,7 +213,10 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                     } catch (let writeError){
                         print("there was an error: \(writeError)")
                     }
-                    
+                }
+                if i == downloadArray.count-1 {
+//                    downloadingBanner.dismiss()
+                    didFinishDownload()
                 }
             }
             print("The download key is: \(downloadKey ?? "")")
