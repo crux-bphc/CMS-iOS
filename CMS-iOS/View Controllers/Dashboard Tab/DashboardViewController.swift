@@ -9,7 +9,6 @@
 import UIKit
 import SwiftyJSON
 import Alamofire
-import SVProgressHUD
 import SwiftKeychainWrapper
 import RealmSwift
 import UserNotifications
@@ -272,7 +271,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
-            SVProgressHUD.show()
+            refreshControl.beginRefreshing()
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
                 if courseData.result.isSuccess {
                     if (realmCourses.count != 0){
@@ -298,7 +297,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                     }
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
-                        SVProgressHUD.dismiss()
                     }
                 }
             }
