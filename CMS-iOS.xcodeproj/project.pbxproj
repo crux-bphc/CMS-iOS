@@ -127,8 +127,6 @@
 			isa = PBXGroup;
 			children = (
 				0A9A960723572D62004ABB2F /* BubbleTabBar */,
-				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
-				E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */,
 				0AC43B562350B11700A4ED1B /* New Group */,
 				0A58544F230163E9008FB370 /* Support */,
 				0A3DEB0422FDCCDA001B6BFD /* Font */,
@@ -155,6 +153,8 @@
 		0A58544F230163E9008FB370 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
+				E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */,
 				E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */,
 				0AF7F52B23558A50005F2016 /* DownloadOperation.swift */,
 				0A585452230168E7008FB370 /* Constants.swift */,
