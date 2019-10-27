@@ -18,6 +18,7 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
     @IBOutlet weak var openButton: UIButton!
     var selectedDiscussion = Discussion()
     var qlLocation = URL(string: "")
+    var discussionName : String = "Site_News"
     let downloadManager = SDDownloadManager.shared
     func setMessage(){
         
@@ -61,7 +62,7 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
         let dataPath = documentsDirectory.absoluteURL
         
         guard let url = URL(string: downloadUrl) else { return }
-        let folderDestination = dataPath.appendingPathComponent("Site_News")
+        let folderDestination = dataPath.appendingPathComponent("\(self.discussionName)")
         var destination : URL = dataPath
         var isDir : ObjCBool = false
         if FileManager().fileExists(atPath: folderDestination.path, isDirectory: &isDir) {

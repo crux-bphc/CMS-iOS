@@ -74,6 +74,7 @@ class DiscussionTableViewController: UITableViewController {
         if segue.identifier == "goToDiscussionDetails" {
             let destinationVC = segue.destination as! DiscussionViewController
             destinationVC.selectedDiscussion = self.currentDiscussion
+            destinationVC.discussionName = self.currentModule.coursename
         } else if segue.identifier == "goToAddDiscussion" {
             let destinationVC = segue.destination as! AddDiscussionViewController
             destinationVC.currentForum = String(self.currentModule.id)
