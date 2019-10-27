@@ -119,7 +119,6 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
     
     // Do any additional setup after loading the view.
     @IBAction func openAttachmentPressed(_ sender: Any) {
-        print(selectedDiscussion.filename)
         if selectedDiscussion.attachment != "" {
             if selectedDiscussion.attachment.contains("td.bits-hyderabad.ac.in") {
                 saveFileToStorage(mime: self.selectedDiscussion.mimetype, downloadUrl: selectedDiscussion.attachment, discussion: selectedDiscussion)
