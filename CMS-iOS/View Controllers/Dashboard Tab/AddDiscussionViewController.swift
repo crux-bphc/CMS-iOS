@@ -63,15 +63,15 @@ class AddDiscussionViewController: UIViewController {
     func changeButtonColour() {
         if #available(iOS 12.0, *) {
             if self.traitCollection.userInterfaceStyle == .dark {
-                addButton.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
-                addButton.setTitleColor(UIColor(white: 0.0, alpha: 1.0), for: .normal)
+                addButton.backgroundColor = UIColor.white
+                addButton.setTitleColor(UIColor.black, for: .normal)
             } else {
-                addButton.backgroundColor = UIColor(white: 0.0, alpha: 1.0)
-                addButton.setTitleColor(UIColor(white: 1.0, alpha: 1.0), for: .normal)
+                addButton.backgroundColor = UIColor.black
+                addButton.setTitleColor(UIColor.white, for: .normal)
             }
         } else {
-            addButton.backgroundColor = UIColor(white: 0.0, alpha: 1.0)
-            addButton.setTitleColor(UIColor(white: 1.0, alpha: 1.0), for: .normal)
+            addButton.backgroundColor = UIColor.black
+            addButton.setTitleColor(UIColor.white, for: .normal)
         }
     }
     

@@ -48,8 +48,10 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
         openButton.layer.cornerRadius = 10
         bodyTextView.layer.cornerRadius = 10
         setMessage()
-        super.viewDidLoad()
         self.navigationItem.largeTitleDisplayMode = .never
+        if selectedDiscussion.attachment == "" {
+            self.openButton.isHidden = true
+        }
 
     }
     
