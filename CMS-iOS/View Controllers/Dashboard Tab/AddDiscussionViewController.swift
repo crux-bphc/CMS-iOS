@@ -16,19 +16,17 @@ class AddDiscussionViewController: UIViewController {
     
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var messageBodyTextField: UITextView!
-    @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var addButton: UIBarButtonItem!
     
     let constants = Constants.Global.self
     var currentForum : String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.isModalInPopover = true
+        messageBodyTextField.layer.cornerRadius = 10
+        titleTextField.layer.cornerRadius = 10
         
-        messageBodyTextField.layer.borderColor = UIColor(red: 204.0/255.0, green:204.0/255.0, blue:204.0/255.0, alpha:1.0).cgColor
-        messageBodyTextField.layer.borderWidth = 0.25
-        messageBodyTextField.layer.cornerRadius = 5.0
-        
-        changeButtonColour()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -46,6 +44,7 @@ class AddDiscussionViewController: UIViewController {
                 let confirmation = JSON(response.value as Any)
                 if confirmation["exception"].string == nil {
                     SVProgressHUD.showSuccess(withStatus: "Added discussion.")
+                    self.dismiss(animated: true, completion: nil)
                     SVProgressHUD.dismiss(withDelay: 0.5)
                     completion()
                 } else {
@@ -60,26 +59,11 @@ class AddDiscussionViewController: UIViewController {
         }
     }
     
-    func changeButtonColour() {
-        if #available(iOS 12.0, *) {
-            if self.traitCollection.userInterfaceStyle == .dark {
-                addButton.backgroundColor = UIColor.white
-                addButton.setTitleColor(UIColor.black, for: .normal)
-            } else {
-                addButton.backgroundColor = UIColor.black
-                addButton.setTitleColor(UIColor.white, for: .normal)
-            }
-        } else {
-            addButton.backgroundColor = UIColor.black
-            addButton.setTitleColor(UIColor.white, for: .normal)
-        }
-    }
-    
     @objc func doneButtonAction() {
         self.view.endEditing(true)
     }
     
-    @IBAction func addButtonPressed(_ sender: UIButton) {
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         if (titleTextField.text!.count>0 && messageBodyTextField.text!.count>0) {
             titleTextField.isEnabled = false
             messageBodyTextField.isEditable = false
@@ -93,8 +77,18 @@ class AddDiscussionViewController: UIViewController {
             present(alert, animated: true, completion: nil)
         }
     }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        changeButtonColour()
+    @IBAction func cancelButtonPressed(_ sender: UIBarButtonItem) {
+        if messageBodyTextField.text == "" && titleTextField.text == ""{
+            self.dismiss(animated: true, completion: nil)
+        }else{
+            let confirmation = UIAlertController(title: "Confirmation", message: "Are you sure you want to discard all changes?", preferredStyle: .actionSheet)
+            confirmation.addAction(UIAlertAction(title: "Discard", style: .destructive, handler: { (_) in
+                self.dismiss(animated: true, completion: nil)
+            }))
+            confirmation.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(confirmation, animated: true, completion: nil)
+        }
+
     }
+    
 }
