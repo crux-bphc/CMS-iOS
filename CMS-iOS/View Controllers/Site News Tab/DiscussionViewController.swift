@@ -44,12 +44,15 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        super.viewDidLoad()
         quickLookController.dataSource = self
         openButton.layer.cornerRadius = 10
         bodyTextView.layer.cornerRadius = 10
         setMessage()
-        super.viewDidLoad()
         self.navigationItem.largeTitleDisplayMode = .never
+        if selectedDiscussion.attachment == "" {
+            self.openButton.isHidden = true
+        }
 
     }
     

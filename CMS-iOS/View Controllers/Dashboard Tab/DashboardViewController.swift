@@ -190,15 +190,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func downloadFiles(downloadArray: [URL], localURLArray: [URL], courseName: String, didFinishDownload: @escaping () -> Void) {
-        //        let progress = UIProgressView()
-        //        let downloadingBanner = NotificationBanner(title: "Downloading..", rightView: progress, style: .customView)
-        //        downloadingBanner.dismissOnSwipeUp = false
-        //        downloadingBanner.autoDismiss = false
-        //        downloadingBanner.dismissOnTap = false
-        //        downloadingBanner.autoDismiss = false
-        //        downloadingBanner.show()
         for i in 0 ..< downloadArray.count {
-            //            progress.progress = (Float(i+1/downloadArray.count))
             let request = URLRequest(url: downloadArray[i])
             self.downloadManager.showLocalNotificationOnBackgroundDownloadDone = true
             self.downloadManager.localNotificationText = "Files for \(courseName) downloaded."
@@ -219,7 +211,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                     }
                 }
                 if i == downloadArray.count-1 {
-                    //                    downloadingBanner.dismiss()
                     didFinishDownload()
                 }
             }
