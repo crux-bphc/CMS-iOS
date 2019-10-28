@@ -23,6 +23,7 @@ class CourseDetailsViewController : UITableViewController {
     var selectedModule = Module()
     var discussionArray = [Discussion]()
     let refreshController = UIRefreshControl()
+    var readModuleNames = [String]()
     let realm = try! Realm()
     
     let constants = Constants.Global.self
@@ -52,7 +53,11 @@ class CourseDetailsViewController : UITableViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        readModuleNames.removeAll()
         SVProgressHUD.dismiss()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
     }
     
     func getCourseContent(completion: @escaping ([CourseSection]) -> Void) {
@@ -66,6 +71,14 @@ class CourseDetailsViewController : UITableViewController {
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
                     let realmSections = self.realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
+                    // get read status for all modules and add read ones to readModuleNames
+                    for i in 0..<realmSections.count {
+                        for j in 0..<realmSections[i].modules.count {
+                            if realmSections[i].modules[j].read && !self.readModuleNames.contains(realmSections[i].modules[j].name){
+                                self.readModuleNames.append(realmSections[i].modules[j].name)
+                            }
+                        }
+                    }
                     if realmSections.count != 0{
                         try! self.realm.write {
                             self.realm.delete(realmSections)
@@ -112,6 +125,9 @@ class CourseDetailsViewController : UITableViewController {
                                 }
                                 
                                 moduleData.name = courseContent[i]["modules"][j]["name"].string!
+                                if self.readModuleNames.contains(courseContent[i]["modules"][j]["name"].string!){
+                                    moduleData.read = true
+                                }
                                 if courseContent[i]["modules"][j]["description"].string != nil {
                                     moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
                                 }

@@ -11,6 +11,7 @@ import MobileCoreServices
 import SVProgressHUD
 import SwiftKeychainWrapper
 import QuickLook
+import RealmSwift
 
 class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPreviewControllerDataSource{
     var quickLookController = QLPreviewController()
@@ -58,6 +59,11 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
     }
     override func viewWillAppear(_ animated: Bool) {
         openButton.isEnabled = true
+        let realm = try! Realm()
+        try! realm.write {
+            selectedModule.read = true
+        }
+        print(selectedModule.read)
     }
     
     func setDescription(){
