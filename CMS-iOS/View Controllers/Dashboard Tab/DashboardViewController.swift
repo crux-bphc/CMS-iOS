@@ -261,14 +261,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        do {
-            try FileManager.default.copyItem(at: location, to: locationToCopy!)
-        } catch (let writeError){
-            print("there was an error: \(writeError)")
-        }
-    }
-    
     func getRegisteredCourses(completion: @escaping() -> Void) {
         
         let realmCourses = self.realm.objects(Course.self)
