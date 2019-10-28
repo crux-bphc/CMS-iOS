@@ -58,6 +58,7 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
     }
     
     func saveFileToStorage(mime: String, downloadUrl: String, discussion: Discussion) {
+        clearTempDirectory()
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let dataPath = documentsDirectory.absoluteURL
         
@@ -114,6 +115,16 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
                     print("There was an error in copying/removing the file from/to the location.")
                 }
             }
+        }
+    }
+    
+    func clearTempDirectory() {
+        let fileManager = FileManager.default
+        let cachesDirectory = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
+        do {
+            try fileManager.removeItem(atPath: cachesDirectory)
+        } catch let error {
+            print("There was an error in deleting the caches directory: \(error)")
         }
     }
     
