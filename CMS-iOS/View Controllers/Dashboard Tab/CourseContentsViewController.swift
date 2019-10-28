@@ -177,6 +177,13 @@ class CourseDetailsViewController : UITableViewController {
         if !sectionArray[indexPath.section].modules[indexPath.row].read {
             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         }
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dataPath = documentsDirectory.absoluteURL.appendingPathComponent(sectionArray[indexPath.section].modules[indexPath.row].coursename)
+        let destination = dataPath.appendingPathComponent("\(String(sectionArray[indexPath.section].modules[indexPath.row].id) + sectionArray[indexPath.section].modules[indexPath.row].filename)")
+        if FileManager().fileExists(atPath: destination.path){
+            // module has already been downloaded
+            cell.textLabel?.textColor = .systemGreen
+        }
         
         if sectionArray[indexPath.section].modules[indexPath.row].modname == "folder"{
             if #available(iOS 12.0, *) {
