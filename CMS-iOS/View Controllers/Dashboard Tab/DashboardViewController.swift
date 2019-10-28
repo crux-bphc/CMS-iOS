@@ -179,6 +179,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                     }
                 }
             }
+            self.clearTempDirectory()
             self.downloadFiles(downloadArray: self.downloadArray, localURLArray: self.localURLArray, courseName: course.courseCode) {
                 let successBanner = NotificationBanner(title: "Download Complete", subtitle: "All files from the course have been downloaded.", style: .success)
                 successBanner.dismissOnSwipeUp = true
@@ -189,15 +190,15 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func downloadFiles(downloadArray: [URL], localURLArray: [URL], courseName: String, didFinishDownload: @escaping () -> Void) {
-//        let progress = UIProgressView()
-//        let downloadingBanner = NotificationBanner(title: "Downloading..", rightView: progress, style: .customView)
-//        downloadingBanner.dismissOnSwipeUp = false
-//        downloadingBanner.autoDismiss = false
-//        downloadingBanner.dismissOnTap = false
-//        downloadingBanner.autoDismiss = false
-//        downloadingBanner.show()
+        //        let progress = UIProgressView()
+        //        let downloadingBanner = NotificationBanner(title: "Downloading..", rightView: progress, style: .customView)
+        //        downloadingBanner.dismissOnSwipeUp = false
+        //        downloadingBanner.autoDismiss = false
+        //        downloadingBanner.dismissOnTap = false
+        //        downloadingBanner.autoDismiss = false
+        //        downloadingBanner.show()
         for i in 0 ..< downloadArray.count {
-//            progress.progress = (Float(i+1/downloadArray.count))
+            //            progress.progress = (Float(i+1/downloadArray.count))
             let request = URLRequest(url: downloadArray[i])
             self.downloadManager.showLocalNotificationOnBackgroundDownloadDone = true
             self.downloadManager.localNotificationText = "Files for \(courseName) downloaded."
@@ -208,13 +209,17 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                     print("The file was downloaded to the location: \(String(describing: localFileURL))")
                     do {
                         try FileManager.default.copyItem(at: localFileURL!, to: localURLArray[i])
-                        try FileManager.default.removeItem(at: localFileURL!)
                     } catch (let writeError){
-                        print("there was an error: \(writeError)")
+                        print("there was an error in writing: \(writeError)")
+                    }
+                    do {
+                        try FileManager.default.removeItem(at: localFileURL!)
+                    } catch let removeError {
+                        print("There was an error in removing: \(removeError)")
                     }
                 }
                 if i == downloadArray.count-1 {
-//                    downloadingBanner.dismiss()
+                    //                    downloadingBanner.dismiss()
                     didFinishDownload()
                 }
             }
@@ -253,6 +258,16 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         let destination = destination1.appendingPathComponent("\(String(module.id) + module.filename)")
         downloadArray.append(url)
         localURLArray.append(destination)
+    }
+    
+    func clearTempDirectory() {
+        let fileManager = FileManager.default
+        let cachesDirectory = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
+        do {
+            try fileManager.removeItem(atPath: cachesDirectory)
+        } catch let error {
+            print("There was an error in deleting the caches directory: \(error)")
+        }
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
@@ -335,7 +350,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
-
+        
         if searchController.isActive {
             cell.courseName.text = filteredCourseList[indexPath.row].courseCode
             cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
@@ -370,27 +385,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     @objc func dismissOfflineBanner(){
         banner.dismiss()
     }
-//    func downloadCompletion(){
-//        print("completion inside didPressButton called")
-//        let state = UIApplication.shared.applicationState
-//        if state == .active {
-//            print("Items downloaded successfully")
-//            SVProgressHUD.showSuccess(withStatus: "Downloaded course contents")
-//            SVProgressHUD.dismiss(withDelay: 0.5)
-//        } else if state == .background || state == .inactive {
-//            let content = UNMutableNotificationContent()
-//            content.title = "Download Successful"
-//            content.body = "The course \(selectedCourse.displayname) was successfully downloaded."
-//            content.sound = UNNotificationSound.default
-//            content.badge = 1
-//            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-//            let request = UNNotificationRequest(identifier: "DownloadCompelte", content: content, trigger: trigger)
-//            let center = UNUserNotificationCenter.current()
-//            center.add(request) { (error) in
-//                print("There was an error in sending the notification. \(String(describing: error))")
-//            }
-//        }
-//    }
     
     func animateTable() {
         tableView.reloadData()

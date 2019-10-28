@@ -44,6 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
             print(realmUser.isConnected as Any)
+        } else {
+            
         }
         return true
     }
