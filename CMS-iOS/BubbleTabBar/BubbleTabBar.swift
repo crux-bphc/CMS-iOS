@@ -65,9 +65,15 @@ open class BubbleTabBar: UITabBar {
     private func configure() {
         if #available(iOS 12.0, *) {
             if self.traitCollection.userInterfaceStyle == .dark {
-                backgroundColor = UIColor.black
-                isTranslucent = false
-                barTintColor = UIColor.black
+                if #available(iOS 13.0, *) {
+                    backgroundColor = UIColor.systemBackground
+                isTranslucent = true
+                    barTintColor = UIColor.secondarySystemBackground
+                } else {
+                    backgroundColor = UIColor.darkGray
+                    isTranslucent = true
+                    barTintColor = UIColor.darkGray
+                }
             } else {
                 backgroundColor = UIColor.white
                 isTranslucent = false
@@ -205,18 +211,24 @@ open class BubbleTabBar: UITabBar {
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if #available(iOS 12.0, *) {
             if self.traitCollection.userInterfaceStyle == .dark {
-                //                cell.imageView?.image = UIImage(named: "folder_dark")
-                backgroundColor = UIColor.black.withAlphaComponent(0.8)
-                barTintColor = UIColor.black.withAlphaComponent(0.8)
+                if #available(iOS 13.0, *) {
+                    backgroundColor = UIColor.systemBackground
+                isTranslucent = true
+                    barTintColor = UIColor.secondarySystemBackground
+                } else {
+                    backgroundColor = UIColor.darkGray
+                    isTranslucent = true
+                    barTintColor = UIColor.darkGray
+                }
             } else {
-                //                cell.imageView?.image = UIImage(named: "folder")
                 backgroundColor = UIColor.white
+                isTranslucent = false
                 barTintColor = UIColor.white
             }
         } else {
             // Fallback on earlier versions
-            //            cell.imageView?.image = UIImage(named: "folder")
             backgroundColor = UIColor.white
+            isTranslucent = false
             barTintColor = UIColor.white
         }
     }

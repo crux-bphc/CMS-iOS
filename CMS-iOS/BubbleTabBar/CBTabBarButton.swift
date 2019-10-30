@@ -52,7 +52,6 @@ public class CBTabBarButton: UIControl {
         var maybeImage: UIImage?
         if _isSelected {
             maybeImage = item?.selectedImage ?? item?.image
-            print("\(item?.title ?? "No title")")
         } else {
             maybeImage = item?.image
         }

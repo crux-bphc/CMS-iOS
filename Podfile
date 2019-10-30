@@ -13,5 +13,6 @@ target 'CMS-iOS' do
   pod 'RealmSwift'
   pod 'IQKeyboardManagerSwift'
   pod 'NotificationBannerSwift'
+  pod 'SDDownloadManager'
 
 end

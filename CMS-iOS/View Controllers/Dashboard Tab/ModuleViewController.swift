@@ -11,6 +11,9 @@ import MobileCoreServices
 import SVProgressHUD
 import SwiftKeychainWrapper
 import QuickLook
+import RealmSwift
+import NotificationBannerSwift
+
 
 class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPreviewControllerDataSource{
     var quickLookController = QLPreviewController()
@@ -58,6 +61,11 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
     }
     override func viewWillAppear(_ animated: Bool) {
         openButton.isEnabled = true
+        let realm = try! Realm()
+        try! realm.write {
+            selectedModule.read = true
+        }
+        print(selectedModule.read)
     }
     
     func setDescription(){
@@ -129,12 +137,10 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
                 destinationURL = destination
                 download(url: url, to: destination)
             } else {
-                let generator = UINotificationFeedbackGenerator()
-                generator.notificationOccurred(.error)
-                let alert = UIAlertController(title: "Unable to download", message: "The file cannot be downloaded as the device is offline.", preferredStyle: .alert)
-                let action = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
-                alert.addAction(action)
-                present(alert, animated: true, completion: nil)
+                let offlineBanner = NotificationBanner(title: "Offline", subtitle: "Your device is offline.", style: .danger)
+                if !offlineBanner.isDisplaying {
+                    offlineBanner.show()
+                }
             }
         }
     }

@@ -11,6 +11,7 @@ import Realm
 import RealmSwift
 import IQKeyboardManagerSwift
 import UserNotifications
+import SDDownloadManager
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -43,6 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
             print(realmUser.isConnected as Any)
+        } else {
+            
         }
         return true
     }
@@ -87,13 +90,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let message = url.host
         let loginViewController = self.window?.rootViewController as! LoginViewController
         loginViewController.loginWithGoogle(input: message!)
-        //        let alertController = UIAlertController(title: "Checking google login", message: message, preferredStyle: .alert)
-        //        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        //        alertController.addAction(okAction)
-        //
-        //        window?.rootViewController?.present(alertController, animated: true, completion: nil)
-        //
         return true
+    }
+    
+    func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
+        SDDownloadManager.shared.backgroundCompletionHandler = completionHandler
     }
     
 }

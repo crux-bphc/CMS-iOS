@@ -13,7 +13,7 @@ import SVProgressHUD
 import SwiftKeychainWrapper
 
 class SiteNewsTableViewController: UITableViewController {
-
+    
     let constants = Constants.Global.self
     var discussionArray = [Discussion]()
     var currentDiscussion = Discussion()
@@ -31,7 +31,7 @@ class SiteNewsTableViewController: UITableViewController {
         } else {
             // Fallback on earlier versions
             refreshController.tintColor = .black
-
+            
         }
         refreshController.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.refreshControl = refreshController
@@ -51,14 +51,14 @@ class SiteNewsTableViewController: UITableViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = true
         
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return discussionArray.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
         cell.textLabel?.text = discussionArray[indexPath.row].name
@@ -77,11 +77,9 @@ class SiteNewsTableViewController: UITableViewController {
     }
     
     func getSiteNews(completion: @escaping () -> Void) {
-        
+        SVProgressHUD.show()
         let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!]
         let FINAL_URL : String = constants.BASE_URL + constants.GET_SITE_NEWS
-        SVProgressHUD.show()
-        
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
                 let siteNews = JSON(response.value as Any)
@@ -92,17 +90,21 @@ class SiteNewsTableViewController: UITableViewController {
                     discussion.date = siteNews["discussions"][i]["created"].int!
                     discussion.message = siteNews["discussions"][i]["message"].string ?? "No Content"
                     if siteNews["discussions"][i]["attachment"].string! != "0" {
-                        discussion.attachment = (siteNews["discussions"][i]["attachments"][0]["fileurl"].string ?? "") + "?token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                        //                        discussion.attachment = (siteNews["discussions"][i]["attachments"][0]["fileurl"].string ?? "") + "?token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                        if siteNews["discussions"][i]["attachments"][0]["fileurl"].string != nil {
+                            discussion.attachment = siteNews["discussions"][i]["attachments"][0]["fileurl"].string! + "?token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                        } else {
+                            discussion.attachment = ""
+                        }
                         discussion.filename = siteNews["discussions"][i]["attachments"][0]["filename"].string ?? ""
                         discussion.mimetype = siteNews["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
                     }
                     self.discussionArray.append(discussion)
-                    completion()
                 }
-                 
+                
             }
         }
-        
+        completion()        
     }
     
     @objc func refreshData() {

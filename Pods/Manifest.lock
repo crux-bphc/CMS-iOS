@@ -10,6 +10,7 @@ PODS:
   - Realm/Headers (3.19.1)
   - RealmSwift (3.19.1):
     - Realm (= 3.19.1)
+  - SDDownloadManager (1.1.0)
   - SnapKit (5.0.1)
   - SVProgressHUD (2.2.5)
   - SwiftKeychainWrapper (3.4.0)
@@ -20,6 +21,7 @@ DEPENDENCIES:
   - IQKeyboardManagerSwift
   - NotificationBannerSwift
   - RealmSwift
+  - SDDownloadManager
   - SVProgressHUD
   - SwiftKeychainWrapper
   - SwiftyJSON
@@ -32,6 +34,7 @@ SPEC REPOS:
     - NotificationBannerSwift
     - Realm
     - RealmSwift
+    - SDDownloadManager
     - SnapKit
     - SVProgressHUD
     - SwiftKeychainWrapper
@@ -44,11 +47,12 @@ SPEC CHECKSUMS:
   NotificationBannerSwift: 842401d30f5c36e4f2eafc152824566f6b3c1bb5
   Realm: fb377747e694c7deb62d402400454134fe321bee
   RealmSwift: 1302b0ab60f3105a2b214a735eeb0938607cf16b
+  SDDownloadManager: 62a9339c03ea27606effefd9aa1800e4127e3a52
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftKeychainWrapper: 6fc49fbf7d4a6b0772917acb0e53a1639f6078d6
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: 318a12ca6d1494d73185308943aa79a5a41c1d0a
+PODFILE CHECKSUM: b5b9687a5bc76b76e4da5e471f348181bd01b95b
 
 COCOAPODS: 1.8.4

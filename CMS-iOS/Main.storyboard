@@ -181,7 +181,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="IJh-Kh-fy2"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="kUF-I0-q5T"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="Dashboard" selectedImage="Dashboard" id="kUF-I0-q5T"/>
                     <navigationItem key="navigationItem" title="Dashboard" id="ff5-Mx-dvp"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -286,18 +286,18 @@
             <objects>
                 <viewController id="exB-Lj-j3Y" customClass="DiscussionViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ulu-h6-aXL">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Description Text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="8nS-aw-8fA">
-                                <rect key="frame" x="16" y="16" width="343" height="648"/>
+                                <rect key="frame" x="16" y="104" width="343" height="565"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OVG-jf-hSN">
-                                <rect key="frame" x="16" y="674" width="343" height="40"/>
+                                <rect key="frame" x="16" y="679" width="343" height="40"/>
                                 <color key="backgroundColor" red="0.88988083600000001" green="0.51419252159999995" blue="0.20537361500000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="wPD-2H-b6t"/>
@@ -372,7 +372,7 @@
             <objects>
                 <tableViewController title="Discussion VIew" id="aXd-S3-Oa1" customClass="DiscussionTableViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="dun-6i-2Mx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
@@ -390,7 +390,7 @@
                             <outlet property="delegate" destination="aXd-S3-Oa1" id="wG0-Mc-TeG"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="24p-2C-Riq"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="Dashboard" selectedImage="Dashboard" id="24p-2C-Riq"/>
                     <navigationItem key="navigationItem" id="lKu-my-bvz">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Oer-Dp-ocp">
                             <connections>
@@ -414,7 +414,7 @@
             <objects>
                 <viewController id="JTN-Tg-TTI" customClass="AddDiscussionViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4QJ-os-LE9">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FY1-Ko-OFY">
@@ -439,7 +439,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" keyboardDismissMode="interactive" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="PkW-qS-oSl">
-                                <rect key="frame" x="16" y="211" width="343" height="351"/>
+                                <rect key="frame" x="16" y="211" width="343" height="446"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -447,7 +447,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pAC-Q3-v83">
-                                <rect key="frame" x="16" y="680" width="343" height="36"/>
+                                <rect key="frame" x="16" y="685" width="343" height="36"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                 <state key="normal" title="Add">
@@ -500,7 +500,7 @@
                             <outlet property="delegate" destination="fG0-QY-y8D" id="Ic4-ed-Xo2"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="bJl-Yq-4eH"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="Dashboard" selectedImage="Dashboard" id="bJl-Yq-4eH"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="k38-5n-Ubk"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
@@ -582,7 +582,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NwF-hp-sQY"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="2BU-HJ-rcN"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="Dashboard" selectedImage="Dashboard" id="2BU-HJ-rcN"/>
                     <navigationItem key="navigationItem" id="buI-fF-F5d"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -825,7 +825,7 @@
                             <outlet property="delegate" destination="Opn-i5-N4W" id="YhK-dP-Zzp"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Site News" image="folded-newspaper" selectedImage="folded-newspaper" id="8sY-3q-xrJ"/>
+                    <tabBarItem key="tabBarItem" title="Site News" image="Site News" selectedImage="Site News" id="8sY-3q-xrJ"/>
                     <navigationItem key="navigationItem" title="Site News" id="CkA-Q8-4wD"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -860,8 +860,6 @@
         <image name="More" width="30" height="30"/>
         <image name="Search" width="30" height="30"/>
         <image name="Site News" width="30" height="30"/>
-        <image name="dashboard" width="21.333333969116211" height="21.333333969116211"/>
-        <image name="folded-newspaper" width="21.333333969116211" height="21.333333969116211"/>
         <image name="google logo white" width="654" height="665"/>
         <image name="logo" width="8000" height="8000"/>
         <namedColor name="loginUI background">
@@ -875,9 +873,9 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="OrM-jC-JFg"/>
-        <segue reference="bDO-Ye-r9b"/>
-        <segue reference="67r-4m-Wu4"/>
+        <segue reference="IgU-80-XSP"/>
+        <segue reference="CoA-DR-f5i"/>
+        <segue reference="r0O-gx-IAp"/>
         <segue reference="p9a-Sh-oWN"/>
     </inferredMetricsTieBreakers>
 </document>

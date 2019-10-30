@@ -11,6 +11,7 @@ import SwiftKeychainWrapper
 import SwiftyJSON
 import Alamofire
 import SVProgressHUD
+import NotificationBannerSwift
 
 class DiscussionTableViewController: UITableViewController {
     
@@ -25,10 +26,15 @@ class DiscussionTableViewController: UITableViewController {
         super.viewDidLoad()
         self.addDiscussionButton.isEnabled = false
         SVProgressHUD.dismiss()
-        canAddDiscussion()
-        getCourseDiscussions {
-            self.tableView.reloadData()
-            SVProgressHUD.dismiss()
+        if Reachability.isConnectedToNetwork() {
+            canAddDiscussion()
+            getCourseDiscussions {
+                self.tableView.reloadData()
+                SVProgressHUD.dismiss()
+            }
+        } else {
+            let banner = NotificationBanner(title: "Offline", style: .danger)
+            banner.show()
         }
     }
     
@@ -60,8 +66,11 @@ class DiscussionTableViewController: UITableViewController {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "reuseCell")
         if discussionArray.count == 0 {
             cell.textLabel?.text = "No discussions"
+            cell.textLabel?.textAlignment = .center
+            self.tableView.separatorStyle = .none
         } else {
             cell.textLabel?.text = discussionArray[indexPath.row].name
+            self.tableView.separatorStyle = .singleLine
         }
         return cell
     }
@@ -71,6 +80,7 @@ class DiscussionTableViewController: UITableViewController {
         if segue.identifier == "goToDiscussionDetails" {
             let destinationVC = segue.destination as! DiscussionViewController
             destinationVC.selectedDiscussion = self.currentDiscussion
+            destinationVC.discussionName = self.currentModule.coursename
         } else if segue.identifier == "goToAddDiscussion" {
             let destinationVC = segue.destination as! AddDiscussionViewController
             destinationVC.currentForum = String(self.currentModule.id)
@@ -81,7 +91,6 @@ class DiscussionTableViewController: UITableViewController {
         
         let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
         let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
-        SVProgressHUD.show()
         
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
@@ -107,8 +116,8 @@ class DiscussionTableViewController: UITableViewController {
                         }
                         self.discussionArray.append(discussion)
                     }
-                    completion()
                 }
+                completion()
             }
         }
         
@@ -123,7 +132,7 @@ class DiscussionTableViewController: UITableViewController {
             if response.result.isSuccess {
                 let canAdd = JSON(response.value as Any)
                 if canAdd["status"].bool == false {
-//                    self.addDiscussionButton.width = 0.0
+                    //                    self.addDiscussionButton.width = 0.0
                     self.addDiscussionButton.tintColor = UIColor.clear
                     self.addDiscussionButton.style = .plain
                     self.addDiscussionButton.isEnabled = false
