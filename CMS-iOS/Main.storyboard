@@ -181,7 +181,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="IJh-Kh-fy2"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="kUF-I0-q5T"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="Dashboard" selectedImage="Dashboard" id="kUF-I0-q5T"/>
                     <navigationItem key="navigationItem" title="Dashboard" id="ff5-Mx-dvp"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -390,7 +390,7 @@
                             <outlet property="delegate" destination="aXd-S3-Oa1" id="wG0-Mc-TeG"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="24p-2C-Riq"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="Dashboard" selectedImage="Dashboard" id="24p-2C-Riq"/>
                     <navigationItem key="navigationItem" id="lKu-my-bvz">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Oer-Dp-ocp">
                             <connections>
@@ -416,7 +416,7 @@
             <objects>
                 <viewController id="JTN-Tg-TTI" customClass="AddDiscussionViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4QJ-os-LE9">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vLu-1L-CVL">
@@ -468,6 +468,17 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pAC-Q3-v83">
+                                <rect key="frame" x="16" y="685" width="343" height="36"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <state key="normal" title="Add">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="addButtonPressed:" destination="JTN-Tg-TTI" eventType="touchUpInside" id="arN-UM-9GH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -521,6 +532,7 @@
                             <outlet property="delegate" destination="fG0-QY-y8D" id="Ic4-ed-Xo2"/>
                         </connections>
                     </tableView>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="Dashboard" selectedImage="Dashboard" id="bJl-Yq-4eH"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="k38-5n-Ubk"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
@@ -602,7 +614,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NwF-hp-sQY"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Dashboard" image="dashboard" selectedImage="dashboard" id="2BU-HJ-rcN"/>
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="Dashboard" selectedImage="Dashboard" id="2BU-HJ-rcN"/>
                     <navigationItem key="navigationItem" id="buI-fF-F5d"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -845,7 +857,7 @@
                             <outlet property="delegate" destination="Opn-i5-N4W" id="YhK-dP-Zzp"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Site News" image="folded-newspaper" selectedImage="folded-newspaper" id="8sY-3q-xrJ"/>
+                    <tabBarItem key="tabBarItem" title="Site News" image="Site News" selectedImage="Site News" id="8sY-3q-xrJ"/>
                     <navigationItem key="navigationItem" title="Site News" id="CkA-Q8-4wD"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -880,8 +892,6 @@
         <image name="More" width="30" height="30"/>
         <image name="Search" width="30" height="30"/>
         <image name="Site News" width="30" height="30"/>
-        <image name="dashboard" width="21.333333969116211" height="21.333333969116211"/>
-        <image name="folded-newspaper" width="21.333333969116211" height="21.333333969116211"/>
         <image name="google logo white" width="654" height="665"/>
         <image name="logo" width="8000" height="8000"/>
         <namedColor name="loginUI background">
@@ -896,7 +906,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="IgU-80-XSP"/>
-        <segue reference="bDO-Ye-r9b"/>
+        <segue reference="CoA-DR-f5i"/>
         <segue reference="r0O-gx-IAp"/>
         <segue reference="p9a-Sh-oWN"/>
     </inferredMetricsTieBreakers>
