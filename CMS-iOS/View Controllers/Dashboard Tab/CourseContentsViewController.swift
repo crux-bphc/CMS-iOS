@@ -25,10 +25,13 @@ class CourseDetailsViewController : UITableViewController {
     let refreshController = UIRefreshControl()
     var readModuleNames = [String]()
     let realm = try! Realm()
-    
     let constants = Constants.Global.self
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        loadModulesFromMemory()
         
         navigationItem.largeTitleDisplayMode = .never
         
@@ -44,11 +47,9 @@ class CourseDetailsViewController : UITableViewController {
         tableView.refreshControl = refreshController
         tableView.reloadData()
         
-        if sectionArray.isEmpty {
-            getCourseContent { (courses) in
-                self.updateUI()
-                SVProgressHUD.dismiss()
-            }
+        getCourseContent { (courses) in
+            self.updateUI()
+            SVProgressHUD.dismiss()
         }
     }
     
@@ -58,6 +59,20 @@ class CourseDetailsViewController : UITableViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
+    }
+    
+    func loadModulesFromMemory() {
+        
+        let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
+        if sections.count != 0{
+            sectionArray.removeAll()
+            for i in 0..<sections.count{
+                sectionArray.append(sections[i])
+            }
+        } else {
+            SVProgressHUD.show()
+        }
+        
     }
     
     func getCourseContent(completion: @escaping ([CourseSection]) -> Void) {
@@ -149,7 +164,6 @@ class CourseDetailsViewController : UITableViewController {
             // try to get modules from memory
             
             let sections = self.realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
-            
             if sections.count != 0{
                 sectionArray.removeAll()
                 for i in 0..<sections.count{
@@ -314,4 +328,15 @@ class CourseDetailsViewController : UITableViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         updateUI()
     }
+    //    func markAllRead(){
+    //        let realmSections = self.realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
+    //        for i in 0..<realmSections.count {
+    //            for j in 0..<realmSections[i].modules.count{
+    //                try! realm.write {
+    //                    realmSections[i].modules[j].read = true
+    //                }
+    //            }
+    //        }
+    //        tableView.reloadData()
+    //    }
 }

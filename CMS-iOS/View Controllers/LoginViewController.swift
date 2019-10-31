@@ -54,6 +54,11 @@ class LoginViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
+        if realm.objects(User.self).count == 0{
+            canLogIn = false
+
+        }
         self.view.isUserInteractionEnabled = true
         if canLogIn {
             self.performSegue(withIdentifier: "goToDashboard", sender: self)
@@ -121,7 +126,7 @@ class LoginViewController: UIViewController {
                         print(savedPassword)
                         
                     }
-                    
+                    self.currentUser = User()
                     self.currentUser.name = userData["firstname"].string!.capitalized
                     self.currentUser.userid = userData["userid"].int!
                     
