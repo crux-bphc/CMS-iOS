@@ -216,38 +216,35 @@ class CourseDetailsViewController : UITableViewController {
         }
         
         if sectionArray[indexPath.section].modules[indexPath.row].modname == "folder"{
-            cell.imageView?.image = UIImage(named: "folder")?.withRenderingMode(.alwaysTemplate)
             if #available(iOS 12.0, *) {
                 if self.traitCollection.userInterfaceStyle == .dark {
-                    cell.imageView?.tintColor = .white
+                    cell.imageView?.image = UIImage(named: "folder_dark")
                 } else {
-                    cell.imageView?.tintColor = .black
+                    cell.imageView?.image = UIImage(named: "folder")
                 }
             } else {
                 // Fallback on earlier versions
-                cell.imageView?.tintColor = .black
+                cell.imageView?.image = UIImage(named: "folder")
             }
         } else if sectionArray[indexPath.section].modules[indexPath.row].modname == "resource" {
-            setImage(cell: cell, sectionArray: sectionArray, indexPath: indexPath)
             if #available(iOS 12.0, *) {
                 if self.traitCollection.userInterfaceStyle == .dark {
-                    cell.imageView?.tintColor = .white
+                    changeImage(mode: "_dark", cell: cell, sectionArray: sectionArray, indexPath: indexPath)
                 } else {
-                    cell.imageView?.tintColor = .black
+                    changeImage(mode: "", cell: cell, sectionArray: sectionArray, indexPath: indexPath)
                 }
             } else {
-                cell.imageView?.tintColor = .black
+                changeImage(mode: "", cell: cell, sectionArray: sectionArray, indexPath: indexPath)
             }
         } else if sectionArray[indexPath.section].modules[indexPath.row].modname == "url" {
-            cell.imageView?.image = UIImage(named: "web")?.withRenderingMode(.alwaysTemplate)
             if #available(iOS 12.0, *) {
                 if self.traitCollection.userInterfaceStyle == .dark {
-                    cell.imageView?.tintColor = .white
+                    cell.imageView?.image = UIImage(named: "web_dark")
                 } else {
-                    cell.imageView?.tintColor = .black
+                    cell.imageView?.image = UIImage(named: "web")
                 }
             } else {
-                cell.imageView?.tintColor = .black
+                cell.imageView?.image = UIImage(named: "web")
             }
         }
         return cell
@@ -290,44 +287,42 @@ class CourseDetailsViewController : UITableViewController {
         self.tableView.reloadData()
     }
     
-    func setImage(cell: UITableViewCell, sectionArray: [CourseSection], indexPath: IndexPath) {
-        let cellImage : UIImage
+    func changeImage(mode: String, cell: UITableViewCell, sectionArray: [CourseSection], indexPath: IndexPath) {
         switch sectionArray[indexPath.section].modules[indexPath.row].mimetype {
         case "application/pdf":
-            cellImage = UIImage(named: "pdf")!
+            cell.imageView?.image = UIImage(named: "pdf\(mode)")
             break
         case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-            cellImage = UIImage(named: "doc")!
+            cell.imageView?.image = UIImage(named: "doc\(mode)")
             break
         case "text/plain":
-            cellImage = UIImage(named: "txt")!
+            cell.imageView?.image = UIImage(named: "txt\(mode)")
             break
         case "image/jpeg":
-            cellImage = UIImage(named: "img")!
+            cell.imageView?.image = UIImage(named: "img\(mode)")
             break
         case "image/png":
-            cellImage = UIImage(named: "img")!
+            cell.imageView?.image = UIImage(named: "img\(mode)")
             break
         case "application/vnd.ms-excel":
-            cellImage = UIImage(named: "xls")!
+            cell.imageView?.image = UIImage(named: "xls\(mode)")
             break
         case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-            cellImage = UIImage(named: "xls")!
+            cell.imageView?.image = UIImage(named: "xls\(mode)")
             break
         case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-            cellImage = UIImage(named: "ppt")!
+            cell.imageView?.image = UIImage(named: "ppt\(mode)")
             break
         case "application/zip":
-            cellImage = UIImage(named: "zip")!
+            cell.imageView?.image = UIImage(named: "zip\(mode)")
             break
         case "application/x-rar-compressed":
-            cellImage = UIImage(named: "zip")!
+            cell.imageView?.image = UIImage(named: "zip\(mode)")
             break
         default:
-            cellImage = UIImage(named: "raw")!
+            cell.imageView?.image = UIImage(named: "raw\(mode)")
             break
         }
-        cell.imageView?.image = cellImage.withRenderingMode(.alwaysTemplate)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
