@@ -26,6 +26,9 @@ class AddDiscussionViewController: UIViewController {
         self.isModalInPopover = true
         messageBodyTextField.layer.cornerRadius = 10
         titleTextField.layer.cornerRadius = 10
+        let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 35))
+        titleTextField.leftView = paddingView
+        titleTextField.leftViewMode = .always
         
     }
     

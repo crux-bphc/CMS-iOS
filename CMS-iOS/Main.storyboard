@@ -286,18 +286,18 @@
             <objects>
                 <viewController id="exB-Lj-j3Y" customClass="DiscussionViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ulu-h6-aXL">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Description Text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="8nS-aw-8fA">
-                                <rect key="frame" x="16" y="16" width="343" height="648"/>
+                                <rect key="frame" x="16" y="104" width="343" height="565"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OVG-jf-hSN">
-                                <rect key="frame" x="16" y="674" width="343" height="40"/>
+                                <rect key="frame" x="16" y="679" width="343" height="40"/>
                                 <color key="backgroundColor" red="0.88988083600000001" green="0.51419252159999995" blue="0.20537361500000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="wPD-2H-b6t"/>
@@ -372,7 +372,7 @@
             <objects>
                 <tableViewController title="Discussion VIew" id="aXd-S3-Oa1" customClass="DiscussionTableViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="dun-6i-2Mx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
@@ -462,7 +462,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="PkW-qS-oSl">
-                                <rect key="frame" x="16" y="211" width="343" height="476"/>
+                                <rect key="frame" x="16" y="211" width="343" height="503"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -471,7 +471,7 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="S7c-SU-MuG" firstAttribute="bottom" secondItem="PkW-qS-oSl" secondAttribute="bottom" constant="37" id="9t0-hu-LCz"/>
+                            <constraint firstItem="S7c-SU-MuG" firstAttribute="bottom" secondItem="PkW-qS-oSl" secondAttribute="bottom" constant="10" id="9t0-hu-LCz"/>
                             <constraint firstItem="PkW-qS-oSl" firstAttribute="top" secondItem="FhL-cq-lxZ" secondAttribute="bottom" constant="8" id="LVQ-7F-yi5"/>
                             <constraint firstItem="4xV-zw-tAp" firstAttribute="top" secondItem="FY1-Ko-OFY" secondAttribute="bottom" constant="8" id="Nw0-Ih-t2d"/>
                             <constraint firstItem="FY1-Ko-OFY" firstAttribute="trailing" secondItem="4QJ-os-LE9" secondAttribute="trailingMargin" id="blu-PK-ueL"/>
@@ -522,13 +522,7 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="k38-5n-Ubk">
-                        <barButtonItem key="rightBarButtonItem" image="mark_read" style="plain" id="1s4-Ex-6La">
-                            <connections>
-                                <action selector="markReadPressed:" destination="fG0-QY-y8D" id="Ssu-0L-Viy"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="k38-5n-Ubk"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="courseLabel" destination="moC-lT-cPs" id="Ujm-xC-3kp"/>
@@ -890,7 +884,6 @@
         <image name="folded-newspaper" width="21.333333969116211" height="21.333333969116211"/>
         <image name="google logo white" width="654" height="665"/>
         <image name="logo" width="8000" height="8000"/>
-        <image name="mark_read" width="30" height="30"/>
         <namedColor name="loginUI background">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
@@ -902,10 +895,9 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="kPf-bB-3CG"/>
         <segue reference="IgU-80-XSP"/>
         <segue reference="bDO-Ye-r9b"/>
-        <segue reference="67r-4m-Wu4"/>
+        <segue reference="r0O-gx-IAp"/>
         <segue reference="p9a-Sh-oWN"/>
     </inferredMetricsTieBreakers>
 </document>

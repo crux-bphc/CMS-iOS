@@ -314,26 +314,15 @@ class CourseDetailsViewController : UITableViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         updateUI()
     }
-    @IBAction func markReadPressed(_ sender: Any) {
-        let warningSheet = UIAlertController(title: currentCourse.courseName, message: "Are you sure you want to mark all modules of this course as read?", preferredStyle: .actionSheet)
-        let markAction = UIAlertAction(title: "Mark Read", style: .default) { (_) in
-            self.markAllRead()
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        warningSheet.addAction(markAction)
-        warningSheet.addAction(cancelAction)
-        self.present(warningSheet, animated: true, completion: nil)
-        
-    }
-    func markAllRead(){
-        let realmSections = self.realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
-        for i in 0..<realmSections.count {
-            for j in 0..<realmSections[i].modules.count{
-                try! realm.write {
-                    realmSections[i].modules[j].read = true
-                }
-            }
-        }
-        tableView.reloadData()
-    }
+//    func markAllRead(){
+//        let realmSections = self.realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
+//        for i in 0..<realmSections.count {
+//            for j in 0..<realmSections[i].modules.count{
+//                try! realm.write {
+//                    realmSections[i].modules[j].read = true
+//                }
+//            }
+//        }
+//        tableView.reloadData()
+//    }
 }
