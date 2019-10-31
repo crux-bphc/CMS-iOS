@@ -319,4 +319,15 @@ class CourseDetailsViewController : UITableViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         updateUI()
     }
+//    func markAllRead(){
+//        let realmSections = self.realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
+//        for i in 0..<realmSections.count {
+//            for j in 0..<realmSections[i].modules.count{
+//                try! realm.write {
+//                    realmSections[i].modules[j].read = true
+//                }
+//            }
+//        }
+//        tableView.reloadData()
+//    }
 }
