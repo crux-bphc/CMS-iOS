@@ -11,6 +11,7 @@ import SwiftKeychainWrapper
 import SwiftyJSON
 import Alamofire
 import SVProgressHUD
+import NotificationBannerSwift
 
 class DiscussionTableViewController: UITableViewController {
     
@@ -25,10 +26,15 @@ class DiscussionTableViewController: UITableViewController {
         super.viewDidLoad()
         self.addDiscussionButton.isEnabled = false
         SVProgressHUD.dismiss()
-        canAddDiscussion()
-        getCourseDiscussions {
-            self.tableView.reloadData()
-            SVProgressHUD.dismiss()
+        if Reachability.isConnectedToNetwork() {
+            canAddDiscussion()
+            getCourseDiscussions {
+                self.tableView.reloadData()
+                SVProgressHUD.dismiss()
+            }
+        } else {
+            let banner = NotificationBanner(title: "Offline", style: .danger)
+            banner.show()
         }
     }
     
@@ -85,7 +91,6 @@ class DiscussionTableViewController: UITableViewController {
         
         let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
         let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
-        SVProgressHUD.show()
         
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
@@ -111,8 +116,8 @@ class DiscussionTableViewController: UITableViewController {
                         }
                         self.discussionArray.append(discussion)
                     }
-                    completion()
                 }
+                completion()
             }
         }
         
@@ -127,7 +132,7 @@ class DiscussionTableViewController: UITableViewController {
             if response.result.isSuccess {
                 let canAdd = JSON(response.value as Any)
                 if canAdd["status"].bool == false {
-//                    self.addDiscussionButton.width = 0.0
+                    //                    self.addDiscussionButton.width = 0.0
                     self.addDiscussionButton.tintColor = UIColor.clear
                     self.addDiscussionButton.style = .plain
                     self.addDiscussionButton.isEnabled = false

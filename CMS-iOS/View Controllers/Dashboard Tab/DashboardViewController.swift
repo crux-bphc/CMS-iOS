@@ -227,7 +227,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         var isDir : ObjCBool = false
         if FileManager.default.fileExists(atPath: dataPath.appendingPathComponent(module.coursename).path, isDirectory: &isDir) {
             if isDir.boolValue  {
-                //                Directory exists
                 destination1 = dataPath.appendingPathComponent(module.coursename)
             } else {
                 do {
@@ -247,8 +246,14 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         }
         
         let destination = destination1.appendingPathComponent("\(String(module.id) + module.filename)")
-        downloadArray.append(url)
-        localURLArray.append(destination)
+        do {
+            if !FileManager.default.fileExists(atPath: destination.path) {
+                downloadArray.append(url)
+                localURLArray.append(destination)
+            } else {
+                print("File exists.")
+            }
+        }
     }
     
     func clearTempDirectory() {
