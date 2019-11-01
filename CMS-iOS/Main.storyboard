@@ -148,7 +148,7 @@
                 <exit id="I0u-iS-F4i" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-307.24637681159425" y="837.72321428571422"/>
-        </scene>
+      </scene>
         <!--Bubble Tab Bar Controller-->
         <scene sceneID="tH7-yD-jyj">
             <objects>
