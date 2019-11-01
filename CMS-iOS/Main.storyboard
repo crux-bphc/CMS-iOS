@@ -177,7 +177,7 @@
                             <constraint firstItem="cIS-ep-aHO" firstAttribute="centerX" secondItem="D51-nF-iPl" secondAttribute="centerX" id="IHg-PF-dNu"/>
                             <constraint firstItem="cIS-ep-aHO" firstAttribute="bottom" secondItem="IJh-Kh-fy2" secondAttribute="bottom" id="Za6-Da-mT4"/>
                             <constraint firstItem="cIS-ep-aHO" firstAttribute="leading" secondItem="IJh-Kh-fy2" secondAttribute="leading" id="f6n-KB-JOv"/>
-                            <constraint firstItem="cIS-ep-aHO" firstAttribute="top" secondItem="IJh-Kh-fy2" secondAttribute="top" id="gaT-oA-he7"/>
+                            <constraint firstItem="cIS-ep-aHO" firstAttribute="top" secondItem="D51-nF-iPl" secondAttribute="top" constant="88" id="gaT-oA-he7"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="IJh-Kh-fy2"/>
                     </view>
@@ -186,6 +186,7 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="tableView" destination="cIS-ep-aHO" id="baW-wS-hh2"/>
+                        <outlet property="topConstraint" destination="gaT-oA-he7" id="i95-Wa-hJW"/>
                         <segue destination="fG0-QY-y8D" kind="show" identifier="goToCourseContent" id="CoA-DR-f5i"/>
                     </connections>
                 </viewController>
@@ -896,7 +897,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="IgU-80-XSP"/>
-        <segue reference="bDO-Ye-r9b"/>
+        <segue reference="CoA-DR-f5i"/>
         <segue reference="r0O-gx-IAp"/>
         <segue reference="p9a-Sh-oWN"/>
     </inferredMetricsTieBreakers>

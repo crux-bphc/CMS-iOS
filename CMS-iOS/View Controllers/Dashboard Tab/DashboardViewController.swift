@@ -17,6 +17,7 @@ import SDDownloadManager
 
 class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate {
     
+    @IBOutlet weak var topConstraint: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
     let banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
     let constant = Constants.Global.self
@@ -46,7 +47,8 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        
+//        tableView.scrollsToTop = false
+//        self.tableView.topAnchor = self
         if #available(iOS 13.0, *) {
             refreshControl.tintColor = .label
         } else {
