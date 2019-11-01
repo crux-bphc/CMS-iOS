@@ -13,7 +13,6 @@ import SwiftKeychainWrapper
 import RealmSwift
 import UserNotifications
 import NotificationBannerSwift
-import SDDownloadManager
 
 class DashboardViewController : UITableViewController, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate {
     
@@ -31,7 +30,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var locationToCopy = URL(string: "")
     var downloadArray : [URL] = []
     var localURLArray : [URL] = []
-    let downloadManager = SDDownloadManager.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,12 +39,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
         
         setupNavBar()
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.separatorStyle = .none
-//        tableView.scrollsToTop = false
-//        self.tableView.topAnchor = self
+
         if #available(iOS 13.0, *) {
             refreshControl?.tintColor = .label
         } else {
@@ -192,9 +185,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     func downloadFiles(downloadArray: [URL], localURLArray: [URL], courseName: String, didFinishDownload: @escaping () -> Void) {
         for i in 0 ..< downloadArray.count {
             let request = URLRequest(url: downloadArray[i])
-            self.downloadManager.showLocalNotificationOnBackgroundDownloadDone = true
-            self.downloadManager.localNotificationText = "Files for \(courseName) downloaded."
-            let downloadKey = self.downloadManager.downloadFile(withRequest: request, shouldDownloadInBackground: true) { (error, localFileURL) in
+            constant.downloadManager.showLocalNotificationOnBackgroundDownloadDone = true
+            constant.downloadManager.localNotificationText = "Files for \(courseName) downloaded."
+            let downloadKey = constant.downloadManager.downloadFile(withRequest: request, shouldDownloadInBackground: true) { (error, localFileURL) in
                 if error != nil {
                     print("There was an error while downloading the file. \(String(describing: error))")
                 } else {

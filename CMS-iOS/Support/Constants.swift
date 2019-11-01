@@ -8,10 +8,12 @@
 
 import UIKit
 import Alamofire
+import SDDownloadManager
 
 class Constants: NSObject {
     
     struct Global {
+        static let downloadManager = SDDownloadManager.shared
         static let BASE_URL : String = "https://td.bits-hyderabad.ac.in/moodle/"
         static let LOGIN : String = "webservice/rest/server.php?wsfunction=core_webservice_get_site_info&moodlewsrestformat=json"
         static let GET_COURSES : String = "webservice/rest/server.php?wsfunction=core_enrol_get_users_courses&moodlewsrestformat=json"
