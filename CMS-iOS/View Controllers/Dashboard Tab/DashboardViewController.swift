@@ -15,9 +15,9 @@ import UserNotifications
 import NotificationBannerSwift
 import SDDownloadManager
 
-class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate {
+class DashboardViewController : UITableViewController, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate {
     
-    @IBOutlet weak var tableView: UITableView!
+//    @IBOutlet weak var tableView: UITableView!
     let banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
     let constant = Constants.Global.self
     var animated = false
@@ -25,7 +25,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     var userDetails = User()
     var selectedCourse = Course()
     var searching : Bool = false
-    let refreshControl = UIRefreshControl()
+//   refreshControl = UIRefreshControl()
     var filteredCourseList = [Course]()
     let realm = try! Realm()
     let searchController = UISearchController(searchResultsController: nil)
@@ -48,13 +48,13 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         tableView.separatorStyle = .none
         
         if #available(iOS 13.0, *) {
-            refreshControl.tintColor = .label
+            refreshControl?.tintColor = .label
         } else {
             // Fallback on earlier versions
-            refreshControl.tintColor = .black
+            refreshControl?.tintColor = .black
             
         }
-        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         
         tableView.refreshControl = refreshControl
         tableView.reloadData()
@@ -85,7 +85,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        refreshControl.endRefreshing()
+        refreshControl?.endRefreshing()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -269,7 +269,7 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
             
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
-            refreshControl.beginRefreshing()
+            refreshControl?.beginRefreshing()
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
                 if courseData.result.isSuccess {
                     if (realmCourses.count != 0){
@@ -309,13 +309,13 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     
     @objc func refreshData() {
         if !searchController.isActive {
-            self.refreshControl.beginRefreshing()
+            self.refreshControl?.beginRefreshing()
             getRegisteredCourses {
-                self.refreshControl.endRefreshing()
+                self.refreshControl?.endRefreshing()
                 self.tableView.reloadData()
             }
         }else{
-            self.refreshControl.endRefreshing()
+            self.refreshControl?.endRefreshing()
         }
         
         if !Reachability.isConnectedToNetwork(){
@@ -323,15 +323,15 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchController.isActive ? filteredCourseList.count : courseList.count
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.contentView.layer.masksToBounds = true
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
         
         if searchController.isActive {
@@ -344,11 +344,11 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: true)
         if searchController.isActive {
