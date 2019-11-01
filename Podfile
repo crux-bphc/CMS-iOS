@@ -14,5 +14,6 @@ target 'CMS-iOS' do
   pod 'IQKeyboardManagerSwift'
   pod 'NotificationBannerSwift'
   pod 'SDDownloadManager'
+  pod 'GradientLoadingBar', '~> 2.0'
 
 end

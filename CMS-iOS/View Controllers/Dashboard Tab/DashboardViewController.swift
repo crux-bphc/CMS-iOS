@@ -13,6 +13,7 @@ import SwiftKeychainWrapper
 import RealmSwift
 import UserNotifications
 import NotificationBannerSwift
+import GradientLoadingBar
 
 class DashboardViewController : UITableViewController, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate {
     
@@ -23,7 +24,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var userDetails = User()
     var selectedCourse = Course()
     var searching : Bool = false
-//   refreshControl = UIRefreshControl()
+    private let gradientLoadingBar = GradientLoadingBar()
     var filteredCourseList = [Course]()
     let realm = try! Realm()
     let searchController = UISearchController(searchResultsController: nil)
@@ -39,7 +40,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
         
         setupNavBar()
-
+        loadOfflineCourses()
+        
         if #available(iOS 13.0, *) {
             refreshControl?.tintColor = .label
         } else {
@@ -67,9 +69,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        //        if !searchController.isActive{
-        //            refreshData()
-        //        }
         tableView.reloadData()
         if !animated{
             animateTable()
@@ -78,7 +77,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         refreshControl?.endRefreshing()
+        gradientLoadingBar.fadeOut()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -257,8 +258,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     func getRegisteredCourses(completion: @escaping() -> Void) {
         
         let realmCourses = self.realm.objects(Course.self)
-        print("The device connection is: \(self.userDetails.isConnected)")
-        if self.userDetails.isConnected{
+        if Reachability.isConnectedToNetwork(){
             
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
@@ -300,14 +300,28 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         completion()
     }
     
+    func loadOfflineCourses() {
+        let realmCourses = self.realm.objects(Course.self)
+        if realmCourses.count != 0 {
+            courseList.removeAll()
+            for x in 0..<realmCourses.count{
+                courseList.append(realmCourses[x])
+            }
+        }
+    }
+    
     @objc func refreshData() {
+        gradientLoadingBar.fadeIn()
         if !searchController.isActive {
             self.refreshControl?.beginRefreshing()
+            gradientLoadingBar.fadeIn()
             getRegisteredCourses {
                 self.refreshControl?.endRefreshing()
+                self.gradientLoadingBar.fadeOut()
                 self.tableView.reloadData()
             }
         }else{
+            gradientLoadingBar.fadeOut()
             self.refreshControl?.endRefreshing()
         }
         
