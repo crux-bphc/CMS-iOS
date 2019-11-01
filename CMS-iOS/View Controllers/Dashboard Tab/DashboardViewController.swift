@@ -24,7 +24,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var userDetails = User()
     var selectedCourse = Course()
     var searching : Bool = false
-    private let gradientLoadingBar = GradientLoadingBar()
+    private let gradientLoadingBar = GradientActivityIndicatorView()
     var filteredCourseList = [Course]()
     let realm = try! Realm()
     let searchController = UISearchController(searchResultsController: nil)
@@ -34,13 +34,14 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupGradientLoadingBar()
         if let currentUser = realm.objects(User.self).first {
             userDetails = currentUser
         }
         
         setupNavBar()
         loadOfflineCourses()
+        refreshData()
         
         if #available(iOS 13.0, *) {
             refreshControl?.tintColor = .label
@@ -288,6 +289,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     }
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
+                        self.gradientLoadingBar.fadeOut()
                     }
                 }
             }
@@ -317,7 +319,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             gradientLoadingBar.fadeIn()
             getRegisteredCourses {
                 self.refreshControl?.endRefreshing()
-                self.gradientLoadingBar.fadeOut()
+//                self.gradientLoadingBar.fadeOut()
                 self.tableView.reloadData()
             }
         }else{
@@ -397,5 +399,21 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         tableView.reloadData()
+    }
+    func setupGradientLoadingBar(){
+        guard let navigationBar = navigationController?.navigationBar else { return }
+
+        gradientLoadingBar.fadeOut(duration: 0)
+
+        gradientLoadingBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.addSubview(gradientLoadingBar)
+
+        NSLayoutConstraint.activate([
+            gradientLoadingBar.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor),
+            gradientLoadingBar.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor),
+
+            gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+            gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
+        ])
     }
 }
