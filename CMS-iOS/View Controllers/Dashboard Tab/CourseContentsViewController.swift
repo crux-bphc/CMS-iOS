@@ -18,7 +18,7 @@ class CourseDetailsViewController : UITableViewController {
     
     @IBOutlet var courseLabel: UITableView!
     
-    private let gradientLoadingBar = GradientLoadingBar()
+    private let gradientLoadingBar = GradientActivityIndicatorView()
     var sectionArray = [CourseSection]()
     var currentCourse = Course()
     var selectedModule = Module()
@@ -31,7 +31,7 @@ class CourseDetailsViewController : UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupGradientLoadingBar()
         loadModulesFromMemory()
         
         navigationItem.largeTitleDisplayMode = .never
@@ -342,4 +342,21 @@ class CourseDetailsViewController : UITableViewController {
     //        }
     //        tableView.reloadData()
     //    }
+    
+    func setupGradientLoadingBar(){
+        guard let navigationBar = navigationController?.navigationBar else { return }
+
+        gradientLoadingBar.fadeOut(duration: 0)
+
+        gradientLoadingBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.addSubview(gradientLoadingBar)
+
+        NSLayoutConstraint.activate([
+            gradientLoadingBar.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor),
+            gradientLoadingBar.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor),
+
+            gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+            gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
+        ])
+    }
 }
