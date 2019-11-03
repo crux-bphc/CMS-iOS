@@ -19,4 +19,5 @@ class Course : Object {
     @objc dynamic var progress : Float = 0
     @objc dynamic var courseCode : String = ""
     @objc dynamic var courseName : String = ""
+    @objc dynamic var allotedColor : String = ""
 }

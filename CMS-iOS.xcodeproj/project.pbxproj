@@ -41,6 +41,7 @@
 		3B34F1132358B3B300F59536 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B34F1122358B3B300F59536 /* Colors.xcassets */; };
 		DFD17517A1F9E0EBABB30158 /* Pods_CMS_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E5932C06751619A1DAA02E4 /* Pods_CMS_iOS.framework */; };
 		E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */; };
+		E61F0E9A236EFEB300A9C9DA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */; };
 		E6510CAE233FD49B009FCF0D /* HTMLStringDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */; };
 		E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */; };
 		E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6C61630235DA91F00FFC2E4 /* Main.storyboard */; };
@@ -86,6 +87,7 @@
 		5DB2C29A2C6FAFC42F287ED2 /* Pods-CMS-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.release.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		B0636254EDBA8C9884A2EE9A /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderContentViewController.swift; sourceTree = "<group>"; };
+		E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLStringDecoder.swift; sourceTree = "<group>"; };
 		E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLPreviewItemSubclass.swift; sourceTree = "<group>"; };
 		E6C61630235DA91F00FFC2E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
+				E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */,
 				E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */,
 				E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */,
 				0A585452230168E7008FB370 /* Constants.swift */,
@@ -399,6 +402,7 @@
 				0A2FD035236059A800917BE7 /* Regex.swift in Sources */,
 				0AF20A35230B48AD001C0CB1 /* DiscussionViewController.swift in Sources */,
 				0A5ECD7C2306A98800723365 /* AboutPageViewController.swift in Sources */,
+				E61F0E9A236EFEB300A9C9DA /* ColorExtension.swift in Sources */,
 				E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */,
 				0A8F492B23313A3800E7A94C /* AddDiscussionViewController.swift in Sources */,
 				0A585453230168E7008FB370 /* Constants.swift in Sources */,

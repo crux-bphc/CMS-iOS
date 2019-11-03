@@ -31,7 +31,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var locationToCopy = URL(string: "")
     var downloadArray : [URL] = []
     var localURLArray : [URL] = []
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGradientLoadingBar()
@@ -282,7 +281,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
                         currentCourse.enrolled = true
                         self.courseList.append(currentCourse)
-                        
+                        self.setupColors(colors: self.constant.DashboardCellColors)
                         try! self.realm.write {
                             self.realm.add(self.courseList[i])
                         }
@@ -310,6 +309,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 courseList.append(realmCourses[x])
             }
         }
+        setupColors(colors: constant.DashboardCellColors)
     }
     
     @objc func refreshData() {
@@ -319,7 +319,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             gradientLoadingBar.fadeIn()
             getRegisteredCourses {
                 self.refreshControl?.endRefreshing()
-//                self.gradientLoadingBar.fadeOut()
                 self.tableView.reloadData()
             }
         }else{
@@ -329,6 +328,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         
         if !Reachability.isConnectedToNetwork(){
             showOfflineMessage()
+            gradientLoadingBar.fadeOut()
         }
     }
     
@@ -346,9 +346,13 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         if searchController.isActive {
             cell.courseName.text = filteredCourseList[indexPath.row].courseCode
             cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
+            cell.colorView.backgroundColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
         } else {
             cell.courseName.text = courseList[indexPath.row].courseCode
             cell.courseFullName.text = courseList[indexPath.row].courseName
+            cell.colorView.backgroundColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
+
+            
         }
         return cell
     }
@@ -415,5 +419,32 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
+    }
+    func setupColors(colors: [UIColor]){
+        var currentCourseCode = String()
+        var currentIndex = 0
+        for i in 0..<courseList.count{
+            if i == 0{
+                currentCourseCode = courseList[0].courseCode
+                currentIndex = 0
+            }
+            if courseList[i].courseCode == currentCourseCode{
+                try! realm.write {
+                    courseList[i].allotedColor = UIColor.StringFromUIColor(color: colors[currentIndex])
+                }
+                
+            }else{
+                currentIndex+=1;
+                if currentIndex == colors.count{
+                    currentIndex = 0
+                }
+                currentCourseCode = courseList[i].courseCode
+                try! realm.write {
+                    courseList[i].allotedColor = UIColor.StringFromUIColor(color: colors[currentIndex])
+                }
+                
+            }
+            
+        }
     }
 }
