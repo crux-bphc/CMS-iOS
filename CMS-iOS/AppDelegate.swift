@@ -12,7 +12,7 @@ import RealmSwift
 import IQKeyboardManagerSwift
 import UserNotifications
 import SDDownloadManager
-
+import SafariServices
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -90,6 +90,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let message = url.host
         let loginViewController = self.window?.rootViewController as! LoginViewController
         loginViewController.loginWithGoogle(input: message!)
+        loginViewController.safariVC.dismiss(animated: true)
         return true
     }
     
