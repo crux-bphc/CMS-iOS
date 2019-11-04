@@ -9,15 +9,16 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
-import SVProgressHUD
 import SwiftKeychainWrapper
 import MobileCoreServices
 import RealmSwift
+import GradientLoadingBar
 
 class CourseDetailsViewController : UITableViewController {
     
     @IBOutlet var courseLabel: UITableView!
     
+    private let gradientLoadingBar = GradientActivityIndicatorView()
     var sectionArray = [CourseSection]()
     var currentCourse = Course()
     var selectedModule = Module()
@@ -30,7 +31,7 @@ class CourseDetailsViewController : UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupGradientLoadingBar()
         loadModulesFromMemory()
         
         navigationItem.largeTitleDisplayMode = .never
@@ -49,13 +50,13 @@ class CourseDetailsViewController : UITableViewController {
         
         getCourseContent { (courses) in
             self.updateUI()
-            SVProgressHUD.dismiss()
+            self.gradientLoadingBar.fadeOut()
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         readModuleNames.removeAll()
-        SVProgressHUD.dismiss()
+        gradientLoadingBar.fadeOut()
     }
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
@@ -70,7 +71,7 @@ class CourseDetailsViewController : UITableViewController {
                 sectionArray.append(sections[i])
             }
         } else {
-            SVProgressHUD.show()
+            gradientLoadingBar.fadeIn()
         }
         
     }
@@ -80,7 +81,7 @@ class CourseDetailsViewController : UITableViewController {
         if Reachability.isConnectedToNetwork(){
             let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
             let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
-            SVProgressHUD.show()
+            gradientLoadingBar.fadeIn()
             
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
                 if response.result.isSuccess {
@@ -175,10 +176,12 @@ class CourseDetailsViewController : UITableViewController {
     }
     
     @objc func refreshData() {
-        self.refreshControl!.beginRefreshing()
-        getCourseContent{ (courses) in
-            self.refreshControl!.endRefreshing()
-            SVProgressHUD.dismiss()
+        if Reachability.isConnectedToNetwork() {
+            self.refreshControl!.beginRefreshing()
+            getCourseContent{ (courses) in
+                self.refreshControl!.endRefreshing()
+                self.gradientLoadingBar.fadeOut()
+            }
         }
     }
     
@@ -339,4 +342,21 @@ class CourseDetailsViewController : UITableViewController {
     //        }
     //        tableView.reloadData()
     //    }
+    
+    func setupGradientLoadingBar(){
+        guard let navigationBar = navigationController?.navigationBar else { return }
+
+        gradientLoadingBar.fadeOut(duration: 0)
+
+        gradientLoadingBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.addSubview(gradientLoadingBar)
+
+        NSLayoutConstraint.activate([
+            gradientLoadingBar.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor),
+            gradientLoadingBar.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor),
+
+            gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+            gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
+        ])
+    }
 }

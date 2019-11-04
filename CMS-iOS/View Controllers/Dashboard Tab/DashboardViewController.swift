@@ -13,11 +13,10 @@ import SwiftKeychainWrapper
 import RealmSwift
 import UserNotifications
 import NotificationBannerSwift
-import SDDownloadManager
+import GradientLoadingBar
 
-class DashboardViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate {
+class DashboardViewController : UITableViewController, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate {
     
-    @IBOutlet weak var tableView: UITableView!
     let banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
     let constant = Constants.Global.self
     var animated = false
@@ -25,36 +24,32 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     var userDetails = User()
     var selectedCourse = Course()
     var searching : Bool = false
-    let refreshControl = UIRefreshControl()
+    private let gradientLoadingBar = GradientActivityIndicatorView()
     var filteredCourseList = [Course]()
     let realm = try! Realm()
     let searchController = UISearchController(searchResultsController: nil)
     var locationToCopy = URL(string: "")
     var downloadArray : [URL] = []
     var localURLArray : [URL] = []
-    let downloadManager = SDDownloadManager.shared
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupGradientLoadingBar()
         if let currentUser = realm.objects(User.self).first {
             userDetails = currentUser
         }
         
         setupNavBar()
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.separatorStyle = .none
+        loadOfflineCourses()
+        refreshData()
         
         if #available(iOS 13.0, *) {
-            refreshControl.tintColor = .label
+            refreshControl?.tintColor = .label
         } else {
             // Fallback on earlier versions
-            refreshControl.tintColor = .black
+            refreshControl?.tintColor = .black
             
         }
-        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         
         tableView.refreshControl = refreshControl
         tableView.reloadData()
@@ -74,9 +69,6 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        //        if !searchController.isActive{
-        //            refreshData()
-        //        }
         tableView.reloadData()
         if !animated{
             animateTable()
@@ -85,7 +77,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        refreshControl.endRefreshing()
+        super.viewDidDisappear(animated)
+        refreshControl?.endRefreshing()
+        gradientLoadingBar.fadeOut()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -192,9 +186,9 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     func downloadFiles(downloadArray: [URL], localURLArray: [URL], courseName: String, didFinishDownload: @escaping () -> Void) {
         for i in 0 ..< downloadArray.count {
             let request = URLRequest(url: downloadArray[i])
-            self.downloadManager.showLocalNotificationOnBackgroundDownloadDone = true
-            self.downloadManager.localNotificationText = "Files for \(courseName) downloaded."
-            let downloadKey = self.downloadManager.downloadFile(withRequest: request, shouldDownloadInBackground: true) { (error, localFileURL) in
+            constant.downloadManager.showLocalNotificationOnBackgroundDownloadDone = true
+            constant.downloadManager.localNotificationText = "Files for \(courseName) downloaded."
+            let downloadKey = constant.downloadManager.downloadFile(withRequest: request, shouldDownloadInBackground: true) { (error, localFileURL) in
                 if error != nil {
                     print("There was an error while downloading the file. \(String(describing: error))")
                 } else {
@@ -264,12 +258,11 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     func getRegisteredCourses(completion: @escaping() -> Void) {
         
         let realmCourses = self.realm.objects(Course.self)
-        print("The device connection is: \(self.userDetails.isConnected)")
-        if self.userDetails.isConnected{
+        if Reachability.isConnectedToNetwork(){
             
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
-            refreshControl.beginRefreshing()
+            refreshControl?.beginRefreshing()
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
                 if courseData.result.isSuccess {
                     if (realmCourses.count != 0){
@@ -288,13 +281,14 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
                         currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
                         currentCourse.enrolled = true
                         self.courseList.append(currentCourse)
-                        
+                        self.setupColors(colors: self.constant.DashboardCellColors)
                         try! self.realm.write {
                             self.realm.add(self.courseList[i])
                         }
                     }
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
+                        self.gradientLoadingBar.fadeOut()
                     }
                 }
             }
@@ -307,48 +301,67 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
         completion()
     }
     
+    func loadOfflineCourses() {
+        let realmCourses = self.realm.objects(Course.self)
+        if realmCourses.count != 0 {
+            courseList.removeAll()
+            for x in 0..<realmCourses.count{
+                courseList.append(realmCourses[x])
+            }
+        }
+        setupColors(colors: constant.DashboardCellColors)
+    }
+    
     @objc func refreshData() {
+        gradientLoadingBar.fadeIn()
         if !searchController.isActive {
-            self.refreshControl.beginRefreshing()
+            self.refreshControl?.beginRefreshing()
+            gradientLoadingBar.fadeIn()
             getRegisteredCourses {
-                self.refreshControl.endRefreshing()
+                self.refreshControl?.endRefreshing()
                 self.tableView.reloadData()
             }
         }else{
-            self.refreshControl.endRefreshing()
+            gradientLoadingBar.fadeOut()
+            self.refreshControl?.endRefreshing()
         }
         
         if !Reachability.isConnectedToNetwork(){
             showOfflineMessage()
+            gradientLoadingBar.fadeOut()
         }
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchController.isActive ? filteredCourseList.count : courseList.count
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.contentView.layer.masksToBounds = true
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
         
         if searchController.isActive {
             cell.courseName.text = filteredCourseList[indexPath.row].courseCode
             cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
+            cell.colorView.backgroundColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
         } else {
             cell.courseName.text = courseList[indexPath.row].courseCode
             cell.courseFullName.text = courseList[indexPath.row].courseName
+            cell.colorView.backgroundColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
+
+            
         }
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: true)
         if searchController.isActive {
@@ -390,5 +403,48 @@ class DashboardViewController : UIViewController, UITableViewDelegate, UITableVi
     }
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         tableView.reloadData()
+    }
+    func setupGradientLoadingBar(){
+        guard let navigationBar = navigationController?.navigationBar else { return }
+
+        gradientLoadingBar.fadeOut(duration: 0)
+
+        gradientLoadingBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.addSubview(gradientLoadingBar)
+
+        NSLayoutConstraint.activate([
+            gradientLoadingBar.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor),
+            gradientLoadingBar.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor),
+
+            gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+            gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
+        ])
+    }
+    func setupColors(colors: [UIColor]){
+        var currentCourseCode = String()
+        var currentIndex = 0
+        for i in 0..<courseList.count{
+            if i == 0{
+                currentCourseCode = courseList[0].courseCode
+                currentIndex = 0
+            }
+            if courseList[i].courseCode == currentCourseCode{
+                try! realm.write {
+                    courseList[i].allotedColor = UIColor.StringFromUIColor(color: colors[currentIndex])
+                }
+                
+            }else{
+                currentIndex+=1;
+                if currentIndex == colors.count{
+                    currentIndex = 0
+                }
+                currentCourseCode = courseList[i].courseCode
+                try! realm.write {
+                    courseList[i].allotedColor = UIColor.StringFromUIColor(color: colors[currentIndex])
+                }
+                
+            }
+            
+        }
     }
 }

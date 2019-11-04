@@ -1,6 +1,9 @@
 PODS:
   - Alamofire (4.9.0)
+  - GradientLoadingBar (2.0.0):
+    - LightweightObservable (~> 1.0)
   - IQKeyboardManagerSwift (6.5.1)
+  - LightweightObservable (1.0.3)
   - MarqueeLabel (4.0.0)
   - NotificationBannerSwift (2.5.1):
     - MarqueeLabel (~> 4.0.0)
@@ -18,6 +21,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - GradientLoadingBar (~> 2.0)
   - IQKeyboardManagerSwift
   - NotificationBannerSwift
   - RealmSwift
@@ -29,7 +33,9 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - GradientLoadingBar
     - IQKeyboardManagerSwift
+    - LightweightObservable
     - MarqueeLabel
     - NotificationBannerSwift
     - Realm
@@ -42,7 +48,9 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: afc3e7c6db61476cb45cdd23fed06bad03bbc321
+  GradientLoadingBar: b46dffa5b505dd0b20ec65b80d178da600d815bb
   IQKeyboardManagerSwift: 9ac7524fad9f9fe9a3b98c927e7772471ca546d2
+  LightweightObservable: 8687e8e1e2940ae2f64d7f71fe78c036d89c966f
   MarqueeLabel: b55b26e690b6ad41faedd95cbf5eae6f1d1735b4
   NotificationBannerSwift: e55dd801b0d78f1a7bacb10d722a935ec95f94a3
   Realm: 995d585bcf699aaff226715886c849a29dd3d07f
@@ -53,6 +61,6 @@ SPEC CHECKSUMS:
   SwiftKeychainWrapper: 6fc49fbf7d4a6b0772917acb0e53a1639f6078d6
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: b5b9687a5bc76b76e4da5e471f348181bd01b95b
+PODFILE CHECKSUM: f3da7ac83612a82da43751702d5b2267f20b06e9
 
 COCOAPODS: 1.7.5

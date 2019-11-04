@@ -20,7 +20,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var googleLoginBtn: UIButton!
     
     let constant = Constants.Global.self
-    
+    var safariVC  = SFSafariViewController(url: URL(string: "https://google.com")!)
     var currentUser = User()
     var canLogIn : Bool = false
     let realm = try! Realm()
@@ -189,7 +189,9 @@ class LoginViewController: UIViewController {
     
     @IBAction func googleLoginPressed(_ sender: UIButton) {
         self.view.isUserInteractionEnabled = false
-        UIApplication.shared.open(URL(string: "https://td.bits-hyderabad.ac.in/moodle/admin/tool/mobile/launch.php?service=moodle_mobile_app&passport=144.05993500117754&urlscheme=cruxcmsios&oauthsso=1")!, options: [:], completionHandler: nil)
+        guard let url = URL(string: "https://td.bits-hyderabad.ac.in/moodle/admin/tool/mobile/launch.php?service=moodle_mobile_app&passport=144.05993500117754&urlscheme=cruxcmsios&oauthsso=1")else{ return }
+        safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true, completion: nil)
         
     }
     

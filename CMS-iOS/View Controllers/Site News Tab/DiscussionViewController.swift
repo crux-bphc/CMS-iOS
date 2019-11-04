@@ -9,19 +9,37 @@
 import UIKit
 import SVProgressHUD
 import QuickLook
-import SDDownloadManager
 
 class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
     
-    var quickLookController = QLPreviewController()
     @IBOutlet weak var bodyTextView: UITextView!
     @IBOutlet weak var openButton: UIButton!
+    
+    var quickLookController = QLPreviewController()
     var selectedDiscussion = Discussion()
     var qlLocation = URL(string: "")
     var discussionName : String = "Site_News"
-    let downloadManager = SDDownloadManager.shared
+    let constant = Constants.Global.self
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        quickLookController.dataSource = self
+        openButton.layer.cornerRadius = 10
+        bodyTextView.layer.cornerRadius = 10
+        setMessage()
+        self.navigationItem.largeTitleDisplayMode = .never
+        if selectedDiscussion.attachment == "" {
+            self.openButton.isHidden = true
+        }
+
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
+    }
+    
     func setMessage(){
-        
         if selectedDiscussion.message != "" {
             do {
                 let formattedString = try NSAttributedString(data: ("<font size=\"+1.7\">\(selectedDiscussion.message)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
@@ -41,22 +59,6 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
             
             bodyTextView.isEditable = false
         }
-    }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        quickLookController.dataSource = self
-        openButton.layer.cornerRadius = 10
-        bodyTextView.layer.cornerRadius = 10
-        setMessage()
-        self.navigationItem.largeTitleDisplayMode = .never
-        if selectedDiscussion.attachment == "" {
-            self.openButton.isHidden = true
-        }
-
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        SVProgressHUD.dismiss()
     }
     
     func saveFileToStorage(mime: String, downloadUrl: String, discussion: Discussion) {
@@ -104,7 +106,7 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
     func downloadFile(from : URL, to: URL, completionHanadler: @escaping () -> Void ) {
         SVProgressHUD.show()
         let request = URLRequest(url: from)
-        let _ = self.downloadManager.downloadFile(withRequest: request, shouldDownloadInBackground: true) { (error, url) in
+        let _ = constant.downloadManager.downloadFile(withRequest: request, shouldDownloadInBackground: true) { (error, url) in
             if error != nil {
                 print("There was an error in downloading the file: \(error!)")
             } else {
