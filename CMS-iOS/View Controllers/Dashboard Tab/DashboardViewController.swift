@@ -281,11 +281,11 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
                         currentCourse.enrolled = true
                         self.courseList.append(currentCourse)
-                        self.setupColors(colors: self.constant.DashboardCellColors)
                         try! self.realm.write {
                             self.realm.add(self.courseList[i])
                         }
                     }
+                    self.setupColors(colors: self.constant.DashboardCellColors)
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                         self.gradientLoadingBar.fadeOut()
