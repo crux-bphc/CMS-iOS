@@ -257,17 +257,19 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func getRegisteredCourses(completion: @escaping() -> Void) {
         
-        let realmCourses = self.realm.objects(Course.self)
+        
         if Reachability.isConnectedToNetwork(){
-            
+            let queue = DispatchQueue(label: "com.cruxbphc.getcoursetitles", qos: .userInteractive, attributes: .concurrent)
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
             refreshControl?.beginRefreshing()
-            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
+            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON (queue: queue) { (courseData) in
                 if courseData.result.isSuccess {
+                    let bkgRealm = try! Realm()
+                    let realmCourses = bkgRealm.objects(Course.self)
                     if (realmCourses.count != 0){
-                        try! self.realm.write {
-                            self.realm.delete(realmCourses)
+                        try! bkgRealm.write {
+                            bkgRealm.delete(realmCourses)
                         }
                     }
                     
@@ -281,8 +283,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
                         currentCourse.enrolled = true
                         self.courseList.append(currentCourse)
-                        try! self.realm.write {
-                            self.realm.add(self.courseList[i])
+                        try! bkgRealm.write {
+                            bkgRealm.add(self.courseList[i])
                         }
                     }
                     self.setupColors(colors: self.constant.DashboardCellColors)
@@ -294,6 +296,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             }
         }else{
             courseList.removeAll()
+            let realmCourses = realm.objects(Course.self)
             for x in 0..<realmCourses.count{
                 courseList.append(realmCourses[x])
             }
