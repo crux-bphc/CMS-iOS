@@ -294,11 +294,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             coursesRef = ThreadSafeReference(to: tempCourses!)
                         }
                     }
-                    print("Main thread: \(Thread.isMainThread)")
                     DispatchQueue.main.async {
-                        
-                        print("Main thread: \(Thread.isMainThread)")
-                        print("done printing temp courses in main thread")
                         guard let coursesRef = coursesRef, let temp2 = self.realm.resolve(coursesRef) else {return}
                         for i in 0..<temp2.count{
                             self.courseList.append(temp2[i])
