@@ -255,7 +255,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
     }
     
-    func getRegisteredCourses(completion: @escaping() -> Void) {
+    func getRegisteredCourses() {
         
         
         if Reachability.isConnectedToNetwork(){
@@ -263,9 +263,11 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
             refreshControl?.beginRefreshing()
+            var coursesRef: ThreadSafeReference<Results<Course>>?
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON (queue: queue) { (courseData) in
                 if courseData.result.isSuccess {
                     let bkgRealm = try! Realm()
+                    var tempCourses : Results<Course>?
                     let realmCourses = bkgRealm.objects(Course.self)
                     if (realmCourses.count != 0){
                         try! bkgRealm.write {
@@ -282,26 +284,44 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         currentCourse.courseCode = Regex.match(pattern: "(..|...|....)\\s[A-Z][0-9][0-9][0-9]", text: currentCourse.displayname).first ?? ""
                         currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
                         currentCourse.enrolled = true
-                        self.courseList.append(currentCourse)
                         try! bkgRealm.write {
-                            bkgRealm.add(self.courseList[i])
+                            bkgRealm.add(currentCourse)
+                        }
+                        
+                        if i == courses.count - 1{
+                            
+                            tempCourses = bkgRealm.objects(Course.self)
+                            coursesRef = ThreadSafeReference(to: tempCourses!)
                         }
                     }
-                    self.setupColors(colors: self.constant.DashboardCellColors)
+                    print("Main thread: \(Thread.isMainThread)")
                     DispatchQueue.main.async {
+                        
+                        print("Main thread: \(Thread.isMainThread)")
+                        print("done printing temp courses in main thread")
+                        guard let coursesRef = coursesRef, let temp2 = self.realm.resolve(coursesRef) else {return}
+                        for i in 0..<temp2.count{
+                            self.courseList.append(temp2[i])
+                        }
+                        self.setupColors(colors: self.constant.DashboardCellColors)
                         self.tableView.reloadData()
-                        self.gradientLoadingBar.fadeOut()
+                        self.refreshControl?.endRefreshing()
+                        self.gradientLoadingBar.fadeOut(duration: 0.5) { (_) in
+                            self.tableView.flashScrollIndicators()
+                            
+                            
+                            
+                        }
                     }
                 }
             }
         }else{
-            courseList.removeAll()
+            courseList = [Course]()
             let realmCourses = realm.objects(Course.self)
             for x in 0..<realmCourses.count{
                 courseList.append(realmCourses[x])
             }
         }
-        completion()
     }
     
     func loadOfflineCourses() {
@@ -319,11 +339,10 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         gradientLoadingBar.fadeIn()
         if !searchController.isActive {
             self.refreshControl?.beginRefreshing()
+            self.tableView.showsVerticalScrollIndicator = false
             gradientLoadingBar.fadeIn()
-            getRegisteredCourses {
-                self.refreshControl?.endRefreshing()
-                self.tableView.reloadData()
-            }
+            self.refreshControl?.endRefreshing()
+            getRegisteredCourses()
         }else{
             gradientLoadingBar.fadeOut()
             self.refreshControl?.endRefreshing()
@@ -345,18 +364,21 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
-        
-        if searchController.isActive {
-            cell.courseName.text = filteredCourseList[indexPath.row].courseCode
-            cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
-            cell.colorView.backgroundColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
-        } else {
-            cell.courseName.text = courseList[indexPath.row].courseCode
-            cell.courseFullName.text = courseList[indexPath.row].courseName
-            cell.colorView.backgroundColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
-
-            
+        if indexPath.row < courseList.count{
+            if searchController.isActive {
+                cell.courseName.text = filteredCourseList[indexPath.row].courseCode
+                cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
+                cell.colorView.backgroundColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
+            } else {
+                cell.courseName.text = courseList[indexPath.row].courseCode
+                cell.courseFullName.text = courseList[indexPath.row].courseName
+                cell.colorView.backgroundColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
+                
+                
+            }
         }
+        
+        
         return cell
     }
     
@@ -409,16 +431,16 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     func setupGradientLoadingBar(){
         guard let navigationBar = navigationController?.navigationBar else { return }
-
+        
         gradientLoadingBar.fadeOut(duration: 0)
-
+        
         gradientLoadingBar.translatesAutoresizingMaskIntoConstraints = false
         navigationBar.addSubview(gradientLoadingBar)
-
+        
         NSLayoutConstraint.activate([
             gradientLoadingBar.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor),
             gradientLoadingBar.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor),
-
+            
             gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
