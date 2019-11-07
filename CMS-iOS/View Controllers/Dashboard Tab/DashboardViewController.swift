@@ -78,7 +78,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        refreshControl?.endRefreshing()
+//        refreshControl?.endRefreshing()
         gradientLoadingBar.fadeOut()
     }
     
@@ -262,7 +262,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             let queue = DispatchQueue(label: "com.cruxbphc.getcoursetitles", qos: .userInteractive, attributes: .concurrent)
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
-            refreshControl?.beginRefreshing()
             var coursesRef: ThreadSafeReference<Results<Course>>?
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON (queue: queue) { (courseData) in
                 if courseData.result.isSuccess {
@@ -301,7 +300,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         }
                         self.setupColors(colors: self.constant.DashboardCellColors)
                         self.tableView.reloadData()
-                        self.refreshControl?.endRefreshing()
                         self.gradientLoadingBar.fadeOut(duration: 0.5) { (_) in
                             self.tableView.flashScrollIndicators()
                             
@@ -334,7 +332,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     @objc func refreshData() {
         gradientLoadingBar.fadeIn()
         if !searchController.isActive {
-            self.refreshControl?.beginRefreshing()
             self.tableView.showsVerticalScrollIndicator = false
             gradientLoadingBar.fadeIn()
             self.refreshControl?.endRefreshing()
@@ -384,14 +381,17 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        tableView.deselectRow(at: indexPath, animated: true)
-        if searchController.isActive {
-            self.selectedCourse = filteredCourseList[indexPath.row]
+        if courseList.count > indexPath.row{
+            tableView.deselectRow(at: indexPath, animated: true)
+            if searchController.isActive {
+                self.selectedCourse = filteredCourseList[indexPath.row]
+            }
+            else {
+                self.selectedCourse = courseList[indexPath.row]
+            }
+            performSegue(withIdentifier: "goToCourseContent", sender: self)
         }
-        else {
-            self.selectedCourse = courseList[indexPath.row]
-        }
-        performSegue(withIdentifier: "goToCourseContent", sender: self)
+        
     }
     
     func showOfflineMessage(){
