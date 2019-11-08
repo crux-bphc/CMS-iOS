@@ -78,7 +78,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        refreshControl?.endRefreshing()
+//        refreshControl?.endRefreshing()
         gradientLoadingBar.fadeOut()
     }
     
@@ -287,19 +287,22 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
     }
     
-    func getRegisteredCourses(completion: @escaping() -> Void) {
+    func getRegisteredCourses() {
         
-        let realmCourses = self.realm.objects(Course.self)
+        
         if Reachability.isConnectedToNetwork(){
-            
+            let queue = DispatchQueue(label: "com.cruxbphc.getcoursetitles", qos: .userInteractive, attributes: .concurrent)
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
-            refreshControl?.beginRefreshing()
-            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (courseData) in
+            var coursesRef: ThreadSafeReference<Results<Course>>?
+            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON (queue: queue) { (courseData) in
                 if courseData.result.isSuccess {
+                    let bkgRealm = try! Realm()
+                    var tempCourses : Results<Course>?
+                    let realmCourses = bkgRealm.objects(Course.self)
                     if (realmCourses.count != 0){
-                        try! self.realm.write {
-                            self.realm.delete(realmCourses)
+                        try! bkgRealm.write {
+                            bkgRealm.delete(realmCourses)
                         }
                     }
                     
@@ -312,25 +315,39 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         currentCourse.courseCode = Regex.match(pattern: "(..|...|....)\\s[A-Z][0-9][0-9][0-9]", text: currentCourse.displayname).first ?? ""
                         currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
                         currentCourse.enrolled = true
-                        self.courseList.append(currentCourse)
-                        self.setupColors(colors: self.constant.DashboardCellColors)
-                        try! self.realm.write {
-                            self.realm.add(self.courseList[i])
+                        try! bkgRealm.write {
+                            bkgRealm.add(currentCourse)
+                        }
+                        
+                        if i == courses.count - 1{
+                            
+                            tempCourses = bkgRealm.objects(Course.self)
+                            coursesRef = ThreadSafeReference(to: tempCourses!)
                         }
                     }
                     DispatchQueue.main.async {
+                        guard let coursesRef = coursesRef, let temp2 = self.realm.resolve(coursesRef) else {return}
+                        for i in 0..<temp2.count{
+                            self.courseList.append(temp2[i])
+                        }
+                        self.setupColors(colors: self.constant.DashboardCellColors)
                         self.tableView.reloadData()
-                        self.gradientLoadingBar.fadeOut()
+                        self.gradientLoadingBar.fadeOut(duration: 0.5) { (_) in
+                            self.tableView.flashScrollIndicators()
+                            
+                            
+                            
+                        }
                     }
                 }
             }
         }else{
-            courseList.removeAll()
+            courseList = [Course]()
+            let realmCourses = realm.objects(Course.self)
             for x in 0..<realmCourses.count{
                 courseList.append(realmCourses[x])
             }
         }
-        completion()
     }
     
     func loadOfflineCourses() {
@@ -347,12 +364,10 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     @objc func refreshData() {
         gradientLoadingBar.fadeIn()
         if !searchController.isActive {
-            self.refreshControl?.beginRefreshing()
+            self.tableView.showsVerticalScrollIndicator = false
             gradientLoadingBar.fadeIn()
-            getRegisteredCourses {
-                self.refreshControl?.endRefreshing()
-                self.tableView.reloadData()
-            }
+            self.refreshControl?.endRefreshing()
+            getRegisteredCourses()
         }else{
             gradientLoadingBar.fadeOut()
             self.refreshControl?.endRefreshing()
@@ -374,18 +389,22 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
-        
-        if searchController.isActive {
-            cell.courseName.text = filteredCourseList[indexPath.row].courseCode
-            cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
-            cell.colorView.backgroundColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
-        } else {
-            cell.courseName.text = courseList[indexPath.row].courseCode
-            cell.courseFullName.text = courseList[indexPath.row].courseName
-            cell.colorView.backgroundColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
-            
-            
+      
+        if indexPath.row < courseList.count{
+            if searchController.isActive {
+                cell.courseName.text = filteredCourseList[indexPath.row].courseCode
+                cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
+                cell.colorView.backgroundColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
+            } else {
+                cell.courseName.text = courseList[indexPath.row].courseCode
+                cell.courseFullName.text = courseList[indexPath.row].courseName
+                cell.colorView.backgroundColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
+                
+                
+            }
         }
+        
+        
         return cell
     }
     
@@ -395,14 +414,17 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        tableView.deselectRow(at: indexPath, animated: true)
-        if searchController.isActive {
-            self.selectedCourse = filteredCourseList[indexPath.row]
+        if courseList.count > indexPath.row{
+            tableView.deselectRow(at: indexPath, animated: true)
+            if searchController.isActive {
+                self.selectedCourse = filteredCourseList[indexPath.row]
+            }
+            else {
+                self.selectedCourse = courseList[indexPath.row]
+            }
+            performSegue(withIdentifier: "goToCourseContent", sender: self)
         }
-        else {
-            self.selectedCourse = courseList[indexPath.row]
-        }
-        performSegue(withIdentifier: "goToCourseContent", sender: self)
+        
     }
     
     func showOfflineMessage(){

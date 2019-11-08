@@ -20,43 +20,63 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="So3-QL-m9G" userLabel="Container View">
                         <rect key="frame" x="7" y="4.5" width="306" height="91"/>
                         <subviews>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="2Zh-ce-ydP">
-                                <rect key="frame" x="0.0" y="86" width="306" height="6"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KC4-ze-5Ht">
+                                <rect key="frame" x="0.0" y="0.0" width="91" height="91"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Dashboard" translatesAutoresizingMaskIntoConstraints="NO" id="Qmn-RB-21z">
+                                        <rect key="frame" x="20.5" y="20.5" width="50" height="50"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="50" id="cTq-6m-c4k"/>
+                                            <constraint firstAttribute="height" constant="50" id="qC9-rg-3PZ"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="5" id="vGY-Ma-7hT"/>
+                                    <constraint firstAttribute="trailing" secondItem="Qmn-RB-21z" secondAttribute="trailing" constant="20.5" id="5fB-pc-Uid"/>
+                                    <constraint firstItem="Qmn-RB-21z" firstAttribute="top" secondItem="KC4-ze-5Ht" secondAttribute="top" constant="20.5" id="8rj-DE-PVx"/>
+                                    <constraint firstItem="Qmn-RB-21z" firstAttribute="leading" secondItem="KC4-ze-5Ht" secondAttribute="leading" constant="20.5" id="Jtu-8E-hKL"/>
+                                    <constraint firstAttribute="width" secondItem="KC4-ze-5Ht" secondAttribute="height" multiplier="1:1" id="VFG-oc-bCI"/>
+                                    <constraint firstAttribute="bottom" secondItem="Qmn-RB-21z" secondAttribute="bottom" constant="20.5" id="zti-6i-s0k"/>
                                 </constraints>
-                            </progressView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Option Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pf1-kh-Sds">
-                                <rect key="frame" x="95.5" y="33.5" width="115" height="24"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Option Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7cW-vQ-YKQ">
+                                <rect key="frame" x="107" y="32" width="191" height="27"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="pf1-kh-Sds" firstAttribute="centerY" secondItem="So3-QL-m9G" secondAttribute="centerY" id="01i-zz-Dt0"/>
-                            <constraint firstItem="pf1-kh-Sds" firstAttribute="centerX" secondItem="So3-QL-m9G" secondAttribute="centerX" id="2rK-uh-fKO"/>
-                            <constraint firstItem="2Zh-ce-ydP" firstAttribute="leading" secondItem="So3-QL-m9G" secondAttribute="leading" id="UBZ-SO-b4O"/>
-                            <constraint firstAttribute="trailing" secondItem="2Zh-ce-ydP" secondAttribute="trailing" id="Zf4-Qc-Pn7"/>
-                            <constraint firstAttribute="bottom" secondItem="2Zh-ce-ydP" secondAttribute="bottom" id="gMc-X0-tjT"/>
+                            <constraint firstItem="KC4-ze-5Ht" firstAttribute="top" secondItem="So3-QL-m9G" secondAttribute="top" id="0mI-ss-qNh"/>
+                            <constraint firstAttribute="bottom" secondItem="KC4-ze-5Ht" secondAttribute="bottom" id="ABu-XH-6JV"/>
+                            <constraint firstAttribute="trailing" secondItem="7cW-vQ-YKQ" secondAttribute="trailing" constant="8" id="Qca-Qz-kGF"/>
+                            <constraint firstItem="KC4-ze-5Ht" firstAttribute="leading" secondItem="So3-QL-m9G" secondAttribute="leading" id="dC0-3S-3Qh"/>
+                            <constraint firstItem="7cW-vQ-YKQ" firstAttribute="leading" secondItem="KC4-ze-5Ht" secondAttribute="trailing" constant="16" id="q0C-cb-Gvw"/>
+                            <constraint firstItem="7cW-vQ-YKQ" firstAttribute="centerY" secondItem="So3-QL-m9G" secondAttribute="centerY" id="yuc-G8-FLi"/>
                         </constraints>
                     </view>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="So3-QL-m9G" firstAttribute="leading" secondItem="caE-OR-Ubl" secondAttribute="leading" constant="7" id="8kq-v3-kd3"/>
+                    <constraint firstAttribute="bottom" secondItem="So3-QL-m9G" secondAttribute="bottom" constant="4.5" id="9Ax-Uc-Zu7"/>
+                    <constraint firstAttribute="trailing" secondItem="So3-QL-m9G" secondAttribute="trailing" constant="7" id="HJm-N1-pfN"/>
+                    <constraint firstItem="So3-QL-m9G" firstAttribute="top" secondItem="caE-OR-Ubl" secondAttribute="top" constant="4.5" id="x55-8G-M95"/>
+                </constraints>
             </tableViewCellContentView>
-            <constraints>
-                <constraint firstItem="So3-QL-m9G" firstAttribute="height" secondItem="QV4-IP-xoq" secondAttribute="height" constant="-9" id="IQk-P4-SBN"/>
-                <constraint firstItem="So3-QL-m9G" firstAttribute="width" secondItem="QV4-IP-xoq" secondAttribute="width" constant="-14" id="XS8-it-6au"/>
-                <constraint firstItem="So3-QL-m9G" firstAttribute="centerX" secondItem="QV4-IP-xoq" secondAttribute="centerX" id="ogw-fg-C5v"/>
-                <constraint firstItem="So3-QL-m9G" firstAttribute="centerY" secondItem="QV4-IP-xoq" secondAttribute="centerY" id="pZJ-LF-hry"/>
-            </constraints>
             <viewLayoutGuide key="safeArea" id="QV4-IP-xoq"/>
             <connections>
+                <outlet property="colorView" destination="KC4-ze-5Ht" id="1Zh-oE-5Ps"/>
                 <outlet property="containerView" destination="So3-QL-m9G" id="iyB-sQ-x6G"/>
-                <outlet property="optionLabel" destination="pf1-kh-Sds" id="e8z-sF-gCK"/>
-                <outlet property="progressTint" destination="2Zh-ce-ydP" id="LJc-J2-Yw9"/>
+                <outlet property="iconImage" destination="Qmn-RB-21z" id="y2g-Ur-Lwq"/>
+                <outlet property="optionLabel" destination="7cW-vQ-YKQ" id="cED-zC-jg1"/>
             </connections>
             <point key="canvasLocation" x="140.57971014492756" y="115.17857142857142"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="Dashboard" width="30" height="30"/>
+    </resources>
 </document>
