@@ -28,7 +28,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var filteredCourseList = [Course]()
     let realm = try! Realm()
     let searchController = UISearchController(searchResultsController: nil)
-    var locationToCopy = URL(string: "")
+    var sectionArray = [CourseSection]()
     var downloadArray : [URL] = []
     var localURLArray : [URL] = []
     override func viewDidLoad() {
@@ -152,8 +152,22 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             if response.result.isSuccess {
                 let courseData = JSON(response.value as Any)
                 for i in 0 ..< courseData.count {
+                    let section = CourseSection()
+                    section.name = courseData[i]["name"].string ?? ""
                     for j in 0 ..< courseData[i]["modules"].count {
+                        let module = Module()
+                        module.modname = courseData[i]["modules"][j]["modname"].string!
+                        module.id = courseData[i]["modules"][j]["id"].int!
                         if courseData[i]["modules"][j]["modname"].string! == "resource" {
+                            if (courseData[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("td.bits-hyderabad.ac.in") {
+                                module.fileurl = (courseData[i]["modules"][j]["contents"][0]["fileurl"].string! +
+                                    "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
+                                module.mimetype = courseData[i]["modules"][j]["contents"][0]["mimetype"].string!
+                                module.filename = courseData[i]["modules"][j]["contents"][0]["filename"].string!
+                            }
+                            else {
+                                module.fileurl = (courseData[i]["modules"][j]["contents"][0]["fileurl"].string!)
+                            }
                             let downloadUrl = courseData[i]["modules"][j]["contents"][0]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                             let moduleToDownload = Module()
                             moduleToDownload.coursename = course.displayname
@@ -162,6 +176,14 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             self.saveFileToStorage(mime: courseData[i]["modules"][j]["contents"][0]["mimetype"].string!, downloadUrl: downloadUrl, module: moduleToDownload)
                         } else if courseData[i]["modules"][j]["modname"].string! == "folder" {
                             for u in 0 ..< courseData[i]["modules"][j]["contents"].count {
+                                let newModule = Module()
+                                newModule.filename = courseData[i]["modules"][j]["contents"][u]["filename"].string!
+                                
+                                if courseData[i]["modules"][j]["contents"][u]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
+                                    newModule.fileurl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                }
+                                newModule.mimetype = courseData[i]["modules"][j]["contents"][u]["mimetype"].string!
+                                module.fileModules.append(newModule)
                                 let moduleToDownload = Module()
                                 let downloadUrl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                 moduleToDownload.coursename = course.displayname
@@ -170,6 +192,16 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                 self.saveFileToStorage(mime: courseData[i]["modules"][j]["contents"][u]["mimetype"].string!, downloadUrl: downloadUrl, module: moduleToDownload)
                             }
                         }
+                        section.modules.append(module)
+                    }
+                    print("added to realm")
+                    self.sectionArray.append(section)
+                    do {
+                        try self.realm.write {
+                            self.realm.add(section)
+                        }
+                    } catch let error{
+                        print("There was an error writing to realm: \(error)")
                     }
                 }
             }
@@ -357,6 +389,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
+      
         if indexPath.row < courseList.count{
             if searchController.isActive {
                 cell.courseName.text = filteredCourseList[indexPath.row].courseCode
