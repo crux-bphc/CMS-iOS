@@ -63,9 +63,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if courseList.isEmpty {
-            refreshData()
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -257,7 +254,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func getRegisteredCourses() {
         
-        
         if Reachability.isConnectedToNetwork(){
             let queue = DispatchQueue(label: "com.cruxbphc.getcoursetitles", qos: .userInteractive, attributes: .concurrent)
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
@@ -286,13 +282,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         try! bkgRealm.write {
                             bkgRealm.add(currentCourse)
                         }
-                        
-                        if i == courses.count - 1{
-                            
-                            tempCourses = bkgRealm.objects(Course.self)
-                            coursesRef = ThreadSafeReference(to: tempCourses!)
-                        }
                     }
+                    tempCourses = bkgRealm.objects(Course.self)
+                    coursesRef = ThreadSafeReference(to: tempCourses!)
                     DispatchQueue.main.async {
                         guard let coursesRef = coursesRef, let temp2 = self.realm.resolve(coursesRef) else {return}
                         for i in 0..<temp2.count{
