@@ -18,7 +18,10 @@ class FolderContentViewController: UITableViewController {
         super.viewDidLoad()
         
         self.title = currentModule.name
-        
+        let realm = try! Realm()
+        try! realm.write{
+            self.currentModule.read = true
+        }
         for i in 0..<currentModule.fileModules.count {
             currentModuleContents.append(currentModule.fileModules[i])
         }
