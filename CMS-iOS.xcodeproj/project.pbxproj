@@ -44,6 +44,7 @@
 		E61F0E9A236EFEB300A9C9DA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */; };
 		E6510CAE233FD49B009FCF0D /* HTMLStringDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */; };
 		E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */; };
+		E6B205F7237C3FED00D0F69F /* AttributedStringFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */; };
 		E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6C61630235DA91F00FFC2E4 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -90,6 +91,7 @@
 		E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLStringDecoder.swift; sourceTree = "<group>"; };
 		E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLPreviewItemSubclass.swift; sourceTree = "<group>"; };
+		E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringFontExtension.swift; sourceTree = "<group>"; };
 		E6C61630235DA91F00FFC2E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -159,6 +161,7 @@
 				E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */,
 				0A585452230168E7008FB370 /* Constants.swift */,
 				0A2FD034236059A800917BE7 /* Regex.swift */,
+				E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 				0AC33B6923022B2C004AE385 /* CourseContentsViewController.swift in Sources */,
 				0A8EFC6523100F9D00CD6BAD /* Reachability.swift in Sources */,
 				0AF20A2F230B2F17001C0CB1 /* ExtrasTableViewController.swift in Sources */,
+				E6B205F7237C3FED00D0F69F /* AttributedStringFontExtension.swift in Sources */,
 				0AC33B6B2302EDD6004AE385 /* CourseSection.swift in Sources */,
 				0AF20A32230B3D9F001C0CB1 /* SiteNewsTableViewController.swift in Sources */,
 			);
@@ -554,14 +558,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8GWNHA8Z3U;
+				DEVELOPMENT_TEAM = P773Z36HNN;
 				INFOPLIST_FILE = "CMS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.cruxbphcac.CMS-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cruxbphc.cms-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ENABLE_BATCH_MODE = NO;
 				SWIFT_VERSION = 5.0;
@@ -575,14 +579,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8GWNHA8Z3U;
+				DEVELOPMENT_TEAM = P773Z36HNN;
 				INFOPLIST_FILE = "CMS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.cruxbphcac.CMS-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cruxbphc.cmsios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ENABLE_BATCH_MODE = NO;
 				SWIFT_VERSION = 5.0;

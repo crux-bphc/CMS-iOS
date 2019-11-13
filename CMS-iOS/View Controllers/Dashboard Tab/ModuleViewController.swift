@@ -82,6 +82,7 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
                     
                 }
                 let string = NSMutableAttributedString(attributedString: formattedString)
+                string.setFontFace(font: UIFont.systemFont(ofSize: 15))
                 string.addAttributes(attributedStringName, range: NSRange(location: 0, length: formattedString.length))
                 descriptionText.attributedText = string
             } catch let error {
