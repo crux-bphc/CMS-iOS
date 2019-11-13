@@ -14,7 +14,7 @@ import MobileCoreServices
 import RealmSwift
 import GradientLoadingBar
 
-class CourseDetailsViewController : UITableViewController {
+class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDelegate{
     
     @IBOutlet var courseLabel: UITableView!
     
@@ -52,6 +52,10 @@ class CourseDetailsViewController : UITableViewController {
             self.updateUI()
             self.gradientLoadingBar.fadeOut()
         }
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        longPressGesture.minimumPressDuration = 0.5
+        longPressGesture.delegate = self
+        self.tableView.addGestureRecognizer(longPressGesture)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -331,17 +335,17 @@ class CourseDetailsViewController : UITableViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         updateUI()
     }
-    //    func markAllRead(){
-    //        let realmSections = self.realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
-    //        for i in 0..<realmSections.count {
-    //            for j in 0..<realmSections[i].modules.count{
-    //                try! realm.write {
-    //                    realmSections[i].modules[j].read = true
-    //                }
-    //            }
-    //        }
-    //        tableView.reloadData()
-    //    }
+        func markAllRead(){
+            let realmSections = self.realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
+            for i in 0..<realmSections.count {
+                for j in 0..<realmSections[i].modules.count{
+                    try! realm.write {
+                        realmSections[i].modules[j].read = true
+                    }
+                }
+            }
+            tableView.reloadData()
+        }
     
     func setupGradientLoadingBar(){
         guard let navigationBar = navigationController?.navigationBar else { return }
@@ -358,5 +362,37 @@ class CourseDetailsViewController : UITableViewController {
             gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
+    }
+    @objc func handleLongPress(longPressGesture: UILongPressGestureRecognizer) {
+        let pressLocation = longPressGesture.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: pressLocation)
+        if indexPath == nil {
+        } else if longPressGesture.state == UIGestureRecognizer.State.began {
+            let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+            selectionFeedbackGenerator.selectionChanged()
+            var actionSheet = UIAlertController()
+            if let _ = indexPath?.row{
+                actionSheet = UIAlertController(title: sectionArray[indexPath?.section ?? 0].modules[indexPath?.row ?? 0].name, message: nil, preferredStyle: .actionSheet)
+            }
+            let readAction = UIAlertAction(title: "Mark Read", style: .default) { (_) in
+                // mark as read
+                try! self.realm.write {
+                    self.sectionArray[indexPath?.section ?? 0].modules[indexPath?.row ?? 0].read = true
+                }
+                self.tableView.reloadData()
+            }
+            let markAllRead = UIAlertAction(title: "Mark All Read", style: .default) { (_) in
+                self.markAllRead()
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            actionSheet.addAction(readAction)
+            actionSheet.addAction(markAllRead)
+            actionSheet.addAction(cancelAction)
+            self.present(actionSheet, animated: true, completion: nil)
+            
+            
+            
+            
+        }
     }
 }
