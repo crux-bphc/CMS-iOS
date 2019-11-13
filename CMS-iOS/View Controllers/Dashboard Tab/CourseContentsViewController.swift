@@ -155,6 +155,10 @@ class CourseDetailsViewController : UITableViewController {
                             try! self.realm.write {
                                 self.realm.add(section)
                             }
+//                            self.currentCourse.sections.append(section)
+//                            try! self.realm.write {
+//                                self.realm.add(self.currentCourse)
+//                            }
                         }
                     }
                 }
