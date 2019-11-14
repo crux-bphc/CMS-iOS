@@ -24,8 +24,6 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     var selectedModule = Module()
     var discussionArray = [Discussion]()
     let refreshController = UIRefreshControl()
-    var readModuleNames = [String]()
-    let realm = try! Realm()
     let constants = Constants.Global.self
     
     
@@ -59,7 +57,6 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        readModuleNames.removeAll()
         gradientLoadingBar.fadeOut()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -67,7 +64,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     }
     
     func loadModulesFromMemory() {
-        
+        let realm = try! Realm()
         let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
         if sections.count != 0{
             sectionArray.removeAll()
@@ -85,23 +82,25 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
         if Reachability.isConnectedToNetwork(){
             let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
             let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
+            var readModuleIds = [Int]()
             gradientLoadingBar.fadeIn()
             
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
+                let realm = try! Realm()
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
-                    let realmSections = self.realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
+                    let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
                     // get read status for all modules and add read ones to readModuleNames
                     for i in 0..<realmSections.count {
                         for j in 0..<realmSections[i].modules.count {
-                            if realmSections[i].modules[j].read && !self.readModuleNames.contains(realmSections[i].modules[j].name){
-                                self.readModuleNames.append(realmSections[i].modules[j].name)
+                            if realmSections[i].modules[j].read && !readModuleIds.contains(realmSections[i].modules[j].id){
+                                readModuleIds.append(realmSections[i].modules[j].id)
                             }
                         }
                     }
                     if realmSections.count != 0{
-                        try! self.realm.write {
-                            self.realm.delete(realmSections)
+                        try! realm.write {
+                            realm.delete(realmSections)
                         }
                     }
                     
@@ -145,7 +144,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                 }
                                 
                                 moduleData.name = courseContent[i]["modules"][j]["name"].string!
-                                if self.readModuleNames.contains(courseContent[i]["modules"][j]["name"].string!){
+                                if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!){
                                     moduleData.read = true
                                 }
                                 if courseContent[i]["modules"][j]["description"].string != nil {
@@ -156,8 +155,8 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                 section.courseId = self.currentCourse.courseid
                             }
                             self.sectionArray.append(section)
-                            try! self.realm.write {
-                                self.realm.add(section)
+                            try! realm.write {
+                                realm.add(section)
                             }
                         }
                     }
@@ -167,8 +166,8 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
         }
         else{
             // try to get modules from memory
-            
-            let sections = self.realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
+            let realm = try! Realm()
+            let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
             if sections.count != 0{
                 sectionArray.removeAll()
                 for i in 0..<sections.count{
@@ -266,6 +265,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let realm = try! Realm()
         let realmModule = realm.objects(Module.self)[indexPath.row]
         try! realm.write {
             realmModule.read = true
@@ -336,7 +336,8 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
         updateUI()
     }
         func markAllRead(){
-            let realmSections = self.realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
+            let realm = try! Realm()
+            let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
             for i in 0..<realmSections.count {
                 for j in 0..<realmSections[i].modules.count{
                     try! realm.write {
@@ -376,7 +377,8 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
             }
             let readAction = UIAlertAction(title: "Mark Read", style: .default) { (_) in
                 // mark as read
-                try! self.realm.write {
+                let realm = try! Realm()
+                try! realm.write {
                     self.sectionArray[indexPath?.section ?? 0].modules[indexPath?.row ?? 0].read = true
                 }
                 self.tableView.reloadData()
