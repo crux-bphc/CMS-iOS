@@ -15,6 +15,7 @@ class CourseTableViewCell: UITableViewCell {
     @IBOutlet weak var colorView: UIView!
     var gradientProgressIndicatorView = GradientActivityIndicatorView()
     @IBOutlet weak var courseFullName: UILabel!
+    @IBOutlet weak var unreadCounterLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

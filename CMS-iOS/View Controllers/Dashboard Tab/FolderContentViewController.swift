@@ -57,6 +57,10 @@ class FolderContentViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         folderSelectedModule = currentModuleContents[indexPath.row]
+        let realm = try! Realm()
+        try! realm.write {
+            currentModuleContents[indexPath.row].read = true
+        }
         performSegue(withIdentifier: "goToFolderModule", sender: self)
     }
     

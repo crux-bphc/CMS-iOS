@@ -58,6 +58,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     
     override func viewWillDisappear(_ animated: Bool) {
         gradientLoadingBar.fadeOut()
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
@@ -89,18 +90,18 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                 let realm = try! Realm()
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
-                    let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
-                    // get read status for all modules and add read ones to readModuleNames
-                    for i in 0..<realmSections.count {
-                        for j in 0..<realmSections[i].modules.count {
-                            if realmSections[i].modules[j].read && !readModuleIds.contains(realmSections[i].modules[j].id){
-                                readModuleIds.append(realmSections[i].modules[j].id)
+                    let realmModules = realm.objects(Module.self).filter("coursename = %@" ,self.currentCourse.courseName)
+                    for i in 0..<realmModules.count {
+                        if realmModules[i].read && !readModuleIds.contains(realmModules[i].id){
+                                readModuleIds.append(realmModules[i].id)
                             }
-                        }
+                        
                     }
+                    let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
                     if realmSections.count != 0{
                         try! realm.write {
                             realm.delete(realmSections)
+                            realm.delete(realm.objects(Module.self).filter("coursename = %@", self.currentCourse.courseName))
                         }
                     }
                     
@@ -132,6 +133,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                         let newModule = Module()
                                         newModule.coursename = self.currentCourse.displayname
                                         newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
+                                        newModule.read = true
                                         
                                         if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
                                             newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
@@ -146,18 +148,25 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                 moduleData.name = courseContent[i]["modules"][j]["name"].string!
                                 if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!){
                                     moduleData.read = true
+                                    
+                                }else if moduleData.name == "Announcements"{
+                                    moduleData.read = true
+                                }else{
+                                    moduleData.read = false
                                 }
                                 if courseContent[i]["modules"][j]["description"].string != nil {
                                     moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
                                 }
-                                moduleData.coursename = self.currentCourse.displayname
+                                moduleData.coursename = self.currentCourse.courseName
                                 section.modules.append(moduleData)
-                                section.courseId = self.currentCourse.courseid
                             }
+                            section.courseId = self.currentCourse.courseid
                             self.sectionArray.append(section)
                             try! realm.write {
                                 realm.add(section)
                             }
+                            
+
                         }
                     }
                 }
@@ -181,6 +190,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     @objc func refreshData() {
         if Reachability.isConnectedToNetwork() {
             self.refreshControl!.beginRefreshing()
+            
             getCourseContent{ (courses) in
                 self.refreshControl!.endRefreshing()
                 self.gradientLoadingBar.fadeOut()
