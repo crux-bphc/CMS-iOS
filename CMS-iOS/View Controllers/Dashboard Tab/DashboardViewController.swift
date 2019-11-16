@@ -130,9 +130,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 DispatchQueue.global(qos: .userInteractive).async {
                     let realm = try! Realm()
                     let allUnreadModules = realm.objects(Module.self).filter("read = NO")
-                    for i in 0..<allUnreadModules.count{
-                        try! realm.write{
-                            allUnreadModules[i].read = true
+                    while (allUnreadModules.count > 0){
+                        try! realm.write {
+                            allUnreadModules[0].read = true
                         }
                     }
                     DispatchQueue.main.async {
