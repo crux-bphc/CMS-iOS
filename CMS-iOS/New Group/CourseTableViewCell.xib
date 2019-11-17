@@ -42,15 +42,15 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TEST COURSE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tjO-gw-hV7">
-                                <rect key="frame" x="99" y="17" width="149" height="58"/>
+                                <rect key="frame" x="99" y="17" width="162" height="58"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zo5-Rh-0en">
-                                <rect key="frame" x="268" y="33.5" width="22" height="24"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <rect key="frame" x="270" y="33.5" width="23" height="24"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -60,7 +60,7 @@
                             <constraint firstItem="jg9-gf-FTb" firstAttribute="top" secondItem="In3-Lu-Tqa" secondAttribute="top" id="7fh-Vl-NzQ"/>
                             <constraint firstAttribute="bottom" secondItem="jg9-gf-FTb" secondAttribute="bottom" id="Vvo-Ur-Jlg"/>
                             <constraint firstItem="zo5-Rh-0en" firstAttribute="centerY" secondItem="In3-Lu-Tqa" secondAttribute="centerY" id="eAy-14-pXD"/>
-                            <constraint firstAttribute="trailing" secondItem="zo5-Rh-0en" secondAttribute="trailing" constant="16" id="l3P-tt-HET"/>
+                            <constraint firstAttribute="trailing" secondItem="zo5-Rh-0en" secondAttribute="trailing" constant="13" id="l3P-tt-HET"/>
                             <constraint firstItem="jg9-gf-FTb" firstAttribute="leading" secondItem="In3-Lu-Tqa" secondAttribute="leading" id="tfg-rh-9fM"/>
                         </constraints>
                     </view>
