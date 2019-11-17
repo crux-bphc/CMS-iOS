@@ -93,6 +93,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+//    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+//        <#code#>
+//    }
+    
     func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
         SDDownloadManager.shared.backgroundCompletionHandler = completionHandler
     }

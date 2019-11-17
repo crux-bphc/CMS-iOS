@@ -20,4 +20,5 @@ class Course : Object {
     @objc dynamic var courseCode : String = ""
     @objc dynamic var courseName : String = ""
     @objc dynamic var allotedColor : String = ""
+//    var sections =  RealmSwift.List<CourseSection>()
 }

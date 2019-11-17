@@ -165,8 +165,6 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                             try! realm.write {
                                 realm.add(section)
                             }
-                            
-
                         }
                     }
                 }
