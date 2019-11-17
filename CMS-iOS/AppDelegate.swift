@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let realm = try! Realm()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+        application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         let options : UNAuthorizationOptions = [.alert, .sound, .badge]
         notificationCenter.requestAuthorization(options: options) { (didAllow, error) in
             if !didAllow {
@@ -97,5 +97,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         SDDownloadManager.shared.backgroundCompletionHandler = completionHandler
     }
     
+    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        if Reachability.isConnectedToNetwork(){
+            let bkgObj = BackgroundFetch()
+            bkgObj.updateCourseContents { (newDataFound) in
+                if newDataFound{
+                    completionHandler(.newData)
+                    print("found new data")
+                }else{
+                    completionHandler(.noData)
+                    print("no new data found")
+                }
+            }
+        }else{
+            completionHandler(.failed)
+            print("failed to background fetch")
+        }
+    }
 }
-
