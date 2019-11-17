@@ -24,10 +24,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="91" height="91"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEST F111" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jb8-52-F4v">
-                                        <rect key="frame" x="8" y="8" width="75" height="75"/>
+                                        <rect key="frame" x="9" y="9" width="73" height="73"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="75" id="0yH-SE-EtR"/>
-                                            <constraint firstAttribute="width" constant="75" id="QCR-7Y-bLK"/>
+                                            <constraint firstAttribute="height" constant="73" id="0yH-SE-EtR"/>
+                                            <constraint firstAttribute="width" constant="73" id="QCR-7Y-bLK"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

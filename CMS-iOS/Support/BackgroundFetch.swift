@@ -24,28 +24,10 @@ class BackgroundFetch{
             
             let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
             let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
-//                        var readModuleIds = [Int]()
-            
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
                 let realm = try! Realm()
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
-//                                        let realmModules = realm.objects(Module.self).filter("coursename = %@" ,currentCourse.courseName)
-//                                        for i in 0..<realmModules.count {
-//                                            if realmModules[i].read && !readModuleIds.contains(realmModules[i].id){
-//                                                readModuleIds.append(realmModules[i].id)
-//                                            }
-//
-//                                        }
-                    //                    let realmSections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
-                    //                    if realmSections.count != 0{
-                    //                        try! realm.write {
-                    //                            realm.delete(realmSections)
-                    //                            realm.delete(realm.objects(Module.self).filter("coursename = %@", currentCourse.courseName))
-                    //                        }
-                    //                    }
-                    
-                    
                     for i in 0 ..< courseContent.count {
                         if courseContent[i]["modules"].count > 0 {
                             let section = CourseSection()
@@ -91,9 +73,6 @@ class BackgroundFetch{
                                 if courseContent[i]["modules"][j]["description"].string != nil {
                                     moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
                                 }
-//                                if readModuleIds.contains(moduleData.id){
-//                                    moduleData.read = true
-//                                }
                                 moduleData.coursename = currentCourse.courseName
                                 section.modules.append(moduleData)
                                 // check module here
@@ -103,13 +82,6 @@ class BackgroundFetch{
                                     foundNewData = true
                                 }
                             }
-//                            try! realm.write {
-//                                realm.delete(realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)"))
-//                                realm.delete(realm.objects(Module.self).filter("coursename = %@", currentCourse.courseName))
-//                            }
-//                            try! realm.write {
-//                                realm.add(section)
-//                            }
                         }
                     }
                 }
