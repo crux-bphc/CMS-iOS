@@ -14,7 +14,7 @@ import MobileCoreServices
 import RealmSwift
 import GradientLoadingBar
 
-class CourseDetailsViewController : UITableViewController {
+class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDelegate{
     
     @IBOutlet var courseLabel: UITableView!
     
@@ -24,8 +24,6 @@ class CourseDetailsViewController : UITableViewController {
     var selectedModule = Module()
     var discussionArray = [Discussion]()
     let refreshController = UIRefreshControl()
-    var readModuleNames = [String]()
-    let realm = try! Realm()
     let constants = Constants.Global.self
     
     
@@ -52,18 +50,22 @@ class CourseDetailsViewController : UITableViewController {
             self.updateUI()
             self.gradientLoadingBar.fadeOut()
         }
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        longPressGesture.minimumPressDuration = 0.5
+        longPressGesture.delegate = self
+        self.tableView.addGestureRecognizer(longPressGesture)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        readModuleNames.removeAll()
         gradientLoadingBar.fadeOut()
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
     }
     
     func loadModulesFromMemory() {
-        
+        let realm = try! Realm()
         let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
         if sections.count != 0{
             sectionArray.removeAll()
@@ -81,23 +83,25 @@ class CourseDetailsViewController : UITableViewController {
         if Reachability.isConnectedToNetwork(){
             let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
             let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
+            var readModuleIds = [Int]()
             gradientLoadingBar.fadeIn()
             
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
+                let realm = try! Realm()
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
-                    let realmSections = self.realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
-                    // get read status for all modules and add read ones to readModuleNames
-                    for i in 0..<realmSections.count {
-                        for j in 0..<realmSections[i].modules.count {
-                            if realmSections[i].modules[j].read && !self.readModuleNames.contains(realmSections[i].modules[j].name){
-                                self.readModuleNames.append(realmSections[i].modules[j].name)
+                    let realmModules = realm.objects(Module.self).filter("coursename = %@" ,self.currentCourse.courseName)
+                    for i in 0..<realmModules.count {
+                        if realmModules[i].read && !readModuleIds.contains(realmModules[i].id){
+                                readModuleIds.append(realmModules[i].id)
                             }
-                        }
+                        
                     }
+                    let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
                     if realmSections.count != 0{
-                        try! self.realm.write {
-                            self.realm.delete(realmSections)
+                        try! realm.write {
+                            realm.delete(realmSections)
+                            realm.delete(realm.objects(Module.self).filter("coursename = %@", self.currentCourse.courseName))
                         }
                     }
                     
@@ -129,6 +133,7 @@ class CourseDetailsViewController : UITableViewController {
                                         let newModule = Module()
                                         newModule.coursename = self.currentCourse.displayname
                                         newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
+                                        newModule.read = true
                                         
                                         if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
                                             newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
@@ -141,24 +146,25 @@ class CourseDetailsViewController : UITableViewController {
                                 }
                                 
                                 moduleData.name = courseContent[i]["modules"][j]["name"].string!
-                                if self.readModuleNames.contains(courseContent[i]["modules"][j]["name"].string!){
+                                if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!){
                                     moduleData.read = true
+                                    
+                                }else if moduleData.name == "Announcements"{
+                                    moduleData.read = true
+                                }else{
+                                    moduleData.read = false
                                 }
                                 if courseContent[i]["modules"][j]["description"].string != nil {
                                     moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
                                 }
-                                moduleData.coursename = self.currentCourse.displayname
+                                moduleData.coursename = self.currentCourse.courseName
                                 section.modules.append(moduleData)
-                                section.courseId = self.currentCourse.courseid
                             }
+                            section.courseId = self.currentCourse.courseid
                             self.sectionArray.append(section)
-                            try! self.realm.write {
-                                self.realm.add(section)
+                            try! realm.write {
+                                realm.add(section)
                             }
-//                            self.currentCourse.sections.append(section)
-//                            try! self.realm.write {
-//                                self.realm.add(self.currentCourse)
-//                            }
                         }
                     }
                 }
@@ -167,8 +173,8 @@ class CourseDetailsViewController : UITableViewController {
         }
         else{
             // try to get modules from memory
-            
-            let sections = self.realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
+            let realm = try! Realm()
+            let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
             if sections.count != 0{
                 sectionArray.removeAll()
                 for i in 0..<sections.count{
@@ -182,6 +188,7 @@ class CourseDetailsViewController : UITableViewController {
     @objc func refreshData() {
         if Reachability.isConnectedToNetwork() {
             self.refreshControl!.beginRefreshing()
+            
             getCourseContent{ (courses) in
                 self.refreshControl!.endRefreshing()
                 self.gradientLoadingBar.fadeOut()
@@ -266,6 +273,7 @@ class CourseDetailsViewController : UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let realm = try! Realm()
         let realmModule = realm.objects(Module.self)[indexPath.row]
         try! realm.write {
             realmModule.read = true
@@ -335,17 +343,18 @@ class CourseDetailsViewController : UITableViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         updateUI()
     }
-    //    func markAllRead(){
-    //        let realmSections = self.realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
-    //        for i in 0..<realmSections.count {
-    //            for j in 0..<realmSections[i].modules.count{
-    //                try! realm.write {
-    //                    realmSections[i].modules[j].read = true
-    //                }
-    //            }
-    //        }
-    //        tableView.reloadData()
-    //    }
+        func markAllRead(){
+            let realm = try! Realm()
+            let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
+            for i in 0..<realmSections.count {
+                for j in 0..<realmSections[i].modules.count{
+                    try! realm.write {
+                        realmSections[i].modules[j].read = true
+                    }
+                }
+            }
+            tableView.reloadData()
+        }
     
     func setupGradientLoadingBar(){
         guard let navigationBar = navigationController?.navigationBar else { return }
@@ -362,5 +371,38 @@ class CourseDetailsViewController : UITableViewController {
             gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
+    }
+    @objc func handleLongPress(longPressGesture: UILongPressGestureRecognizer) {
+        let pressLocation = longPressGesture.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: pressLocation)
+        if indexPath == nil {
+        } else if longPressGesture.state == UIGestureRecognizer.State.began {
+            let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+            selectionFeedbackGenerator.selectionChanged()
+            var actionSheet = UIAlertController()
+            if let _ = indexPath?.row{
+                actionSheet = UIAlertController(title: sectionArray[indexPath?.section ?? 0].modules[indexPath?.row ?? 0].name, message: nil, preferredStyle: .actionSheet)
+            }
+            let readAction = UIAlertAction(title: "Mark Read", style: .default) { (_) in
+                // mark as read
+                let realm = try! Realm()
+                try! realm.write {
+                    self.sectionArray[indexPath?.section ?? 0].modules[indexPath?.row ?? 0].read = true
+                }
+                self.tableView.reloadData()
+            }
+            let markAllRead = UIAlertAction(title: "Mark All Read", style: .default) { (_) in
+                self.markAllRead()
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            actionSheet.addAction(readAction)
+            actionSheet.addAction(markAllRead)
+            actionSheet.addAction(cancelAction)
+            self.present(actionSheet, animated: true, completion: nil)
+            
+            
+            
+            
+        }
     }
 }

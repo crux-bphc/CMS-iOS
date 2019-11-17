@@ -51,6 +51,7 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
 
                 }
                 let string = NSMutableAttributedString(attributedString: formattedString)
+                string.setFontFace(font: UIFont.systemFont(ofSize: 15))
                 string.addAttributes(attributedStringName, range: NSRange(location: 0, length: formattedString.length))
                 bodyTextView.attributedText = string
             } catch let error {
