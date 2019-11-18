@@ -47,6 +47,7 @@
 		E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */; };
 		E6B205F7237C3FED00D0F69F /* AttributedStringFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */; };
 		E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6C61630235DA91F00FFC2E4 /* Main.storyboard */; };
+		E6DE3F7E23806A5800FA1099 /* BackgroundFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DE3F7D23806A5800FA1099 /* BackgroundFetch.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +96,7 @@
 		E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLPreviewItemSubclass.swift; sourceTree = "<group>"; };
 		E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringFontExtension.swift; sourceTree = "<group>"; };
 		E6C61630235DA91F00FFC2E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		E6DE3F7D23806A5800FA1099 /* BackgroundFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundFetch.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
+				E6DE3F7D23806A5800FA1099 /* BackgroundFetch.swift */,
 				E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */,
 				E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */,
 				E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */,
@@ -417,6 +420,7 @@
 				0A9A960B23572E93004ABB2F /* CBTabBarButton.swift in Sources */,
 				0A2FD03823619E9A00917BE7 /* ExtrasTableViewCell.swift in Sources */,
 				0AC33B6923022B2C004AE385 /* CourseContentsViewController.swift in Sources */,
+				E6DE3F7E23806A5800FA1099 /* BackgroundFetch.swift in Sources */,
 				0A8EFC6523100F9D00CD6BAD /* Reachability.swift in Sources */,
 				0AF20A2F230B2F17001C0CB1 /* ExtrasTableViewController.swift in Sources */,
 				E6B205F7237C3FED00D0F69F /* AttributedStringFontExtension.swift in Sources */,
