@@ -21,4 +21,8 @@ class Course : Object {
     @objc dynamic var courseName : String = ""
     @objc dynamic var allotedColor : String = ""
 //    var sections =  RealmSwift.List<CourseSection>()
+    
+    override class func primaryKey() -> String? {
+        return "courseid"
+    }
 }
