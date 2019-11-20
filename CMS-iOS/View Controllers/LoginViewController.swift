@@ -122,7 +122,7 @@ class LoginViewController: UIViewController {
                     print("Enter the key again.")
                 } else {
                     if loggedin == false {
-                        let savedPassword : Bool = KeychainWrapper.standard.set(password, forKey: "userPassword")
+                        let savedPassword : Bool = KeychainWrapper.standard.set(password, forKey: "userPassword", withAccessibility: .always)
                         print(savedPassword)
                         
                     }

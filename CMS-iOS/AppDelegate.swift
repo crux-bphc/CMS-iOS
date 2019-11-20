@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let realm = try! Realm()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+        application.setMinimumBackgroundFetchInterval(900)
         let options : UNAuthorizationOptions = [.alert, .sound, .badge]
         notificationCenter.requestAuthorization(options: options) { (didAllow, error) in
             if !didAllow {
@@ -104,6 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         if Reachability.isConnectedToNetwork(){
             let bkgObj = BackgroundFetch()
+            bkgObj.sendNotification(title: "Testing",body: "Attempting to fetch data in background", identifier: "awjt8329")
             bkgObj.updateCourseContents { (newDataFound) in
                 if newDataFound{
                     completionHandler(.newData)
