@@ -84,6 +84,17 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! CourseDetailsViewController
         destinationVC.currentCourse = selectedCourse
+        //        let realm = try! Realm()
+        //        let destinationVC = segue.destination as! CourseDetailsViewController
+        //        var dupCourse = Course()
+        //        dupCourse.allotedColor = selectedCourse.allotedColor
+        //        dupCourse.canMakeDiscussion = selectedCourse.canMakeDiscussion
+        //        dupCourse.courseCode = selectedCourse.courseCode
+        //        dupCourse.courseid = selectedCourse.courseid
+        //        dupCourse.courseName = selectedCourse.courseName
+        //        dupCourse.displayname = selectedCourse.displayname
+        //        dupCourse.enrolled = selectedCourse.enrolled
+        //        destinationVC.currentCourse = dupCourse
     }
     
     func setupNavBar() {
@@ -137,7 +148,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     }
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
-
+                        
                     }
                 }
                 
@@ -317,12 +328,12 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 if courseData.result.isSuccess {
                     let bkgRealm = try! Realm()
                     var tempCourses : Results<Course>?
-                    let realmCourses = bkgRealm.objects(Course.self)
-                    if (realmCourses.count != 0){
-                        try! bkgRealm.write {
-                            bkgRealm.delete(realmCourses)
-                        }
-                    }
+//                    let realmCourses = bkgRealm.objects(Course.self)
+                    //                    if (realmCourses.count != 0){
+                    //                        try! bkgRealm.write {
+                    //                            bkgRealm.delete(realmCourses)
+                    //                        }
+                    //                    }
                     
                     let courses = JSON(courseData.value as Any)
                     self.totalCourseCount = courses.count
@@ -335,7 +346,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
                         currentCourse.enrolled = true
                         try! bkgRealm.write {
-                            bkgRealm.add(currentCourse)
+//                            bkgRealm.add(currentCourse)
+                            bkgRealm.add(currentCourse, update: .modified)
                         }
                         self.downloadDashboardCourseContents(courseName: currentCourse.courseName, courseId: currentCourse.courseid)
                     }
@@ -349,7 +361,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         }
                         self.setupColors(colors: self.constant.DashboardCellColors)
                         self.tableView.reloadData()
-
+                        
                     }
                 }
             }
@@ -437,6 +449,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if courseList.count > indexPath.row{
+            stopTheDamnRequests()
             tableView.deselectRow(at: indexPath, animated: true)
             if searchController.isActive {
                 self.selectedCourse = filteredCourseList[indexPath.row]
@@ -482,16 +495,16 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     func setupGradientLoadingBar(){
         guard let navigationBar = navigationController?.navigationBar else { return }
-
+        
         gradientLoadingBar.fadeOut(duration: 0)
-
+        
         gradientLoadingBar.translatesAutoresizingMaskIntoConstraints = false
         navigationBar.addSubview(gradientLoadingBar)
-
+        
         NSLayoutConstraint.activate([
             gradientLoadingBar.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor),
             gradientLoadingBar.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor),
-
+            
             gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
@@ -548,10 +561,10 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     try! realm.write {
                         realm.delete(realm.objects(CourseSection.self).filter("courseId = \(courseId)"))
                         realm.delete(realm.objects(Module.self).filter("coursename = %@", courseName))
-
+                        
                     }
                 }
-
+                
                 for i in 0 ..< courseContent.count {
                     if courseContent[i]["modules"].count > 0 {
                         let section = CourseSection()
@@ -576,14 +589,14 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                 
                                 moduleData.read = true
                             }else if moduleData.modname == "folder"{
-
+                                
                                 let itemCount = courseContent[i]["modules"][j]["contents"].count
                                 for a in 0..<itemCount{
                                     let newModule = Module()
                                     newModule.coursename = courseName
                                     newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
                                     newModule.read = true
-
+                                    
                                     if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
                                         newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                     }
@@ -593,7 +606,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             } else if moduleData.modname == "url" {
                                 moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!)
                             }
-
+                            
                             moduleData.name = courseContent[i]["modules"][j]["name"].string!
                             if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!){
                                 moduleData.read = true
@@ -607,7 +620,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         }
                         try! realm.write {
                             realm.add(section)
-
+                            
                         }
                     }
                 }
@@ -621,5 +634,20 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             }
         }
         
+    }
+    
+    
+    func stopTheDamnRequests(){
+        if #available(iOS 9.0, *) {
+            Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
+                tasks.forEach{ $0.cancel() }
+            }
+        } else {
+            Alamofire.SessionManager.default.session.getTasksWithCompletionHandler { (sessionDataTask, uploadData, downloadData) in
+                sessionDataTask.forEach { $0.cancel() }
+                uploadData.forEach { $0.cancel() }
+                downloadData.forEach { $0.cancel() }
+            }
+        }
     }
 }

@@ -95,7 +95,7 @@ class BackgroundFetch{
         
         
     }
-    private func sendNotification(title: String, body: String, identifier: String){
+    public func sendNotification(title: String, body: String, identifier: String){
         let notificationCenter = UNUserNotificationCenter.current()
         let content = UNMutableNotificationContent()
         content.title = title
