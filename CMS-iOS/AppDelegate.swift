@@ -109,9 +109,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             bkgObj.updateCourseContents { (newDataFound) in
                 if newDataFound{
                     completionHandler(.newData)
-                    if UIApplication.shared.applicationIconBadgeNumber > 1 {
-                        UIApplication.shared.applicationIconBadgeNumber += 1
-                    }
                     print("found new data")
                 }else{
                     completionHandler(.noData)
