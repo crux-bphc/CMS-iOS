@@ -25,9 +25,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.setMinimumBackgroundFetchInterval(900)
         let options : UNAuthorizationOptions = [.alert, .sound, .badge]
         notificationCenter.requestAuthorization(options: options) { (didAllow, error) in
-            if !didAllow {
-                print("The user denied notification permission.")
-            }
+            guard didAllow else {return}
+            BackgroundFetch().setCategories()
+//            if !didAllow {
+//                print("The user denied notification permission.")
+//            } else if didAllow {
+//                BackgroundFetch().setCategories()
+//            }
         }
         
         IQKeyboardManager.shared.enable = true
@@ -118,6 +122,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }else{
             completionHandler(.failed)
             print("failed to background fetch")
+        }
+    }
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // Print message ID.
+        UNUserNotificationCenter.current().delegate = self
+        // Print full message.
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        if response.actionIdentifier == "Mark as Read" {
+
+            //Mark as read function
+        } else if response.actionIdentifier == "Open" {
+//            Open file
         }
     }
 }

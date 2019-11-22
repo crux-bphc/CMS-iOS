@@ -13,7 +13,7 @@ import Alamofire
 import SwiftyJSON
 import UserNotifications
 
-class BackgroundFetch{
+class BackgroundFetch {
     
     public func updateCourseContents(completion: @escaping ((Bool) -> Void)){
         let realm = try! Realm()
@@ -112,5 +112,14 @@ class BackgroundFetch{
             }
         }
         print("The identifier for the notification is: \(identifier)")
+    }
+    
+    public func setCategories() {
+        let notificationCenter = UNUserNotificationCenter.current()
+        let userActions = "User Actions"
+        let markRead = UNNotificationAction(identifier: "Mark as Read", title: "Mark as Read", options: [])
+        let openAction = UNNotificationAction(identifier: "Open", title: "Open", options: [])
+        let categories = UNNotificationCategory(identifier: userActions, actions: [markRead, openAction], intentIdentifiers: [], options: [])
+        notificationCenter.setNotificationCategories([categories])
     }
 }
