@@ -10,10 +10,11 @@ import UIKit
 import SwiftKeychainWrapper
 import SwiftyJSON
 import Alamofire
-import SVProgressHUD
+import GradientLoadingBar
 
 class DiscussionTableViewController: UITableViewController {
     
+    private let gradientLoadingBar = GradientActivityIndicatorView()
     let constants = Constants.Global.self
     var discussionArray = [Discussion]()
     var currentDiscussion = Discussion()
@@ -24,16 +25,18 @@ class DiscussionTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.addDiscussionButton.isEnabled = false
-        SVProgressHUD.dismiss()
+        setupGradientLoadingBar()
+        gradientLoadingBar.fadeOut()
         canAddDiscussion()
         getCourseDiscussions {
             self.tableView.reloadData()
-            SVProgressHUD.dismiss()
+            self.gradientLoadingBar.fadeOut()
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        SVProgressHUD.dismiss()
+        gradientLoadingBar.fadeOut()
+
     }
     
     // MARK: - Table view data source
@@ -85,7 +88,7 @@ class DiscussionTableViewController: UITableViewController {
         
         let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
         let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
-        SVProgressHUD.show()
+        gradientLoadingBar.fadeIn()
         
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
@@ -140,4 +143,20 @@ class DiscussionTableViewController: UITableViewController {
         performSegue(withIdentifier: "goToAddDiscussion", sender: self)
     }
     
+    func setupGradientLoadingBar(){
+        guard let navigationBar = navigationController?.navigationBar else { return }
+
+        gradientLoadingBar.fadeOut(duration: 0)
+
+        gradientLoadingBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.addSubview(gradientLoadingBar)
+
+        NSLayoutConstraint.activate([
+            gradientLoadingBar.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor),
+            gradientLoadingBar.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor),
+
+            gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+            gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
+        ])
+    }
 }
