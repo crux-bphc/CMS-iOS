@@ -95,7 +95,6 @@ class DiscussionTableViewController: UITableViewController {
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
                 if response.result.isSuccess {
                     let discussionResponse = JSON(response.value as Any)
-                    print(discussionResponse)
                     if discussionResponse["discussions"].count == 0 {
                         completion()
                     } else {
