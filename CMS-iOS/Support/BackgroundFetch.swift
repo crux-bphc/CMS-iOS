@@ -20,11 +20,12 @@ class BackgroundFetch {
         let constants = Constants.Global.self
         let subscribedCourses = realm.objects(Course.self)
         var foundNewData = false
+        let password = realm.objects(User.self).first?.token
         for x in 0..<subscribedCourses.count{
             let currentCourse = subscribedCourses[x]
             
             let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
-            let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
+            let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword") ?? password!, "courseid" : currentCourse.courseid]
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
                 let realm = try! Realm()
                 if response.result.isSuccess {
