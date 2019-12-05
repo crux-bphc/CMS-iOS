@@ -74,10 +74,10 @@ class BackgroundFetch {
                                 if courseContent[i]["modules"][j]["description"].string != nil {
                                     moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
                                 }
-                                moduleData.coursename = currentCourse.courseName
+                                moduleData.coursename = currentCourse.displayname
                                 section.modules.append(moduleData)
                                 // check module here
-                                if (realm.objects(Module.self).filter("coursename = %@", currentCourse.courseName).filter("id = \(moduleData.id)").count == 0){
+                                if (realm.objects(Module.self).filter("coursename = %@", currentCourse.displayname).filter("id = \(moduleData.id)").count == 0){
                                     // this is a new module
                                     self.sendNotification(title: "\(moduleData.name)", body: "New content in \(currentCourse.displayname)", identifier: "\(currentCourse.displayname + String(moduleData.id))")
                                     foundNewData = true

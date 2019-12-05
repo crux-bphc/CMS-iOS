@@ -90,7 +90,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                 let realm = try! Realm()
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
-                    let realmModules = realm.objects(Module.self).filter("coursename = %@" ,self.currentCourse.courseName)
+                    let realmModules = realm.objects(Module.self).filter("coursename = %@" ,self.currentCourse.displayname)
                     for i in 0..<realmModules.count {
                         if realmModules[i].read && !readModuleIds.contains(realmModules[i].id){
                                 readModuleIds.append(realmModules[i].id)
@@ -101,7 +101,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                     if realmSections.count != 0{
                         try! realm.write {
                             realm.delete(realmSections)
-                            realm.delete(realm.objects(Module.self).filter("coursename = %@", self.currentCourse.courseName))
+                            realm.delete(realm.objects(Module.self).filter("coursename = %@", self.currentCourse.displayname))
                         }
                     }
                     
@@ -157,7 +157,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                 if courseContent[i]["modules"][j]["description"].string != nil {
                                     moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
                                 }
-                                moduleData.coursename = self.currentCourse.courseName
+                                moduleData.coursename = self.currentCourse.displayname
                                 section.modules.append(moduleData)
                             }
                             section.courseId = self.currentCourse.courseid
