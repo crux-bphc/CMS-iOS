@@ -1,5 +1,6 @@
 ${PODS_ROOT}/Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
+${BUILT_PRODUCTS_DIR}/BadgeSwift/BadgeSwift.framework
 ${BUILT_PRODUCTS_DIR}/GradientLoadingBar/GradientLoadingBar.framework
 ${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework
 ${BUILT_PRODUCTS_DIR}/LightweightObservable/LightweightObservable.framework

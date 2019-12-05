@@ -425,15 +425,25 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
                 cell.colorView.backgroundColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
                 let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("read = NO")
-                cell.unreadCounterLabel.text = unreadModules.count > 0 ? String(unreadModules.count) : ""
-                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
+                if unreadModules.count == 0 {
+                    cell.unreadCounterLabel.isHidden = true
+                } else {
+                    cell.unreadCounterLabel.isHidden = false
+                    cell.unreadCounterLabel.text = String(unreadModules.count)
+                }
+//                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
             } else {
                 cell.courseName.text = courseList[indexPath.row].courseCode
                 cell.courseFullName.text = courseList[indexPath.row].courseName
                 cell.colorView.backgroundColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
                 let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("read = NO")
-                cell.unreadCounterLabel.text = unreadModules.count > 0 ? String(unreadModules.count) : ""
-                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
+                if unreadModules.count == 0 {
+                    cell.unreadCounterLabel.isHidden = true
+                } else {
+                    cell.unreadCounterLabel.isHidden = false
+                    cell.unreadCounterLabel.text = String(unreadModules.count)
+                }
+//                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
                 
             }
         }
