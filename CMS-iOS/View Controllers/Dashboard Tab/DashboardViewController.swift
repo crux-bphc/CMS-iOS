@@ -92,7 +92,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         //        dupCourse.canMakeDiscussion = selectedCourse.canMakeDiscussion
         //        dupCourse.courseCode = selectedCourse.courseCode
         //        dupCourse.courseid = selectedCourse.courseid
-        //        dupCourse.courseName = selectedCourse.courseName
+        //        dupCourse.courseName = selectedCourse.displayname
         //        dupCourse.displayname = selectedCourse.displayname
         //        dupCourse.enrolled = selectedCourse.enrolled
         //        destinationVC.currentCourse = dupCourse
@@ -350,7 +350,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
 //                            bkgRealm.add(currentCourse)
                             bkgRealm.add(currentCourse, update: .modified)
                         }
-                        self.downloadDashboardCourseContents(courseName: currentCourse.courseName, courseId: currentCourse.courseid)
+                        self.downloadDashboardCourseContents(courseName: currentCourse.displayname, courseId: currentCourse.courseid)
                     }
                     tempCourses = bkgRealm.objects(Course.self)
                     coursesRef = ThreadSafeReference(to: tempCourses!)
@@ -425,16 +425,26 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 cell.courseName.text = filteredCourseList[indexPath.row].courseCode
                 cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
                 cell.colorView.backgroundColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
-                let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].courseName).filter("read = NO")
-                cell.unreadCounterLabel.text = unreadModules.count > 0 ? String(unreadModules.count) : ""
-                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
+                let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("read = NO")
+                if unreadModules.count == 0 {
+                    cell.unreadCounterLabel.isHidden = true
+                } else {
+                    cell.unreadCounterLabel.isHidden = false
+                    cell.unreadCounterLabel.text = String(unreadModules.count)
+                }
+//                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
             } else {
                 cell.courseName.text = courseList[indexPath.row].courseCode
                 cell.courseFullName.text = courseList[indexPath.row].courseName
                 cell.colorView.backgroundColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
-                let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].courseName).filter("read = NO")
-                cell.unreadCounterLabel.text = unreadModules.count > 0 ? String(unreadModules.count) : ""
-                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
+                let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("read = NO")
+                if unreadModules.count == 0 {
+                    cell.unreadCounterLabel.isHidden = true
+                } else {
+                    cell.unreadCounterLabel.isHidden = false
+                    cell.unreadCounterLabel.text = String(unreadModules.count)
+                }
+//                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
                 
             }
         }

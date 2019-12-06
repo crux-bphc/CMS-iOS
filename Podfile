@@ -15,5 +15,6 @@ target 'CMS-iOS' do
   pod 'NotificationBannerSwift'
   pod 'SDDownloadManager'
   pod 'GradientLoadingBar', '~> 2.0'
+  pod 'BadgeSwift', '~> 8.0'
 
 end
