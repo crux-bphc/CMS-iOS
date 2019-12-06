@@ -69,6 +69,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     override func viewDidAppear(_ animated: Bool) {
         tableView.reloadData()
+        UIApplication.shared.applicationIconBadgeNumber = 0
         if !animated{
             animateTable()
             self.animated = true
