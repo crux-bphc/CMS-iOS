@@ -423,7 +423,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             if searchController.isActive {
                 cell.courseName.text = filteredCourseList[indexPath.row].courseCode
                 cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
-                cell.colorView.backgroundColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
+                cell.courseName.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
                 let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("read = NO")
                 if unreadModules.count == 0 {
                     cell.unreadCounterLabel.isHidden = true
@@ -435,7 +435,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             } else {
                 cell.courseName.text = courseList[indexPath.row].courseCode
                 cell.courseFullName.text = courseList[indexPath.row].courseName
-                cell.colorView.backgroundColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
+                cell.courseName.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
                 let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("read = NO")
                 if unreadModules.count == 0 {
                     cell.unreadCounterLabel.isHidden = true
