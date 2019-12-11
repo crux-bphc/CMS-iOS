@@ -357,8 +357,10 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     DispatchQueue.main.async {
                         let realm = try! Realm()
                         guard let coursesRef = coursesRef, let temp2 = realm.resolve(coursesRef) else {return}
-                        for i in 0..<temp2.count{
-                            self.courseList.append(temp2[i])
+                        let  sortedTemp2 = temp2.sorted(byKeyPath: "displayname").sorted(byKeyPath: "courseCode")
+                        for i in 0..<sortedTemp2.count{
+                            self.courseList.append(sortedTemp2[i])
+                            
                         }
                         self.setupColors(colors: self.constant.DashboardCellColors)
                         self.tableView.reloadData()
