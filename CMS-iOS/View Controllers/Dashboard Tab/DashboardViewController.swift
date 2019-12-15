@@ -329,12 +329,12 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 if courseData.result.isSuccess {
                     let bkgRealm = try! Realm()
                     var tempCourses : Results<Course>?
-//                    let realmCourses = bkgRealm.objects(Course.self)
-                    //                    if (realmCourses.count != 0){
-                    //                        try! bkgRealm.write {
-                    //                            bkgRealm.delete(realmCourses)
-                    //                        }
-                    //                    }
+                    let realmCourses = bkgRealm.objects(Course.self)
+                                        if (realmCourses.count != 0){
+                                            try! bkgRealm.write {
+                                                bkgRealm.delete(realmCourses)
+                                            }
+                                        }
                     
                     let courses = JSON(courseData.value as Any)
                     self.totalCourseCount = courses.count
@@ -357,9 +357,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     DispatchQueue.main.async {
                         let realm = try! Realm()
                         guard let coursesRef = coursesRef, let temp2 = realm.resolve(coursesRef) else {return}
-                        let  sortedTemp2 = temp2.sorted(byKeyPath: "displayname").sorted(byKeyPath: "courseCode")
-                        for i in 0..<sortedTemp2.count{
-                            self.courseList.append(sortedTemp2[i])
+                        for i in 0..<temp2.count{
+                            self.courseList.append(temp2[i])
                             
                         }
                         self.setupColors(colors: self.constant.DashboardCellColors)
