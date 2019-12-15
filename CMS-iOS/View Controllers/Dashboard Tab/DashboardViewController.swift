@@ -68,7 +68,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        tableView.reloadData()
+//        tableView.reloadData()
         UIApplication.shared.applicationIconBadgeNumber = 0
         if !animated{
             animateTable()
@@ -100,7 +100,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func setupNavBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        
         navigationItem.searchController = self.searchController
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
