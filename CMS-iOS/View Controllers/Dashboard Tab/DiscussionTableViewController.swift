@@ -10,10 +10,12 @@ import UIKit
 import SwiftKeychainWrapper
 import SwiftyJSON
 import Alamofire
-import SVProgressHUD
+import GradientLoadingBar
+import RealmSwift
 
 class DiscussionTableViewController: UITableViewController {
     
+    private let gradientLoadingBar = GradientActivityIndicatorView()
     let constants = Constants.Global.self
     var discussionArray = [Discussion]()
     var currentDiscussion = Discussion()
@@ -24,16 +26,18 @@ class DiscussionTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.addDiscussionButton.isEnabled = false
-        SVProgressHUD.dismiss()
+        setupGradientLoadingBar()
+        gradientLoadingBar.fadeOut()
         canAddDiscussion()
         getCourseDiscussions {
             self.tableView.reloadData()
-            SVProgressHUD.dismiss()
+            self.gradientLoadingBar.fadeOut()
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        SVProgressHUD.dismiss()
+        gradientLoadingBar.fadeOut()
+        
     }
     
     // MARK: - Table view data source
@@ -83,38 +87,55 @@ class DiscussionTableViewController: UITableViewController {
     
     func getCourseDiscussions(completion: @escaping () -> Void) {
         
-        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
-        let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
-        SVProgressHUD.show()
-        
-        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
-            if response.result.isSuccess {
-                let discussionResponse = JSON(response.value as Any)
-                if discussionResponse["discussions"].count == 0 {
-                    completion()
-                } else {
-                    for i in 0 ..< discussionResponse["discussions"].count {
-                        let discussion = Discussion()
-                        discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
-                        discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
-                        discussion.date = discussionResponse["discussions"][i]["created"].int!
-                        discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
-                        if discussionResponse["discussions"][i]["attachment"].string! != "0" {
-                            if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
-                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
-                            } else {
-                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
+        if Reachability.isConnectedToNetwork(){
+            let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
+            let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
+            gradientLoadingBar.fadeIn()
+            
+            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
+                if response.result.isSuccess {
+                    let discussionResponse = JSON(response.value as Any)
+                    if discussionResponse["discussions"].count == 0 {
+                        completion()
+                    } else {
+                        for i in 0 ..< discussionResponse["discussions"].count {
+                            let discussion = Discussion()
+                            discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
+                            discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
+                            discussion.date = discussionResponse["discussions"][i]["created"].int!
+                            discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
+                            discussion.id = discussionResponse["discussions"][i]["id"].int!
+                            discussion.moduleId = self.currentModule.id
+                            if discussionResponse["discussions"][i]["attachment"].string! != "0" {
+                                if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
+                                    discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                } else {
+                                    discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
+                                }
+                                
+                                discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
+                                discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
+                            }
+                            let realm = try! Realm()
+                            try! realm.write {
+                                realm.add(discussion, update: .modified)
                             }
                             
-                            discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
-                            discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
+                            self.discussionArray.append(discussion)
                         }
-                        self.discussionArray.append(discussion)
+                        completion()
                     }
-                    completion()
                 }
             }
+        } else {
+            let realm = try! Realm()
+            let realmDiscussions = realm.objects(Discussion.self).filter("moduleId = %@", self.currentModule.id)
+            self.discussionArray.removeAll()
+            for i in 0..<realmDiscussions.count {
+                discussionArray.append(realmDiscussions[i])
+            }
         }
+        
         
     }
     
@@ -140,4 +161,20 @@ class DiscussionTableViewController: UITableViewController {
         performSegue(withIdentifier: "goToAddDiscussion", sender: self)
     }
     
+    func setupGradientLoadingBar(){
+        guard let navigationBar = navigationController?.navigationBar else { return }
+        
+        gradientLoadingBar.fadeOut(duration: 0)
+        
+        gradientLoadingBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.addSubview(gradientLoadingBar)
+        
+        NSLayoutConstraint.activate([
+            gradientLoadingBar.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor),
+            gradientLoadingBar.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor),
+            
+            gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+            gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
+        ])
+    }
 }

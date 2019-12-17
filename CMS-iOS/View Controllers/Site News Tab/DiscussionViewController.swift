@@ -27,7 +27,9 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
         quickLookController.dataSource = self
         openButton.layer.cornerRadius = 10
         bodyTextView.layer.cornerRadius = 10
-        setMessage()
+        if UIApplication.shared.applicationState == .active {
+            setMessage()
+        }
         self.navigationItem.largeTitleDisplayMode = .never
         if selectedDiscussion.attachment == "" {
             self.openButton.isHidden = true
@@ -51,6 +53,7 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
 
                 }
                 let string = NSMutableAttributedString(attributedString: formattedString)
+                string.setFontFace(font: UIFont.systemFont(ofSize: 15))
                 string.addAttributes(attributedStringName, range: NSRange(location: 0, length: formattedString.length))
                 bodyTextView.attributedText = string
             } catch let error {
@@ -147,7 +150,9 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
         }
     }
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        setMessage()
+        if UIApplication.shared.applicationState == .active {
+            setMessage()
+        }
     }
     func openWithQL(){
         self.present(quickLookController, animated: true) {

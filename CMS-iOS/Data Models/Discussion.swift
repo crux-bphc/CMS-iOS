@@ -7,16 +7,21 @@
 //
 
 import UIKit
+import RealmSwift
 
-class Discussion {
+class Discussion : Object {
     
-    var name : String = ""
-    var date : Int = 0
-    var author : String = ""
-    var message : String = ""
-    var filename : String = ""
-    var mimetype : String = ""
-    var modname : String = ""
-    var attachment : String = ""
-    var id : Int = 0
+    @objc dynamic var name : String = ""
+    @objc dynamic var date : Int = 0
+    @objc dynamic var author : String = ""
+    @objc dynamic var message : String = ""
+    @objc dynamic var filename : String = ""
+    @objc dynamic var mimetype : String = ""
+    @objc dynamic var modname : String = ""
+    @objc dynamic var attachment : String = ""
+    @objc dynamic var id : Int = 0
+    @objc dynamic var moduleId : Int = 0
+    override class func primaryKey() -> String? {
+        return "id"
+    }
 }

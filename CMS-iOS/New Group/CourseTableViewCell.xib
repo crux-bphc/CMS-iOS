@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,16 +18,16 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="In3-Lu-Tqa" userLabel="Container View">
-                        <rect key="frame" x="7" y="4.5" width="306" height="91"/>
+                        <rect key="frame" x="7" y="4.5" width="299" height="91"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jg9-gf-FTb">
                                 <rect key="frame" x="0.0" y="0.0" width="91" height="91"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEST F111" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jb8-52-F4v">
-                                        <rect key="frame" x="8" y="8" width="75" height="75"/>
+                                        <rect key="frame" x="9" y="9" width="73" height="73"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="75" id="0yH-SE-EtR"/>
-                                            <constraint firstAttribute="width" constant="75" id="QCR-7Y-bLK"/>
+                                            <constraint firstAttribute="height" constant="73" id="0yH-SE-EtR"/>
+                                            <constraint firstAttribute="width" constant="73" id="QCR-7Y-bLK"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -42,17 +42,37 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TEST COURSE" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tjO-gw-hV7">
-                                <rect key="frame" x="99" y="17" width="183" height="58"/>
+                                <rect key="frame" x="99" y="17" width="162" height="58"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zo5-Rh-0en" customClass="BadgeSwift" customModule="BadgeSwift">
+                                <rect key="frame" x="249" y="30.5" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="zo5-Rh-0en" secondAttribute="height" multiplier="1:1" id="BAz-PP-cCZ"/>
+                                    <constraint firstAttribute="height" constant="30" id="bc4-Ih-iz8"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="badgeColor">
+                                        <color key="value" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="15"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="jg9-gf-FTb" firstAttribute="top" secondItem="In3-Lu-Tqa" secondAttribute="top" id="7fh-Vl-NzQ"/>
+                            <constraint firstItem="zo5-Rh-0en" firstAttribute="centerY" secondItem="In3-Lu-Tqa" secondAttribute="centerY" id="MJN-3M-fBP"/>
                             <constraint firstAttribute="bottom" secondItem="jg9-gf-FTb" secondAttribute="bottom" id="Vvo-Ur-Jlg"/>
+                            <constraint firstAttribute="trailing" secondItem="zo5-Rh-0en" secondAttribute="trailing" constant="20" id="ms2-6q-laW"/>
                             <constraint firstItem="jg9-gf-FTb" firstAttribute="leading" secondItem="In3-Lu-Tqa" secondAttribute="leading" id="tfg-rh-9fM"/>
                         </constraints>
                     </view>
@@ -60,7 +80,7 @@
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="In3-Lu-Tqa" secondAttribute="bottom" constant="4.5" id="1kT-Pd-KPi"/>
                     <constraint firstItem="In3-Lu-Tqa" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="7" id="NhZ-nE-K37"/>
-                    <constraint firstAttribute="trailing" secondItem="In3-Lu-Tqa" secondAttribute="trailing" constant="7" id="Ww7-z0-USR"/>
+                    <constraint firstAttribute="trailing" secondItem="In3-Lu-Tqa" secondAttribute="trailing" constant="14" id="Ww7-z0-USR"/>
                     <constraint firstItem="In3-Lu-Tqa" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="4.5" id="oS3-Dw-n74"/>
                 </constraints>
             </tableViewCellContentView>
@@ -70,6 +90,7 @@
                 <outlet property="containView" destination="In3-Lu-Tqa" id="gkE-Di-g0i"/>
                 <outlet property="courseFullName" destination="tjO-gw-hV7" id="n6Y-Dw-BkX"/>
                 <outlet property="courseName" destination="jb8-52-F4v" id="hVz-I5-Pn0"/>
+                <outlet property="unreadCounterLabel" destination="zo5-Rh-0en" id="Inh-Cb-OVT"/>
             </connections>
             <point key="canvasLocation" x="140.57971014492756" y="115.17857142857142"/>
         </tableViewCell>
