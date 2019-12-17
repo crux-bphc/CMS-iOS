@@ -68,7 +68,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        tableView.reloadData()
+//        tableView.reloadData()
         UIApplication.shared.applicationIconBadgeNumber = 0
         if !animated{
             animateTable()
@@ -100,7 +100,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func setupNavBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        
         navigationItem.searchController = self.searchController
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
@@ -329,12 +328,12 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 if courseData.result.isSuccess {
                     let bkgRealm = try! Realm()
                     var tempCourses : Results<Course>?
-//                    let realmCourses = bkgRealm.objects(Course.self)
-                    //                    if (realmCourses.count != 0){
-                    //                        try! bkgRealm.write {
-                    //                            bkgRealm.delete(realmCourses)
-                    //                        }
-                    //                    }
+                    let realmCourses = bkgRealm.objects(Course.self)
+                                        if (realmCourses.count != 0){
+                                            try! bkgRealm.write {
+                                                bkgRealm.delete(realmCourses)
+                                            }
+                                        }
                     
                     let courses = JSON(courseData.value as Any)
                     self.totalCourseCount = courses.count
@@ -359,6 +358,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         guard let coursesRef = coursesRef, let temp2 = realm.resolve(coursesRef) else {return}
                         for i in 0..<temp2.count{
                             self.courseList.append(temp2[i])
+                            
                         }
                         self.setupColors(colors: self.constant.DashboardCellColors)
                         self.tableView.reloadData()
