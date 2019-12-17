@@ -2,6 +2,7 @@
 
 This is the iOS version on the CMS app, written in Swift. The app utilises the API endpoints provided by Moodle from the server hosted on the [CMS Website](https://td.bits-hyderabad.ac.in/moodle/).  
   
+[![Join-TestFlight-Badge](https://img.shields.io/badge/Join-TestFlight-blue.svg)](https://testflight.apple.com/join/WPHI9na4) 
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
