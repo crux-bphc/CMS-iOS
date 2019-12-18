@@ -12,6 +12,9 @@ class CourseSection : Object{
     
     @objc dynamic var name : String = ""
     @objc dynamic var courseId : Int = 0
+    @objc dynamic var key : String = ""
     var modules = RealmSwift.List<Module>()
-    
+    override class func primaryKey() -> String? {
+        return "key"
+    }
 }
