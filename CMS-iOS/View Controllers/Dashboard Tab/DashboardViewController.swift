@@ -85,17 +85,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! CourseDetailsViewController
         destinationVC.currentCourse = selectedCourse
-        //        let realm = try! Realm()
-        //        let destinationVC = segue.destination as! CourseDetailsViewController
-        //        var dupCourse = Course()
-        //        dupCourse.allotedColor = selectedCourse.allotedColor
-        //        dupCourse.canMakeDiscussion = selectedCourse.canMakeDiscussion
-        //        dupCourse.courseCode = selectedCourse.courseCode
-        //        dupCourse.courseid = selectedCourse.courseid
-        //        dupCourse.courseName = selectedCourse.displayname
-        //        dupCourse.displayname = selectedCourse.displayname
-        //        dupCourse.enrolled = selectedCourse.enrolled
-        //        destinationVC.currentCourse = dupCourse
     }
     
     func setupNavBar() {
@@ -628,9 +617,10 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             moduleData.coursename = courseName
                             section.modules.append(moduleData)
                             section.courseId = courseId
+                            section.key = String(courseId) + section.name
                         }
                         try! realm.write {
-                            realm.add(section)
+                            realm.add(section, update: .modified)
                             
                         }
                     }

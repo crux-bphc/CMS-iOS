@@ -100,8 +100,8 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                     let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
                     if realmSections.count != 0{
                         try! realm.write {
-                            realm.delete(realmSections)
-                            realm.delete(realm.objects(Module.self).filter("coursename = %@", self.currentCourse.displayname))
+//                            realm.delete(realmSections)
+//                            realm.delete(realm.objects(Module.self).filter("coursename = %@", self.currentCourse.displayname))
                         }
                     }
                     
@@ -161,9 +161,10 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                 section.modules.append(moduleData)
                             }
                             section.courseId = self.currentCourse.courseid
+                            section.key = String(self.currentCourse.courseid) + section.name
                             self.sectionArray.append(section)
                             try! realm.write {
-                                realm.add(section)
+                                realm.add(section, update: .modified)
                             }
                         }
                     }
