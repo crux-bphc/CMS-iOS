@@ -13,7 +13,7 @@ import SwiftKeychainWrapper
 import GradientLoadingBar
 
 class SearchViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate , UISearchResultsUpdating{
-
+    
     let constants = Constants.Global.self
     var resultArray = [Course]()
     var selectedCourse = Course()
@@ -22,8 +22,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        searchBar.delegate = self
-//        searchBar.isHidden = true
+        //        searchBar.delegate = self
+        //        searchBar.isHidden = true
         setupNavBar()
         setupGradientLoadingBar()
         // Do any additional setup after loading the view.
@@ -49,8 +49,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         gradientLoadingBar.fadeIn()
         let params : [String : Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "criteriavalue" : keyword, "page" : 1]
         let FINAL_URL : String = constants.BASE_URL + constants.SEARCH_COURSES
-        
-        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: self.constants.headers).responseJSON { (response) in
+        let queue = DispatchQueue.global(qos: .userInteractive)
+        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: self.constants.headers).responseJSON(queue : queue) { (response) in
             if response.result.isSuccess {
                 let searchResults = JSON(response.value as Any)
                 for i in 0 ..< searchResults["courses"].count {
@@ -61,12 +61,14 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                     self.resultArray.append(course)
                 }
             }
-            completion()
+            DispatchQueue.main.async {
+                completion()
+            }
         }
     }
     
     func updateSearchResults(for searchController: UISearchController) {
-
+        
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -88,10 +90,30 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         }
     }
     
+//    code for real time search results
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        stopTheDamnRequests()
+//        if searchController.searchBar.text != "" {
+//            resultArray.removeAll()
+//            searchRequest(keyword: searchController.searchBar.text!) {
+//                self.tableView.reloadData()
+//                DispatchQueue.main.async {
+//                    self.searchController.resignFirstResponder()
+//                    //                    self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: false)
+//                }
+//            }
+//        }
+//    }
+
+    
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCell")
-        cell.textLabel?.text = resultArray[indexPath.row].displayname
-        cell.detailTextLabel?.text = resultArray[indexPath.row].faculty
+        if resultArray.count > indexPath.row {
+            cell.textLabel?.text = resultArray[indexPath.row].displayname
+            cell.detailTextLabel?.text = resultArray[indexPath.row].faculty
+            return cell
+        }
         return cell
     }
     
@@ -130,5 +152,18 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
+    }
+    func stopTheDamnRequests(){
+        if #available(iOS 9.0, *) {
+            Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
+                tasks.forEach{ $0.cancel() }
+            }
+        } else {
+            Alamofire.SessionManager.default.session.getTasksWithCompletionHandler { (sessionDataTask, uploadData, downloadData) in
+                sessionDataTask.forEach { $0.cancel() }
+                uploadData.forEach { $0.cancel() }
+                downloadData.forEach { $0.cancel() }
+            }
+        }
     }
 }
