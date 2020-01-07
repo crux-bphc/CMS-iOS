@@ -9,8 +9,8 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
-import SVProgressHUD
 import SwiftKeychainWrapper
+import GradientLoadingBar
 
 class SearchViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate , UISearchResultsUpdating{
 
@@ -18,17 +18,19 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     var resultArray = [Course]()
     var selectedCourse = Course()
     let searchController = UISearchController(searchResultsController: nil)
+    private let gradientLoadingBar = GradientActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 //        searchBar.delegate = self
 //        searchBar.isHidden = true
         setupNavBar()
+        setupGradientLoadingBar()
         // Do any additional setup after loading the view.
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        SVProgressHUD.dismiss()
+        gradientLoadingBar.fadeOut()
     }
     
     func setupNavBar() {
@@ -44,7 +46,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     
     func searchRequest (keyword: String, completion: @escaping() -> Void) {
         print("Made request to search for courses.")
-        SVProgressHUD.show()
+        gradientLoadingBar.fadeIn()
         let params : [String : Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "criteriavalue" : keyword, "page" : 1]
         let FINAL_URL : String = constants.BASE_URL + constants.SEARCH_COURSES
         
@@ -77,8 +79,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             resultArray.removeAll()
             searchRequest(keyword: searchController.searchBar.text!) {
                 self.tableView.reloadData()
-                SVProgressHUD.dismiss()
                 DispatchQueue.main.async {
+                    self.gradientLoadingBar.fadeOut()
                     self.searchController.resignFirstResponder()
                     self.searchController.searchBar.endEditing(true)
                 }
@@ -111,5 +113,22 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             let destinationVC = segue.destination as! EnrolmentViewController
             destinationVC.enrolmentCourse = self.selectedCourse
         }
+    }
+    
+    func setupGradientLoadingBar(){
+        guard let navigationBar = navigationController?.navigationBar else { return }
+        
+        gradientLoadingBar.fadeOut(duration: 0)
+        
+        gradientLoadingBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.addSubview(gradientLoadingBar)
+        
+        NSLayoutConstraint.activate([
+            gradientLoadingBar.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor),
+            gradientLoadingBar.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor),
+            
+            gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+            gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
+        ])
     }
 }
