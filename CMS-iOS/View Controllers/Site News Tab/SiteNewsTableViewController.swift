@@ -83,6 +83,7 @@ class SiteNewsTableViewController: UITableViewController {
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
                 let siteNews = JSON(response.value as Any)
+                self.discussionArray.removeAll()
                 for i in 0 ..< siteNews["discussions"].count {
                     let discussion = Discussion()
                     discussion.name = siteNews["discussions"][i]["name"].string ?? "No Name"
