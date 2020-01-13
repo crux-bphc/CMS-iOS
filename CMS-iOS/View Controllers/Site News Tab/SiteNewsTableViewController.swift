@@ -102,10 +102,10 @@ class SiteNewsTableViewController: UITableViewController {
                     }
                     self.discussionArray.append(discussion)
                 }
-                
+                completion()
             }
         }
-        completion()        
+                
     }
     
     @objc func refreshData() {
