@@ -212,12 +212,14 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                 self.saveFileToStorage(mime: courseData[i]["modules"][j]["contents"][u]["mimetype"].string!, downloadUrl: downloadUrl, module: moduleToDownload)
                             }
                         }
+                        section.key = String(course.courseid) + section.name
                         section.modules.append(module)
+                        section.dateCreated = Date().timeIntervalSince1970
                     }
                     print("added to realm")
                     do {
                         try realm.write {
-                            realm.add(section)
+                            realm.add(section, update: .modified)
                         }
                     } catch let error{
                         print("There was an error writing to realm: \(error)")
