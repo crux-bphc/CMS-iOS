@@ -559,8 +559,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 }
                 if realmSections.count != 0{
                     try! realm.write {
-                        realm.delete(realm.objects(CourseSection.self).filter("courseId = \(courseId)"))
                         realm.delete(realm.objects(Module.self).filter("coursename = %@", courseName))
+                        realm.delete(realm.objects(CourseSection.self).filter("courseId = \(courseId)"))
                         
                     }
                 }
@@ -618,6 +618,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             section.modules.append(moduleData)
                             section.courseId = courseId
                             section.key = String(courseId) + section.name
+                            section.dateCreated = Date().timeIntervalSince1970
                         }
                         try! realm.write {
                             realm.add(section, update: .modified)

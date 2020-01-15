@@ -66,10 +66,10 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     
     func loadModulesFromMemory() {
         let realm = try! Realm()
-        let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
+        let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)").sorted(byKeyPath: "dateCreated", ascending: true)
         if sections.count != 0{
             sectionArray.removeAll()
-            for i in 0..<sections.count{
+            for i in 0..<sections.count {
                 sectionArray.append(sections[i])
             }
         } else {
