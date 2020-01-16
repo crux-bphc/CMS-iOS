@@ -16,12 +16,13 @@ import NotificationBannerSwift
 
 
 class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPreviewControllerDataSource{
+    
     var quickLookController = QLPreviewController()
-
     var selectedModule = Module()
     var destinationURL = URL(string: "")
     var locationToCopy = URL(string: "")
     var task = URLSessionDownloadTask()
+    
     @IBOutlet weak var descriptionText: UITextView!
     @IBOutlet weak var textConstraint: NSLayoutConstraint!
     @IBOutlet weak var attachmentButton: UIButton!
@@ -29,6 +30,7 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
     @IBOutlet weak var openButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var downloadProgressLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         descriptionText.layer.cornerRadius = 10

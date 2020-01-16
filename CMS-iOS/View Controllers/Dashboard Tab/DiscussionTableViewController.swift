@@ -20,6 +20,7 @@ class DiscussionTableViewController: UITableViewController {
     var discussionArray = [Discussion]()
     var currentDiscussion = Discussion()
     var currentModule = Module()
+    let sessionManager = Alamofire.SessionManager.default
     
     @IBOutlet weak var addDiscussionButton: UIBarButtonItem!
     
@@ -50,6 +51,13 @@ class DiscussionTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        sessionManager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
+        dataTasks.forEach { $0.cancel() }
+        uploadTasks.forEach { $0.cancel() }
+        downloadTasks.forEach { $0.cancel() }
+        }
+        
         if discussionArray.count != 0 {
             self.currentDiscussion = discussionArray[indexPath.row]
             performSegue(withIdentifier: "goToDiscussionDetails", sender: self)
@@ -158,6 +166,13 @@ class DiscussionTableViewController: UITableViewController {
         }
     }
     @IBAction func addDiscussionButtonPressed(_ sender: Any) {
+        
+        sessionManager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
+        dataTasks.forEach { $0.cancel() }
+        uploadTasks.forEach { $0.cancel() }
+        downloadTasks.forEach { $0.cancel() }
+        }
+        
         performSegue(withIdentifier: "goToAddDiscussion", sender: self)
     }
     
