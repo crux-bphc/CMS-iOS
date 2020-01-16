@@ -214,12 +214,14 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                 self.saveFileToStorage(mime: courseData[i]["modules"][j]["contents"][u]["mimetype"].string!, downloadUrl: downloadUrl, module: moduleToDownload)
                             }
                         }
+                        section.key = String(course.courseid) + section.name
                         section.modules.append(module)
+                        section.dateCreated = Date().timeIntervalSince1970
                     }
                     print("added to realm")
                     do {
                         try realm.write {
-                            realm.add(section)
+                            realm.add(section, update: .modified)
                         }
                     } catch let error{
                         print("There was an error writing to realm: \(error)")
@@ -567,8 +569,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 }
                 if realmSections.count != 0{
                     try! realm.write {
-                        realm.delete(realm.objects(CourseSection.self).filter("courseId = \(courseId)"))
                         realm.delete(realm.objects(Module.self).filter("coursename = %@", courseName))
+                        realm.delete(realm.objects(CourseSection.self).filter("courseId = \(courseId)"))
                         
                     }
                 }
@@ -626,6 +628,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             section.modules.append(moduleData)
                             section.courseId = courseId
                             section.key = String(courseId) + section.name
+                            section.dateCreated = Date().timeIntervalSince1970
                         }
                         try! realm.write {
                             realm.add(section, update: .modified)
