@@ -68,7 +68,7 @@ open class BubbleTabBar: UITabBar {
                 if #available(iOS 13.0, *) {
                     backgroundColor = UIColor.systemBackground
                 isTranslucent = true
-                    barTintColor = UIColor.secondarySystemBackground
+                    barTintColor = UIColor.systemBackground
                 } else {
                     backgroundColor = UIColor.darkGray
                     isTranslucent = true

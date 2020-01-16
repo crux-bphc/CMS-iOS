@@ -69,8 +69,9 @@ class LoginViewController: UIViewController {
                 let users = self.realm.objects(User.self)
                 if (users.count != 0){
                     self.currentUser = users[0]
+                    self.performSegue(withIdentifier: "goToDashboard", sender: self)
                 }
-                self.performSegue(withIdentifier: "goToDashboard", sender: self)
+                
             }
             alert.addAction(dismiss)
             present(alert, animated: true, completion: nil)

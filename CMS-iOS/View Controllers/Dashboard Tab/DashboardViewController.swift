@@ -68,7 +68,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        tableView.reloadData()
+//        tableView.reloadData()
+        UIApplication.shared.applicationIconBadgeNumber = 0
         if !animated{
             animateTable()
             self.animated = true
@@ -84,22 +85,10 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! CourseDetailsViewController
         destinationVC.currentCourse = selectedCourse
-        //        let realm = try! Realm()
-        //        let destinationVC = segue.destination as! CourseDetailsViewController
-        //        var dupCourse = Course()
-        //        dupCourse.allotedColor = selectedCourse.allotedColor
-        //        dupCourse.canMakeDiscussion = selectedCourse.canMakeDiscussion
-        //        dupCourse.courseCode = selectedCourse.courseCode
-        //        dupCourse.courseid = selectedCourse.courseid
-        //        dupCourse.courseName = selectedCourse.displayname
-        //        dupCourse.displayname = selectedCourse.displayname
-        //        dupCourse.enrolled = selectedCourse.enrolled
-        //        destinationVC.currentCourse = dupCourse
     }
     
     func setupNavBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        
         navigationItem.searchController = self.searchController
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
@@ -223,12 +212,14 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                 self.saveFileToStorage(mime: courseData[i]["modules"][j]["contents"][u]["mimetype"].string!, downloadUrl: downloadUrl, module: moduleToDownload)
                             }
                         }
+                        section.key = String(course.courseid) + section.name
                         section.modules.append(module)
+                        section.dateCreated = Date().timeIntervalSince1970
                     }
                     print("added to realm")
                     do {
                         try realm.write {
-                            realm.add(section)
+                            realm.add(section, update: .modified)
                         }
                     } catch let error{
                         print("There was an error writing to realm: \(error)")
@@ -328,12 +319,12 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 if courseData.result.isSuccess {
                     let bkgRealm = try! Realm()
                     var tempCourses : Results<Course>?
-//                    let realmCourses = bkgRealm.objects(Course.self)
-                    //                    if (realmCourses.count != 0){
-                    //                        try! bkgRealm.write {
-                    //                            bkgRealm.delete(realmCourses)
-                    //                        }
-                    //                    }
+                    let realmCourses = bkgRealm.objects(Course.self)
+                                        if (realmCourses.count != 0){
+                                            try! bkgRealm.write {
+                                                bkgRealm.delete(realmCourses)
+                                            }
+                                        }
                     
                     let courses = JSON(courseData.value as Any)
                     self.totalCourseCount = courses.count
@@ -358,6 +349,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         guard let coursesRef = coursesRef, let temp2 = realm.resolve(coursesRef) else {return}
                         for i in 0..<temp2.count{
                             self.courseList.append(temp2[i])
+                            
                         }
                         self.setupColors(colors: self.constant.DashboardCellColors)
                         self.tableView.reloadData()
@@ -569,8 +561,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 }
                 if realmSections.count != 0{
                     try! realm.write {
-                        realm.delete(realm.objects(CourseSection.self).filter("courseId = \(courseId)"))
                         realm.delete(realm.objects(Module.self).filter("coursename = %@", courseName))
+                        realm.delete(realm.objects(CourseSection.self).filter("courseId = \(courseId)"))
                         
                     }
                 }
@@ -627,9 +619,11 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             moduleData.coursename = courseName
                             section.modules.append(moduleData)
                             section.courseId = courseId
+                            section.key = String(courseId) + section.name
+                            section.dateCreated = Date().timeIntervalSince1970
                         }
                         try! realm.write {
-                            realm.add(section)
+                            realm.add(section, update: .modified)
                             
                         }
                     }

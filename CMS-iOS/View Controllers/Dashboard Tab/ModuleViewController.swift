@@ -46,8 +46,9 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
         } else {
             attachmentButton.isHidden = true
         }
-        
-        setDescription()
+        if UIApplication.shared.applicationState == .active {
+            setDescription()
+        }
         progressBar.isHidden = true
         downloadProgressLabel.isHidden = true
         cancelButton.isHidden = true
@@ -180,7 +181,9 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        setDescription()
+        if UIApplication.shared.applicationState == .active {
+            setDescription()
+        }
     }
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         do {
