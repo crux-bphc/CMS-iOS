@@ -14,7 +14,7 @@ import MobileCoreServices
 import RealmSwift
 import GradientLoadingBar
 
-class CourseContentViewController : UITableViewController, UIGestureRecognizerDelegate{
+class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDelegate{
     
     @IBOutlet var courseLabel: UITableView!
     
@@ -25,7 +25,7 @@ class CourseContentViewController : UITableViewController, UIGestureRecognizerDe
     var discussionArray = [Discussion]()
     let refreshController = UIRefreshControl()
     let constants = Constants.Global.self
-    let sessionManager = Alamofire.SessionManager.self
+    let sessionManager = Alamofire.SessionManager.default
     
     
     override func viewDidLoad() {
