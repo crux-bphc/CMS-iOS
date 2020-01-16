@@ -42,7 +42,14 @@ class FolderContentViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseCell", for: indexPath)
         cell.textLabel?.text = currentModuleContents[indexPath.row].filename
-        
+//        TODO - make downloaded modules green
+//        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+//        let dataPath = documentsDirectory.absoluteURL.appendingPathComponent(currentModule.coursename)
+//        let destination = dataPath.appendingPathComponent("\(String(currentModuleContents[indexPath.row].id) + currentModuleContents[indexPath.row].filename)")
+//        if FileManager().fileExists(atPath: destination.path){
+//            // module has already been downloaded
+//            cell.textLabel?.textColor = .systemGreen
+//        }
         if #available(iOS 12.0, *) {
             if self.traitCollection.userInterfaceStyle == .dark {
                 changeImage(mode: "_dark", cell: cell, module: currentModuleContents, indexPath: indexPath)
