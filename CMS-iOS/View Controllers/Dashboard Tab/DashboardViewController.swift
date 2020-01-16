@@ -31,6 +31,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     let searchController = UISearchController(searchResultsController: nil)
     var downloadArray : [URL] = []
     var localURLArray : [URL] = []
+    let sessionManager = Alamofire.SessionManager.default
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGradientLoadingBar()
@@ -449,6 +451,12 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        sessionManager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
+        dataTasks.forEach { $0.cancel() }
+        uploadTasks.forEach { $0.cancel() }
+        downloadTasks.forEach { $0.cancel() }
+        }
         
         if courseList.count > indexPath.row{
             stopTheDamnRequests()

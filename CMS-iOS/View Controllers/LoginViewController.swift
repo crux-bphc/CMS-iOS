@@ -24,6 +24,7 @@ class LoginViewController: UIViewController {
     var currentUser = User()
     var canLogIn : Bool = false
     let realm = try! Realm()
+    let sessionManager = Alamofire.SessionManager.default
     
     override func viewDidLoad() {
         SVProgressHUD.dismiss()
@@ -61,6 +62,7 @@ class LoginViewController: UIViewController {
         }
         self.view.isUserInteractionEnabled = true
         if canLogIn {
+            
             self.performSegue(withIdentifier: "goToDashboard", sender: self)
         }
         if !Reachability.isConnectedToNetwork() {
@@ -83,6 +85,12 @@ class LoginViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        sessionManager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
+        dataTasks.forEach { $0.cancel() }
+        uploadTasks.forEach { $0.cancel() }
+        downloadTasks.forEach { $0.cancel() }
+        }
         
         switch segue.identifier! {
         case "goToDashboard":

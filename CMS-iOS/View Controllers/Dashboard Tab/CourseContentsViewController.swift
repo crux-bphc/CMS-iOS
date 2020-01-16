@@ -25,6 +25,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     var discussionArray = [Discussion]()
     let refreshController = UIRefreshControl()
     let constants = Constants.Global.self
+    let sessionManager = Alamofire.SessionManager.default
     
     
     override func viewDidLoad() {
@@ -274,6 +275,13 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        sessionManager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
+        dataTasks.forEach { $0.cancel() }
+        uploadTasks.forEach { $0.cancel() }
+        downloadTasks.forEach { $0.cancel() }
+        }
+        
         let realm = try! Realm()
         let realmModule = realm.objects(Module.self)[indexPath.row]
         try! realm.write {
