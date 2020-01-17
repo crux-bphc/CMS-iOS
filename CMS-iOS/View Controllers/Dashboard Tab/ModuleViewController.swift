@@ -22,6 +22,7 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
     var destinationURL = URL(string: "")
     var locationToCopy = URL(string: "")
     var task = URLSessionDownloadTask()
+    let constants = Constants.Global.self
     
     @IBOutlet weak var descriptionText: UITextView!
     @IBOutlet weak var textConstraint: NSLayoutConstraint!
@@ -112,7 +113,7 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
                 destination1 = dataPath.appendingPathComponent(module.coursename)
                 print(module.coursename)
                 print("Changed destination1 to \(destination1)")
-
+                
             } else {
                 do {
                     try FileManager.default.createDirectory(atPath: dataPath.appendingPathComponent(module.coursename).path, withIntermediateDirectories: true, attributes: nil)
@@ -139,7 +140,10 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
         } else {
             if Reachability.isConnectedToNetwork() {
                 destinationURL = destination
-                download(url: url, to: destination)
+//                download(url: url, to: destination)
+                downloadFile(downloadURL: url, localURL: destination) {
+                    self.openFile()
+                }
             } else {
                 let offlineBanner = NotificationBanner(title: "Offline", subtitle: "Your device is offline.", style: .danger)
                 if !offlineBanner.isDisplaying {
@@ -163,6 +167,42 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
         request.httpMethod = "GET"
         task = session.downloadTask(with: request)
         task.resume()
+    }
+    
+    func downloadFile(downloadURL: URL, localURL: URL, completion: @escaping () -> Void ) {
+        constants.downloadManager.showLocalNotificationOnBackgroundDownloadDone = true
+        constants.downloadManager.localNotificationText = "Module completed download."
+        let request = URLRequest(url: downloadURL)
+        let downloadKey = constants.downloadManager.downloadFile(withRequest: request, shouldDownloadInBackground: true, onProgress: { (progress) in
+            self.progressBar.isHidden = false
+            self.downloadProgressLabel.isHidden = false
+            self.progressBar.progress = Float(progress)
+            self.downloadProgressLabel.text = "Downloading: \(progress * 100)%"
+            self.cancelButton.isHidden = false
+        }) { (error, localFileURL) in
+            if error != nil {
+                print("There was an error while downloading the file. \(String(describing: error))")
+            } else {
+                print("The file was downloaded to the location: \(String(describing: localFileURL))")
+                do {
+                    try FileManager.default.copyItem(at: localFileURL!, to: localURL)
+                } catch (let writeError){
+                    print("there was an error in writing: \(writeError)")
+                }
+                do {
+                    try FileManager.default.removeItem(at: localFileURL!)
+                } catch let removeError {
+                    print("There was an error in removing: \(removeError)")
+                }
+            }
+        }
+        print("The download key is: \(downloadKey ?? "")")
+        locationToCopy = localURL as URL
+        self.progressBar.isHidden = true
+        self.cancelButton.isEnabled = false
+        self.cancelButton.isHidden = true
+        self.downloadProgressLabel.isHidden = true
+        completion()
     }
     
     @IBAction func openFileButtonPressed(_ sender: UIButton) {
@@ -213,12 +253,12 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
             let downloadProgress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
             self.progressBar.progress = Float(downloadProgress)
             self.downloadProgressLabel.text = "Downloading... \(Int(downloadProgress*100))%"
-           
-//            SVProgressHUD.showProgress(Float((downloadProgress)))
+            
+            //            SVProgressHUD.showProgress(Float((downloadProgress)))
         }
     }    
     @IBAction func cancelDownloadButtonPressed(_ sender: UIButton) {
-        task.cancel()
+        constants.downloadManager.cancelAllDownloads()
         openButton.isEnabled = true
         self.progressBar.isHidden = true
         self.downloadProgressLabel.isHidden = true
