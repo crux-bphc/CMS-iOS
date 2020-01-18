@@ -353,7 +353,17 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             self.courseList.append(temp2[i])
                             
                         }
-                        self.setupColors(colors: DashboardCellColours().dark)
+                        
+                        if #available(iOS 12.0, *) {
+                            if self.traitCollection.userInterfaceStyle == .dark{
+                                self.setupColors(colors: DashboardCellColours().dark)
+                            }else{
+                                self.setupColors(colors: DashboardCellColours().light)
+                            }
+                        } else {
+                            self.setupColors(colors: DashboardCellColours().light)
+                        }
+                        
                         self.tableView.reloadData()
                         
                     }
@@ -378,7 +388,15 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 courseList.append(realmCourses[x])
             }
         }
-        setupColors(colors: constant.DashboardCellColors)
+        if #available(iOS 12.0, *) {
+            if self.traitCollection.userInterfaceStyle == .dark{
+                self.setupColors(colors: DashboardCellColours().dark)
+            }else{
+                self.setupColors(colors: DashboardCellColours().light)
+            }
+        } else {
+            self.setupColors(colors: DashboardCellColours().light)
+        }
     }
     
     @objc func refreshData() {
@@ -505,6 +523,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         tableView.reloadData()
+        refreshData()
     }
     func setupGradientLoadingBar(){
         guard let navigationBar = navigationController?.navigationBar else { return }
