@@ -16,7 +16,7 @@ import SafariServices
 class LoginViewController: UIViewController {
     
     @IBOutlet weak var keyField: UITextField!
-    
+    @IBOutlet weak var loginLabel: UILabel!
     @IBOutlet weak var googleLoginBtn: UIButton!
     
     let constant = Constants.Global.self
