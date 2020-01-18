@@ -96,7 +96,7 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
             
             descriptionText.isEditable = false
         } else {
-            self.textConstraint.constant = 0
+            self.textConstraint.constant = self.view.frame.height - 16
         }
     }
     
