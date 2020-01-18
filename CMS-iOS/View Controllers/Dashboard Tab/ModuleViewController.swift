@@ -15,7 +15,7 @@ import RealmSwift
 import NotificationBannerSwift
 
 
-class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPreviewControllerDataSource{
+class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
     
     var quickLookController = QLPreviewController()
     var selectedModule = Module()
@@ -158,16 +158,16 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
         generator.notificationOccurred(.success)
         openWithQL()
     }
-    func download(url: URL, to localUrl: URL) {
-        locationToCopy = localUrl
-        let sessionConfig = URLSessionConfiguration.default
-        let session = URLSession(configuration: sessionConfig, delegate: self, delegateQueue: OperationQueue.main)
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        task = session.downloadTask(with: request)
-        task.resume()
-    }
+//    func download(url: URL, to localUrl: URL) {
+//        locationToCopy = localUrl
+//        let sessionConfig = URLSessionConfiguration.default
+//        let session = URLSession(configuration: sessionConfig, delegate: self, delegateQueue: OperationQueue.main)
+//
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "GET"
+//        task = session.downloadTask(with: request)
+//        task.resume()
+//    }
     
     func downloadFile(downloadURL: URL, localURL: URL, completion: @escaping () -> Void ) {
         constants.downloadManager.showLocalNotificationOnBackgroundDownloadDone = true
@@ -227,36 +227,36 @@ class ModuleViewController : UIViewController, URLSessionDownloadDelegate, QLPre
             setDescription()
         }
     }
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        do {
-            try FileManager.default.copyItem(at: location, to: locationToCopy!)
-            print("Saved")
-            openFile()
-            DispatchQueue.main.async {
-                self.progressBar.isHidden = true
-                self.downloadProgressLabel.isHidden = true
-                self.cancelButton.isHidden = true
-            }
-        } catch (let writeError){
-            print("there was an error: \(writeError)")
-        }
-    }
-    
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        DispatchQueue.main.async {
-            if self.progressBar.isHidden{
-                self.progressBar.isHidden = false
-                self.downloadProgressLabel.isHidden = false
-                self.cancelButton.isHidden = false
-                
-            }
-            let downloadProgress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
-            self.progressBar.progress = Float(downloadProgress)
-            self.downloadProgressLabel.text = "Downloading... \(Int(downloadProgress*100))%"
-            
-            //            SVProgressHUD.showProgress(Float((downloadProgress)))
-        }
-    }    
+//    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+//        do {
+//            try FileManager.default.copyItem(at: location, to: locationToCopy!)
+//            print("Saved")
+//            openFile()
+//            DispatchQueue.main.async {
+//                self.progressBar.isHidden = true
+//                self.downloadProgressLabel.isHidden = true
+//                self.cancelButton.isHidden = true
+//            }
+//        } catch (let writeError){
+//            print("there was an error: \(writeError)")
+//        }
+//    }
+//    
+//    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+//        DispatchQueue.main.async {
+//            if self.progressBar.isHidden{
+//                self.progressBar.isHidden = false
+//                self.downloadProgressLabel.isHidden = false
+//                self.cancelButton.isHidden = false
+//                
+//            }
+//            let downloadProgress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+//            self.progressBar.progress = Float(downloadProgress)
+//            self.downloadProgressLabel.text = "Downloading... \(Int(downloadProgress*100))%"
+//            
+//            //            SVProgressHUD.showProgress(Float((downloadProgress)))
+//        }
+//    }    
     @IBAction func cancelDownloadButtonPressed(_ sender: UIButton) {
         constants.downloadManager.cancelAllDownloads()
         openButton.isEnabled = true
