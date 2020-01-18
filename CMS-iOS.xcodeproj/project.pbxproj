@@ -44,7 +44,6 @@
 		BFC1B417931C30110801FF27 /* Pods_CMS_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AF741CDDD3243055B74D650 /* Pods_CMS_iOS.framework */; };
 		E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */; };
 		E61F0E9A236EFEB300A9C9DA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */; };
-		E6510CAE233FD49B009FCF0D /* HTMLStringDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */; };
 		E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */; };
 		E6B205F7237C3FED00D0F69F /* AttributedStringFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */; };
 		E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6C61630235DA91F00FFC2E4 /* Main.storyboard */; };
@@ -93,7 +92,6 @@
 		C8721D6CE305796446207B23 /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderContentViewController.swift; sourceTree = "<group>"; };
 		E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
-		E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLStringDecoder.swift; sourceTree = "<group>"; };
 		E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLPreviewItemSubclass.swift; sourceTree = "<group>"; };
 		E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringFontExtension.swift; sourceTree = "<group>"; };
 		E6C61630235DA91F00FFC2E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -170,7 +168,6 @@
 				0A4AF7B323819C0100C6EBA1 /* BackgroundFetch.swift */,
 				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
 				E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */,
-				E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */,
 				E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */,
 				0A585452230168E7008FB370 /* Constants.swift */,
 				0A2FD034236059A800917BE7 /* Regex.swift */,
@@ -406,7 +403,6 @@
 				0AC33B6F2304306C004AE385 /* ModuleViewController.swift in Sources */,
 				0A8E02D72300207900724899 /* User.swift in Sources */,
 				0AC33B642302153C004AE385 /* Course.swift in Sources */,
-				E6510CAE233FD49B009FCF0D /* HTMLStringDecoder.swift in Sources */,
 				0A9A960C23572E93004ABB2F /* BubbleTabBar.swift in Sources */,
 				0A3DEAF522FDCA69001B6BFD /* LoginViewController.swift in Sources */,
 				0AF805C5234F43A3008D9B25 /* CourseTableViewCell.swift in Sources */,
