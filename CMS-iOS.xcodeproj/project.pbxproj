@@ -20,6 +20,7 @@
 		0A585453230168E7008FB370 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A585452230168E7008FB370 /* Constants.swift */; };
 		0A5ECD7C2306A98800723365 /* AboutPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5ECD7B2306A98800723365 /* AboutPageViewController.swift */; };
 		0A5ECD7E2306B23000723365 /* Discussion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5ECD7D2306B23000723365 /* Discussion.swift */; };
+		0A646D7A23D188150023572B /* Colours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A646D7923D188150023572B /* Colours.swift */; };
 		0A67E5DC23091B4700E18E99 /* EnrolmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A67E5DB23091B4700E18E99 /* EnrolmentViewController.swift */; };
 		0A7F90BC2300753E00683867 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F90BB2300753E00683867 /* DashboardViewController.swift */; };
 		0A8E02D72300207900724899 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8E02D62300207900724899 /* User.swift */; };
@@ -66,6 +67,7 @@
 		0A585452230168E7008FB370 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		0A5ECD7B2306A98800723365 /* AboutPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPageViewController.swift; sourceTree = "<group>"; };
 		0A5ECD7D2306B23000723365 /* Discussion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Discussion.swift; sourceTree = "<group>"; };
+		0A646D7923D188150023572B /* Colours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colours.swift; sourceTree = "<group>"; };
 		0A67E5DB23091B4700E18E99 /* EnrolmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnrolmentViewController.swift; sourceTree = "<group>"; };
 		0A7F90BB2300753E00683867 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		0A8E02D62300207900724899 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 				0A585452230168E7008FB370 /* Constants.swift */,
 				0A2FD034236059A800917BE7 /* Regex.swift */,
 				E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */,
+				0A646D7923D188150023572B /* Colours.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -412,6 +415,7 @@
 				0A9A960D23572E93004ABB2F /* BubbleTabBarController.swift in Sources */,
 				0A7F90BC2300753E00683867 /* DashboardViewController.swift in Sources */,
 				0A2B472C23083C1A005879D6 /* SearchViewController.swift in Sources */,
+				0A646D7A23D188150023572B /* Colours.swift in Sources */,
 				0A03483623166C2D00552F69 /* DiscussionTableViewController.swift in Sources */,
 				0A2FD035236059A800917BE7 /* Regex.swift in Sources */,
 				0AF20A35230B48AD001C0CB1 /* DiscussionViewController.swift in Sources */,
