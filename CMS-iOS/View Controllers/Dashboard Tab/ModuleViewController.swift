@@ -38,9 +38,9 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
         openButton.layer.cornerRadius = 10
         quickLookController.dataSource = self
         openButton.isEnabled = true
-        if selectedModule.name != ""{
+        if selectedModule.name != "" {
             self.title = selectedModule.name
-        }else{
+        } else {
             self.title = selectedModule.filename
         }
         print(selectedModule.modname)
@@ -59,6 +59,7 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
     
     override func viewWillDisappear(_ animated: Bool) {
         task.cancel()
+        constants.downloadManager.cancelAllDownloads()
         self.progressBar.isHidden = true
         self.downloadProgressLabel.isHidden = true
         self.cancelButton.isHidden = true
@@ -95,7 +96,7 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
             
             descriptionText.isEditable = false
         } else {
-            self.textConstraint.constant = 0
+            self.textConstraint.constant = self.view.frame.height - 16
         }
     }
     
@@ -140,8 +141,9 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
         } else {
             if Reachability.isConnectedToNetwork() {
                 destinationURL = destination
-//                download(url: url, to: destination)
+                //                download(url: url, to: destination)
                 downloadFile(downloadURL: url, localURL: destination) {
+                    self.locationToCopy = destination
                     self.openFile()
                 }
             } else {
@@ -158,27 +160,18 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
         generator.notificationOccurred(.success)
         openWithQL()
     }
-//    func download(url: URL, to localUrl: URL) {
-//        locationToCopy = localUrl
-//        let sessionConfig = URLSessionConfiguration.default
-//        let session = URLSession(configuration: sessionConfig, delegate: self, delegateQueue: OperationQueue.main)
-//
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "GET"
-//        task = session.downloadTask(with: request)
-//        task.resume()
-//    }
     
     func downloadFile(downloadURL: URL, localURL: URL, completion: @escaping () -> Void ) {
         constants.downloadManager.showLocalNotificationOnBackgroundDownloadDone = true
         constants.downloadManager.localNotificationText = "Module completed download."
         let request = URLRequest(url: downloadURL)
-        let downloadKey = constants.downloadManager.downloadFile(withRequest: request, shouldDownloadInBackground: true, onProgress: { (progress) in
+        let downloadKey = constants.downloadManager.downloadFile(withRequest: request, shouldDownloadInBackground: false, onProgress: { (progress) in
             self.progressBar.isHidden = false
             self.downloadProgressLabel.isHidden = false
             self.progressBar.progress = Float(progress)
-            self.downloadProgressLabel.text = "Downloading: \(progress * 100)%"
+            self.downloadProgressLabel.text = "Downloading: \(Int(progress * 100))%"
             self.cancelButton.isHidden = false
+            self.cancelButton.isEnabled = true
         }) { (error, localFileURL) in
             if error != nil {
                 print("There was an error while downloading the file. \(String(describing: error))")
@@ -194,6 +187,7 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
                 } catch let removeError {
                     print("There was an error in removing: \(removeError)")
                 }
+                completion()
             }
         }
         print("The download key is: \(downloadKey ?? "")")
@@ -202,10 +196,10 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
         self.cancelButton.isEnabled = false
         self.cancelButton.isHidden = true
         self.downloadProgressLabel.isHidden = true
-        completion()
     }
     
     @IBAction func openFileButtonPressed(_ sender: UIButton) {
+        constants.downloadManager.cancelAllDownloads()
         sender.isEnabled = false
         switch selectedModule.modname {
         case "url":
@@ -227,36 +221,7 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
             setDescription()
         }
     }
-//    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-//        do {
-//            try FileManager.default.copyItem(at: location, to: locationToCopy!)
-//            print("Saved")
-//            openFile()
-//            DispatchQueue.main.async {
-//                self.progressBar.isHidden = true
-//                self.downloadProgressLabel.isHidden = true
-//                self.cancelButton.isHidden = true
-//            }
-//        } catch (let writeError){
-//            print("there was an error: \(writeError)")
-//        }
-//    }
-//    
-//    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-//        DispatchQueue.main.async {
-//            if self.progressBar.isHidden{
-//                self.progressBar.isHidden = false
-//                self.downloadProgressLabel.isHidden = false
-//                self.cancelButton.isHidden = false
-//                
-//            }
-//            let downloadProgress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
-//            self.progressBar.progress = Float(downloadProgress)
-//            self.downloadProgressLabel.text = "Downloading... \(Int(downloadProgress*100))%"
-//            
-//            //            SVProgressHUD.showProgress(Float((downloadProgress)))
-//        }
-//    }    
+
     @IBAction func cancelDownloadButtonPressed(_ sender: UIButton) {
         constants.downloadManager.cancelAllDownloads()
         openButton.isEnabled = true
