@@ -13,6 +13,7 @@ import SwiftKeychainWrapper
 import MobileCoreServices
 import RealmSwift
 import GradientLoadingBar
+import BadgeSwift
 
 class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDelegate{
     
@@ -218,7 +219,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCourse")
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: "reuseCourse")
         cell.textLabel?.text = sectionArray[indexPath.section].modules[indexPath.row].name
         if !sectionArray[indexPath.section].modules[indexPath.row].read {
             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
@@ -262,6 +263,23 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
             } else {
                 cell.imageView?.image = UIImage(named: "web")
             }
+        } else if sectionArray[indexPath.section].modules[indexPath.row].modname == "forum" {
+            // this code should show a badge showing the count of announcements, however the badge is not centred vertically
+            // *********************************************************************************************************
+            //            let announcementsBadge = BadgeSwift()
+            //            announcementsBadge.text = "2"
+            //            announcementsBadge.frame.size = CGSize(width: 22, height: 22)
+            //            announcementsBadge.font = UIFont.preferredFont(forTextStyle: .body)
+            //            announcementsBadge.textColor = .white
+            //            announcementsBadge.badgeColor = .systemBlue
+            //            cell.accessoryView = announcementsBadge
+            // *********************************************************************************************************
+            
+            // this code just shows the count on the right side like the iOS mail app
+            // *********************************************************************************************************
+            //            cell.detailTextLabel?.text = "2"
+            //            cell.accessoryType = .disclosureIndicator
+            // *********************************************************************************************************
         }
         return cell
     }
