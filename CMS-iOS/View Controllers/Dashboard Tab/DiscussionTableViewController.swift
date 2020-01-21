@@ -30,6 +30,7 @@ class DiscussionTableViewController: UITableViewController {
         setupGradientLoadingBar()
         gradientLoadingBar.fadeOut()
         canAddDiscussion()
+        self.title = currentModule.name
         getCourseDiscussions {
             self.tableView.reloadData()
             self.gradientLoadingBar.fadeOut()

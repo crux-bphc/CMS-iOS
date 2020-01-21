@@ -27,6 +27,7 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
         quickLookController.dataSource = self
         openButton.layer.cornerRadius = 10
         bodyTextView.layer.cornerRadius = 10
+        self.title = selectedDiscussion.name
         if UIApplication.shared.applicationState == .active {
             setMessage()
         }
