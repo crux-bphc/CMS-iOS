@@ -106,6 +106,10 @@ class DiscussionTableViewController: UITableViewController {
                     if discussionResponse["discussions"].count == 0 {
                         completion()
                     } else {
+                        let realm = try! Realm()
+                        try! realm.write {
+                            realm.delete(realm.objects(Discussion.self).filter("moduleId = %@", self.currentModule.id))
+                        }
                         for i in 0 ..< discussionResponse["discussions"].count {
                             let discussion = Discussion()
                             discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
@@ -124,7 +128,6 @@ class DiscussionTableViewController: UITableViewController {
                                 discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
                                 discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
                             }
-                            let realm = try! Realm()
                             try! realm.write {
                                 realm.add(discussion, update: .modified)
                             }
