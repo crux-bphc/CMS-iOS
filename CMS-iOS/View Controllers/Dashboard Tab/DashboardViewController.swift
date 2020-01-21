@@ -129,20 +129,33 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 }
             }
             let markAllRead = UIAlertAction(title: "Mark Everything Read", style: .destructive) { (_) in
-                DispatchQueue.global(qos: .userInteractive).async {
-                    let realm = try! Realm()
-                    let allUnreadModules = realm.objects(Module.self).filter("read = NO")
-                    while (allUnreadModules.count > 0){
-                        try! realm.write {
-                            allUnreadModules[0].read = true
+                let warning = UIAlertController(title: "Confirmation", message: "Are you sure you want to mark all modules and announcements as read?", preferredStyle: .actionSheet)
+                let doItAction = UIAlertAction(title: "Yes", style: .destructive) { (_) in
+                    DispatchQueue.global(qos: .userInteractive).async {
+                        
+                        let realm = try! Realm()
+                        let allUnreadModules = realm.objects(Module.self).filter("read = NO")
+                        while (allUnreadModules.count > 0){
+                            try! realm.write {
+                                allUnreadModules[0].read = true
+                            }
+                        }
+                        let allUnreadDiscussions = realm.objects(Discussion.self).filter("read = NO")
+                        while (allUnreadDiscussions.count > 0) {
+                            try! realm.write {
+                                allUnreadDiscussions[0].read = true
+                            }
+                        }
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                            
                         }
                     }
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        
-                    }
                 }
-                
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                warning.addAction(doItAction)
+                warning.addAction(cancelAction)
+                self.present(warning, animated: true, completion: nil)
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             actionSheet.addAction(downloadAction)
