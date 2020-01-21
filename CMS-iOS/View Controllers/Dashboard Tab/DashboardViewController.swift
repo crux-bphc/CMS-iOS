@@ -523,7 +523,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         tableView.reloadData()
-        refreshData()
+//        refreshData()
     }
     func setupGradientLoadingBar(){
         guard let navigationBar = navigationController?.navigationBar else { return }
