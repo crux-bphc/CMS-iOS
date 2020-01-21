@@ -277,8 +277,10 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
             
             // this code just shows the count on the right side like the iOS mail app
             // *********************************************************************************************************
-            //            cell.detailTextLabel?.text = "2"
-            //            cell.accessoryType = .disclosureIndicator
+            let realm = try! Realm()
+            let counterText = String(realm.objects(Discussion.self).filter("moduleId = %@", sectionArray[indexPath.section].modules[indexPath.row].id).filter("read = NO").count)
+            cell.detailTextLabel?.text = (counterText == "0") ? "" : counterText
+            cell.accessoryType = .disclosureIndicator
             // *********************************************************************************************************
         }
         return cell

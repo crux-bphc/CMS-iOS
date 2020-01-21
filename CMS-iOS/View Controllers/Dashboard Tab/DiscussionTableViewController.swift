@@ -38,7 +38,7 @@ class DiscussionTableViewController: UITableViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         gradientLoadingBar.fadeOut()
-        
+        tableView.reloadData()
     }
     
     // MARK: - Table view data source
@@ -53,13 +53,18 @@ class DiscussionTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         sessionManager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
-        dataTasks.forEach { $0.cancel() }
-        uploadTasks.forEach { $0.cancel() }
-        downloadTasks.forEach { $0.cancel() }
+            dataTasks.forEach { $0.cancel() }
+            uploadTasks.forEach { $0.cancel() }
+            downloadTasks.forEach { $0.cancel() }
         }
         
         if discussionArray.count != 0 {
             self.currentDiscussion = discussionArray[indexPath.row]
+            let realm = try! Realm()
+            try! realm.write {
+                    discussionArray[indexPath.row].read = true
+            }
+            
             performSegue(withIdentifier: "goToDiscussionDetails", sender: self)
         } else {
             self.tableView.isScrollEnabled = false
@@ -76,8 +81,13 @@ class DiscussionTableViewController: UITableViewController {
             self.tableView.separatorStyle = .none
         } else {
             cell.textLabel?.text = discussionArray[indexPath.row].name
+            if !discussionArray[indexPath.row].read {
+                cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+            }
             self.tableView.separatorStyle = .singleLine
         }
+        
+        
         return cell
     }
     
@@ -107,6 +117,11 @@ class DiscussionTableViewController: UITableViewController {
                         completion()
                     } else {
                         let realm = try! Realm()
+                        var readDiscussionIds = [Int]()
+                        let readDiscussions = realm.objects(Discussion.self).filter("read = YES")
+                        for i in 0..<readDiscussions.count {
+                            readDiscussionIds.append(readDiscussions[i].id)
+                        }
                         try! realm.write {
                             realm.delete(realm.objects(Discussion.self).filter("moduleId = %@", self.currentModule.id))
                         }
@@ -117,6 +132,7 @@ class DiscussionTableViewController: UITableViewController {
                             discussion.date = discussionResponse["discussions"][i]["created"].int!
                             discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
                             discussion.id = discussionResponse["discussions"][i]["id"].int!
+                            discussion.read = readDiscussionIds.contains(discussion.id) ? true : false
                             discussion.moduleId = self.currentModule.id
                             if discussionResponse["discussions"][i]["attachment"].string! != "0" {
                                 if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
@@ -171,9 +187,9 @@ class DiscussionTableViewController: UITableViewController {
     @IBAction func addDiscussionButtonPressed(_ sender: Any) {
         
         sessionManager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
-        dataTasks.forEach { $0.cancel() }
-        uploadTasks.forEach { $0.cancel() }
-        downloadTasks.forEach { $0.cancel() }
+            dataTasks.forEach { $0.cancel() }
+            uploadTasks.forEach { $0.cancel() }
+            downloadTasks.forEach { $0.cancel() }
         }
         
         performSegue(withIdentifier: "goToAddDiscussion", sender: self)
