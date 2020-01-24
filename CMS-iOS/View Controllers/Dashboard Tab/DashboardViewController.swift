@@ -135,7 +135,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         
                         let realm = try! Realm()
                         let allUnreadModules = realm.objects(Module.self).filter("read = NO")
-                        while (allUnreadModules.count > 0){
+                        while (allUnreadModules.count > 0) {
                             try! realm.write {
                                 allUnreadModules[0].read = true
                             }
@@ -167,7 +167,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func filterCoursesForSearch(string: String) {
         
-        filteredCourseList = courseList.filter(){$0.displayname.contains(string.uppercased())}
+        filteredCourseList = courseList.filter() {$0.displayname.contains(string.uppercased())}
         self.tableView.reloadData()
     }
     
@@ -214,7 +214,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                 let newModule = Module()
                                 newModule.filename = courseData[i]["modules"][j]["contents"][u]["filename"].string!
                                 
-                                if courseData[i]["modules"][j]["contents"][u]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
+                                if courseData[i]["modules"][j]["contents"][u]["fileurl"].string!.contains("td.bits-hyderabad.ac.in") {
                                     newModule.fileurl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                 }
                                 newModule.mimetype = courseData[i]["modules"][j]["contents"][u]["mimetype"].string!
@@ -263,7 +263,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     print("The file was downloaded to the location: \(String(describing: localFileURL))")
                     do {
                         try FileManager.default.copyItem(at: localFileURL!, to: localURLArray[i])
-                    } catch (let writeError){
+                    } catch (let writeError) {
                         print("there was an error in writing: \(writeError)")
                     }
                     do {
@@ -325,7 +325,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func getRegisteredCourses() {
         
-        if Reachability.isConnectedToNetwork(){
+        if Reachability.isConnectedToNetwork() {
             let queue = DispatchQueue(label: "com.cruxbphc.getcoursetitles", qos: .userInteractive, attributes: .concurrent)
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
@@ -335,7 +335,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     let bkgRealm = try! Realm()
                     var tempCourses : Results<Course>?
                     let realmCourses = bkgRealm.objects(Course.self)
-                                        if (realmCourses.count != 0){
+                                        if (realmCourses.count != 0) {
                                             try! bkgRealm.write {
                                                 bkgRealm.delete(realmCourses)
                                             }
@@ -426,7 +426,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             self.refreshControl?.endRefreshing()
         }
         
-        if !Reachability.isConnectedToNetwork(){
+        if !Reachability.isConnectedToNetwork() {
             showOfflineMessage()
             gradientLoadingBar.fadeOut()
         }
@@ -506,12 +506,12 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         
     }
     
-    func showOfflineMessage(){
+    func showOfflineMessage() {
         banner.show()
         self.perform(#selector(dismissOfflineBanner), with: nil, afterDelay: 1)
     }
     
-    @objc func dismissOfflineBanner(){
+    @objc func dismissOfflineBanner() {
         banner.dismiss()
     }
     
@@ -538,7 +538,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         tableView.reloadData()
 //        refreshData()
     }
-    func setupGradientLoadingBar(){
+    func setupGradientLoadingBar() {
         guard let navigationBar = navigationController?.navigationBar else { return }
         
         gradientLoadingBar.fadeOut(duration: 0)
@@ -554,7 +554,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
     }
-    func setupColors(colors: [UIColor]){
+    func setupColors(colors: [UIColor]) {
         let realm = try! Realm()
         var currentCourseCode = String()
         var currentIndex = 0
@@ -582,7 +582,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             
         }
     }
-    func downloadDashboardCourseContents(courseName: String, courseId: Int){
+    func downloadDashboardCourseContents(courseName: String, courseId: Int) {
         
         
         let FINAL_URL = constant.BASE_URL + constant.GET_COURSE_CONTENT
@@ -597,7 +597,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 // get read status for all modules and add read ones to readModuleNames
                 for i in 0..<realmSections.count {
                     for j in 0..<realmSections[i].modules.count {
-                        if realmSections[i].modules[j].read && !readModuleIds.contains(realmSections[i].modules[j].id){
+                        if realmSections[i].modules[j].read && !readModuleIds.contains(realmSections[i].modules[j].id) {
                             readModuleIds.append(realmSections[i].modules[j].id)
                         }
                     }
@@ -642,7 +642,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                     newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
                                     newModule.read = true
                                     
-                                    if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
+                                    if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in") {
                                         newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                     }
                                     newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
@@ -653,7 +653,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             }
                             
                             moduleData.name = courseContent[i]["modules"][j]["name"].string!
-                            if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!){
+                            if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!) {
                                 moduleData.read = true
                             }
                             if courseContent[i]["modules"][j]["description"].string != nil {
@@ -684,7 +684,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     
-    func stopTheDamnRequests(){
+    func stopTheDamnRequests() {
         if #available(iOS 9.0, *) {
             Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
                 tasks.forEach{ $0.cancel() }

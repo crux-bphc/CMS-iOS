@@ -42,7 +42,7 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
         SVProgressHUD.dismiss()
     }
     
-    func setMessage(){
+    func setMessage() {
         if selectedDiscussion.message != "" {
             do {
                 let formattedString = try NSAttributedString(data: ("<font size=\"+1.7\">\(selectedDiscussion.message)</font>").data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [ .documentType : NSAttributedString.DocumentType.html], documentAttributes: nil)
@@ -155,7 +155,7 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
             setMessage()
         }
     }
-    func openWithQL(){
+    func openWithQL() {
         self.present(quickLookController, animated: true) {
             // completion
         }

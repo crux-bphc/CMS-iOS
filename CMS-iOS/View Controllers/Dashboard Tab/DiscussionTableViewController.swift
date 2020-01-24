@@ -106,7 +106,7 @@ class DiscussionTableViewController: UITableViewController {
     
     func getCourseDiscussions(completion: @escaping () -> Void) {
         
-        if Reachability.isConnectedToNetwork(){
+        if Reachability.isConnectedToNetwork() {
             let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
             let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
             gradientLoadingBar.fadeIn()
@@ -196,7 +196,7 @@ class DiscussionTableViewController: UITableViewController {
         performSegue(withIdentifier: "goToAddDiscussion", sender: self)
     }
     
-    func setupGradientLoadingBar(){
+    func setupGradientLoadingBar() {
         guard let navigationBar = navigationController?.navigationBar else { return }
         
         gradientLoadingBar.fadeOut(duration: 0)

@@ -68,7 +68,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     func loadModulesFromMemory() {
         let realm = try! Realm()
         let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)").sorted(byKeyPath: "dateCreated", ascending: true)
-        if sections.count != 0{
+        if sections.count != 0 {
             sectionArray.removeAll()
             for i in 0..<sections.count {
                 sectionArray.append(sections[i])
@@ -81,7 +81,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     
     func getCourseContent(completion: @escaping ([CourseSection]) -> Void) {
         
-        if Reachability.isConnectedToNetwork(){
+        if Reachability.isConnectedToNetwork() {
             let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
             let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
             var readModuleIds = [Int]()
@@ -93,7 +93,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                     let courseContent = JSON(response.value as Any)
                     let realmModules = realm.objects(Module.self).filter("coursename = %@" ,self.currentCourse.displayname)
                     for i in 0..<realmModules.count {
-                        if realmModules[i].read && !readModuleIds.contains(realmModules[i].id){
+                        if realmModules[i].read && !readModuleIds.contains(realmModules[i].id) {
                                 readModuleIds.append(realmModules[i].id)
                             }
                         
@@ -141,7 +141,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                         newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
                                         newModule.read = true
                                         
-                                        if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
+                                        if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in") {
                                             newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                         }
                                         newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
@@ -152,7 +152,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                 }
                                 
                                 moduleData.name = courseContent[i]["modules"][j]["name"].string!
-                                if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!){
+                                if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!) {
                                     moduleData.read = true
                                     
                                 }else if moduleData.name == "Announcements"{
@@ -168,6 +168,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                             }
                             section.courseId = self.currentCourse.courseid
                             section.key = String(self.currentCourse.courseid) + section.name
+                            section.dateCreated = NSDate().timeIntervalSince1970
                             self.sectionArray.append(section)
                             try! realm.write {
                                 realm.add(section, update: .modified)
@@ -232,7 +233,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let dataPath = documentsDirectory.absoluteURL.appendingPathComponent(sectionArray[indexPath.section].modules[indexPath.row].coursename)
         let destination = dataPath.appendingPathComponent("\(String(sectionArray[indexPath.section].modules[indexPath.row].id) + sectionArray[indexPath.section].modules[indexPath.row].filename)")
-        if FileManager().fileExists(atPath: destination.path){
+        if FileManager().fileExists(atPath: destination.path) {
             // module has already been downloaded
             cell.textLabel?.textColor = .systemGreen
         }
@@ -377,7 +378,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         updateUI()
     }
-        func markAllRead(){
+        func markAllRead() {
             let realm = try! Realm()
             let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
             for i in 0..<realmSections.count {
@@ -390,7 +391,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
             tableView.reloadData()
         }
     
-    func setupGradientLoadingBar(){
+    func setupGradientLoadingBar() {
         guard let navigationBar = navigationController?.navigationBar else { return }
 
         gradientLoadingBar.fadeOut(duration: 0)

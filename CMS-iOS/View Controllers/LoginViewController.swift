@@ -69,7 +69,7 @@ class LoginViewController: UIViewController {
             let alert = UIAlertController(title: "Unable to connect", message: "You are not connected to the internet. Please check your connection and relaunch the app.", preferredStyle: .alert)
             let dismiss = UIAlertAction(title: "Dismiss", style: .default) { _ in
                 let users = self.realm.objects(User.self)
-                if (users.count != 0){
+                if (users.count != 0) {
                     self.currentUser = users[0]
                     self.performSegue(withIdentifier: "goToDashboard", sender: self)
                 }
@@ -159,7 +159,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    func loginWithGoogle(input: String){
+    func loginWithGoogle(input: String) {
         let base64String = input.replacingOccurrences(of: "token=", with: "")
         let decodedData = Data(base64Encoded: base64String)!
         let decodedString = String(data: decodedData, encoding: .utf8)!

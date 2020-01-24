@@ -137,7 +137,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         }
     }
     
-    func setupGradientLoadingBar(){
+    func setupGradientLoadingBar() {
         guard let navigationBar = navigationController?.navigationBar else { return }
         
         gradientLoadingBar.fadeOut(duration: 0)
@@ -153,7 +153,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
     }
-    func stopTheDamnRequests(){
+    func stopTheDamnRequests() {
         if #available(iOS 9.0, *) {
             Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
                 tasks.forEach{ $0.cancel() }

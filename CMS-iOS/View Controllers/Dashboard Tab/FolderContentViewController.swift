@@ -46,7 +46,7 @@ class FolderContentViewController: UITableViewController {
 //        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 //        let dataPath = documentsDirectory.absoluteURL.appendingPathComponent(currentModule.coursename)
 //        let destination = dataPath.appendingPathComponent("\(String(currentModuleContents[indexPath.row].id) + currentModuleContents[indexPath.row].filename)")
-//        if FileManager().fileExists(atPath: destination.path){
+//        if FileManager().fileExists(atPath: destination.path) {
 //            // module has already been downloaded
 //            cell.textLabel?.textColor = .systemGreen
 //        }
