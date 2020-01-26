@@ -51,6 +51,11 @@ class BackgroundFetch {
                                     }
                                 } else if moduleData.modname == "forum" {
                                     moduleData.id = courseContent[i]["modules"][j]["instance"].int!
+//                                    self.downloadDiscussions(currentModule: moduleData) { (foundNewDiscussions) in
+//                                        if foundNewDiscussions {
+//                                            foundNewData = true
+//                                        }
+//                                    }
                                 }else if moduleData.modname == "folder"{
                                     
                                     let itemCount = courseContent[i]["modules"][j]["contents"].count
@@ -123,4 +128,52 @@ class BackgroundFetch {
         let categories = UNNotificationCategory(identifier: userActions, actions: [markRead, openAction], intentIdentifiers: [], options: [])
         notificationCenter.setNotificationCategories([categories])
     }
+//    func downloadDiscussions(currentModule : Module, completion : @escaping (Bool) -> Void) {
+//        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
+//        let constants = Constants.Global.self
+//        let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
+//        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
+//            if response.result.isSuccess {
+//                let discussionResponse = JSON(response.value as Any)
+//                if discussionResponse["discussions"].count == 0 {
+//                    completion(false)
+//                } else {
+//                    let realm = try! Realm()
+////                    var readDiscussionIds = [Int]()
+////                    let readDiscussions = realm.objects(Discussion.self).filter("read = YES")
+////                    for i in 0..<readDiscussions.count {
+////                        readDiscussionIds.append(readDiscussions[i].id)
+////                    }
+////                    try! realm.write {
+////                        realm.delete(realm.objects(Discussion.self).filter("moduleId = %@", currentModule.id))
+////                    }
+//                    for i in 0 ..< discussionResponse["discussions"].count {
+//                        let discussion = Discussion()
+//                        discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
+//                        discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
+//                        discussion.date = discussionResponse["discussions"][i]["created"].int!
+//                        discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
+//                        discussion.id = discussionResponse["discussions"][i]["id"].int!
+//                        discussion.moduleId = currentModule.id
+//                        if discussionResponse["discussions"][i]["attachment"].string! != "0" {
+//                            if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
+//                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+//                            } else {
+//                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
+//                            }
+//
+//                            discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
+//                            discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
+//                        }
+//                        if realm.objects(Discussion.self).filter("id = %@", discussion.id).count == 0 {
+//                            // new discussion
+//                            self.sendNotification(title: discussion.name, body: "New announcement in \(currentModule.coursename)", identifier: String(discussion.id))
+//                            completion(true)
+//                        }
+//
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
