@@ -70,7 +70,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func viewDidAppear(_ animated: Bool) {
-//        tableView.reloadData()
+        //        tableView.reloadData()
         UIApplication.shared.applicationIconBadgeNumber = 0
         if !animated{
             animateTable()
@@ -335,50 +335,60 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     let bkgRealm = try! Realm()
                     var tempCourses : Results<Course>?
                     let realmCourses = bkgRealm.objects(Course.self)
-                                        if (realmCourses.count != 0) {
-                                            try! bkgRealm.write {
-                                                bkgRealm.delete(realmCourses)
-                                            }
-                                        }
+                    if (realmCourses.count != 0) {
+                        try! bkgRealm.write {
+                            bkgRealm.delete(realmCourses)
+                        }
+                    }
                     
                     let courses = JSON(courseData.value as Any)
                     self.totalCourseCount = courses.count
                     self.courseList.removeAll()
-                    for i in 0 ..< courses.count{
-                        let currentCourse = Course()
-                        currentCourse.courseid = courses[i]["id"].int!
-                        currentCourse.displayname = courses[i]["displayname"].string!
-                        currentCourse.courseCode = Regex.match(pattern: "(..|...|....)\\s[A-Z][0-9][0-9][0-9]", text: currentCourse.displayname).first ?? ""
-                        currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
-                        currentCourse.enrolled = true
-                        try! bkgRealm.write {
-//                            bkgRealm.add(currentCourse)
-                            bkgRealm.add(currentCourse, update: .modified)
+                    if let _ = courses[0]["id"].int {
+                        for i in 0 ..< courses.count{
+                            let currentCourse = Course()
+                            currentCourse.courseid = courses[i]["id"].int!
+                            currentCourse.displayname = courses[i]["displayname"].string!
+                            currentCourse.courseCode = Regex.match(pattern: "(..|...|....)\\s[A-Z][0-9][0-9][0-9]", text: currentCourse.displayname).first ?? ""
+                            currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
+                            currentCourse.enrolled = true
+                            try! bkgRealm.write {
+                                //                            bkgRealm.add(currentCourse)
+                                bkgRealm.add(currentCourse, update: .modified)
+                            }
+                            self.downloadDashboardCourseContents(courseName: currentCourse.displayname, courseId: currentCourse.courseid)
                         }
-                        self.downloadDashboardCourseContents(courseName: currentCourse.displayname, courseId: currentCourse.courseid)
-                    }
-                    tempCourses = bkgRealm.objects(Course.self)
-                    coursesRef = ThreadSafeReference(to: tempCourses!)
-                    DispatchQueue.main.async {
-                        let realm = try! Realm()
-                        guard let coursesRef = coursesRef, let temp2 = realm.resolve(coursesRef) else {return}
-                        for i in 0..<temp2.count{
-                            self.courseList.append(temp2[i])
+                        tempCourses = bkgRealm.objects(Course.self)
+                        coursesRef = ThreadSafeReference(to: tempCourses!)
+                        DispatchQueue.main.async {
+                            let realm = try! Realm()
+                            guard let coursesRef = coursesRef, let temp2 = realm.resolve(coursesRef) else {return}
+                            for i in 0..<temp2.count{
+                                self.courseList.append(temp2[i])
+                                
+                            }
                             
-                        }
-                        
-                        if #available(iOS 12.0, *) {
-                            if self.traitCollection.userInterfaceStyle == .dark{
-                                self.setupColors(colors: DashboardCellColours().dark)
-                            }else{
+                            if #available(iOS 12.0, *) {
+                                if self.traitCollection.userInterfaceStyle == .dark{
+                                    self.setupColors(colors: DashboardCellColours().dark)
+                                }else{
+                                    self.setupColors(colors: DashboardCellColours().light)
+                                }
+                            } else {
                                 self.setupColors(colors: DashboardCellColours().light)
                             }
-                        } else {
-                            self.setupColors(colors: DashboardCellColours().light)
+                            
+                            self.tableView.reloadData()
+                            
                         }
-                        
-                        self.tableView.reloadData()
-                        
+                    } else {
+                        let alert = UIAlertController(title: "Error downloading data", message: "The site may be down or your token may have been updated. You will be logged out, try logging in again.", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "Ok", style: .default) { (_) in
+                            self.logoutCurrentUser()
+                            self.dismiss(animated: true, completion: nil)
+                        }
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
                     }
                 }
             }
@@ -457,7 +467,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     cell.unreadCounterLabel.isHidden = false
                     cell.unreadCounterLabel.text = String(unreadModules.count)
                 }
-//                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
+                //                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
             } else {
                 cell.courseName.text = courseList[indexPath.row].courseCode
                 let courseFullName = courseList[indexPath.row].courseName
@@ -471,7 +481,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     cell.unreadCounterLabel.isHidden = false
                     cell.unreadCounterLabel.text = String(unreadModules.count)
                 }
-//                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
+                //                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
                 
             }
         }
@@ -487,9 +497,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         sessionManager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
-        dataTasks.forEach { $0.cancel() }
-        uploadTasks.forEach { $0.cancel() }
-        downloadTasks.forEach { $0.cancel() }
+            dataTasks.forEach { $0.cancel() }
+            uploadTasks.forEach { $0.cancel() }
+            downloadTasks.forEach { $0.cancel() }
         }
         
         if courseList.count > indexPath.row{
@@ -536,7 +546,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         tableView.reloadData()
-//        refreshData()
+        //        refreshData()
     }
     func setupGradientLoadingBar() {
         guard let navigationBar = navigationController?.navigationBar else { return }
@@ -696,5 +706,15 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 downloadData.forEach { $0.cancel() }
             }
         }
+    }
+    
+    func logoutCurrentUser() {
+        let realm = try! Realm()
+        
+        try! realm.write {
+            realm.deleteAll()
+            
+        }
+        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
     }
 }
