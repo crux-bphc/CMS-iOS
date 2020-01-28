@@ -12,7 +12,6 @@ class CourseTableViewCell: UITableViewCell {
     
     @IBOutlet weak var courseName: UILabel!
     @IBOutlet weak var containView: UIView!
-    @IBOutlet weak var colorView: UIView!
     var gradientProgressIndicatorView = GradientActivityIndicatorView()
     @IBOutlet weak var courseFullName: UILabel!
     @IBOutlet weak var unreadCounterLabel: UILabel!
@@ -80,7 +79,7 @@ class CourseTableViewCell: UITableViewCell {
         containView.addSubview(gradientProgressIndicatorView)
         
         NSLayoutConstraint.activate([
-            gradientProgressIndicatorView.leadingAnchor.constraint(equalTo: colorView.trailingAnchor),
+            gradientProgressIndicatorView.leadingAnchor.constraint(equalTo: containView.leadingAnchor),
             gradientProgressIndicatorView.trailingAnchor.constraint(equalTo: containView.trailingAnchor),
             
             gradientProgressIndicatorView.bottomAnchor.constraint(equalTo: containView.bottomAnchor),
