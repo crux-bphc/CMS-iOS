@@ -113,7 +113,6 @@
 			isa = PBXGroup;
 			children = (
 				0A3DEAF122FDCA69001B6BFD /* CMS-iOS */,
-				0A3DEAF022FDCA69001B6BFD /* Products */,
 				CA6329F197F899A3DCF66141 /* Pods */,
 				D102A9AAD55443ACB0B6B7DF /* Frameworks */,
 				0A4AF7B223819B2100C6EBA1 /* Recovered References */,
@@ -126,6 +125,7 @@
 				0A3DEAEF22FDCA69001B6BFD /* CMS-iOS.app */,
 			);
 			name = Products;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		0A3DEAF122FDCA69001B6BFD /* CMS-iOS */ = {
@@ -143,6 +143,7 @@
 				0A3DEAFE22FDCA6A001B6BFD /* Info.plist */,
 				3B34F1122358B3B300F59536 /* Colors.xcassets */,
 				E6C61630235DA91F00FFC2E4 /* Main.storyboard */,
+				0A3DEAF022FDCA69001B6BFD /* Products */,
 			);
 			path = "CMS-iOS";
 			sourceTree = "<group>";
@@ -578,7 +579,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.crux-bphc.CMS-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ENABLE_BATCH_MODE = NO;
@@ -601,7 +602,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.crux-bphc.CMS-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ENABLE_BATCH_MODE = NO;
