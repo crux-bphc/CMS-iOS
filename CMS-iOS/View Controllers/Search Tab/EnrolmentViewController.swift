@@ -23,7 +23,7 @@ class EnrolmentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         enrolButton.layer.cornerRadius = 10
-        courseLabel.text = enrolmentCourse.displayname
+        courseLabel.text = enrolmentCourse.displayname.replacingOccurrences(of: "&amp;", with: "&")
         instructorLabel.text = enrolmentCourse.faculty
         self.navigationItem.largeTitleDisplayMode = .never
         self.title = "Course Details"
