@@ -107,7 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        if Reachability.isConnectedToNetwork() {
+        if Reachability.isConnectedToNetwork(){
             let bkgObj = BackgroundFetch()
             bkgObj.updateCourseContents { (newDataFound) in
                 if newDataFound{

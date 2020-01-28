@@ -21,7 +21,6 @@ class Discussion : Object {
     @objc dynamic var attachment : String = ""
     @objc dynamic var id : Int = 0
     @objc dynamic var moduleId : Int = 0
-    @objc dynamic var read : Bool = false
     override class func primaryKey() -> String? {
         return "id"
     }

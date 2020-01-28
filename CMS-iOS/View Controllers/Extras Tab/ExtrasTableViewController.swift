@@ -28,7 +28,7 @@ class ExtrasTableViewController: UITableViewController {
         
     }
     
-    func logout() {
+    func logout(){
         let realm = try! Realm()
         
         try! realm.write {

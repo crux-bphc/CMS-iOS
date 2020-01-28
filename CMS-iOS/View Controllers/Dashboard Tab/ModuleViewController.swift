@@ -73,7 +73,7 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
         print(selectedModule.read)
     }
     
-    func setDescription() {
+    func setDescription(){
         if selectedModule.moduleDescription != "" {
             do {
                 print(selectedModule.moduleDescription)
@@ -155,7 +155,7 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
         }
     }
     
-    func openFile() {
+    func openFile(){
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
         openWithQL()
@@ -179,7 +179,7 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
                 print("The file was downloaded to the location: \(String(describing: localFileURL))")
                 do {
                     try FileManager.default.copyItem(at: localFileURL!, to: localURL)
-                } catch (let writeError) {
+                } catch (let writeError){
                     print("there was an error in writing: \(writeError)")
                 }
                 do {
@@ -231,7 +231,7 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
         
     }
     
-    func openWithQL() {
+    func openWithQL(){
         self.present(quickLookController, animated: true) {
             // completion
         }

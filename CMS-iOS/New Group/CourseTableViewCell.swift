@@ -70,7 +70,7 @@ class CourseTableViewCell: UITableViewCell {
             //            self.courseProgress.tintColor = #colorLiteral(red: 0.9372549057, green: 0.5625251839, blue: 0.3577104232, alpha: 1)
         }
     }
-    func showGradientLoadingBar() {
+    func showGradientLoadingBar(){
     
         gradientProgressIndicatorView.isHidden = false
         gradientProgressIndicatorView.fadeOut(duration: 0)
@@ -87,7 +87,7 @@ class CourseTableViewCell: UITableViewCell {
         ])
         gradientProgressIndicatorView.fadeIn()
     }
-    func hideGradientLoadingBar() {
+    func hideGradientLoadingBar(){
         gradientProgressIndicatorView.fadeOut()
         gradientProgressIndicatorView.isHidden = true
         
