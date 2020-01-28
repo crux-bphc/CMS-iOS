@@ -370,7 +370,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             
                             if #available(iOS 12.0, *) {
                                 if self.traitCollection.userInterfaceStyle == .dark{
-                                    self.setupColors(colors: DashboardCellColours().dark)
+                                    // make this dark in the future
+//                                    self.setupColors(colors: DashboardCellColours().dark)
+                                    self.setupColors(colors: DashboardCellColours().light)
                                 }else{
                                     self.setupColors(colors: DashboardCellColours().light)
                                 }
@@ -413,7 +415,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
         if #available(iOS 12.0, *) {
             if self.traitCollection.userInterfaceStyle == .dark{
-                self.setupColors(colors: DashboardCellColours().dark)
+//                self.setupColors(colors: DashboardCellColours().dark)
+                self.setupColors(colors: DashboardCellColours().light)
             }else{
                 self.setupColors(colors: DashboardCellColours().light)
             }
@@ -457,9 +460,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         if indexPath.row < courseList.count{
             if searchController.isActive {
                 cell.courseName.text = filteredCourseList[indexPath.row].courseCode
-                let courseFullname = filteredCourseList[indexPath.row].courseName
-                cell.courseFullName.text = courseFullname.replacingOccurrences(of: "&amp;", with: "&")
-                cell.colorView.backgroundColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
+
+                cell.courseFullName.text = filteredCourseList[indexPath.row].courseName.replacingOccurrences(of: "&amp;", with: "&")
+                cell.courseName.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
                 let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("read = NO")
                 if unreadModules.count == 0 {
                     cell.unreadCounterLabel.isHidden = true
@@ -470,10 +473,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 //                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
             } else {
                 cell.courseName.text = courseList[indexPath.row].courseCode
-                let courseFullName = courseList[indexPath.row].courseName
-                cell.courseFullName.text = courseFullName.replacingOccurrences(of: "&amp;", with: "&")
-                
-                cell.colorView.backgroundColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
+                cell.courseFullName.text = courseList[indexPath.row].courseName.replacingOccurrences(of: "&amp;", with: "&")
+                cell.courseName.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
                 let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("read = NO")
                 if unreadModules.count == 0 {
                     cell.unreadCounterLabel.isHidden = true
