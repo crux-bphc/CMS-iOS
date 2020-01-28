@@ -117,7 +117,7 @@ class SiteNewsTableViewController: UITableViewController {
             self.gradientLoadingBar.fadeOut()
         }
     }
-    func setupGradientLoadingBar(){
+    func setupGradientLoadingBar() {
         guard let navigationBar = navigationController?.navigationBar else { return }
         
         gradientLoadingBar.fadeOut(duration: 0)

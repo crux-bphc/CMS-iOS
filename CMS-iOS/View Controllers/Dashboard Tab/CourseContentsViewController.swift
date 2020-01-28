@@ -13,6 +13,7 @@ import SwiftKeychainWrapper
 import MobileCoreServices
 import RealmSwift
 import GradientLoadingBar
+import BadgeSwift
 
 class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDelegate{
     
@@ -22,7 +23,6 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     var sectionArray = [CourseSection]()
     var currentCourse = Course()
     var selectedModule = Module()
-    var discussionArray = [Discussion]()
     let refreshController = UIRefreshControl()
     let constants = Constants.Global.self
     let sessionManager = Alamofire.SessionManager.default
@@ -68,7 +68,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     func loadModulesFromMemory() {
         let realm = try! Realm()
         let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)").sorted(byKeyPath: "dateCreated", ascending: true)
-        if sections.count != 0{
+        if sections.count != 0 {
             sectionArray.removeAll()
             for i in 0..<sections.count {
                 sectionArray.append(sections[i])
@@ -81,7 +81,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     
     func getCourseContent(completion: @escaping ([CourseSection]) -> Void) {
         
-        if Reachability.isConnectedToNetwork(){
+        if Reachability.isConnectedToNetwork() {
             let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
             let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
             var readModuleIds = [Int]()
@@ -93,7 +93,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                     let courseContent = JSON(response.value as Any)
                     let realmModules = realm.objects(Module.self).filter("coursename = %@" ,self.currentCourse.displayname)
                     for i in 0..<realmModules.count {
-                        if realmModules[i].read && !readModuleIds.contains(realmModules[i].id){
+                        if realmModules[i].read && !readModuleIds.contains(realmModules[i].id) {
                                 readModuleIds.append(realmModules[i].id)
                             }
                         
@@ -127,6 +127,11 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                     }
                                 } else if moduleData.modname == "forum" {
                                     moduleData.id = courseContent[i]["modules"][j]["instance"].int!
+                                    self.downloadDiscussions(currentModule: moduleData) {
+                                        DispatchQueue.main.async {
+                                            self.tableView.reloadData()
+                                        }
+                                    }
                                 }else if moduleData.modname == "folder"{
                                     
                                     let itemCount = courseContent[i]["modules"][j]["contents"].count
@@ -136,7 +141,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                         newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
                                         newModule.read = true
                                         
-                                        if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
+                                        if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in") {
                                             newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                         }
                                         newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
@@ -147,7 +152,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                 }
                                 
                                 moduleData.name = courseContent[i]["modules"][j]["name"].string!
-                                if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!){
+                                if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!) {
                                     moduleData.read = true
                                     
                                 }else if moduleData.name == "Announcements"{
@@ -163,6 +168,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                             }
                             section.courseId = self.currentCourse.courseid
                             section.key = String(self.currentCourse.courseid) + section.name
+                            section.dateCreated = NSDate().timeIntervalSince1970
                             self.sectionArray.append(section)
                             try! realm.write {
                                 realm.add(section, update: .modified)
@@ -170,6 +176,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                         }
                     }
                 }
+                
                 completion(self.sectionArray)
             }
         }
@@ -218,7 +225,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCourse")
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: "reuseCourse")
         cell.textLabel?.text = sectionArray[indexPath.section].modules[indexPath.row].name
         if !sectionArray[indexPath.section].modules[indexPath.row].read {
             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
@@ -226,7 +233,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let dataPath = documentsDirectory.absoluteURL.appendingPathComponent(sectionArray[indexPath.section].modules[indexPath.row].coursename)
         let destination = dataPath.appendingPathComponent("\(String(sectionArray[indexPath.section].modules[indexPath.row].id) + sectionArray[indexPath.section].modules[indexPath.row].filename)")
-        if FileManager().fileExists(atPath: destination.path){
+        if FileManager().fileExists(atPath: destination.path) {
             // module has already been downloaded
             cell.textLabel?.textColor = .systemGreen
         }
@@ -262,6 +269,25 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
             } else {
                 cell.imageView?.image = UIImage(named: "web")
             }
+        } else if sectionArray[indexPath.section].modules[indexPath.row].modname == "forum" {
+            // this code should show a badge showing the count of announcements, however the badge is not centred vertically
+            // *********************************************************************************************************
+            //            let announcementsBadge = BadgeSwift()
+            //            announcementsBadge.text = "2"
+            //            announcementsBadge.frame.size = CGSize(width: 22, height: 22)
+            //            announcementsBadge.font = UIFont.preferredFont(forTextStyle: .body)
+            //            announcementsBadge.textColor = .white
+            //            announcementsBadge.badgeColor = .systemBlue
+            //            cell.accessoryView = announcementsBadge
+            // *********************************************************************************************************
+            
+            // this code just shows the count on the right side like the iOS mail app
+            // *********************************************************************************************************
+            let realm = try! Realm()
+            let counterText = String(realm.objects(Discussion.self).filter("moduleId = %@", sectionArray[indexPath.section].modules[indexPath.row].id).filter("read = NO").count)
+            cell.detailTextLabel?.text = (counterText == "0") ? "" : counterText
+            cell.accessoryType = .disclosureIndicator
+            // *********************************************************************************************************
         }
         return cell
     }
@@ -352,7 +378,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         updateUI()
     }
-        func markAllRead(){
+        func markAllRead() {
             let realm = try! Realm()
             let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
             for i in 0..<realmSections.count {
@@ -365,7 +391,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
             tableView.reloadData()
         }
     
-    func setupGradientLoadingBar(){
+    func setupGradientLoadingBar() {
         guard let navigationBar = navigationController?.navigationBar else { return }
 
         gradientLoadingBar.fadeOut(duration: 0)
@@ -412,6 +438,54 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
             
             
             
+        }
+    }
+    
+    func downloadDiscussions(currentModule : Module, completion : @escaping () -> Void) {
+        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
+        let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
+        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
+            if response.result.isSuccess {
+                let discussionResponse = JSON(response.value as Any)
+                if discussionResponse["discussions"].count == 0 {
+                    completion()
+                } else {
+                    let realm = try! Realm()
+                    var readDiscussionIds = [Int]()
+                    let readDiscussions = realm.objects(Discussion.self).filter("read = YES")
+                    for i in 0..<readDiscussions.count {
+                        readDiscussionIds.append(readDiscussions[i].id)
+                    }
+                    try! realm.write {
+                        realm.delete(realm.objects(Discussion.self).filter("moduleId = %@", currentModule.id))
+                    }
+                    for i in 0 ..< discussionResponse["discussions"].count {
+                        let discussion = Discussion()
+                        discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
+                        discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
+                        discussion.date = discussionResponse["discussions"][i]["created"].int!
+                        discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
+                        discussion.id = discussionResponse["discussions"][i]["id"].int!
+                        discussion.read = readDiscussionIds.contains(discussion.id) ? true : false
+                        discussion.moduleId = currentModule.id
+                        if discussionResponse["discussions"][i]["attachment"].string! != "0" {
+                            if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
+                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                            } else {
+                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
+                            }
+                            
+                            discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
+                            discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
+                        }
+                        try! realm.write {
+                            realm.add(discussion, update: .modified)
+                        }
+                        
+                    }
+                    completion()
+                }
+            }
         }
     }
 }
