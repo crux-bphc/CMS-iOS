@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0A3DEAEE22FDCA69001B6BFD"
-               BuildableName = "CMS-iOS.app"
+               BuildableName = "CMS BPHC.app"
                BlueprintName = "CMS-iOS"
                ReferencedContainer = "container:CMS-iOS.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0A3DEAEE22FDCA69001B6BFD"
-            BuildableName = "CMS-iOS.app"
+            BuildableName = "CMS BPHC.app"
             BlueprintName = "CMS-iOS"
             ReferencedContainer = "container:CMS-iOS.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0A3DEAEE22FDCA69001B6BFD"
-            BuildableName = "CMS-iOS.app"
+            BuildableName = "CMS BPHC.app"
             BlueprintName = "CMS-iOS"
             ReferencedContainer = "container:CMS-iOS.xcodeproj">
          </BuildableReference>

@@ -12,7 +12,7 @@
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="LoginViewController" title="Login View Controller" id="BYZ-38-t0r" customClass="LoginViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" title="Login View Controller" id="BYZ-38-t0r" customClass="LoginViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -161,7 +161,7 @@
         <!--Bubble Tab Bar Controller-->
         <scene sceneID="tH7-yD-jyj">
             <objects>
-                <tabBarController id="PKq-G8-IPd" customClass="BubbleTabBarController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController id="PKq-G8-IPd" customClass="BubbleTabBarController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="ytW-2U-uqX"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Ke4-Vn-te4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
@@ -182,7 +182,7 @@
         <!--About Page View Controller-->
         <scene sceneID="RDk-PH-gVM">
             <objects>
-                <viewController id="fZo-By-xbF" customClass="AboutPageViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="fZo-By-xbF" customClass="AboutPageViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RFz-sM-rPE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -249,20 +249,20 @@
         <!--Discussion View Controller-->
         <scene sceneID="r3e-Io-Mxb">
             <objects>
-                <viewController id="exB-Lj-j3Y" customClass="DiscussionViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="exB-Lj-j3Y" customClass="DiscussionViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ulu-h6-aXL">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Description Text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="8nS-aw-8fA">
-                                <rect key="frame" x="16" y="16" width="343" height="648"/>
+                                <rect key="frame" x="16" y="104" width="343" height="565"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OVG-jf-hSN">
-                                <rect key="frame" x="16" y="674" width="343" height="40"/>
+                                <rect key="frame" x="16" y="679" width="343" height="40"/>
                                 <color key="backgroundColor" red="0.88988083600000001" green="0.51419252159999995" blue="0.20537361500000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="wPD-2H-b6t"/>
@@ -303,7 +303,7 @@
         <!--Folder View-->
         <scene sceneID="FtP-86-yAH">
             <objects>
-                <tableViewController title="Folder View" id="Aeb-vz-2Hs" customClass="FolderContentViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Folder View" id="Aeb-vz-2Hs" customClass="FolderContentViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="m4w-Kt-yGF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -335,9 +335,9 @@
         <!--Discussion VIew-->
         <scene sceneID="91e-yF-CMr">
             <objects>
-                <tableViewController title="Discussion VIew" id="aXd-S3-Oa1" customClass="DiscussionTableViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Discussion VIew" id="aXd-S3-Oa1" customClass="DiscussionTableViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="dun-6i-2Mx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
@@ -379,7 +379,7 @@
         <!--Add Discussion View Controller-->
         <scene sceneID="xwG-EP-a5m">
             <objects>
-                <viewController id="JTN-Tg-TTI" customClass="AddDiscussionViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="JTN-Tg-TTI" customClass="AddDiscussionViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4QJ-os-LE9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -466,7 +466,7 @@
         <!--Dashboard-->
         <scene sceneID="bx0-Re-ZoF">
             <objects>
-                <tableViewController id="kZv-mO-d0U" customClass="DashboardViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="kZv-mO-d0U" customClass="DashboardViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="6Ei-6p-9ug">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -502,11 +502,11 @@
         <!--Course Details View Controller-->
         <scene sceneID="4Oj-1c-0M3">
             <objects>
-                <tableViewController storyboardIdentifier="Course Contents" useStoryboardIdentifierAsRestorationIdentifier="YES" id="fG0-QY-y8D" customClass="CourseDetailsViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="Course Contents" useStoryboardIdentifierAsRestorationIdentifier="YES" id="fG0-QY-y8D" customClass="CourseDetailsViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="moC-lT-cPs">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="reuseCourse" id="k6D-kJ-iGH">
                                 <rect key="frame" x="16" y="55.333332061767578" width="343" height="43.666667938232422"/>
@@ -540,7 +540,7 @@
         <!--Module VIew-->
         <scene sceneID="jgk-y6-roT">
             <objects>
-                <viewController storyboardIdentifier="Module View Controller" title="Module VIew" id="sHh-GJ-T8A" customClass="ModuleViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Module View Controller" title="Module VIew" id="sHh-GJ-T8A" customClass="ModuleViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1Bu-Qw-jml">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -661,7 +661,7 @@
         <!--Search-->
         <scene sceneID="sxF-qA-WhI">
             <objects>
-                <tableViewController id="hc7-og-Syb" customClass="SearchViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="hc7-og-Syb" customClass="SearchViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="y3d-a5-ddq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -696,7 +696,7 @@
         <!--Enrolment View Controller-->
         <scene sceneID="UpV-Ba-mwR">
             <objects>
-                <viewController id="euS-wt-hGD" customClass="EnrolmentViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="euS-wt-hGD" customClass="EnrolmentViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KaF-1f-OgI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -791,13 +791,13 @@
         <!--Extras-->
         <scene sceneID="EUF-WJ-Gcb">
             <objects>
-                <tableViewController id="MqB-zP-MHh" customClass="ExtrasTableViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="MqB-zP-MHh" customClass="ExtrasTableViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="PWb-NC-ERk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ExtraTableViewCell" id="cha-vi-arR" customClass="ExtrasTableViewCell" customModule="CMS_iOS" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ExtraTableViewCell" id="cha-vi-arR" customClass="ExtrasTableViewCell" customModule="CMS_BPHC" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="43.666667938232422"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cha-vi-arR" id="2PC-C7-HwA">
@@ -825,7 +825,7 @@
         <!--Site News-->
         <scene sceneID="zuY-Sa-Yd9">
             <objects>
-                <tableViewController id="Opn-i5-N4W" customClass="SiteNewsTableViewController" customModule="CMS_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Opn-i5-N4W" customClass="SiteNewsTableViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="LIl-4B-EIS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -900,7 +900,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="IgU-80-XSP"/>
         <segue reference="bDO-Ye-r9b"/>
-        <segue reference="67r-4m-Wu4"/>
+        <segue reference="r0O-gx-IAp"/>
         <segue reference="p9a-Sh-oWN"/>
     </inferredMetricsTieBreakers>
 </document>
