@@ -17,6 +17,8 @@
 		0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A3DEAFB22FDCA6A001B6BFD /* LaunchScreen.storyboard */; };
 		0A3DEB0622FDCD26001B6BFD /* SF-Pro-Display-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A3DEB0522FDCD26001B6BFD /* SF-Pro-Display-Heavy.otf */; };
 		0A4AF7B423819C0100C6EBA1 /* BackgroundFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4AF7B323819C0100C6EBA1 /* BackgroundFetch.swift */; };
+		0A54509423E48025009B8177 /* DiscussionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A54509223E48025009B8177 /* DiscussionTableViewCell.swift */; };
+		0A54509523E48025009B8177 /* DiscussionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A54509323E48025009B8177 /* DiscussionTableViewCell.xib */; };
 		0A585453230168E7008FB370 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A585452230168E7008FB370 /* Constants.swift */; };
 		0A5ECD7C2306A98800723365 /* AboutPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5ECD7B2306A98800723365 /* AboutPageViewController.swift */; };
 		0A5ECD7E2306B23000723365 /* Discussion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5ECD7D2306B23000723365 /* Discussion.swift */; };
@@ -63,6 +65,8 @@
 		0A3DEAFE22FDCA6A001B6BFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A3DEB0522FDCD26001B6BFD /* SF-Pro-Display-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Heavy.otf"; sourceTree = "<group>"; };
 		0A4AF7B323819C0100C6EBA1 /* BackgroundFetch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundFetch.swift; sourceTree = "<group>"; };
+		0A54509223E48025009B8177 /* DiscussionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionTableViewCell.swift; sourceTree = "<group>"; };
+		0A54509323E48025009B8177 /* DiscussionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiscussionTableViewCell.xib; sourceTree = "<group>"; };
 		0A585452230168E7008FB370 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		0A5ECD7B2306A98800723365 /* AboutPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPageViewController.swift; sourceTree = "<group>"; };
 		0A5ECD7D2306B23000723365 /* Discussion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Discussion.swift; sourceTree = "<group>"; };
@@ -139,10 +143,10 @@
 				0AC33B6023020669004AE385 /* View Controllers */,
 				0AC33B6523021591004AE385 /* Data Models */,
 				0A3DEAFB22FDCA6A001B6BFD /* LaunchScreen.storyboard */,
+				E6C61630235DA91F00FFC2E4 /* Main.storyboard */,
 				0AC33B6623022453004AE385 /* Assets.xcassets */,
 				0A3DEAFE22FDCA6A001B6BFD /* Info.plist */,
 				3B34F1122358B3B300F59536 /* Colors.xcassets */,
-				E6C61630235DA91F00FFC2E4 /* Main.storyboard */,
 				0A3DEAF022FDCA69001B6BFD /* Products */,
 			);
 			path = "CMS-iOS";
@@ -241,6 +245,8 @@
 				0A2FD03723619E9A00917BE7 /* ExtrasTableViewCell.xib */,
 				0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */,
 				0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */,
+				0A54509223E48025009B8177 /* DiscussionTableViewCell.swift */,
+				0A54509323E48025009B8177 /* DiscussionTableViewCell.xib */,
 			);
 			path = "New Group";
 			sourceTree = "<group>";
@@ -344,6 +350,7 @@
 				E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */,
 				0AF805C6234F43A3008D9B25 /* CourseTableViewCell.xib in Resources */,
 				0A2FD03923619E9A00917BE7 /* ExtrasTableViewCell.xib in Resources */,
+				0A54509523E48025009B8177 /* DiscussionTableViewCell.xib in Resources */,
 				0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */,
 				0AC33B6723022453004AE385 /* Assets.xcassets in Resources */,
 				0A3DEB0622FDCD26001B6BFD /* SF-Pro-Display-Heavy.otf in Resources */,
@@ -424,6 +431,7 @@
 				0A67E5DC23091B4700E18E99 /* EnrolmentViewController.swift in Sources */,
 				E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */,
 				0A9A960B23572E93004ABB2F /* CBTabBarButton.swift in Sources */,
+				0A54509423E48025009B8177 /* DiscussionTableViewCell.swift in Sources */,
 				0A2FD03823619E9A00917BE7 /* ExtrasTableViewCell.swift in Sources */,
 				0AC33B6923022B2C004AE385 /* CourseContentsViewController.swift in Sources */,
 				0A8EFC6523100F9D00CD6BAD /* Reachability.swift in Sources */,

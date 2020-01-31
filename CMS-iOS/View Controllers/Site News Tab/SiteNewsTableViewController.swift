@@ -25,6 +25,8 @@ class SiteNewsTableViewController: UITableViewController {
         
         super.viewDidLoad()
         
+        self.tableView.register(UINib(nibName: "DiscussionTableViewCell", bundle: nil), forCellReuseIdentifier: "discussionCell")
+        
         setupNavBar()
         setupGradientLoadingBar()
         
@@ -61,9 +63,15 @@ class SiteNewsTableViewController: UITableViewController {
         return discussionArray.count
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 130
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-        cell.textLabel?.text = discussionArray[indexPath.row].name
+        let cell = tableView.dequeueReusableCell(withIdentifier: "discussionCell", for: indexPath) as! DiscussionTableViewCell
+        cell.timeLabel.text = epochConvert(epoch: self.discussionArray[indexPath.row].date)
+        cell.contentPreviewLabel.text = discussionArray[indexPath.row].message.html2String
+        cell.titleLabel.text = discussionArray[indexPath.row].name
         return cell
     }
     
@@ -107,7 +115,7 @@ class SiteNewsTableViewController: UITableViewController {
                 completion()
             }
         }
-                
+        
     }
     
     @objc func refreshData() {
@@ -133,4 +141,15 @@ class SiteNewsTableViewController: UITableViewController {
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
     }
+    
+    func epochConvert(epoch: Int) -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(epoch))
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = DateFormatter.Style.none //Set time style
+        dateFormatter.dateStyle = DateFormatter.Style.medium //Set date style
+        dateFormatter.timeZone = .current
+        let localDate = dateFormatter.string(from: date)
+        return localDate
+    }
+    
 }

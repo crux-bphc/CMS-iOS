@@ -26,6 +26,7 @@ class DiscussionTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.register(UINib(nibName: "DiscussionTableViewCell", bundle: nil), forCellReuseIdentifier: "discussionCell")
         self.addDiscussionButton.isEnabled = false
         setupGradientLoadingBar()
         gradientLoadingBar.fadeOut()
@@ -45,10 +46,14 @@ class DiscussionTableViewController: UITableViewController {
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if discussionArray.count == 0 {
-            return 1
+            return 0
         } else {
             return discussionArray.count
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 130
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -75,20 +80,25 @@ class DiscussionTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "reuseCell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "discussionCell", for: indexPath) as! DiscussionTableViewCell
+        
+//        let cell = UITableViewCell(reuseIdentifier: "discussionCell") as! DiscussionTableViewCell
         if discussionArray.count == 0 {
-            cell.textLabel?.text = "No discussions"
-            cell.textLabel?.textAlignment = .center
-            self.tableView.separatorStyle = .none
+//            cell.textLabel?.text = "No discussions"
+//            cell.textLabel?.textAlignment = .center
+//            self.tableView.separatorStyle = .none
         } else {
-            cell.textLabel?.text = discussionArray[indexPath.row].name
+//            cell.textLabel?.text = discussionArray[indexPath.row].name
+//            cell.cellDiscussion = discussionArray[indexPath.row]
+            cell.timeLabel.text = epochConvert(epoch: self.discussionArray[indexPath.row].date)
+//            print(self.discussionArray[indexPath.row].date)
+            cell.contentPreviewLabel.text = discussionArray[indexPath.row].message.html2String
+            cell.titleLabel.text = discussionArray[indexPath.row].name
             if !discussionArray[indexPath.row].read {
-                cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+//                cell.titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
             }
             self.tableView.separatorStyle = .singleLine
         }
-        
-        
         return cell
     }
     
@@ -211,5 +221,39 @@ class DiscussionTableViewController: UITableViewController {
             gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
+    }
+    
+    func epochConvert(epoch: Int) -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(epoch))
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = DateFormatter.Style.none //Set time style
+        dateFormatter.dateStyle = DateFormatter.Style.medium //Set date style
+        dateFormatter.timeZone = .current
+        let localDate = dateFormatter.string(from: date)
+        return localDate
+    }
+    
+}
+
+extension Data {
+    var html2AttributedString: NSAttributedString? {
+        do {
+            return try NSAttributedString(data: self, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
+        } catch {
+            print("error:", error)
+            return  nil
+        }
+    }
+    var html2String: String {
+        return html2AttributedString?.string ?? ""
+    }
+}
+
+extension String {
+    var html2AttributedString: NSAttributedString? {
+        return Data(utf8).html2AttributedString
+    }
+    var html2String: String {
+        return html2AttributedString?.string ?? ""
     }
 }
