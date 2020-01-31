@@ -31,6 +31,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     let searchController = UISearchController(searchResultsController: nil)
     var downloadArray : [URL] = []
     var localURLArray : [URL] = []
+    let sessionManager = Alamofire.SessionManager.default
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGradientLoadingBar()
@@ -68,7 +70,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func viewDidAppear(_ animated: Bool) {
-//        tableView.reloadData()
+        //        tableView.reloadData()
         UIApplication.shared.applicationIconBadgeNumber = 0
         if !animated{
             animateTable()
@@ -85,17 +87,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! CourseDetailsViewController
         destinationVC.currentCourse = selectedCourse
-        //        let realm = try! Realm()
-        //        let destinationVC = segue.destination as! CourseDetailsViewController
-        //        var dupCourse = Course()
-        //        dupCourse.allotedColor = selectedCourse.allotedColor
-        //        dupCourse.canMakeDiscussion = selectedCourse.canMakeDiscussion
-        //        dupCourse.courseCode = selectedCourse.courseCode
-        //        dupCourse.courseid = selectedCourse.courseid
-        //        dupCourse.courseName = selectedCourse.displayname
-        //        dupCourse.displayname = selectedCourse.displayname
-        //        dupCourse.enrolled = selectedCourse.enrolled
-        //        destinationVC.currentCourse = dupCourse
     }
     
     func setupNavBar() {
@@ -138,20 +129,33 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 }
             }
             let markAllRead = UIAlertAction(title: "Mark Everything Read", style: .destructive) { (_) in
-                DispatchQueue.global(qos: .userInteractive).async {
-                    let realm = try! Realm()
-                    let allUnreadModules = realm.objects(Module.self).filter("read = NO")
-                    while (allUnreadModules.count > 0){
-                        try! realm.write {
-                            allUnreadModules[0].read = true
+                let warning = UIAlertController(title: "Confirmation", message: "Are you sure you want to mark all modules and announcements as read?", preferredStyle: .actionSheet)
+                let doItAction = UIAlertAction(title: "Yes", style: .destructive) { (_) in
+                    DispatchQueue.global(qos: .userInteractive).async {
+                        
+                        let realm = try! Realm()
+                        let allUnreadModules = realm.objects(Module.self).filter("read = NO")
+                        while (allUnreadModules.count > 0) {
+                            try! realm.write {
+                                allUnreadModules[0].read = true
+                            }
+                        }
+                        let allUnreadDiscussions = realm.objects(Discussion.self).filter("read = NO")
+                        while (allUnreadDiscussions.count > 0) {
+                            try! realm.write {
+                                allUnreadDiscussions[0].read = true
+                            }
+                        }
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                            
                         }
                     }
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        
-                    }
                 }
-                
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                warning.addAction(doItAction)
+                warning.addAction(cancelAction)
+                self.present(warning, animated: true, completion: nil)
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             actionSheet.addAction(downloadAction)
@@ -163,7 +167,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func filterCoursesForSearch(string: String) {
         
-        filteredCourseList = courseList.filter(){$0.displayname.contains(string.uppercased())}
+        filteredCourseList = courseList.filter() {$0.displayname.contains(string.uppercased())}
         self.tableView.reloadData()
     }
     
@@ -210,7 +214,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                 let newModule = Module()
                                 newModule.filename = courseData[i]["modules"][j]["contents"][u]["filename"].string!
                                 
-                                if courseData[i]["modules"][j]["contents"][u]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
+                                if courseData[i]["modules"][j]["contents"][u]["fileurl"].string!.contains("td.bits-hyderabad.ac.in") {
                                     newModule.fileurl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                 }
                                 newModule.mimetype = courseData[i]["modules"][j]["contents"][u]["mimetype"].string!
@@ -223,12 +227,14 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                 self.saveFileToStorage(mime: courseData[i]["modules"][j]["contents"][u]["mimetype"].string!, downloadUrl: downloadUrl, module: moduleToDownload)
                             }
                         }
+                        section.key = String(course.courseid) + section.name
                         section.modules.append(module)
+                        section.dateCreated = Date().timeIntervalSince1970
                     }
                     print("added to realm")
                     do {
                         try realm.write {
-                            realm.add(section)
+                            realm.add(section, update: .modified)
                         }
                     } catch let error{
                         print("There was an error writing to realm: \(error)")
@@ -257,7 +263,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     print("The file was downloaded to the location: \(String(describing: localFileURL))")
                     do {
                         try FileManager.default.copyItem(at: localFileURL!, to: localURLArray[i])
-                    } catch (let writeError){
+                    } catch (let writeError) {
                         print("there was an error in writing: \(writeError)")
                     }
                     do {
@@ -319,7 +325,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func getRegisteredCourses() {
         
-        if Reachability.isConnectedToNetwork(){
+        if Reachability.isConnectedToNetwork() {
             let queue = DispatchQueue(label: "com.cruxbphc.getcoursetitles", qos: .userInteractive, attributes: .concurrent)
             let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
@@ -329,44 +335,66 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     let bkgRealm = try! Realm()
                     var tempCourses : Results<Course>?
                     let realmCourses = bkgRealm.objects(Course.self)
-                                        if (realmCourses.count != 0){
-                                            try! bkgRealm.write {
-                                                bkgRealm.delete(realmCourses)
-                                            }
-                                        }
+                    if (realmCourses.count != 0) {
+                        try! bkgRealm.write {
+                            bkgRealm.delete(realmCourses)
+                        }
+                    }
                     
                     let courses = JSON(courseData.value as Any)
                     self.totalCourseCount = courses.count
                     self.courseList.removeAll()
-                    for i in 0 ..< courses.count{
-                        let currentCourse = Course()
-                        currentCourse.courseid = courses[i]["id"].int!
-                        currentCourse.displayname = courses[i]["displayname"].string!
-                        currentCourse.courseCode = Regex.match(pattern: "(..|...|....)\\s[A-Z][0-9][0-9][0-9]", text: currentCourse.displayname).first ?? ""
-                        currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
-                        currentCourse.enrolled = true
-                        try! bkgRealm.write {
-//                            bkgRealm.add(currentCourse)
-                            bkgRealm.add(currentCourse, update: .modified)
+                    if let _ = courses[0]["id"].int {
+                        for i in 0 ..< courses.count{
+                            let currentCourse = Course()
+                            currentCourse.courseid = courses[i]["id"].int!
+                            currentCourse.displayname = courses[i]["displayname"].string!
+                            currentCourse.courseCode = Regex.match(pattern: "(..|...|....)\\s[A-Z][0-9][0-9][0-9]", text: currentCourse.displayname).first ?? ""
+                            currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
+                            currentCourse.enrolled = true
+                            try! bkgRealm.write {
+                                //                            bkgRealm.add(currentCourse)
+                                bkgRealm.add(currentCourse, update: .modified)
+                            }
+                            self.downloadDashboardCourseContents(courseName: currentCourse.displayname, courseId: currentCourse.courseid)
                         }
-                        self.downloadDashboardCourseContents(courseName: currentCourse.displayname, courseId: currentCourse.courseid)
-                    }
-                    tempCourses = bkgRealm.objects(Course.self)
-                    coursesRef = ThreadSafeReference(to: tempCourses!)
-                    DispatchQueue.main.async {
-                        let realm = try! Realm()
-                        guard let coursesRef = coursesRef, let temp2 = realm.resolve(coursesRef) else {return}
-                        for i in 0..<temp2.count{
-                            self.courseList.append(temp2[i])
+                        tempCourses = bkgRealm.objects(Course.self)
+                        coursesRef = ThreadSafeReference(to: tempCourses!)
+                        DispatchQueue.main.async {
+                            let realm = try! Realm()
+                            guard let coursesRef = coursesRef, let temp2 = realm.resolve(coursesRef) else {return}
+                            for i in 0..<temp2.count{
+                                self.courseList.append(temp2[i])
+                                
+                            }
+                            
+                            if #available(iOS 12.0, *) {
+                                if self.traitCollection.userInterfaceStyle == .dark{
+                                    // make this dark in the future
+//                                    self.setupColors(colors: DashboardCellColours().dark)
+                                    self.setupColors(colors: DashboardCellColours().light)
+                                }else{
+                                    self.setupColors(colors: DashboardCellColours().light)
+                                }
+                            } else {
+                                self.setupColors(colors: DashboardCellColours().light)
+                            }
+                            
+                            self.tableView.reloadData()
                             
                         }
-                        self.setupColors(colors: self.constant.DashboardCellColors)
-                        self.tableView.reloadData()
-                        
+                    } else {
+                        let alert = UIAlertController(title: "Error downloading data", message: "The site may be down or your token may have been updated. You will be logged out, try logging in again.", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "Ok", style: .default) { (_) in
+                            self.logoutCurrentUser()
+                            self.dismiss(animated: true, completion: nil)
+                        }
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
                     }
                 }
             }
-        }else{
+        } else{
             let realm = try! Realm()
             courseList = [Course]()
             let realmCourses = realm.objects(Course.self)
@@ -385,7 +413,16 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 courseList.append(realmCourses[x])
             }
         }
-        setupColors(colors: constant.DashboardCellColors)
+        if #available(iOS 12.0, *) {
+            if self.traitCollection.userInterfaceStyle == .dark{
+//                self.setupColors(colors: DashboardCellColours().dark)
+                self.setupColors(colors: DashboardCellColours().light)
+            }else{
+                self.setupColors(colors: DashboardCellColours().light)
+            }
+        } else {
+            self.setupColors(colors: DashboardCellColours().light)
+        }
     }
     
     @objc func refreshData() {
@@ -402,7 +439,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             self.refreshControl?.endRefreshing()
         }
         
-        if !Reachability.isConnectedToNetwork(){
+        if !Reachability.isConnectedToNetwork() {
             showOfflineMessage()
             gradientLoadingBar.fadeOut()
         }
@@ -423,8 +460,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         if indexPath.row < courseList.count{
             if searchController.isActive {
                 cell.courseName.text = filteredCourseList[indexPath.row].courseCode
-                cell.courseFullName.text = filteredCourseList[indexPath.row].courseName
-                cell.colorView.backgroundColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
+
+                cell.courseFullName.text = filteredCourseList[indexPath.row].courseName.replacingOccurrences(of: "&amp;", with: "&")
+                cell.courseName.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
                 let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("read = NO")
                 if unreadModules.count == 0 {
                     cell.unreadCounterLabel.isHidden = true
@@ -432,11 +470,11 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     cell.unreadCounterLabel.isHidden = false
                     cell.unreadCounterLabel.text = String(unreadModules.count)
                 }
-//                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
+                //                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
             } else {
                 cell.courseName.text = courseList[indexPath.row].courseCode
-                cell.courseFullName.text = courseList[indexPath.row].courseName
-                cell.colorView.backgroundColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
+                cell.courseFullName.text = courseList[indexPath.row].courseName.replacingOccurrences(of: "&amp;", with: "&")
+                cell.courseName.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
                 let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("read = NO")
                 if unreadModules.count == 0 {
                     cell.unreadCounterLabel.isHidden = true
@@ -444,7 +482,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     cell.unreadCounterLabel.isHidden = false
                     cell.unreadCounterLabel.text = String(unreadModules.count)
                 }
-//                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
+                //                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
                 
             }
         }
@@ -458,6 +496,12 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        sessionManager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
+            dataTasks.forEach { $0.cancel() }
+            uploadTasks.forEach { $0.cancel() }
+            downloadTasks.forEach { $0.cancel() }
+        }
         
         if courseList.count > indexPath.row{
             stopTheDamnRequests()
@@ -473,12 +517,12 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         
     }
     
-    func showOfflineMessage(){
+    func showOfflineMessage() {
         banner.show()
         self.perform(#selector(dismissOfflineBanner), with: nil, afterDelay: 1)
     }
     
-    @objc func dismissOfflineBanner(){
+    @objc func dismissOfflineBanner() {
         banner.dismiss()
     }
     
@@ -503,8 +547,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         tableView.reloadData()
+        //        refreshData()
     }
-    func setupGradientLoadingBar(){
+    func setupGradientLoadingBar() {
         guard let navigationBar = navigationController?.navigationBar else { return }
         
         gradientLoadingBar.fadeOut(duration: 0)
@@ -520,7 +565,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
     }
-    func setupColors(colors: [UIColor]){
+    func setupColors(colors: [UIColor]) {
         let realm = try! Realm()
         var currentCourseCode = String()
         var currentIndex = 0
@@ -548,7 +593,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             
         }
     }
-    func downloadDashboardCourseContents(courseName: String, courseId: Int){
+    func downloadDashboardCourseContents(courseName: String, courseId: Int) {
         
         
         let FINAL_URL = constant.BASE_URL + constant.GET_COURSE_CONTENT
@@ -563,15 +608,15 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 // get read status for all modules and add read ones to readModuleNames
                 for i in 0..<realmSections.count {
                     for j in 0..<realmSections[i].modules.count {
-                        if realmSections[i].modules[j].read && !readModuleIds.contains(realmSections[i].modules[j].id){
+                        if realmSections[i].modules[j].read && !readModuleIds.contains(realmSections[i].modules[j].id) {
                             readModuleIds.append(realmSections[i].modules[j].id)
                         }
                     }
                 }
                 if realmSections.count != 0{
                     try! realm.write {
-                        realm.delete(realm.objects(CourseSection.self).filter("courseId = \(courseId)"))
                         realm.delete(realm.objects(Module.self).filter("coursename = %@", courseName))
+                        realm.delete(realm.objects(CourseSection.self).filter("courseId = \(courseId)"))
                         
                     }
                 }
@@ -608,7 +653,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                     newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
                                     newModule.read = true
                                     
-                                    if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
+                                    if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in") {
                                         newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                     }
                                     newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
@@ -619,7 +664,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             }
                             
                             moduleData.name = courseContent[i]["modules"][j]["name"].string!
-                            if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!){
+                            if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!) {
                                 moduleData.read = true
                             }
                             if courseContent[i]["modules"][j]["description"].string != nil {
@@ -628,9 +673,11 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             moduleData.coursename = courseName
                             section.modules.append(moduleData)
                             section.courseId = courseId
+                            section.key = String(courseId) + section.name
+                            section.dateCreated = Date().timeIntervalSince1970
                         }
                         try! realm.write {
-                            realm.add(section)
+                            realm.add(section, update: .modified)
                             
                         }
                     }
@@ -648,7 +695,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     
-    func stopTheDamnRequests(){
+    func stopTheDamnRequests() {
         if #available(iOS 9.0, *) {
             Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
                 tasks.forEach{ $0.cancel() }
@@ -660,5 +707,15 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 downloadData.forEach { $0.cancel() }
             }
         }
+    }
+    
+    func logoutCurrentUser() {
+        let realm = try! Realm()
+        
+        try! realm.write {
+            realm.deleteAll()
+            
+        }
+        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
     }
 }

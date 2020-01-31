@@ -12,7 +12,6 @@ class CourseTableViewCell: UITableViewCell {
     
     @IBOutlet weak var courseName: UILabel!
     @IBOutlet weak var containView: UIView!
-    @IBOutlet weak var colorView: UIView!
     var gradientProgressIndicatorView = GradientActivityIndicatorView()
     @IBOutlet weak var courseFullName: UILabel!
     @IBOutlet weak var unreadCounterLabel: UILabel!
@@ -71,7 +70,7 @@ class CourseTableViewCell: UITableViewCell {
             //            self.courseProgress.tintColor = #colorLiteral(red: 0.9372549057, green: 0.5625251839, blue: 0.3577104232, alpha: 1)
         }
     }
-    func showGradientLoadingBar(){
+    func showGradientLoadingBar() {
     
         gradientProgressIndicatorView.isHidden = false
         gradientProgressIndicatorView.fadeOut(duration: 0)
@@ -80,7 +79,7 @@ class CourseTableViewCell: UITableViewCell {
         containView.addSubview(gradientProgressIndicatorView)
         
         NSLayoutConstraint.activate([
-            gradientProgressIndicatorView.leadingAnchor.constraint(equalTo: colorView.trailingAnchor),
+            gradientProgressIndicatorView.leadingAnchor.constraint(equalTo: containView.leadingAnchor),
             gradientProgressIndicatorView.trailingAnchor.constraint(equalTo: containView.trailingAnchor),
             
             gradientProgressIndicatorView.bottomAnchor.constraint(equalTo: containView.bottomAnchor),
@@ -88,7 +87,7 @@ class CourseTableViewCell: UITableViewCell {
         ])
         gradientProgressIndicatorView.fadeIn()
     }
-    func hideGradientLoadingBar(){
+    func hideGradientLoadingBar() {
         gradientProgressIndicatorView.fadeOut()
         gradientProgressIndicatorView.isHidden = true
         

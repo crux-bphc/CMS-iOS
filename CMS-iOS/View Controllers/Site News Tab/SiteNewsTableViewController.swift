@@ -9,14 +9,15 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
-import SVProgressHUD
 import SwiftKeychainWrapper
+import GradientLoadingBar
 
 class SiteNewsTableViewController: UITableViewController {
     
     let constants = Constants.Global.self
     var discussionArray = [Discussion]()
     var currentDiscussion = Discussion()
+    private let gradientLoadingBar = GradientActivityIndicatorView()
     
     let refreshController = UIRefreshControl()
     
@@ -25,6 +26,7 @@ class SiteNewsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         setupNavBar()
+        setupGradientLoadingBar()
         
         if #available(iOS 13.0, *) {
             refreshController.tintColor = .label
@@ -37,13 +39,13 @@ class SiteNewsTableViewController: UITableViewController {
         tableView.refreshControl = refreshController
         
         getSiteNews {
-            SVProgressHUD.dismiss()
+            self.gradientLoadingBar.fadeOut()
             self.tableView.reloadData()
         }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        SVProgressHUD.dismiss()
+        gradientLoadingBar.fadeOut()
     }
     
     func setupNavBar() {
@@ -77,12 +79,13 @@ class SiteNewsTableViewController: UITableViewController {
     }
     
     func getSiteNews(completion: @escaping () -> Void) {
-        SVProgressHUD.show()
+        gradientLoadingBar.fadeIn()
         let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!]
         let FINAL_URL : String = constants.BASE_URL + constants.GET_SITE_NEWS
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
                 let siteNews = JSON(response.value as Any)
+                self.discussionArray.removeAll()
                 for i in 0 ..< siteNews["discussions"].count {
                     let discussion = Discussion()
                     discussion.name = siteNews["discussions"][i]["name"].string ?? "No Name"
@@ -101,18 +104,33 @@ class SiteNewsTableViewController: UITableViewController {
                     }
                     self.discussionArray.append(discussion)
                 }
-                
+                completion()
             }
         }
-        completion()        
+                
     }
     
     @objc func refreshData() {
-        self.refreshControl!.beginRefreshing()
-        getSiteNews{
-            self.refreshControl!.endRefreshing()
+        self.refreshControl!.endRefreshing()
+        getSiteNews {
             self.tableView.reloadData()
-            SVProgressHUD.dismiss()
+            self.gradientLoadingBar.fadeOut()
         }
+    }
+    func setupGradientLoadingBar() {
+        guard let navigationBar = navigationController?.navigationBar else { return }
+        
+        gradientLoadingBar.fadeOut(duration: 0)
+        
+        gradientLoadingBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.addSubview(gradientLoadingBar)
+        
+        NSLayoutConstraint.activate([
+            gradientLoadingBar.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor),
+            gradientLoadingBar.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor),
+            
+            gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+            gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
+        ])
     }
 }

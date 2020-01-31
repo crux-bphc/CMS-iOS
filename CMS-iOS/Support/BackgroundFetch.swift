@@ -15,7 +15,7 @@ import UserNotifications
 
 class BackgroundFetch {
     
-    public func updateCourseContents(completion: @escaping ((Bool) -> Void)){
+    public func updateCourseContents(completion: @escaping ((Bool) -> Void)) {
         let realm = try! Realm()
         let constants = Constants.Global.self
         let subscribedCourses = realm.objects(Course.self)
@@ -60,7 +60,7 @@ class BackgroundFetch {
                                         newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
                                         newModule.read = true
                                         
-                                        if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in"){
+                                        if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in") {
                                             newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                         }
                                         newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
@@ -78,7 +78,7 @@ class BackgroundFetch {
                                 moduleData.coursename = currentCourse.displayname
                                 section.modules.append(moduleData)
                                 // check module here
-                                if (realm.objects(Module.self).filter("coursename = %@", currentCourse.displayname).filter("id = \(moduleData.id)").count == 0){
+                                if (realm.objects(Module.self).filter("coursename = %@", currentCourse.displayname).filter("id = \(moduleData.id)").count == 0) {
                                     // this is a new module
                                     self.sendNotification(title: "\(moduleData.name)", body: "New content in \(currentCourse.displayname)", identifier: "\(currentCourse.displayname + String(moduleData.id))")
                                     foundNewData = true
@@ -98,7 +98,60 @@ class BackgroundFetch {
         
     }
     
-    public func sendNotification(title: String, body: String, identifier: String){
+    public func downloadDiscussions(discussionModules : Results<Module>, completion : @escaping (Bool) -> Void) {
+        var foundNewDiscussions = false
+        for x in 0..<discussionModules.count {
+            let discussionModule = discussionModules[x]
+            let constants = Constants.Global.self
+            let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(discussionModule.id)]
+            let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
+
+            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
+                if response.result.isSuccess {
+                    let discussionResponse = JSON(response.value as Any)
+                    if discussionResponse["discussions"].count == 0 {
+
+                    } else {
+                        for i in 0 ..< discussionResponse["discussions"].count {
+                            let discussion = Discussion()
+                            discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
+                            discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
+                            discussion.date = discussionResponse["discussions"][i]["created"].int!
+                            discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
+                            discussion.id = discussionResponse["discussions"][i]["id"].int!
+                            discussion.moduleId = discussionModule.id
+                            if discussionResponse["discussions"][i]["attachment"].string! != "0" {
+                                if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
+                                    discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                } else {
+                                    discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
+                                }
+                                
+                                discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
+                                discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
+                            }
+                            
+                            let realm = try! Realm()
+                            if realm.objects(Discussion.self).filter("id = %@", discussion.id).count == 0 {
+                                // new discussion
+                                foundNewDiscussions = true
+                                self.sendNotification(title: discussion.name, body: "New Announcement in \(discussionModule.coursename)", identifier: discussion.name + String(discussion.id))
+                                try! realm.write {
+                                    realm.add(discussion)
+                                }
+                            }
+                            if i == discussionResponse["discussions"].count - 1 && x == discussionModules.count - 1 {
+                                completion(foundNewDiscussions)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    public func sendNotification(title: String, body: String, identifier: String) {
         let notificationCenter = UNUserNotificationCenter.current()
         let content = UNMutableNotificationContent()
         content.title = title
@@ -123,4 +176,5 @@ class BackgroundFetch {
         let categories = UNNotificationCategory(identifier: userActions, actions: [markRead, openAction], intentIdentifiers: [], options: [])
         notificationCenter.setNotificationCategories([categories])
     }
+    
 }
