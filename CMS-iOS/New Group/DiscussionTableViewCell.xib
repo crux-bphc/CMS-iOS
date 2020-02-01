@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,14 +17,20 @@
                 <rect key="frame" x="0.0" y="0.0" width="362" height="130"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Classes cancelled from 21st to 31st January" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dh3-tv-9hT">
-                        <rect key="frame" x="12" y="12" width="252" height="42"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Classes cancelled from 21st to 31st January" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dh3-tv-9hT">
+                        <rect key="frame" x="16" y="12" width="256" height="42"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="42" id="u2S-GF-AzD"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jan 9, 2020" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1QU-nF-Yin">
-                        <rect key="frame" x="294.5" y="14" width="67.5" height="15"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jan 9, 2020" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1QU-nF-Yin">
+                        <rect key="frame" x="282" y="16" width="80" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="80" id="jh2-yR-tMs"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
@@ -45,9 +51,11 @@ Archana Srivastava</string>
                     <constraint firstAttribute="trailing" secondItem="5Ko-B9-SIY" secondAttribute="trailing" constant="6" id="4FM-5m-glX"/>
                     <constraint firstItem="Dh3-tv-9hT" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="dKD-ZQ-xtn"/>
                     <constraint firstAttribute="bottom" secondItem="5Ko-B9-SIY" secondAttribute="bottom" constant="12" id="eVf-g6-rwb"/>
+                    <constraint firstItem="5Ko-B9-SIY" firstAttribute="top" secondItem="Dh3-tv-9hT" secondAttribute="bottom" constant="13.5" id="gjq-Rl-aUf"/>
                     <constraint firstItem="5Ko-B9-SIY" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="hVb-gM-RXv"/>
+                    <constraint firstItem="1QU-nF-Yin" firstAttribute="leading" secondItem="Dh3-tv-9hT" secondAttribute="trailing" constant="10" id="jDJ-u2-HXu"/>
                     <constraint firstAttribute="trailing" secondItem="1QU-nF-Yin" secondAttribute="trailing" id="lCt-nN-Sgb"/>
-                    <constraint firstItem="1QU-nF-Yin" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="14" id="ocL-RF-TeZ"/>
+                    <constraint firstItem="1QU-nF-Yin" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="ocL-RF-TeZ"/>
                     <constraint firstItem="Dh3-tv-9hT" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="w7y-7M-e4B"/>
                 </constraints>
             </tableViewCellContentView>
