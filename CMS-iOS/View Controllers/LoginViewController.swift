@@ -125,6 +125,7 @@ class LoginViewController: UIViewController {
                     let alert = UIAlertController(title: "Invalid key", message: "The key that you have entered is invalid. Please check and try again.", preferredStyle: .alert)
                     let dismiss = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
                     alert.addAction(dismiss)
+                    let _ = KeychainWrapper.standard.removeObject(forKey: "userPassword")
                     self.present(alert, animated: true, completion: {
                         self.keyField.text = ""
                     })
