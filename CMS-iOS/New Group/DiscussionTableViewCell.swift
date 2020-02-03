@@ -19,6 +19,7 @@ class DiscussionTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        contentPreviewLabel.lineBreakMode = .byTruncatingTail
 //        timeLabel.text = setTimestamp(epochTime: "\(self.cellDiscussion.date)")
 //        contentPreviewLabel.text = cellDiscussion.message
 //        titleLabel.text = cellDiscussion.name
