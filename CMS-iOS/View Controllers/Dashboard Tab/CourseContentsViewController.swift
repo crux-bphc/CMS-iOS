@@ -145,6 +145,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                             newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                         }
                                         newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
+                                        newModule.id = (moduleData.id * 1000) + a + 1
                                         moduleData.fileModules.append(newModule)
                                     }
                                 } else if moduleData.modname == "url" {
