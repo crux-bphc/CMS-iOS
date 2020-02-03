@@ -22,8 +22,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        searchBar.delegate = self
-        //        searchBar.isHidden = true
+        
+        self.tableView.contentInset.top = 16
         setupNavBar()
         setupGradientLoadingBar()
         // Do any additional setup after loading the view.
