@@ -371,7 +371,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             if #available(iOS 12.0, *) {
                                 if self.traitCollection.userInterfaceStyle == .dark{
                                     // make this dark in the future
-//                                    self.setupColors(colors: DashboardCellColours().dark)
+                                    //                                    self.setupColors(colors: DashboardCellColours().dark)
                                     self.setupColors(colors: DashboardCellColours().light)
                                 }else{
                                     self.setupColors(colors: DashboardCellColours().light)
@@ -415,7 +415,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
         if #available(iOS 12.0, *) {
             if self.traitCollection.userInterfaceStyle == .dark{
-//                self.setupColors(colors: DashboardCellColours().dark)
+                //                self.setupColors(colors: DashboardCellColours().dark)
                 self.setupColors(colors: DashboardCellColours().light)
             }else{
                 self.setupColors(colors: DashboardCellColours().light)
@@ -460,29 +460,31 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         if indexPath.row < courseList.count{
             if searchController.isActive {
                 cell.courseName.text = filteredCourseList[indexPath.row].courseCode
-
+                
                 cell.courseFullName.text = filteredCourseList[indexPath.row].courseName.replacingOccurrences(of: "&amp;", with: "&")
                 cell.courseName.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
                 let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("read = NO")
-                if unreadModules.count == 0 {
+                let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("modname = %@", "forum").first
+                let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
+                if unreadModules.count + unreadDiscussions.count == 0 {
                     cell.unreadCounterLabel.isHidden = true
                 } else {
                     cell.unreadCounterLabel.isHidden = false
-                    cell.unreadCounterLabel.text = String(unreadModules.count)
+                    cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
                 }
-                //                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
             } else {
                 cell.courseName.text = courseList[indexPath.row].courseCode
                 cell.courseFullName.text = courseList[indexPath.row].courseName.replacingOccurrences(of: "&amp;", with: "&")
                 cell.courseName.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
                 let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("read = NO")
-                if unreadModules.count == 0 {
+                let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("modname = %@", "forum").first
+                let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
+                if unreadModules.count + unreadDiscussions.count == 0 {
                     cell.unreadCounterLabel.isHidden = true
                 } else {
                     cell.unreadCounterLabel.isHidden = false
-                    cell.unreadCounterLabel.text = String(unreadModules.count)
+                    cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
                 }
-                //                cell.unreadCounterLabel.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
                 
             }
         }
@@ -684,10 +686,14 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 }
             }
             self.tempRealmCount += 1
-            if self.tempRealmCount == self.totalCourseCount{
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    self.gradientLoadingBar.fadeOut()
+            if self.tempRealmCount == self.totalCourseCount {
+                // download discussions here
+                //
+                self.downloadDiscussions {
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                        self.gradientLoadingBar.fadeOut()
+                    }
                 }
             }
         }
@@ -717,5 +723,60 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             
         }
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
+    }
+    
+    func downloadDiscussions(completion : @escaping () -> Void) {
+        let realm = try! Realm()
+        let discussionModules = realm.objects(Module.self).filter("modname = %@", "forum")
+        let totalCount = discussionModules.count
+        var totalDone = 0
+        for x in 0..<discussionModules.count {
+            let constants = Constants.Global.self
+            let moduleId = discussionModules[x].id
+            let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(discussionModules[x].id)]
+            let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
+            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON(queue: DispatchQueue.global(qos: .userInteractive)) { (response) in
+                if response.result.isSuccess {
+                    let discussionResponse = JSON(response.value as Any)
+                    if discussionResponse["discussions"].count != 0 {
+                        for i in 0 ..< discussionResponse["discussions"].count {
+                            let discussion = Discussion()
+                            discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
+                            discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
+                            discussion.date = discussionResponse["discussions"][i]["created"].int!
+                            discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
+                            discussion.id = discussionResponse["discussions"][i]["id"].int!
+                            discussion.moduleId = moduleId
+                            if discussionResponse["discussions"][i]["attachment"].string! != "0" {
+                                if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
+                                    discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                } else {
+                                    discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
+                                }
+                                
+                                discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
+                                discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
+                            }
+                            let bkgRealm = try! Realm()
+                            if bkgRealm.objects(Discussion.self).filter("id = %@", discussion.id).count == 0 {
+                                try! bkgRealm.write {
+                                    bkgRealm.add(discussion)
+                                }
+                            }
+                            if i == discussionResponse["discussions"].count - 1 {
+                                totalDone += 1
+                                if totalDone == totalCount {
+                                    print("Completed loading discussions")
+                                    completion()
+                                }
+                            }
+                        }
+                    } else {
+                        totalDone += 1
+                    }
+                }
+            }
+        }
+        
     }
 }
