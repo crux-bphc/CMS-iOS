@@ -76,6 +76,7 @@ class DiscussionTableViewController: UITableViewController {
             self.tableView.isScrollEnabled = false
             self.tableView.allowsSelection = false
         }
+        self.tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -95,7 +96,9 @@ class DiscussionTableViewController: UITableViewController {
             cell.contentPreviewLabel.text = discussionArray[indexPath.row].message.html2String
             cell.titleLabel.text = discussionArray[indexPath.row].name
             if !discussionArray[indexPath.row].read {
-//                cell.titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
+                cell.titleLabel.font = UIFont.systemFont(ofSize: 17.0, weight: .bold)
+                cell.timeLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .semibold)
+                cell.contentPreviewLabel.font = UIFont.systemFont(ofSize: 14.0, weight: .semibold)
             }
             self.tableView.separatorStyle = .singleLine
         }
