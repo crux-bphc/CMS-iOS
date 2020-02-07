@@ -11,9 +11,12 @@ import Alamofire
 import SwiftyJSON
 import SwiftKeychainWrapper
 import GradientLoadingBar
+import RealmSwift
+import NotificationBannerSwift
 
 class SiteNewsTableViewController: UITableViewController {
     
+    let banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
     let constants = Constants.Global.self
     var discussionArray = [Discussion]()
     var currentDiscussion = Discussion()
@@ -40,10 +43,23 @@ class SiteNewsTableViewController: UITableViewController {
         refreshController.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.refreshControl = refreshController
         
-        getSiteNews {
-            self.gradientLoadingBar.fadeOut()
-            self.tableView.reloadData()
+        if Reachability.isConnectedToNetwork() {
+            getSiteNews {
+                self.gradientLoadingBar.fadeOut()
+                self.tableView.reloadData()
+            }
+        } else {
+            // load from realm
+            let realm = try! Realm()
+            let realmDiscussions = realm.objects(Discussion.self).filter("moduleId = %@", 0)
+            if realmDiscussions.count > 0 {
+                discussionArray.removeAll()
+                for discussion in realmDiscussions {
+                    discussionArray.append(discussion)
+                }
+            }
         }
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -93,13 +109,19 @@ class SiteNewsTableViewController: UITableViewController {
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
                 let siteNews = JSON(response.value as Any)
+                print(siteNews)
                 self.discussionArray.removeAll()
+                let realm = try! Realm()
+                try! realm.write {
+                    realm.delete(realm.objects(Discussion.self).filter("moduleId = %@", 0)) // removes all site news since they dont have a module id
+                }
                 for i in 0 ..< siteNews["discussions"].count {
                     let discussion = Discussion()
                     discussion.name = siteNews["discussions"][i]["name"].string ?? "No Name"
                     discussion.author = siteNews["discussions"][i]["userfullname"].string?.capitalized ?? ""
                     discussion.date = siteNews["discussions"][i]["created"].int!
                     discussion.message = siteNews["discussions"][i]["message"].string ?? "No Content"
+                    discussion.id = siteNews["discussions"][i]["discussion"].int ?? 0
                     if siteNews["discussions"][i]["attachment"].string! != "0" {
                         //                        discussion.attachment = (siteNews["discussions"][i]["attachments"][0]["fileurl"].string ?? "") + "?token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                         if siteNews["discussions"][i]["attachments"][0]["fileurl"].string != nil {
@@ -111,6 +133,9 @@ class SiteNewsTableViewController: UITableViewController {
                         discussion.mimetype = siteNews["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
                     }
                     self.discussionArray.append(discussion)
+                    try! realm.write {
+                        realm.add(discussion, update: .modified)
+                    }
                 }
                 completion()
             }
@@ -120,10 +145,16 @@ class SiteNewsTableViewController: UITableViewController {
     
     @objc func refreshData() {
         self.refreshControl!.endRefreshing()
-        getSiteNews {
-            self.tableView.reloadData()
-            self.gradientLoadingBar.fadeOut()
+        if Reachability.isConnectedToNetwork() {
+            getSiteNews {
+                self.gradientLoadingBar.fadeOut()
+                self.tableView.reloadData()
+            }
+        } else {
+            // display offline banner
+            showOfflineMessage()
         }
+        
     }
     func setupGradientLoadingBar() {
         guard let navigationBar = navigationController?.navigationBar else { return }
@@ -150,6 +181,15 @@ class SiteNewsTableViewController: UITableViewController {
         dateFormatter.timeZone = .current
         let localDate = dateFormatter.string(from: date)
         return localDate
+    }
+    
+    func showOfflineMessage() {
+        banner.show()
+        self.perform(#selector(dismissOfflineBanner), with: nil, afterDelay: 1)
+    }
+    
+    @objc func dismissOfflineBanner() {
+        banner.dismiss()
     }
     
 }
