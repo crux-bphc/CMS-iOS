@@ -109,7 +109,6 @@ class SiteNewsTableViewController: UITableViewController {
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
                 let siteNews = JSON(response.value as Any)
-                print(siteNews)
                 self.discussionArray.removeAll()
                 let realm = try! Realm()
                 try! realm.write {
