@@ -141,7 +141,12 @@ class DiscussionTableViewController: UITableViewController {
                         }
                         for i in 0 ..< discussionResponse["discussions"].count {
                             let discussion = Discussion()
-                            discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
+                            if discussionResponse["discussions"][i]["pinned"].bool! {
+                               discussion.name = "📌 " + (discussionResponse["discussions"][i]["name"].string ?? "No Name")
+                            } else {
+                                discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
+                            }
+                            
                             discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
                             discussion.date = discussionResponse["discussions"][i]["created"].int!
                             discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"

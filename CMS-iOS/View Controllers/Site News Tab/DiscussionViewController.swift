@@ -27,7 +27,7 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
         quickLookController.dataSource = self
         openButton.layer.cornerRadius = 10
         bodyTextView.layer.cornerRadius = 10
-        self.title = selectedDiscussion.name
+        self.title = selectedDiscussion.name.replacingOccurrences(of: "📌 ", with: "")
         if UIApplication.shared.applicationState == .active {
             setMessage()
         }
