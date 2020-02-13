@@ -40,6 +40,10 @@ class DiscussionTableViewController: UITableViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         gradientLoadingBar.fadeOut()
+//        tableView.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
     }
     
@@ -99,6 +103,10 @@ class DiscussionTableViewController: UITableViewController {
                 cell.titleLabel.font = UIFont.systemFont(ofSize: 17.0, weight: .bold)
                 cell.timeLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .semibold)
                 cell.contentPreviewLabel.font = UIFont.systemFont(ofSize: 14.0, weight: .semibold)
+            } else {
+                cell.titleLabel.font = UIFont.systemFont(ofSize: 17.0, weight: .medium)
+                cell.timeLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .regular)
+                cell.contentPreviewLabel.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
             }
             self.tableView.separatorStyle = .singleLine
         }
