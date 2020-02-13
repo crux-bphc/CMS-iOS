@@ -30,6 +30,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.register(UINib(nibName: "DiscussionTableViewCell", bundle: nil), forCellReuseIdentifier: "discussionCell")
         setupGradientLoadingBar()
         loadModulesFromMemory()
         
@@ -72,6 +73,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
             sectionArray.removeAll()
             for i in 0..<sections.count {
                 sectionArray.append(sections[i])
+                print(sections[i].name)
             }
         } else {
             gradientLoadingBar.fadeIn()
@@ -108,9 +110,20 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                     
                     self.sectionArray.removeAll()
                     for i in 0 ..< courseContent.count {
-                        if courseContent[i]["modules"].count > 0 {
+                        if courseContent[i]["modules"].count > 0 || courseContent[i]["summary"] != "" {
                             let section = CourseSection()
                             section.name = courseContent[i]["name"].string!
+                            if courseContent[i]["summary"] != "" {
+                                // create a summary module and load it in a discussion cell
+                                let summaryModule = Module()
+                                summaryModule.name = "Summary"
+                                summaryModule.coursename = self.currentCourse.displayname
+                                summaryModule.moduleDescription = courseContent[i]["summary"].string!
+                                summaryModule.modname = "summary"
+                                summaryModule.id = courseContent[i]["id"].int!
+                                summaryModule.read = true
+                                section.modules.append(summaryModule)
+                            } // add summary module
                             for j in 0 ..< courseContent[i]["modules"].array!.count {
                                 let moduleData = Module()
                                 moduleData.modname = courseContent[i]["modules"][j]["modname"].string!
@@ -225,7 +238,22 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
         return sectionArray.count
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if sectionArray[indexPath.section].modules[indexPath.row].modname == "summary" {
+            return 130
+        }
+        return 44
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if sectionArray[indexPath.section].modules[indexPath.row].modname == "summary" {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "discussionCell") as! DiscussionTableViewCell
+            cell.contentPreviewLabel.text = sectionArray[indexPath.section].modules[indexPath.row].moduleDescription.html2String
+            cell.titleLabel.text = sectionArray[indexPath.section].modules[indexPath.row].name
+            cell.timeLabel.text = ""
+            return cell
+            
+        }
         let cell = UITableViewCell(style: .value1, reuseIdentifier: "reuseCourse")
         cell.textLabel?.text = sectionArray[indexPath.section].modules[indexPath.row].name
         if !sectionArray[indexPath.section].modules[indexPath.row].read {
@@ -319,6 +347,9 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
         if self.selectedModule.modname == "assign" {
             let alert = UIAlertController(title: "Assignments not supported", message: "Assignments are not supported on the mobile version of CMS.", preferredStyle: .alert)
             let action = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
+            try! realm.write {
+                self.selectedModule.read = true
+            }
             alert.addAction(action)
             present(alert, animated: true, completion: nil)
         }

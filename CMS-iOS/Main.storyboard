@@ -515,6 +515,15 @@
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="reuseCourseSummary" rowHeight="130" id="AVm-iQ-QJg" customClass="DiscussionTableViewCell" customModule="CMS_BPHC" customModuleProvider="target">
+                                <rect key="frame" x="16" y="99" width="343" height="130"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AVm-iQ-QJg" id="1c4-yJ-1Tt">
+                                    <rect key="frame" x="0.0" y="0.0" width="343" height="130"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="fG0-QY-y8D" id="YCn-zr-s7m"/>
@@ -893,8 +902,8 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="OrM-jC-JFg"/>
-        <segue reference="bDO-Ye-r9b"/>
+        <segue reference="IgU-80-XSP"/>
+        <segue reference="enf-3I-Kaq"/>
         <segue reference="r0O-gx-IAp"/>
         <segue reference="p9a-Sh-oWN"/>
     </inferredMetricsTieBreakers>
