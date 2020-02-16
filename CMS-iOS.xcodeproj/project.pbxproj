@@ -17,9 +17,12 @@
 		0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A3DEAFB22FDCA6A001B6BFD /* LaunchScreen.storyboard */; };
 		0A3DEB0622FDCD26001B6BFD /* SF-Pro-Display-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A3DEB0522FDCD26001B6BFD /* SF-Pro-Display-Heavy.otf */; };
 		0A4AF7B423819C0100C6EBA1 /* BackgroundFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4AF7B323819C0100C6EBA1 /* BackgroundFetch.swift */; };
+		0A54509423E48025009B8177 /* DiscussionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A54509223E48025009B8177 /* DiscussionTableViewCell.swift */; };
+		0A54509523E48025009B8177 /* DiscussionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A54509323E48025009B8177 /* DiscussionTableViewCell.xib */; };
 		0A585453230168E7008FB370 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A585452230168E7008FB370 /* Constants.swift */; };
 		0A5ECD7C2306A98800723365 /* AboutPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5ECD7B2306A98800723365 /* AboutPageViewController.swift */; };
 		0A5ECD7E2306B23000723365 /* Discussion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5ECD7D2306B23000723365 /* Discussion.swift */; };
+		0A646D7A23D188150023572B /* Colours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A646D7923D188150023572B /* Colours.swift */; };
 		0A67E5DC23091B4700E18E99 /* EnrolmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A67E5DB23091B4700E18E99 /* EnrolmentViewController.swift */; };
 		0A7F90BC2300753E00683867 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F90BB2300753E00683867 /* DashboardViewController.swift */; };
 		0A8E02D72300207900724899 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8E02D62300207900724899 /* User.swift */; };
@@ -39,11 +42,10 @@
 		0AF20A35230B48AD001C0CB1 /* DiscussionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF20A34230B48AD001C0CB1 /* DiscussionViewController.swift */; };
 		0AF805C5234F43A3008D9B25 /* CourseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */; };
 		0AF805C6234F43A3008D9B25 /* CourseTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */; };
-		158680B2EB1E35837F070279 /* Pods_CMS_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FCE264AABF799031C842344 /* Pods_CMS_iOS.framework */; };
+		31428B5D47EE448BA90A05E6 /* Pods_CMS_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94C16E7BA1B34B3DCB650F95 /* Pods_CMS_iOS.framework */; };
 		3B34F1132358B3B300F59536 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B34F1122358B3B300F59536 /* Colors.xcassets */; };
 		E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */; };
 		E61F0E9A236EFEB300A9C9DA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */; };
-		E6510CAE233FD49B009FCF0D /* HTMLStringDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */; };
 		E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */; };
 		E6B205F7237C3FED00D0F69F /* AttributedStringFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */; };
 		E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6C61630235DA91F00FFC2E4 /* Main.storyboard */; };
@@ -56,16 +58,19 @@
 		0A2FD034236059A800917BE7 /* Regex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Regex.swift; sourceTree = "<group>"; };
 		0A2FD03623619E9A00917BE7 /* ExtrasTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrasTableViewCell.swift; sourceTree = "<group>"; };
 		0A2FD03723619E9A00917BE7 /* ExtrasTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExtrasTableViewCell.xib; sourceTree = "<group>"; };
-		0A3DEAEF22FDCA69001B6BFD /* CMS-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CMS-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A3DEAEF22FDCA69001B6BFD /* CMS BPHC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CMS BPHC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A3DEAF222FDCA69001B6BFD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A3DEAF422FDCA69001B6BFD /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		0A3DEAFC22FDCA6A001B6BFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0A3DEAFE22FDCA6A001B6BFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A3DEB0522FDCD26001B6BFD /* SF-Pro-Display-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Heavy.otf"; sourceTree = "<group>"; };
 		0A4AF7B323819C0100C6EBA1 /* BackgroundFetch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundFetch.swift; sourceTree = "<group>"; };
+		0A54509223E48025009B8177 /* DiscussionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionTableViewCell.swift; sourceTree = "<group>"; };
+		0A54509323E48025009B8177 /* DiscussionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiscussionTableViewCell.xib; sourceTree = "<group>"; };
 		0A585452230168E7008FB370 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		0A5ECD7B2306A98800723365 /* AboutPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPageViewController.swift; sourceTree = "<group>"; };
 		0A5ECD7D2306B23000723365 /* Discussion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Discussion.swift; sourceTree = "<group>"; };
+		0A646D7923D188150023572B /* Colours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colours.swift; sourceTree = "<group>"; };
 		0A67E5DB23091B4700E18E99 /* EnrolmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnrolmentViewController.swift; sourceTree = "<group>"; };
 		0A7F90BB2300753E00683867 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		0A8E02D62300207900724899 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -85,16 +90,15 @@
 		0AF20A34230B48AD001C0CB1 /* DiscussionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionViewController.swift; sourceTree = "<group>"; };
 		0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseTableViewCell.swift; path = "CMS-iOS/New Group/CourseTableViewCell.swift"; sourceTree = SOURCE_ROOT; };
 		0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CourseTableViewCell.xib; path = "CMS-iOS/New Group/CourseTableViewCell.xib"; sourceTree = SOURCE_ROOT; };
-		2A13C560281647F10CA5D755 /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		1C4EB617C056F8D14EB41B19 /* Pods-CMS-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.release.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		3B34F1122358B3B300F59536 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
-		8FCE264AABF799031C842344 /* Pods_CMS_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CMS_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		94C16E7BA1B34B3DCB650F95 /* Pods_CMS_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CMS_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A384C530B8684AA813E94380 /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderContentViewController.swift; sourceTree = "<group>"; };
 		E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
-		E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLStringDecoder.swift; sourceTree = "<group>"; };
 		E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLPreviewItemSubclass.swift; sourceTree = "<group>"; };
 		E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringFontExtension.swift; sourceTree = "<group>"; };
 		E6C61630235DA91F00FFC2E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		EA8D0C9AD8D97666B7F6077A /* Pods-CMS-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.release.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				158680B2EB1E35837F070279 /* Pods_CMS_iOS.framework in Frameworks */,
+				31428B5D47EE448BA90A05E6 /* Pods_CMS_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,7 +117,6 @@
 			isa = PBXGroup;
 			children = (
 				0A3DEAF122FDCA69001B6BFD /* CMS-iOS */,
-				0A3DEAF022FDCA69001B6BFD /* Products */,
 				CA6329F197F899A3DCF66141 /* Pods */,
 				D102A9AAD55443ACB0B6B7DF /* Frameworks */,
 				0A4AF7B223819B2100C6EBA1 /* Recovered References */,
@@ -123,9 +126,10 @@
 		0A3DEAF022FDCA69001B6BFD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0A3DEAEF22FDCA69001B6BFD /* CMS-iOS.app */,
+				0A3DEAEF22FDCA69001B6BFD /* CMS BPHC.app */,
 			);
 			name = Products;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		0A3DEAF122FDCA69001B6BFD /* CMS-iOS */ = {
@@ -139,10 +143,11 @@
 				0AC33B6023020669004AE385 /* View Controllers */,
 				0AC33B6523021591004AE385 /* Data Models */,
 				0A3DEAFB22FDCA6A001B6BFD /* LaunchScreen.storyboard */,
+				E6C61630235DA91F00FFC2E4 /* Main.storyboard */,
 				0AC33B6623022453004AE385 /* Assets.xcassets */,
 				0A3DEAFE22FDCA6A001B6BFD /* Info.plist */,
 				3B34F1122358B3B300F59536 /* Colors.xcassets */,
-				E6C61630235DA91F00FFC2E4 /* Main.storyboard */,
+				0A3DEAF022FDCA69001B6BFD /* Products */,
 			);
 			path = "CMS-iOS";
 			sourceTree = "<group>";
@@ -168,11 +173,11 @@
 				0A4AF7B323819C0100C6EBA1 /* BackgroundFetch.swift */,
 				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
 				E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */,
-				E6510CAD233FD49A009FCF0D /* HTMLStringDecoder.swift */,
 				E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */,
 				0A585452230168E7008FB370 /* Constants.swift */,
 				0A2FD034236059A800917BE7 /* Regex.swift */,
 				E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */,
+				0A646D7923D188150023572B /* Colours.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -240,6 +245,8 @@
 				0A2FD03723619E9A00917BE7 /* ExtrasTableViewCell.xib */,
 				0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */,
 				0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */,
+				0A54509223E48025009B8177 /* DiscussionTableViewCell.swift */,
+				0A54509323E48025009B8177 /* DiscussionTableViewCell.xib */,
 			);
 			path = "New Group";
 			sourceTree = "<group>";
@@ -265,8 +272,8 @@
 		CA6329F197F899A3DCF66141 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				2A13C560281647F10CA5D755 /* Pods-CMS-iOS.debug.xcconfig */,
-				EA8D0C9AD8D97666B7F6077A /* Pods-CMS-iOS.release.xcconfig */,
+				A384C530B8684AA813E94380 /* Pods-CMS-iOS.debug.xcconfig */,
+				1C4EB617C056F8D14EB41B19 /* Pods-CMS-iOS.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -275,7 +282,7 @@
 			isa = PBXGroup;
 			children = (
 				0A2B03AF2305971900CC51A4 /* WebKit.framework */,
-				8FCE264AABF799031C842344 /* Pods_CMS_iOS.framework */,
+				94C16E7BA1B34B3DCB650F95 /* Pods_CMS_iOS.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -287,11 +294,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0A3DEB0122FDCA6A001B6BFD /* Build configuration list for PBXNativeTarget "CMS-iOS" */;
 			buildPhases = (
-				8C1FC81A5F668368AD231B6D /* [CP] Check Pods Manifest.lock */,
+				F1955234A42BB4C37A8154CE /* [CP] Check Pods Manifest.lock */,
 				0A3DEAEB22FDCA69001B6BFD /* Sources */,
 				0A3DEAEC22FDCA69001B6BFD /* Frameworks */,
 				0A3DEAED22FDCA69001B6BFD /* Resources */,
-				06127D9E2A1D44755A1E8566 /* [CP] Embed Pods Frameworks */,
+				224B05C9C559D450D1F8B57B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -299,7 +306,7 @@
 			);
 			name = "CMS-iOS";
 			productName = "CMS-iOS";
-			productReference = 0A3DEAEF22FDCA69001B6BFD /* CMS-iOS.app */;
+			productReference = 0A3DEAEF22FDCA69001B6BFD /* CMS BPHC.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -343,6 +350,7 @@
 				E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */,
 				0AF805C6234F43A3008D9B25 /* CourseTableViewCell.xib in Resources */,
 				0A2FD03923619E9A00917BE7 /* ExtrasTableViewCell.xib in Resources */,
+				0A54509523E48025009B8177 /* DiscussionTableViewCell.xib in Resources */,
 				0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */,
 				0AC33B6723022453004AE385 /* Assets.xcassets in Resources */,
 				0A3DEB0622FDCD26001B6BFD /* SF-Pro-Display-Heavy.otf in Resources */,
@@ -353,7 +361,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		06127D9E2A1D44755A1E8566 /* [CP] Embed Pods Frameworks */ = {
+		224B05C9C559D450D1F8B57B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -370,7 +378,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8C1FC81A5F668368AD231B6D /* [CP] Check Pods Manifest.lock */ = {
+		F1955234A42BB4C37A8154CE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -403,7 +411,6 @@
 				0AC33B6F2304306C004AE385 /* ModuleViewController.swift in Sources */,
 				0A8E02D72300207900724899 /* User.swift in Sources */,
 				0AC33B642302153C004AE385 /* Course.swift in Sources */,
-				E6510CAE233FD49B009FCF0D /* HTMLStringDecoder.swift in Sources */,
 				0A9A960C23572E93004ABB2F /* BubbleTabBar.swift in Sources */,
 				0A3DEAF522FDCA69001B6BFD /* LoginViewController.swift in Sources */,
 				0AF805C5234F43A3008D9B25 /* CourseTableViewCell.swift in Sources */,
@@ -412,6 +419,7 @@
 				0A9A960D23572E93004ABB2F /* BubbleTabBarController.swift in Sources */,
 				0A7F90BC2300753E00683867 /* DashboardViewController.swift in Sources */,
 				0A2B472C23083C1A005879D6 /* SearchViewController.swift in Sources */,
+				0A646D7A23D188150023572B /* Colours.swift in Sources */,
 				0A03483623166C2D00552F69 /* DiscussionTableViewController.swift in Sources */,
 				0A2FD035236059A800917BE7 /* Regex.swift in Sources */,
 				0AF20A35230B48AD001C0CB1 /* DiscussionViewController.swift in Sources */,
@@ -423,6 +431,7 @@
 				0A67E5DC23091B4700E18E99 /* EnrolmentViewController.swift in Sources */,
 				E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */,
 				0A9A960B23572E93004ABB2F /* CBTabBarButton.swift in Sources */,
+				0A54509423E48025009B8177 /* DiscussionTableViewCell.swift in Sources */,
 				0A2FD03823619E9A00917BE7 /* ExtrasTableViewCell.swift in Sources */,
 				0AC33B6923022B2C004AE385 /* CourseContentsViewController.swift in Sources */,
 				0A8EFC6523100F9D00CD6BAD /* Reachability.swift in Sources */,
@@ -566,19 +575,21 @@
 		};
 		0A3DEB0222FDCA6A001B6BFD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2A13C560281647F10CA5D755 /* Pods-CMS-iOS.debug.xcconfig */;
+			baseConfigurationReference = A384C530B8684AA813E94380 /* Pods-CMS-iOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = P773Z36HNN;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = 8NXR4FCN3L;
 				INFOPLIST_FILE = "CMS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.crux--bphc.CMS-iOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.crux-bphc.CMS-iOS";
+				PRODUCT_NAME = "CMS BPHC";
 				SWIFT_ENABLE_BATCH_MODE = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -587,19 +598,21 @@
 		};
 		0A3DEB0322FDCA6A001B6BFD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EA8D0C9AD8D97666B7F6077A /* Pods-CMS-iOS.release.xcconfig */;
+			baseConfigurationReference = 1C4EB617C056F8D14EB41B19 /* Pods-CMS-iOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = P773Z36HNN;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = 8NXR4FCN3L;
 				INFOPLIST_FILE = "CMS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.crux--bphc.CMS-iOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.crux-bphc.CMS-iOS";
+				PRODUCT_NAME = "CMS BPHC";
 				SWIFT_ENABLE_BATCH_MODE = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

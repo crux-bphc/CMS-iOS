@@ -107,19 +107,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        if Reachability.isConnectedToNetwork(){
+        if Reachability.isConnectedToNetwork() {
             let bkgObj = BackgroundFetch()
-            bkgObj.sendNotification(title: "Testing",body: "Attempting to fetch data in background", identifier: "awjt8329")
-            bkgObj.updateCourseContents { (newDataFound) in
-                if newDataFound{
-                    completionHandler(.newData)
-                    print("found new data")
-                }else{
-                    completionHandler(.noData)
-                    print("no new data found")
+            bkgObj.updateCourseContents { (newModulesFound) in
+                
+                let discussionModules = self.realm.objects(Module.self).filter("modname = %@", "forum")
+                bkgObj.downloadDiscussions(discussionModules: discussionModules) { (newDiscussionsFound) in
+                    completionHandler(newDiscussionsFound || newModulesFound ? .newData : .noData)
+                    print(newDiscussionsFound || newModulesFound ? "found new data" : "no new data found")
                 }
             }
-        }else{
+        } else {
             completionHandler(.failed)
             print("failed to background fetch")
         }

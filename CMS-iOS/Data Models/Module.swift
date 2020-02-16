@@ -21,5 +21,7 @@ class Module : Object {
     @objc dynamic var read : Bool = false
     @objc dynamic var coursename : String = ""
     var fileModules = RealmSwift.List<Module>();
-    
+    override class func primaryKey() -> String? {
+        return "id"
+    }
 }

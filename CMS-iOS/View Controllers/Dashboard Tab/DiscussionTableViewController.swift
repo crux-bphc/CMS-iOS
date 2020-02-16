@@ -20,15 +20,18 @@ class DiscussionTableViewController: UITableViewController {
     var discussionArray = [Discussion]()
     var currentDiscussion = Discussion()
     var currentModule = Module()
+    let sessionManager = Alamofire.SessionManager.default
     
     @IBOutlet weak var addDiscussionButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.register(UINib(nibName: "DiscussionTableViewCell", bundle: nil), forCellReuseIdentifier: "discussionCell")
         self.addDiscussionButton.isEnabled = false
         setupGradientLoadingBar()
         gradientLoadingBar.fadeOut()
         canAddDiscussion()
+        self.title = currentModule.name
         getCourseDiscussions {
             self.tableView.reloadData()
             self.gradientLoadingBar.fadeOut()
@@ -37,37 +40,74 @@ class DiscussionTableViewController: UITableViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         gradientLoadingBar.fadeOut()
-        
+//        tableView.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
     }
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if discussionArray.count == 0 {
-            return 1
+            return 0
         } else {
             return discussionArray.count
         }
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 130
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        sessionManager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
+            dataTasks.forEach { $0.cancel() }
+            uploadTasks.forEach { $0.cancel() }
+            downloadTasks.forEach { $0.cancel() }
+        }
+        
         if discussionArray.count != 0 {
             self.currentDiscussion = discussionArray[indexPath.row]
+            let realm = try! Realm()
+            try! realm.write {
+                    discussionArray[indexPath.row].read = true
+            }
+            
             performSegue(withIdentifier: "goToDiscussionDetails", sender: self)
         } else {
             self.tableView.isScrollEnabled = false
             self.tableView.allowsSelection = false
         }
+        self.tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "reuseCell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "discussionCell", for: indexPath) as! DiscussionTableViewCell
+        
+//        let cell = UITableViewCell(reuseIdentifier: "discussionCell") as! DiscussionTableViewCell
         if discussionArray.count == 0 {
-            cell.textLabel?.text = "No discussions"
-            cell.textLabel?.textAlignment = .center
-            self.tableView.separatorStyle = .none
+//            cell.textLabel?.text = "No discussions"
+//            cell.textLabel?.textAlignment = .center
+//            self.tableView.separatorStyle = .none
         } else {
-            cell.textLabel?.text = discussionArray[indexPath.row].name
+//            cell.textLabel?.text = discussionArray[indexPath.row].name
+//            cell.cellDiscussion = discussionArray[indexPath.row]
+            cell.timeLabel.text = epochConvert(epoch: self.discussionArray[indexPath.row].date)
+//            print(self.discussionArray[indexPath.row].date)
+            cell.contentPreviewLabel.text = discussionArray[indexPath.row].message.html2String
+            cell.titleLabel.text = discussionArray[indexPath.row].name
+            if !discussionArray[indexPath.row].read {
+                cell.titleLabel.font = UIFont.systemFont(ofSize: 17.0, weight: .bold)
+                cell.timeLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .semibold)
+                cell.contentPreviewLabel.font = UIFont.systemFont(ofSize: 14.0, weight: .semibold)
+            } else {
+                cell.titleLabel.font = UIFont.systemFont(ofSize: 17.0, weight: .medium)
+                cell.timeLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .regular)
+                cell.contentPreviewLabel.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            }
             self.tableView.separatorStyle = .singleLine
         }
         return cell
@@ -87,7 +127,7 @@ class DiscussionTableViewController: UITableViewController {
     
     func getCourseDiscussions(completion: @escaping () -> Void) {
         
-        if Reachability.isConnectedToNetwork(){
+        if Reachability.isConnectedToNetwork() {
             let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
             let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
             gradientLoadingBar.fadeIn()
@@ -98,13 +138,28 @@ class DiscussionTableViewController: UITableViewController {
                     if discussionResponse["discussions"].count == 0 {
                         completion()
                     } else {
+                        let realm = try! Realm()
+                        var readDiscussionIds = [Int]()
+                        let readDiscussions = realm.objects(Discussion.self).filter("read = YES")
+                        for i in 0..<readDiscussions.count {
+                            readDiscussionIds.append(readDiscussions[i].id)
+                        }
+                        try! realm.write {
+                            realm.delete(realm.objects(Discussion.self).filter("moduleId = %@", self.currentModule.id))
+                        }
                         for i in 0 ..< discussionResponse["discussions"].count {
                             let discussion = Discussion()
-                            discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
+                            if discussionResponse["discussions"][i]["pinned"].bool! {
+                               discussion.name = "📌 " + (discussionResponse["discussions"][i]["name"].string ?? "No Name")
+                            } else {
+                                discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
+                            }
+                            
                             discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
                             discussion.date = discussionResponse["discussions"][i]["created"].int!
                             discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
                             discussion.id = discussionResponse["discussions"][i]["id"].int!
+                            discussion.read = readDiscussionIds.contains(discussion.id) ? true : false
                             discussion.moduleId = self.currentModule.id
                             if discussionResponse["discussions"][i]["attachment"].string! != "0" {
                                 if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
@@ -116,7 +171,6 @@ class DiscussionTableViewController: UITableViewController {
                                 discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
                                 discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
                             }
-                            let realm = try! Realm()
                             try! realm.write {
                                 realm.add(discussion, update: .modified)
                             }
@@ -158,10 +212,17 @@ class DiscussionTableViewController: UITableViewController {
         }
     }
     @IBAction func addDiscussionButtonPressed(_ sender: Any) {
+        
+        sessionManager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
+            dataTasks.forEach { $0.cancel() }
+            uploadTasks.forEach { $0.cancel() }
+            downloadTasks.forEach { $0.cancel() }
+        }
+        
         performSegue(withIdentifier: "goToAddDiscussion", sender: self)
     }
     
-    func setupGradientLoadingBar(){
+    func setupGradientLoadingBar() {
         guard let navigationBar = navigationController?.navigationBar else { return }
         
         gradientLoadingBar.fadeOut(duration: 0)
@@ -176,5 +237,39 @@ class DiscussionTableViewController: UITableViewController {
             gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
+    }
+    
+    func epochConvert(epoch: Int) -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(epoch))
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = DateFormatter.Style.none //Set time style
+        dateFormatter.dateStyle = DateFormatter.Style.medium //Set date style
+        dateFormatter.timeZone = .current
+        let localDate = dateFormatter.string(from: date)
+        return localDate
+    }
+    
+}
+
+extension Data {
+    var html2AttributedString: NSAttributedString? {
+        do {
+            return try NSAttributedString(data: self, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
+        } catch {
+            print("error:", error)
+            return  nil
+        }
+    }
+    var html2String: String {
+        return html2AttributedString?.string ?? ""
+    }
+}
+
+extension String {
+    var html2AttributedString: NSAttributedString? {
+        return Data(utf8).html2AttributedString
+    }
+    var html2String: String {
+        return html2AttributedString?.string ?? ""
     }
 }

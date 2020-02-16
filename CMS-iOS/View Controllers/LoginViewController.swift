@@ -16,7 +16,7 @@ import SafariServices
 class LoginViewController: UIViewController {
     
     @IBOutlet weak var keyField: UITextField!
-    
+    @IBOutlet weak var loginLabel: UILabel!
     @IBOutlet weak var googleLoginBtn: UIButton!
     
     let constant = Constants.Global.self
@@ -24,6 +24,7 @@ class LoginViewController: UIViewController {
     var currentUser = User()
     var canLogIn : Bool = false
     let realm = try! Realm()
+    let sessionManager = Alamofire.SessionManager.default
     
     override func viewDidLoad() {
         SVProgressHUD.dismiss()
@@ -61,16 +62,18 @@ class LoginViewController: UIViewController {
         }
         self.view.isUserInteractionEnabled = true
         if canLogIn {
+            
             self.performSegue(withIdentifier: "goToDashboard", sender: self)
         }
         if !Reachability.isConnectedToNetwork() {
             let alert = UIAlertController(title: "Unable to connect", message: "You are not connected to the internet. Please check your connection and relaunch the app.", preferredStyle: .alert)
             let dismiss = UIAlertAction(title: "Dismiss", style: .default) { _ in
                 let users = self.realm.objects(User.self)
-                if (users.count != 0){
+                if (users.count != 0) {
                     self.currentUser = users[0]
+                    self.performSegue(withIdentifier: "goToDashboard", sender: self)
                 }
-                self.performSegue(withIdentifier: "goToDashboard", sender: self)
+                
             }
             alert.addAction(dismiss)
             present(alert, animated: true, completion: nil)
@@ -82,6 +85,12 @@ class LoginViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        sessionManager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
+        dataTasks.forEach { $0.cancel() }
+        uploadTasks.forEach { $0.cancel() }
+        downloadTasks.forEach { $0.cancel() }
+        }
         
         switch segue.identifier! {
         case "goToDashboard":
@@ -116,6 +125,7 @@ class LoginViewController: UIViewController {
                     let alert = UIAlertController(title: "Invalid key", message: "The key that you have entered is invalid. Please check and try again.", preferredStyle: .alert)
                     let dismiss = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
                     alert.addAction(dismiss)
+                    let _ = KeychainWrapper.standard.removeObject(forKey: "userPassword")
                     self.present(alert, animated: true, completion: {
                         self.keyField.text = ""
                     })
@@ -150,7 +160,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    func loginWithGoogle(input: String){
+    func loginWithGoogle(input: String) {
         let base64String = input.replacingOccurrences(of: "token=", with: "")
         let decodedData = Data(base64Encoded: base64String)!
         let decodedString = String(data: decodedData, encoding: .utf8)!
