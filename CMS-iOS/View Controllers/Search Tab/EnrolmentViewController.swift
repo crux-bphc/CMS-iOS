@@ -16,15 +16,22 @@ class EnrolmentViewController: UIViewController {
     
     @IBOutlet weak var courseLabel: UILabel!
     @IBOutlet weak var instructorLabel: UILabel!
-    
+    @IBOutlet weak var enrolButton: UIButton!
     let constants = Constants.Global.self
     var enrolmentCourse = Course()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        courseLabel.text = enrolmentCourse.displayname
+        enrolButton.layer.cornerRadius = 10
+        courseLabel.text = enrolmentCourse.displayname.replacingOccurrences(of: "&amp;", with: "&")
         instructorLabel.text = enrolmentCourse.faculty
+        self.navigationItem.largeTitleDisplayMode = .never
+        self.title = "Course Details"
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
     }
     
     func enrolCourse (completion: @escaping () -> Void) {
@@ -34,7 +41,7 @@ class EnrolmentViewController: UIViewController {
         SVProgressHUD.show()
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
-                let enrolmentData = JSON(response.value)
+                let enrolmentData = JSON(response.value as Any)
                 print(enrolmentData)
                 if enrolmentData["status"].bool! {
                     print("Enrolled Successfully")
@@ -67,15 +74,5 @@ class EnrolmentViewController: UIViewController {
         }
         
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
 }

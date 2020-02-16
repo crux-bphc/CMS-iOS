@@ -9,33 +9,50 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
-import SVProgressHUD
 import SwiftKeychainWrapper
+import GradientLoadingBar
 
-class SearchViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate {
+class SearchViewController: UITableViewController, UISearchBarDelegate, UISearchDisplayDelegate , UISearchResultsUpdating{
     
-    
-    @IBOutlet weak var searchBar: UISearchBar!
-    var searchValue : String = ""
     let constants = Constants.Global.self
     var resultArray = [Course]()
     var selectedCourse = Course()
+    let searchController = UISearchController(searchResultsController: nil)
+    private let gradientLoadingBar = GradientActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.delegate = self
+        
+        self.tableView.contentInset.top = 16
+        setupNavBar()
+        setupGradientLoadingBar()
         // Do any additional setup after loading the view.
     }
     
-    func searchRequest (keyword: String, completion: @escaping() -> Void) {
+    override func viewDidDisappear(_ animated: Bool) {
+        gradientLoadingBar.fadeOut()
+    }
+    
+    func setupNavBar() {
         
-        SVProgressHUD.show()
+        self.navigationItem.searchController = searchController
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+    }
+    
+    func searchRequest (keyword: String, completion: @escaping() -> Void) {
+        print("Made request to search for courses.")
+        gradientLoadingBar.fadeIn()
         let params : [String : Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "criteriavalue" : keyword, "page" : 1]
         let FINAL_URL : String = constants.BASE_URL + constants.SEARCH_COURSES
-        
-        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: self.constants.headers).responseJSON { (response) in
+        let queue = DispatchQueue.global(qos: .userInteractive)
+        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: self.constants.headers).responseJSON(queue : queue) { (response) in
             if response.result.isSuccess {
-                let searchResults = JSON(response.value)
+                let searchResults = JSON(response.value as Any)
                 for i in 0 ..< searchResults["courses"].count {
                     let course = Course()
                     course.courseid = searchResults["courses"][i]["id"].int!
@@ -44,38 +61,59 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                     self.resultArray.append(course)
                 }
             }
-            completion()
+            DispatchQueue.main.async {
+                completion()
+            }
         }
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
         
     }
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        resultArray.removeAll()
+        self.tableView.reloadData()
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if searchBar.text != "" {
+        if searchController.searchBar.text != "" {
             resultArray.removeAll()
-            searchRequest(keyword: searchBar.text!) {
+            searchRequest(keyword: searchController.searchBar.text!) {
                 self.tableView.reloadData()
-                SVProgressHUD.dismiss()
                 DispatchQueue.main.async {
-                    searchBar.resignFirstResponder()
+                    self.gradientLoadingBar.fadeOut()
+                    self.searchController.resignFirstResponder()
+                    self.searchController.searchBar.endEditing(true)
                 }
             }
         }
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar.text?.count == 0 {
-            resultArray.removeAll()
-            tableView.reloadData()
-            DispatchQueue.main.async {
-                searchBar.resignFirstResponder()
-            }
-        }
-    }
+//    code for real time search results
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        stopTheDamnRequests()
+//        if searchController.searchBar.text != "" {
+//            resultArray.removeAll()
+//            searchRequest(keyword: searchController.searchBar.text!) {
+//                self.tableView.reloadData()
+//                DispatchQueue.main.async {
+//                    self.searchController.resignFirstResponder()
+//                    //                    self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: .top, animated: false)
+//                }
+//            }
+//        }
+//    }
+
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCell")
-        cell.textLabel?.text = resultArray[indexPath.row].displayname
-        cell.detailTextLabel?.text = resultArray[indexPath.row].faculty
+        if resultArray.count > indexPath.row {
+            cell.textLabel?.text = resultArray[indexPath.row].displayname.replacingOccurrences(of: "&amp;", with: "&")
+            cell.detailTextLabel?.text = resultArray[indexPath.row].faculty
+            return cell
+        }
         return cell
     }
     
@@ -87,7 +125,9 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return resultArray.count
+        
+        return (self.searchController.isActive ? resultArray.count : 0)
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -97,14 +137,33 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         }
     }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
+    func setupGradientLoadingBar() {
+        guard let navigationBar = navigationController?.navigationBar else { return }
+        
+        gradientLoadingBar.fadeOut(duration: 0)
+        
+        gradientLoadingBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.addSubview(gradientLoadingBar)
+        
+        NSLayoutConstraint.activate([
+            gradientLoadingBar.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor),
+            gradientLoadingBar.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor),
+            
+            gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+            gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
+        ])
+    }
+    func stopTheDamnRequests() {
+        if #available(iOS 9.0, *) {
+            Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
+                tasks.forEach{ $0.cancel() }
+            }
+        } else {
+            Alamofire.SessionManager.default.session.getTasksWithCompletionHandler { (sessionDataTask, uploadData, downloadData) in
+                sessionDataTask.forEach { $0.cancel() }
+                uploadData.forEach { $0.cancel() }
+                downloadData.forEach { $0.cancel() }
+            }
+        }
+    }
 }

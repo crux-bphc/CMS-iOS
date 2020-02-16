@@ -10,5 +10,11 @@ target 'CMS-iOS' do
   pod 'SwiftyJSON'
   pod 'SVProgressHUD'
   pod 'SwiftKeychainWrapper'
+  pod 'RealmSwift'
+  pod 'IQKeyboardManagerSwift'
+  pod 'NotificationBannerSwift'
+  pod 'SDDownloadManager'
+  pod 'GradientLoadingBar', '~> 2.0'
+  pod 'BadgeSwift', '~> 8.0'
 
 end

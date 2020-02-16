@@ -7,11 +7,22 @@
 //
 
 import UIKit
+import RealmSwift
 
-class Course {
+class Course : Object {
     
-    var displayname : String = ""
-    var courseid : Int = 0
-    var enrolled : Bool = false
-    var faculty : String = ""
+    @objc dynamic var displayname : String = ""
+    @objc dynamic var courseid : Int = 0
+    @objc dynamic var enrolled : Bool = false
+    @objc dynamic var faculty : String = ""
+    @objc dynamic var canMakeDiscussion : Bool = false
+    @objc dynamic var progress : Float = 0
+    @objc dynamic var courseCode : String = ""
+    @objc dynamic var courseName : String = ""
+    @objc dynamic var allotedColor : String = ""
+//    var sections =  RealmSwift.List<CourseSection>()
+    
+    override class func primaryKey() -> String? {
+        return "courseid"
+    }
 }
