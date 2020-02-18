@@ -36,7 +36,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
         
         navigationItem.largeTitleDisplayMode = .never
         
-        self.title = currentCourse.displayname
+        self.title = currentCourse.displayname.cleanUp()
         if #available(iOS 13.0, *) {
             refreshControl?.tintColor = .label
         } else {
@@ -93,6 +93,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                 let realm = try! Realm()
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
+                    print(courseContent)
                     let realmModules = realm.objects(Module.self).filter("coursename = %@" ,self.currentCourse.displayname)
                     for i in 0..<realmModules.count {
                         if realmModules[i].read && !readModuleIds.contains(realmModules[i].id) {
@@ -255,7 +256,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
             
         }
         let cell = UITableViewCell(style: .value1, reuseIdentifier: "reuseCourse")
-        cell.textLabel?.text = sectionArray[indexPath.section].modules[indexPath.row].name
+        cell.textLabel?.text = sectionArray[indexPath.section].modules[indexPath.row].name.cleanUp()
         if !sectionArray[indexPath.section].modules[indexPath.row].read {
             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         }
@@ -326,7 +327,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sectionArray[section].name
+        return sectionArray[section].name.cleanUp()
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -354,7 +355,13 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
             present(alert, animated: true, completion: nil)
         }
         if selectedModule.modname == "forum" {
-            performSegue(withIdentifier: "goToAnnoucements", sender: self)
+            // if name is not announcements show description
+            if selectedModule.name == "Announcements" {
+                performSegue(withIdentifier: "goToAnnoucements", sender: self)
+            } else {
+                performSegue(withIdentifier: "goToModule", sender: self)
+            }
+            
         }else if selectedModule.modname == "folder"{
             // set destination view controllers module as
             performSegue(withIdentifier: "goToFolder", sender: self)
@@ -365,7 +372,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     }
     
     func updateUI() {
-        self.title = currentCourse.displayname
+        self.title = currentCourse.displayname.cleanUp()
         self.tableView.reloadData()
     }
     

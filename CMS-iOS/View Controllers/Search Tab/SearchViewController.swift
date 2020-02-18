@@ -110,7 +110,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCell")
         if resultArray.count > indexPath.row {
-            cell.textLabel?.text = resultArray[indexPath.row].displayname.replacingOccurrences(of: "&amp;", with: "&")
+            cell.textLabel?.text = resultArray[indexPath.row].displayname.cleanUp()
             cell.detailTextLabel?.text = resultArray[indexPath.row].faculty
             return cell
         }

@@ -461,7 +461,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             if searchController.isActive {
                 cell.courseName.text = filteredCourseList[indexPath.row].courseCode
                 
-                cell.courseFullName.text = filteredCourseList[indexPath.row].courseName.replacingOccurrences(of: "&amp;", with: "&")
+                cell.courseFullName.text = filteredCourseList[indexPath.row].courseName.cleanUp()
                 cell.courseName.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
                 let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("read = NO")
                 let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("modname = %@", "forum").first
@@ -474,7 +474,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 }
             } else {
                 cell.courseName.text = courseList[indexPath.row].courseCode
-                cell.courseFullName.text = courseList[indexPath.row].courseName.replacingOccurrences(of: "&amp;", with: "&")
+                cell.courseFullName.text = courseList[indexPath.row].courseName.cleanUp()
                 cell.courseName.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
                 let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("read = NO")
                 let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("modname = %@", "forum").first
