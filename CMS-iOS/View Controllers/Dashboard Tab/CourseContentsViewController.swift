@@ -93,7 +93,6 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                 let realm = try! Realm()
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
-                    print(courseContent)
                     let realmModules = realm.objects(Module.self).filter("coursename = %@" ,self.currentCourse.displayname)
                     for i in 0..<realmModules.count {
                         if realmModules[i].read && !readModuleIds.contains(realmModules[i].id) {
@@ -167,7 +166,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                 }
                                 
                                 moduleData.name = courseContent[i]["modules"][j]["name"].string!
-                                if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!) {
+                                if readModuleIds.contains(moduleData.id) {
                                     moduleData.read = true
                                     
                                 }else if moduleData.name == "Announcements"{
