@@ -96,6 +96,7 @@
 		A384C530B8684AA813E94380 /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderContentViewController.swift; sourceTree = "<group>"; };
 		E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		E6951E6F23EF172E00C9CC3D /* CMS BPHC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "CMS BPHC.entitlements"; sourceTree = "<group>"; };
 		E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLPreviewItemSubclass.swift; sourceTree = "<group>"; };
 		E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringFontExtension.swift; sourceTree = "<group>"; };
 		E6C61630235DA91F00FFC2E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -135,6 +136,7 @@
 		0A3DEAF122FDCA69001B6BFD /* CMS-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				E6951E6F23EF172E00C9CC3D /* CMS BPHC.entitlements */,
 				0A9A960723572D62004ABB2F /* BubbleTabBar */,
 				0AC43B562350B11700A4ED1B /* New Group */,
 				0A58544F230163E9008FB370 /* Support */,
@@ -578,6 +580,7 @@
 			baseConfigurationReference = A384C530B8684AA813E94380 /* Pods-CMS-iOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "CMS-iOS/CMS BPHC.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 8NXR4FCN3L;
@@ -601,6 +604,7 @@
 			baseConfigurationReference = 1C4EB617C056F8D14EB41B19 /* Pods-CMS-iOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "CMS-iOS/CMS BPHC.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 8NXR4FCN3L;

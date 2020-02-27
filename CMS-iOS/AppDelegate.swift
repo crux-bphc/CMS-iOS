@@ -14,7 +14,7 @@ import UserNotifications
 import SDDownloadManager
 import SafariServices
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     var window: UIWindow?
     
@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let realm = try! Realm()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+//        UIApplication.shared.registerForRemoteNotifications()
         application.setMinimumBackgroundFetchInterval(900)
         let options : UNAuthorizationOptions = [.alert, .sound, .badge]
         notificationCenter.requestAuthorization(options: options) { (didAllow, error) in
@@ -33,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                BackgroundFetch().setCategories()
 //            }
         }
-        
+        UIApplication.shared.registerForRemoteNotifications()
         IQKeyboardManager.shared.enable = true
         if let realmUser = realm.objects(User.self).first {
             if Reachability.isConnectedToNetwork() {
@@ -50,6 +51,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             
         }
+        
+        
         return true
     }
     
@@ -122,9 +125,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("failed to background fetch")
         }
     }
-}
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        
+        let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+        print("device token = \(token)")
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        
+        
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+            if response.actionIdentifier == "Mark as Read" {
 
-extension AppDelegate: UNUserNotificationCenterDelegate {
+                //Mark as read function
+            } else if response.actionIdentifier == "Open" {
+    //            Open file
+            }
+        }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
@@ -132,14 +152,5 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         // Print message ID.
         UNUserNotificationCenter.current().delegate = self
         // Print full message.
-    }
-
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        if response.actionIdentifier == "Mark as Read" {
-
-            //Mark as read function
-        } else if response.actionIdentifier == "Open" {
-//            Open file
-        }
     }
 }
