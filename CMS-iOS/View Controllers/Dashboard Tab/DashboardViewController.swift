@@ -192,6 +192,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         self.filterItemsForSearch(string: searchController.searchBar.text!)
         if !searchController.isActive {
             self.tableView.reloadData()
+//            let topIndex = IndexPath(row: 0, section: 0)
+//            self.tableView.scrollToRow(at: topIndex, at: .top, animated: true)
+//            self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         }
     }
     
@@ -561,19 +564,27 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             uploadTasks.forEach { $0.cancel() }
             downloadTasks.forEach { $0.cancel() }
         }
+        stopTheDamnRequests()
         
-        if courseList.count > indexPath.row{
-            stopTheDamnRequests()
-            tableView.deselectRow(at: indexPath, animated: true)
-            if searchController.isActive {
-                self.selectedCourse = filteredCourseList[indexPath.row]
+        if indexPath.section == 0 {
+            if courseList.count > indexPath.row{
+                tableView.deselectRow(at: indexPath, animated: true)
+                if searchController.isActive {
+                    self.selectedCourse = filteredCourseList[indexPath.row]
+                }
+                else {
+                    self.selectedCourse = courseList[indexPath.row]
+                }
+                performSegue(withIdentifier: "goToCourseContent", sender: self)
             }
-            else {
-                self.selectedCourse = courseList[indexPath.row]
+        } else if indexPath.section == 1 {
+            let realm = try! Realm()
+            if let selectedCourse = realm.objects(Course.self).filter("displayname = %@", searchModuleCourses[indexPath.row]).first {
+                self.selectedCourse = selectedCourse
+                performSegue(withIdentifier: "goToCourseContent", sender: self)
             }
-            performSegue(withIdentifier: "goToCourseContent", sender: self)
+            
         }
-        
     }
     
     func showOfflineMessage() {
