@@ -32,7 +32,11 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var downloadArray : [URL] = []
     var localURLArray : [URL] = []
     let sessionManager = Alamofire.SessionManager.default
-    
+    //// add this in some form of dictionary later maybe with module id
+    /////////////////////////////////////////////////////////////////////////
+    var searchModuleNames = [String]()
+    var searchModuleCourses = [String]()
+    /////////////////////////////////////////////////////////////////////////
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGradientLoadingBar()
@@ -57,7 +61,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         tableView.refreshControl = refreshControl
         tableView.reloadData()
         tableView.register(UINib(nibName: "CourseTableViewCell", bundle: nil), forCellReuseIdentifier: "CourseTableViewCell")
-        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ModuleTableViewCellSearching")
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
         longPressGesture.minimumPressDuration = 0.5
         longPressGesture.delegate = self
@@ -165,16 +169,34 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
     }
     
-    func filterCoursesForSearch(string: String) {
+    func filterItemsForSearch(string: String) {
         
         filteredCourseList = courseList.filter() {$0.displayname.contains(string.uppercased())}
-        self.tableView.reloadData()
+        DispatchQueue.global(qos: .userInteractive).async {
+            let realm = try! Realm()
+            let filterModules = realm.objects(Module.self).filter("name CONTAINS[c] %@", string.lowercased())
+            self.searchModuleNames.removeAll()
+            self.searchModuleCourses.removeAll()
+            for mod in filterModules {
+                self.searchModuleCourses.append(mod.coursename)
+                self.searchModuleNames.append(mod.name)
+            }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+        
     }
     
     func updateSearchResults(for searchController: UISearchController) {
-        self.filterCoursesForSearch(string: searchController.searchBar.text!)
+        self.filterItemsForSearch(string: searchController.searchBar.text!)
+        if !searchController.isActive {
+            self.tableView.reloadData()
+        }
     }
     
+    
+        
     func downloadCourseData(course: Course, completion: @escaping() -> Void) {
         
         let params : [String:String] = ["courseid": String(course.courseid), "wstoken": KeychainWrapper.standard.string(forKey: "userPassword")!]
@@ -445,8 +467,20 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
     }
     
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return searchController.isActive ? 2 : 1
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchController.isActive ? filteredCourseList.count : courseList.count
+        switch section {
+        case 0:
+            return searchController.isActive ? filteredCourseList.count : courseList.count
+        case 1:
+            return searchModuleCourses.count
+        default:
+            return 0
+        }
+        
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -454,47 +488,70 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
         
-        let realm = try! Realm()
-        if indexPath.row < courseList.count{
-            if searchController.isActive {
-                cell.courseName.text = filteredCourseList[indexPath.row].courseCode
-                
-                cell.courseFullName.text = filteredCourseList[indexPath.row].courseName.cleanUp()
-                cell.courseName.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
-                let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("read = NO")
-                let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("modname = %@", "forum").first
-                let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
-                if unreadModules.count + unreadDiscussions.count == 0 {
-                    cell.unreadCounterLabel.isHidden = true
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
+            
+            let realm = try! Realm()
+            if indexPath.row < courseList.count{
+                if searchController.isActive {
+                    cell.courseName.text = filteredCourseList[indexPath.row].courseCode
+                    
+                    cell.courseFullName.text = filteredCourseList[indexPath.row].courseName.cleanUp()
+                    cell.courseName.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
+                    let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("read = NO")
+                    let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("modname = %@", "forum").first
+                    let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
+                    if unreadModules.count + unreadDiscussions.count == 0 {
+                        cell.unreadCounterLabel.isHidden = true
+                    } else {
+                        cell.unreadCounterLabel.isHidden = false
+                        cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
+                    }
                 } else {
-                    cell.unreadCounterLabel.isHidden = false
-                    cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
+                    cell.courseName.text = courseList[indexPath.row].courseCode
+                    cell.courseFullName.text = courseList[indexPath.row].courseName.cleanUp()
+                    cell.courseName.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
+                    let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("read = NO")
+                    let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("modname = %@", "forum").first
+                    let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
+                    if unreadModules.count + unreadDiscussions.count == 0 {
+                        cell.unreadCounterLabel.isHidden = true
+                    } else {
+                        cell.unreadCounterLabel.isHidden = false
+                        cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
+                    }
+                    
                 }
-            } else {
-                cell.courseName.text = courseList[indexPath.row].courseCode
-                cell.courseFullName.text = courseList[indexPath.row].courseName.cleanUp()
-                cell.courseName.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
-                let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("read = NO")
-                let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("modname = %@", "forum").first
-                let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
-                if unreadModules.count + unreadDiscussions.count == 0 {
-                    cell.unreadCounterLabel.isHidden = true
-                } else {
-                    cell.unreadCounterLabel.isHidden = false
-                    cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
-                }
-                
             }
+            
+            
+            return cell
+        } else if indexPath.section == 1 {
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "ModuleTableViewCellSearching")
+            
+            let realm = try! Realm()
+            if indexPath.row < searchModuleCourses.count {
+                cell.textLabel?.text = searchModuleNames[indexPath.row]
+                cell.detailTextLabel?.text = searchModuleCourses[indexPath.row]
+            }
+            
+            
+            return cell
         }
         
-        
-        return cell
+        return UITableViewCell()
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        switch indexPath.section {
+        case 0:
+            return 100
+        case 1:
+            return 50
+        default:
+            return 0
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
