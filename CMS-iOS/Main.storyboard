@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -298,7 +298,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mx8-5f-YdU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3797.5999999999999" y="1969.9507389162563"/>
+            <point key="canvasLocation" x="3798" y="1970"/>
         </scene>
         <!--Folder View-->
         <scene sceneID="FtP-86-yAH">
@@ -468,7 +468,6 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="6Ei-6p-9ug">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="105" id="3bg-uF-chZ">
                                 <rect key="frame" x="0.0" y="28" width="375" height="105"/>
@@ -491,6 +490,9 @@
                     </refreshControl>
                     <connections>
                         <segue destination="fG0-QY-y8D" kind="show" identifier="goToCourseContent" id="wt5-J4-7yV"/>
+                        <segue destination="sHh-GJ-T8A" kind="show" identifier="goToModuleDirectly" id="lTA-yO-kuB"/>
+                        <segue destination="exB-Lj-j3Y" kind="show" identifier="goToDiscussionDirectly" id="nQq-Vr-otz"/>
+                        <segue destination="Aeb-vz-2Hs" kind="show" identifier="goToFolderModuleDirectly" id="Cv0-T4-e1a"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Mr-0O-5t6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -879,6 +881,13 @@
             <point key="canvasLocation" x="1909" y="1970"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="lTA-yO-kuB"/>
+        <segue reference="wt5-J4-7yV"/>
+        <segue reference="r0O-gx-IAp"/>
+        <segue reference="Cv0-T4-e1a"/>
+        <segue reference="nQq-Vr-otz"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="Dashboard" width="30" height="30"/>
         <image name="More" width="30" height="30"/>
@@ -901,10 +910,4 @@
             <color red="0.99800002574920654" green="0.59700000286102295" blue="0.22699999809265137" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="IgU-80-XSP"/>
-        <segue reference="enf-3I-Kaq"/>
-        <segue reference="r0O-gx-IAp"/>
-        <segue reference="p9a-Sh-oWN"/>
-    </inferredMetricsTieBreakers>
 </document>

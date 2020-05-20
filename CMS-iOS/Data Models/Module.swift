@@ -25,3 +25,15 @@ class Module : Object {
         return "id"
     }
 }
+
+class FilterModule {
+    var name = ""
+    var coursename = ""
+    var id = 0
+    
+    init(name: String, coursename: String, id: Int) {
+        self.name = name
+        self.coursename = coursename
+        self.id = id
+    }
+}

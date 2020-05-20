@@ -94,10 +94,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         
-        let message = url.host
+        guard let message = url.host else { return true }
         let loginViewController = self.window?.rootViewController as! LoginViewController
-        loginViewController.loginWithGoogle(input: message!)
+        loginViewController.loginWithGoogle(input: message)
         loginViewController.safariVC.dismiss(animated: true)
+        
         return true
     }
     

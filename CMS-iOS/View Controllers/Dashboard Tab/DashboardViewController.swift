@@ -25,6 +25,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var totalCourseCount = 0
     var userDetails = User()
     var selectedCourse = Course()
+    var selectedModule = Module()
+    var selectedAnnouncement = Discussion()
     var searching : Bool = false
     private let gradientLoadingBar = GradientActivityIndicatorView()
     var filteredCourseList = [Course]()
@@ -32,11 +34,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var downloadArray : [URL] = []
     var localURLArray : [URL] = []
     let sessionManager = Alamofire.SessionManager.default
-    //// add this in some form of dictionary later maybe with module id
-    /////////////////////////////////////////////////////////////////////////
-    var searchModuleNames = [String]()
-    var searchModuleCourses = [String]()
-    /////////////////////////////////////////////////////////////////////////
+    var searchModules = [FilterModule]()
+    var searchAnnouncements = [FilterDiscussion]()
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGradientLoadingBar()
@@ -50,10 +49,10 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         refreshData()
         
         if #available(iOS 13.0, *) {
-            refreshControl?.tintColor = .label
+            refreshControl?.tintColor = .secondaryLabel
         } else {
             // Fallback on earlier versions
-            refreshControl?.tintColor = .black
+            refreshControl?.tintColor = .darkGray
             
         }
         refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
@@ -89,8 +88,22 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinationVC = segue.destination as! CourseDetailsViewController
-        destinationVC.currentCourse = selectedCourse
+        switch segue.identifier {
+        case "goToCourseContent":
+            let destinationVC = segue.destination as! CourseDetailsViewController
+            destinationVC.currentCourse = selectedCourse
+        case "goToModuleDirectly":
+                let destinationVC = segue.destination as! ModuleViewController
+                destinationVC.selectedModule = selectedModule
+        case "goToFolderModuleDirectly":
+                let destinationVC = segue.destination as! FolderContentViewController
+                destinationVC.folderSelectedModule = self.selectedModule
+        case "goToDiscussionDirectly":
+            let destinationVC = segue.destination as! DiscussionViewController
+            destinationVC.selectedDiscussion = selectedAnnouncement
+        default:
+            break
+        }
     }
     
     func setupNavBar() {
@@ -175,11 +188,21 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         DispatchQueue.global(qos: .userInteractive).async {
             let realm = try! Realm()
             let filterModules = realm.objects(Module.self).filter("name CONTAINS[c] %@", string.lowercased())
-            self.searchModuleNames.removeAll()
-            self.searchModuleCourses.removeAll()
+            let filterAnnouncements = realm.objects(Discussion.self).filter("name CONTAINS[c] %@", string.lowercased())
+            self.searchModules.removeAll()
             for mod in filterModules {
-                self.searchModuleCourses.append(mod.coursename)
-                self.searchModuleNames.append(mod.name)
+                let filterModule = FilterModule(name: mod.name, coursename: mod.coursename, id: mod.id)
+                self.searchModules.append(filterModule)
+            }
+            self.searchAnnouncements.removeAll()
+            for ann in filterAnnouncements {
+                let annName = ann.name
+                var annCourseName = ""
+                if let annoucenmentModule = realm.objects(Module.self).filter("id = %@", ann.moduleId).first {
+                    annCourseName = annoucenmentModule.coursename
+                }
+                let filterAnnouncement = FilterDiscussion(name: annName, coursename: annCourseName, id: ann.id)
+                self.searchAnnouncements.append(filterAnnouncement)
             }
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -470,8 +493,30 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
     }
     
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if searchController.isActive {
+            switch section {
+            case 0:
+                if filteredCourseList.count > 0 {
+                    return "Courses"
+                }
+            case 1:
+                if searchModules.count > 0 {
+                    return "Modules"
+                }
+            case 2:
+                if searchAnnouncements.count > 0 {
+                    return "Announcements"
+                }
+            default:
+                return nil
+            }
+        }
+        return nil
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return searchController.isActive ? 2 : 1
+        return searchController.isActive ? 3 : 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -479,7 +524,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         case 0:
             return searchController.isActive ? filteredCourseList.count : courseList.count
         case 1:
-            return searchModuleCourses.count
+            return searchModules.count
+        case 2:
+            return searchAnnouncements.count
         default:
             return 0
         }
@@ -533,12 +580,21 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         } else if indexPath.section == 1 {
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "ModuleTableViewCellSearching")
             
-            let realm = try! Realm()
-            if indexPath.row < searchModuleCourses.count {
-                cell.textLabel?.text = searchModuleNames[indexPath.row]
-                cell.detailTextLabel?.text = searchModuleCourses[indexPath.row]
+            if indexPath.row < searchModules.count {
+                cell.textLabel?.text = searchModules[indexPath.row].name
+                cell.detailTextLabel?.text = searchModules[indexPath.row].coursename
+                
             }
             
+            
+            return cell
+        } else if indexPath.section == 2 {
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "ModuleTableViewCellSearching")
+            
+            if indexPath.row < searchAnnouncements.count {
+                cell.textLabel?.text = searchAnnouncements[indexPath.row].name
+                cell.detailTextLabel?.text = searchAnnouncements[indexPath.row].coursename
+            }
             
             return cell
         }
@@ -551,6 +607,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         case 0:
             return 100
         case 1:
+            return 50
+        case 2:
             return 50
         default:
             return 0
@@ -567,7 +625,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         stopTheDamnRequests()
         
         if indexPath.section == 0 {
-            if courseList.count > indexPath.row{
+            if courseList.count > indexPath.row {
                 tableView.deselectRow(at: indexPath, animated: true)
                 if searchController.isActive {
                     self.selectedCourse = filteredCourseList[indexPath.row]
@@ -579,11 +637,16 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             }
         } else if indexPath.section == 1 {
             let realm = try! Realm()
-            if let selectedCourse = realm.objects(Course.self).filter("displayname = %@", searchModuleCourses[indexPath.row]).first {
-                self.selectedCourse = selectedCourse
-                performSegue(withIdentifier: "goToCourseContent", sender: self)
+            self.selectedModule = realm.objects(Module.self).filter("id = %@", searchModules[indexPath.row].id).first!
+            if self.selectedModule.modname != "folder" {
+                self.redirectToModule()
+            } else {
+                self.redirectToFolderModule()
             }
-            
+        } else if indexPath.section == 2 {
+            let realm = try! Realm()
+            self.selectedAnnouncement = realm.objects(Discussion.self).filter("id = %@", searchAnnouncements[indexPath.row].id).first!
+            redirectToAnnouncement()
         }
     }
     
@@ -858,5 +921,17 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             }
         }
         
+    }
+    
+    func redirectToModule() {
+        self.performSegue(withIdentifier: "goToModuleDirectly", sender: self)
+    }
+    
+    func redirectToAnnouncement() {
+        self.performSegue(withIdentifier: "goToDiscussionDirectly", sender: self)
+    }
+    
+    func redirectToFolderModule() {
+        self.performSegue(withIdentifier: "goToFolderModuleDirectly", sender: self)
     }
 }
