@@ -554,6 +554,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
                     if unreadModules.count + unreadDiscussions.count == 0 {
                         cell.unreadCounterLabel.isHidden = true
+                        cell.unreadCounterLabel.text = String(0)
                     } else {
                         cell.unreadCounterLabel.isHidden = false
                         cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
@@ -567,6 +568,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
                     if unreadModules.count + unreadDiscussions.count == 0 {
                         cell.unreadCounterLabel.isHidden = true
+                        cell.unreadCounterLabel.text = String(0)
                     } else {
                         cell.unreadCounterLabel.isHidden = false
                         cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
