@@ -14,7 +14,7 @@ import SwiftyJSON
 import UserNotifications
 
 class BackgroundFetch {
-    
+    /* OLDER DOWNLOAD MODULES FUNCTION
     public func updateCourseContents(completion: @escaping ((Bool) -> Void)) {
         let realm = try! Realm()
         let constants = Constants.Global.self
@@ -97,6 +97,54 @@ class BackgroundFetch {
         
         
     }
+    */
+    public func downloadModules(completion: @escaping (Bool) -> Void) {
+        let realm = try! Realm()
+        let constants = Constants.Global.self
+        let subscribedCourses = realm.objects(Course.self)
+        if subscribedCourses.count == 0 { return }
+        var foundNewData = false
+        let totalCount = subscribedCourses.count
+        var currentCount = 0
+        let password = realm.objects(User.self).first?.token
+        let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
+        var params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword") ?? password!]
+        for x in 0..<subscribedCourses.count {
+            let currentCourse = subscribedCourses[x]
+            params["courseid"] = currentCourse.courseid
+            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { response in
+                
+                if response.result.isSuccess {
+                    let courseContent = JSON(response.value as Any)
+                    for i in 0 ..< courseContent.count {
+                        for j in 0 ..< courseContent[i]["modules"].array!.count {
+                            var moduleJSONItemId = Int()
+                            if courseContent[i]["modules"][j]["modname"].string! == "forum" {
+                                moduleJSONItemId = courseContent[i]["modules"][j]["instance"].int!
+                            } else {
+                                moduleJSONItemId = courseContent[i]["modules"][j]["id"].int!
+                            }
+                            let moduleJSONItemName = courseContent[i]["modules"][j]["name"].string!
+                            // check module here
+                            if (realm.objects(Module.self).filter("coursename = %@", currentCourse.displayname).filter("id = \(moduleJSONItemId)").count == 0) {
+                                // this is a new module
+                                self.sendNotification(title: "\(moduleJSONItemName)", body: "New content in \(currentCourse.displayname)", identifier: "\(currentCourse.displayname + String(moduleJSONItemId))")
+                                foundNewData = true
+                            }
+                        }
+                    }
+                    print("done with course \(currentCourse.courseName)")
+                    currentCount += 1
+                    if currentCount == totalCount {
+                        completion(foundNewData)
+                    }
+                } else {
+                    print("failed")
+                }
+            }
+        }
+        
+    }
     
     public func downloadDiscussions(discussionModules : Results<Module>, completion : @escaping (Bool) -> Void) {
         var foundNewDiscussions = false
@@ -165,7 +213,7 @@ class BackgroundFetch {
                 print("Error \(error.localizedDescription)")
             }
         }
-        print("The identifier for the notification is: \(identifier)")
+//        print("The identifier for the notification is: \(identifier)")
     }
     
     public func setCategories() {
