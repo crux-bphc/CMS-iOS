@@ -25,6 +25,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var totalCourseCount = 0
     var userDetails = User()
     var selectedCourse = Course()
+    var selectedModule = Module()
+    var selectedAnnouncement = Discussion()
     var searching : Bool = false
     private let gradientLoadingBar = GradientActivityIndicatorView()
     var filteredCourseList = [Course]()
@@ -32,7 +34,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var downloadArray : [URL] = []
     var localURLArray : [URL] = []
     let sessionManager = Alamofire.SessionManager.default
-    
+    var searchModules = [FilterModule]()
+    var searchAnnouncements = [FilterDiscussion]()
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGradientLoadingBar()
@@ -46,10 +49,10 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         refreshData()
         
         if #available(iOS 13.0, *) {
-            refreshControl?.tintColor = .label
+            refreshControl?.tintColor = .secondaryLabel
         } else {
             // Fallback on earlier versions
-            refreshControl?.tintColor = .black
+            refreshControl?.tintColor = .darkGray
             
         }
         refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
@@ -57,7 +60,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         tableView.refreshControl = refreshControl
         tableView.reloadData()
         tableView.register(UINib(nibName: "CourseTableViewCell", bundle: nil), forCellReuseIdentifier: "CourseTableViewCell")
-        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ModuleTableViewCellSearching")
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
         longPressGesture.minimumPressDuration = 0.5
         longPressGesture.delegate = self
@@ -85,8 +88,22 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinationVC = segue.destination as! CourseDetailsViewController
-        destinationVC.currentCourse = selectedCourse
+        switch segue.identifier {
+        case "goToCourseContent":
+            let destinationVC = segue.destination as! CourseDetailsViewController
+            destinationVC.currentCourse = selectedCourse
+        case "goToModuleDirectly":
+                let destinationVC = segue.destination as! ModuleViewController
+                destinationVC.selectedModule = selectedModule
+        case "goToFolderModuleDirectly":
+                let destinationVC = segue.destination as! FolderContentViewController
+                destinationVC.folderSelectedModule = self.selectedModule
+        case "goToDiscussionDirectly":
+            let destinationVC = segue.destination as! DiscussionViewController
+            destinationVC.selectedDiscussion = selectedAnnouncement
+        default:
+            break
+        }
     }
     
     func setupNavBar() {
@@ -165,16 +182,47 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
     }
     
-    func filterCoursesForSearch(string: String) {
+    func filterItemsForSearch(string: String) {
         
         filteredCourseList = courseList.filter() {$0.displayname.contains(string.uppercased())}
-        self.tableView.reloadData()
+        DispatchQueue.global(qos: .userInteractive).async {
+            let realm = try! Realm()
+            let filterModules = realm.objects(Module.self).filter("name CONTAINS[c] %@", string.lowercased())
+            let filterAnnouncements = realm.objects(Discussion.self).filter("name CONTAINS[c] %@", string.lowercased())
+            self.searchModules.removeAll()
+            for mod in filterModules {
+                let filterModule = FilterModule(name: mod.name, coursename: mod.coursename, id: mod.id)
+                self.searchModules.append(filterModule)
+            }
+            self.searchAnnouncements.removeAll()
+            for ann in filterAnnouncements {
+                let annName = ann.name
+                var annCourseName = ""
+                if let annoucenmentModule = realm.objects(Module.self).filter("id = %@", ann.moduleId).first {
+                    annCourseName = annoucenmentModule.coursename
+                }
+                let filterAnnouncement = FilterDiscussion(name: annName, coursename: annCourseName, id: ann.id)
+                self.searchAnnouncements.append(filterAnnouncement)
+            }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+        
     }
     
     func updateSearchResults(for searchController: UISearchController) {
-        self.filterCoursesForSearch(string: searchController.searchBar.text!)
+        self.filterItemsForSearch(string: searchController.searchBar.text!)
+        if !searchController.isActive {
+            self.tableView.reloadData()
+//            let topIndex = IndexPath(row: 0, section: 0)
+//            self.tableView.scrollToRow(at: topIndex, at: .top, animated: true)
+//            self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        }
     }
     
+    
+        
     func downloadCourseData(course: Course, completion: @escaping() -> Void) {
         
         let params : [String:String] = ["courseid": String(course.courseid), "wstoken": KeychainWrapper.standard.string(forKey: "userPassword")!]
@@ -445,8 +493,44 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
     }
     
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if searchController.isActive {
+            switch section {
+            case 0:
+                if filteredCourseList.count > 0 {
+                    return "Courses"
+                }
+            case 1:
+                if searchModules.count > 0 {
+                    return "Modules"
+                }
+            case 2:
+                if searchAnnouncements.count > 0 {
+                    return "Announcements"
+                }
+            default:
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return searchController.isActive ? 3 : 1
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchController.isActive ? filteredCourseList.count : courseList.count
+        switch section {
+        case 0:
+            return searchController.isActive ? filteredCourseList.count : courseList.count
+        case 1:
+            return searchModules.count
+        case 2:
+            return searchAnnouncements.count
+        default:
+            return 0
+        }
+        
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -454,47 +538,83 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
         
-        let realm = try! Realm()
-        if indexPath.row < courseList.count{
-            if searchController.isActive {
-                cell.courseName.text = filteredCourseList[indexPath.row].courseCode
-                
-                cell.courseFullName.text = filteredCourseList[indexPath.row].courseName.cleanUp()
-                cell.courseName.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
-                let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("read = NO")
-                let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("modname = %@", "forum").first
-                let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
-                if unreadModules.count + unreadDiscussions.count == 0 {
-                    cell.unreadCounterLabel.isHidden = true
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
+            
+            let realm = try! Realm()
+            if indexPath.row < courseList.count{
+                if searchController.isActive {
+                    cell.courseName.text = filteredCourseList[indexPath.row].courseCode
+                    
+                    cell.courseFullName.text = filteredCourseList[indexPath.row].courseName.cleanUp()
+                    cell.courseName.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
+                    let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("read = NO")
+                    let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("modname = %@", "forum").first
+                    let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
+                    if unreadModules.count + unreadDiscussions.count == 0 {
+                        cell.unreadCounterLabel.isHidden = true
+                        cell.unreadCounterLabel.text = String(0)
+                    } else {
+                        cell.unreadCounterLabel.isHidden = false
+                        cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
+                    }
                 } else {
-                    cell.unreadCounterLabel.isHidden = false
-                    cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
+                    cell.courseName.text = courseList[indexPath.row].courseCode
+                    cell.courseFullName.text = courseList[indexPath.row].courseName.cleanUp()
+                    cell.courseName.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
+                    let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("read = NO")
+                    let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("modname = %@", "forum").first
+                    let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
+                    if unreadModules.count + unreadDiscussions.count == 0 {
+                        cell.unreadCounterLabel.isHidden = true
+                        cell.unreadCounterLabel.text = String(0)
+                    } else {
+                        cell.unreadCounterLabel.isHidden = false
+                        cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
+                    }
+                    
                 }
-            } else {
-                cell.courseName.text = courseList[indexPath.row].courseCode
-                cell.courseFullName.text = courseList[indexPath.row].courseName.cleanUp()
-                cell.courseName.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
-                let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("read = NO")
-                let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("modname = %@", "forum").first
-                let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
-                if unreadModules.count + unreadDiscussions.count == 0 {
-                    cell.unreadCounterLabel.isHidden = true
-                } else {
-                    cell.unreadCounterLabel.isHidden = false
-                    cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
-                }
+            }
+            
+            
+            return cell
+        } else if indexPath.section == 1 {
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "ModuleTableViewCellSearching")
+            
+            if indexPath.row < searchModules.count {
+                cell.textLabel?.text = searchModules[indexPath.row].name
+                cell.detailTextLabel?.text = searchModules[indexPath.row].coursename
                 
             }
+            
+            
+            return cell
+        } else if indexPath.section == 2 {
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "ModuleTableViewCellSearching")
+            
+            if indexPath.row < searchAnnouncements.count {
+                cell.textLabel?.text = searchAnnouncements[indexPath.row].name
+                cell.detailTextLabel?.text = searchAnnouncements[indexPath.row].coursename
+            }
+            
+            return cell
         }
         
-        
-        return cell
+        return UITableViewCell()
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        switch indexPath.section {
+        case 0:
+            return 100
+        case 1:
+            return 50
+        case 2:
+            return 50
+        default:
+            return 0
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -504,19 +624,32 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             uploadTasks.forEach { $0.cancel() }
             downloadTasks.forEach { $0.cancel() }
         }
+        stopTheDamnRequests()
         
-        if courseList.count > indexPath.row{
-            stopTheDamnRequests()
-            tableView.deselectRow(at: indexPath, animated: true)
-            if searchController.isActive {
-                self.selectedCourse = filteredCourseList[indexPath.row]
+        if indexPath.section == 0 {
+            if courseList.count > indexPath.row {
+                tableView.deselectRow(at: indexPath, animated: true)
+                if searchController.isActive {
+                    self.selectedCourse = filteredCourseList[indexPath.row]
+                }
+                else {
+                    self.selectedCourse = courseList[indexPath.row]
+                }
+                performSegue(withIdentifier: "goToCourseContent", sender: self)
             }
-            else {
-                self.selectedCourse = courseList[indexPath.row]
+        } else if indexPath.section == 1 {
+            let realm = try! Realm()
+            self.selectedModule = realm.objects(Module.self).filter("id = %@", searchModules[indexPath.row].id).first!
+            if self.selectedModule.modname != "folder" {
+                self.redirectToModule()
+            } else {
+                self.redirectToFolderModule()
             }
-            performSegue(withIdentifier: "goToCourseContent", sender: self)
+        } else if indexPath.section == 2 {
+            let realm = try! Realm()
+            self.selectedAnnouncement = realm.objects(Discussion.self).filter("id = %@", searchAnnouncements[indexPath.row].id).first!
+            redirectToAnnouncement()
         }
-        
     }
     
     func showOfflineMessage() {
@@ -790,5 +923,17 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             }
         }
         
+    }
+    
+    func redirectToModule() {
+        self.performSegue(withIdentifier: "goToModuleDirectly", sender: self)
+    }
+    
+    func redirectToAnnouncement() {
+        self.performSegue(withIdentifier: "goToDiscussionDirectly", sender: self)
+    }
+    
+    func redirectToFolderModule() {
+        self.performSegue(withIdentifier: "goToFolderModuleDirectly", sender: self)
     }
 }
