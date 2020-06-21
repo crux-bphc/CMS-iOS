@@ -10,3 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Crash on downloading modules on iOS 13
 - HTML entities showing up on course content page
+
+## [Unreleased]
+### Added
+- Ability to search for modules and courses on Dashboard itself
+### Fixed
+- Colors of cells in Light Mode on Dashboard to be more streamlined with the rest of the UI
+- Crash when the app is opened using URL Schemes as it would previously work only with Login With Google
