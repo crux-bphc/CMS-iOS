@@ -20,7 +20,7 @@ The deployment target for the app is iOS 11.0, so if your device is not on that 
 
 You can download the latest release of the app from the App Store [here](https://apps.apple.com/in/app/cms-bphc/id1489946522).
 
-If you want to manually install the app from this repository, first clone it. Navigate to project directory and then install the pods by executing `pod install`. Once pods have been installed successfully, open the file named `CMS-iOS.xcworkspace` and then change the development profile to your profile and then run it after selecting your device from the drop-down next to the run button.
+If you want to manually install the app from this repository, first clone it. Navigate to the project directory and then install the pods by executing `pod install`. Once pods have been installed successfully, open the file named `CMS-iOS.xcworkspace` and then change the development profile to your profile and then run it after selecting your device from the drop-down next to the run button.
 
 ## Contributing
 
