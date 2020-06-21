@@ -119,7 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 let discussionModules = self.realm.objects(Module.self).filter("modname = %@", "forum")
                 bkgObj.downloadDiscussions(discussionModules: discussionModules) { (newDiscussionsFound) in
                     completionHandler(newDiscussionsFound || newModulesFound ? .newData : .noData)
-                    print(newDiscussionsFound || newModulesFound ? "found new data" : "no new data found")
+                    NSLog(newDiscussionsFound || newModulesFound ? "found new data" : "no new data found")
                     bkgObj.sendNotification(title: "Result", body: newDiscussionsFound || newModulesFound ? "found new data" : "no new data found", identifier: "b")
                 }
             }

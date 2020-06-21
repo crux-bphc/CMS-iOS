@@ -133,7 +133,7 @@ class BackgroundFetch {
                             }
                         }
                     }
-                    print("done with course \(currentCourse.courseName)")
+                    NSLog("done with course \(currentCourse.courseName)")
                     currentCount += 1
                     if currentCount == totalCount {
                         completion(foundNewData)
