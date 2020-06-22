@@ -1,8 +1,9 @@
 # CMS-iOS
 
-This is the iOS version on the CMS app, written in Swift. The app utilises the API endpoints provided by Moodle from the server hosted on the [CMS Website](https://td.bits-hyderabad.ac.in/moodle/).  
+This is the iOS version on the CMS app, written in Swift. The app utilises the API endpoints provided by Moodle from the server hosted on the [CMS Website](https://td.bits-hyderabad.ac.in/moodle/).
+
+[Download on the App Store](https://apps.apple.com/in/app/cms-bphc/id1489946522)
   
-[![Join-TestFlight-Badge](https://img.shields.io/badge/Join-TestFlight-blue.svg)](https://testflight.apple.com/join/WPHI9na4) 
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -15,11 +16,11 @@ This is the iOS version on the CMS app, written in Swift. The app utilises the A
 
 ## Installation
 
-As the app has not been put up for beta testing on TestFlight or published to the App Store yet, the only way you can install the app to your device is to side load it using Xcode. First, clone the repository.
-
 The deployment target for the app is iOS 11.0, so if your device is not on that or a newer version, you're out of luck `¯\_(ツ)_/¯` 
 
-Otherwise, install the pods by navigating to the repository on terminal and executing `pod install`. Once pods have been installed successfully, open the file named `CMS-iOS.xcworkspace` and then change the development profile to your profile and then run it after selecting your device from the drop-down next to the run button.
+You can download the latest release of the app from the App Store [here](https://apps.apple.com/in/app/cms-bphc/id1489946522).
+
+If you want to manually install the app from this repository, first clone it. Navigate to the project directory and then install the pods by executing `pod install`. Once pods have been installed successfully, open the file named `CMS-iOS.xcworkspace` and then change the development profile to your profile and then run it after selecting your device from the drop-down next to the run button.
 
 ## Contributing
 
