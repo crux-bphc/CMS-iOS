@@ -19,11 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var window: UIWindow?
     
     let notificationCenter = UNUserNotificationCenter.current()
-    let realm = try! Realm()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //        UIApplication.shared.registerForRemoteNotifications()
         application.setMinimumBackgroundFetchInterval(900)
+        
         let options : UNAuthorizationOptions = [.alert, .sound, .badge]
         notificationCenter.requestAuthorization(options: options) { (didAllow, error) in
             guard didAllow else {return}
@@ -34,6 +34,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //                BackgroundFetch().setCategories()
 //            }
         }
+        // Code for realm migration, update this when realm schema is changed
+
+        let config = Realm.Configuration(
+            schemaVersion: 1, // version to change schema to
+            // Set the block which will be called automatically when opening a Realm with
+            // a schema version lower than the one set above
+            migrationBlock: { migration, oldSchemaVersion in
+                if (oldSchemaVersion < 1) {
+                    // change properties based on new schema
+                }
+            })
+
+        // Tell Realm to use this new configuration object for the default Realm
+        Realm.Configuration.defaultConfiguration = config
+    
+        let realm = try! Realm()
         UIApplication.shared.registerForRemoteNotifications()
         IQKeyboardManager.shared.enable = true
         if let realmUser = realm.objects(User.self).first {
@@ -68,7 +84,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        
+        let realm = try! Realm()
         if let realmUser = realm.objects(User.self).first {
             if Reachability.isConnectedToNetwork() {
                 try! realm.write {
@@ -115,8 +131,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             let bkgObj = BackgroundFetch()
             bkgObj.sendNotification(title: "Testing", body: "Attempting to fetch data in background", identifier: "a")
             bkgObj.downloadModules { newModulesFound in
-                
-                let discussionModules = self.realm.objects(Module.self).filter("modname = %@", "forum")
+                let realm = try! Realm()
+                let discussionModules = realm.objects(Module.self).filter("modname = %@", "forum")
                 bkgObj.downloadDiscussions(discussionModules: discussionModules) { (newDiscussionsFound) in
                     completionHandler(newDiscussionsFound || newModulesFound ? .newData : .noData)
                     NSLog(newDiscussionsFound || newModulesFound ? "found new data" : "no new data found")
