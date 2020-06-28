@@ -189,7 +189,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         DispatchQueue.global(qos: .userInteractive).async {
             let realm = try! Realm()
             let filterModules = realm.objects(Module.self).filter("name CONTAINS[c] %@ AND modname != 'forum'", string.lowercased())
-            let filterAnnouncements = realm.objects(Discussion.self).filter("name CONTAINS[c] %@", string.lowercased())
+            let filterAnnouncements = realm.objects(Discussion.self).filter("name CONTAINS[c] %@ AND moduleId != 0", string.lowercased())
             self.searchModules.removeAll()
             for mod in filterModules {
                 let filterModule = FilterModule(name: mod.name, coursename: mod.coursename, id: mod.id)
