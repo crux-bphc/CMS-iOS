@@ -16,6 +16,7 @@ class FolderContentViewController: UITableViewController {
     var folderSelectedModule = Module()
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(currentModule)
         navigationItem.largeTitleDisplayMode = .never
         self.title = currentModule.name
         let realm = try! Realm()

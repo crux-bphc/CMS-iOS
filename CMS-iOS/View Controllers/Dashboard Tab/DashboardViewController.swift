@@ -97,7 +97,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 destinationVC.selectedModule = selectedModule
         case "goToFolderModuleDirectly":
                 let destinationVC = segue.destination as! FolderContentViewController
-                destinationVC.folderSelectedModule = self.selectedModule
+                print(self.selectedModule)
+                destinationVC.currentModule = self.selectedModule
         case "goToDiscussionDirectly":
             let destinationVC = segue.destination as! DiscussionViewController
             destinationVC.selectedDiscussion = selectedAnnouncement
