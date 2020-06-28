@@ -33,6 +33,7 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.largeTitleDisplayMode = .never
         descriptionText.layer.cornerRadius = 10
         openButton.layer.cornerRadius = 10
         quickLookController.dataSource = self

@@ -107,6 +107,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     func setupNavBar() {
+        navigationItem.largeTitleDisplayMode = .always
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = self.searchController
         searchController.searchResultsUpdater = self

@@ -24,6 +24,7 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.largeTitleDisplayMode = .never
         quickLookController.dataSource = self
         openButton.layer.cornerRadius = 10
         bodyTextView.layer.cornerRadius = 10
