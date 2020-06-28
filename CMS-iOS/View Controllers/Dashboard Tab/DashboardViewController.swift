@@ -97,7 +97,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 destinationVC.selectedModule = selectedModule
         case "goToFolderModuleDirectly":
                 let destinationVC = segue.destination as! FolderContentViewController
-                print(self.selectedModule)
                 destinationVC.currentModule = self.selectedModule
         case "goToDiscussionDirectly":
             let destinationVC = segue.destination as! DiscussionViewController
@@ -621,6 +620,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        self.tableView.deselectRow(at: indexPath, animated: true)
         sessionManager.session.getTasksWithCompletionHandler { dataTasks, uploadTasks, downloadTasks in
             dataTasks.forEach { $0.cancel() }
             uploadTasks.forEach { $0.cancel() }
@@ -642,10 +642,15 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         } else if indexPath.section == 1 {
             let realm = try! Realm()
             self.selectedModule = realm.objects(Module.self).filter("id = %@", searchModules[indexPath.row].id).first!
-            if self.selectedModule.modname != "folder" {
-                self.redirectToModule()
-            } else {
+            if self.selectedModule.modname == "folder" {
                 self.redirectToFolderModule()
+            } else if self.selectedModule.modname == "assign" {
+                let alert = UIAlertController(title: "Assignments not supported", message: "Assignments are not supported on the mobile version of CMS.", preferredStyle: .alert)
+                let action = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
+                alert.addAction(action)
+                present(alert, animated: true, completion: nil)
+            } else {
+                self.redirectToModule()
             }
         } else if indexPath.section == 2 {
             let realm = try! Realm()
