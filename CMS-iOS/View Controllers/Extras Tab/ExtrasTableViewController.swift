@@ -125,6 +125,7 @@ extension ExtrasTableViewController {
         try! realm.write {
             realm.deleteAll()
         }
+        SpotlightIndex.shared.deindexAllItems()
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
     }
     

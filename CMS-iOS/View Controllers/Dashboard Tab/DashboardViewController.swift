@@ -544,7 +544,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
             
             let realm = try! Realm()
-            if indexPath.row < courseList.count{
+            let count = searchController.isActive ? filteredCourseList.count : courseList.count
+            if indexPath.row < count {
                 if searchController.isActive {
                     cell.courseName.text = filteredCourseList[indexPath.row].courseCode
                     
@@ -873,8 +874,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         
         try! realm.write {
             realm.deleteAll()
-            
         }
+        SpotlightIndex.shared.deindexAllItems()
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
     }
     

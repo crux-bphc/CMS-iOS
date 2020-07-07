@@ -32,6 +32,13 @@ class SpotlightIndex {
             }
         }
     }
+    
+    func deindexAllItems() {
+        CSSearchableIndex.default().deleteAllSearchableItems { (error) in
+            print(error)
+        }
+    }
+    
     private init() { }
 }
 
