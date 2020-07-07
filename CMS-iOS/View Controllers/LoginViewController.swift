@@ -25,6 +25,7 @@ class LoginViewController: UIViewController {
     var canLogIn : Bool = false
     let realm = try! Realm()
     let sessionManager = Alamofire.SessionManager.default
+    var redirectTo: [String: Int]? = nil // course: courseid or module: moduleid
     
     override func viewDidLoad() {
         SVProgressHUD.dismiss()
@@ -36,7 +37,7 @@ class LoginViewController: UIViewController {
                     canLogIn = true
                 }
             } else {
-                checkSavedPassword()
+//                checkSavedPassword()
             }
         } else{
             if let realmUser = realm.objects(User.self).first{
@@ -98,6 +99,14 @@ class LoginViewController: UIViewController {
             let nextVC = tabVC.viewControllers![0] as! UINavigationController
             let destinationVC = nextVC.topViewController as! DashboardViewController
             destinationVC.userDetails = self.currentUser
+            if redirectTo != nil {
+                if redirectTo?.keys.first! == "course" {
+                    // this is a course
+                    guard let course = realm.objects(Course.self).filter("courseid = %@", redirectTo!.values.first!).first else { return }
+                    destinationVC.selectedCourse = course
+                    destinationVC.performSegue(withIdentifier: "goToCourseContent", sender: destinationVC.self)
+                }
+            }
         default:
             break
         }

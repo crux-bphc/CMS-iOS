@@ -15,7 +15,7 @@ import RealmSwift
 import GradientLoadingBar
 import BadgeSwift
 
-class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDelegate{
+class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet var courseLabel: UITableView!
     

@@ -845,6 +845,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                         self.gradientLoadingBar.fadeOut()
+                        SpotlightIndex.shared.indexItems(courses: self.courseList)
                     }
                 }
             }

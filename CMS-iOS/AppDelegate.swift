@@ -13,6 +13,8 @@ import IQKeyboardManagerSwift
 import UserNotifications
 import SDDownloadManager
 import SafariServices
+import CoreSpotlight
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
@@ -172,4 +174,59 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().delegate = self
         // Print full message.
     }
+    // handle opening with spotlight search
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        if userActivity.activityType == CSSearchableItemActionType {
+            if let uniqueIdentifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String {
+                let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+                
+                if var topController = keyWindow?.rootViewController {
+                    while let presentedViewController = topController.presentedViewController {
+                        topController = presentedViewController
+                    }
+                    
+                    // topController should now be your topmost view controller
+                    if let bubbleTabVC = topController as? BubbleTabBarController {
+                        // app is already open
+                        guard let navigationVC = bubbleTabVC.viewControllers?.first as? UINavigationController else { return true }
+                        let params = getTypeAndId(string: uniqueIdentifier)
+                        let redirectType = String(params!.keys.first!)
+                        let redirectId = Int(params!.values.first!)
+                        let realm = try! Realm()
+                        switch redirectType {
+                        case "course":
+                            guard let course = realm.objects(Course.self).filter("courseid = %@", redirectId).first else { return true }
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let courseContentsVC = storyboard.instantiateViewController(withIdentifier: "Course Contents") as! CourseDetailsViewController
+                            courseContentsVC.currentCourse = course
+                            navigationVC.pushViewController(courseContentsVC, animated: true)
+                            
+                        default:
+                            break
+                        }
+                        
+                    } else {
+                        // app is not open, proceed with login vc
+                        guard let loginVC = topController as? LoginViewController else { return true }
+                        loginVC.redirectTo = getTypeAndId(string: uniqueIdentifier)
+                        
+                    }
+                    
+                }
+            }
+        }
+        
+        return true
+    }
+    
+    private func getTypeAndId(string: String) -> [String: Int]? {
+        let comps = string.components(separatedBy: "=")
+        let first = comps.first
+        let last = Int(comps.last!)
+        if first != nil && last != nil {
+            return [first!: last!]
+        }
+        return nil
+    }
+    
 }
