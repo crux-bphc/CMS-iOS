@@ -69,12 +69,9 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     func loadModulesFromMemory() {
         let realm = try! Realm()
         let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)").sorted(byKeyPath: "dateCreated", ascending: true)
+        print(sections.map({[$0.name, $0.dateCreated]}))
         if sections.count != 0 {
-            sectionArray.removeAll()
-            for i in 0..<sections.count {
-                sectionArray.append(sections[i])
-                print(sections[i].name)
-            }
+            sectionArray = Array(sections)
         } else {
             gradientLoadingBar.fadeIn()
         }
@@ -193,18 +190,6 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                 
                 completion(self.sectionArray)
             }
-        }
-        else{
-            // try to get modules from memory
-            let realm = try! Realm()
-            let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)")
-            if sections.count != 0{
-                sectionArray.removeAll()
-                for i in 0..<sections.count{
-                    sectionArray.append(sections[i])
-                }
-            }
-            updateUI()
         }
     }
     
