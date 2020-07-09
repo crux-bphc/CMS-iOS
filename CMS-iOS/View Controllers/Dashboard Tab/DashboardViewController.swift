@@ -430,10 +430,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         DispatchQueue.main.async {
                             let realm = try! Realm()
                             guard let coursesRef = coursesRef, let temp2 = realm.resolve(coursesRef) else { return }
-                            print("passing courses")
                             self.courseList = Array(temp2)
-                            print("Alloting colors")
-                            print("DOne alloting colors")
                             self.tableView.reloadData()
                             
                         }
