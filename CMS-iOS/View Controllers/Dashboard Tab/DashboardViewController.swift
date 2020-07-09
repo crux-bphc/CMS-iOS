@@ -394,6 +394,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     self.totalCourseCount = courses.count
                     self.courseList.removeAll()
                     if let _ = courses[0]["id"].int {
+                        var currentColorsCourseCode = String()
+                        var currentColorsIndex = 0
+                        let colors = DashboardCellColours().light
                         for i in 0 ..< courses.count{
                             let currentCourse = Course()
                             currentCourse.courseid = courses[i]["id"].int!
@@ -401,8 +404,23 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             currentCourse.courseCode = Regex.match(pattern: "(..|...|....)\\s[A-Z][0-9][0-9][0-9]", text: currentCourse.displayname).first ?? ""
                             currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
                             currentCourse.enrolled = true
+                            // color allotment
+                            if i == 0 {
+                                currentColorsIndex = 0
+                                currentColorsCourseCode = currentCourse.courseCode
+                            }
+                            if currentCourse.courseCode == currentColorsCourseCode {
+                                currentCourse.allotedColor = UIColor.StringFromUIColor(color: colors[currentColorsIndex])
+                            } else {
+                                currentColorsIndex += 1
+                                if currentColorsIndex == colors.count {
+                                    currentColorsIndex = 0
+                                }
+                                currentColorsCourseCode = currentCourse.courseCode
+                                currentCourse.allotedColor = UIColor.StringFromUIColor(color: colors[currentColorsIndex])
+                            }
+                            
                             try! bkgRealm.write {
-                                //                            bkgRealm.add(currentCourse)
                                 bkgRealm.add(currentCourse, update: .modified)
                             }
                             self.downloadDashboardCourseContents(courseName: currentCourse.displayname, courseId: currentCourse.courseid)
@@ -411,24 +429,11 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         coursesRef = ThreadSafeReference(to: tempCourses!)
                         DispatchQueue.main.async {
                             let realm = try! Realm()
-                            guard let coursesRef = coursesRef, let temp2 = realm.resolve(coursesRef) else {return}
-                            for i in 0..<temp2.count{
-                                self.courseList.append(temp2[i])
-                                
-                            }
-                            
-                            if #available(iOS 12.0, *) {
-                                if self.traitCollection.userInterfaceStyle == .dark{
-                                    // make this dark in the future
-                                    //                                    self.setupColors(colors: DashboardCellColours().dark)
-                                    self.setupColors(colors: DashboardCellColours().light)
-                                }else{
-                                    self.setupColors(colors: DashboardCellColours().light)
-                                }
-                            } else {
-                                self.setupColors(colors: DashboardCellColours().light)
-                            }
-                            
+                            guard let coursesRef = coursesRef, let temp2 = realm.resolve(coursesRef) else { return }
+                            print("passing courses")
+                            self.courseList = Array(temp2)
+                            print("Alloting colors")
+                            print("DOne alloting colors")
                             self.tableView.reloadData()
                             
                         }
@@ -457,21 +462,18 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         let realm = try! Realm()
         let realmCourses = realm.objects(Course.self)
         if realmCourses.count != 0 {
-            courseList.removeAll()
-            for x in 0..<realmCourses.count{
-                courseList.append(realmCourses[x])
-            }
+            self.courseList = Array(realmCourses)
         }
-        if #available(iOS 12.0, *) {
-            if self.traitCollection.userInterfaceStyle == .dark{
-                //                self.setupColors(colors: DashboardCellColours().dark)
-                self.setupColors(colors: DashboardCellColours().light)
-            }else{
-                self.setupColors(colors: DashboardCellColours().light)
-            }
-        } else {
-            self.setupColors(colors: DashboardCellColours().light)
-        }
+//        if #available(iOS 12.0, *) {
+//            if self.traitCollection.userInterfaceStyle == .dark{
+//                //                self.setupColors(colors: DashboardCellColours().dark)
+//                self.setupColors(colors: DashboardCellColours().light)
+//            }else{
+//                self.setupColors(colors: DashboardCellColours().light)
+//            }
+//        } else {
+//            self.setupColors(colors: DashboardCellColours().light)
+//        }
     }
     
     @objc func refreshData() {
