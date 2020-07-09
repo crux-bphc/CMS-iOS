@@ -125,11 +125,11 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             var actionSheet = UIAlertController()
             if searchController.isActive{
                 if let rowNo = indexPath?.row{
-                    actionSheet = UIAlertController(title: filteredCourseList[rowNo].displayname, message: nil, preferredStyle: .actionSheet)
+                    actionSheet = UIAlertController(title: filteredCourseList[rowNo].displayname.cleanUp(), message: nil, preferredStyle: .actionSheet)
                 }
             }else{
                 if let rowNo = indexPath?.row{
-                    actionSheet = UIAlertController(title: courseList[rowNo].displayname, message: nil, preferredStyle: .actionSheet)
+                    actionSheet = UIAlertController(title: courseList[rowNo].displayname.cleanUp(), message: nil, preferredStyle: .actionSheet)
                 }
             }
             let downloadAction = UIAlertAction(title: "Download Course", style: .default) { (action) in
