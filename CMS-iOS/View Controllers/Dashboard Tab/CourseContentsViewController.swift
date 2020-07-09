@@ -201,6 +201,9 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                 self.refreshControl!.endRefreshing()
                 self.gradientLoadingBar.fadeOut()
             }
+        } else {
+            self.refreshControl!.endRefreshing()
+            self.gradientLoadingBar.fadeOut()
         }
     }
     
