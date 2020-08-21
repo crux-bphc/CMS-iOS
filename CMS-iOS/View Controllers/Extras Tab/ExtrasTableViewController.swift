@@ -129,6 +129,10 @@ class ExtrasTableViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return ["Options", "Website", "App", ""][section]
+    }
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         tableView.reloadData()
     }
