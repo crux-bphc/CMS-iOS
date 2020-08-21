@@ -111,6 +111,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "reuseCell")
         if resultArray.count > indexPath.row {
             cell.textLabel?.text = resultArray[indexPath.row].displayname.cleanUp()
+            cell.textLabel?.numberOfLines = 0
             cell.detailTextLabel?.text = resultArray[indexPath.row].faculty
             return cell
         }

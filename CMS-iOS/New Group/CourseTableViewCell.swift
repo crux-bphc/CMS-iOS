@@ -15,12 +15,14 @@ class CourseTableViewCell: UITableViewCell {
     var gradientProgressIndicatorView = GradientActivityIndicatorView()
     @IBOutlet weak var courseFullName: UILabel!
     @IBOutlet weak var unreadCounterLabel: UILabel!
+    @IBOutlet weak var semesterLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         self.containView.layer.shadowOffset = CGSize(width: 0, height: 2)
         self.containView.layer.cornerRadius = 15
         self.containView.clipsToBounds = true
+        self.semesterLabel.isHidden = true
         if #available(iOS 13.0, *) {
 //            self.contentView.layer.backgroundColor = UIColor.systemBackground.cgColor
             switch traitCollection.userInterfaceStyle {
@@ -92,4 +94,14 @@ class CourseTableViewCell: UITableViewCell {
         gradientProgressIndicatorView.isHidden = true
         
     }
+    
+    func showSemesterLabel(text: String) {
+        semesterLabel.isHidden = false
+        semesterLabel.text = text
+    }
+    
+    func hideSemesterLabel() {
+        semesterLabel.isHidden = true
+    }
+    
 }

@@ -19,7 +19,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     let banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
     let constant = Constants.Global.self
-    var animated = false
     var courseList = [Course]()
     var tempRealmCount = 0
     var totalCourseCount = 0
@@ -75,10 +74,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     override func viewDidAppear(_ animated: Bool) {
         //        tableView.reloadData()
         UIApplication.shared.applicationIconBadgeNumber = 0
-        if !animated{
-            animateTable()
-            self.animated = true
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -401,7 +396,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             let currentCourse = Course()
                             currentCourse.courseid = courses[i]["id"].int!
                             currentCourse.displayname = courses[i]["displayname"].string!
-                            currentCourse.courseCode = Regex.match(pattern: "(..|...|....)\\s[A-Z][0-9][0-9][0-9]", text: currentCourse.displayname).first ?? ""
+                            currentCourse.courseCode = Regex.match(pattern: "^[A-Z\\/]*[ ][A-Z][0-9][0-9][0-9]", text: currentCourse.displayname).first ?? ""
                             currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
                             currentCourse.enrolled = true
                             // color allotment
@@ -548,7 +543,13 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 if searchController.isActive {
                     cell.courseName.text = filteredCourseList[indexPath.row].courseCode
                     
-                    cell.courseFullName.text = filteredCourseList[indexPath.row].courseName.cleanUp()
+                    cell.courseFullName.text = filteredCourseList[indexPath.row].courseName.cleanUp().removeSemester()
+                    if filteredCourseList[indexPath.row].courseName.contains("FIRST SEMESTER 2020-21") {
+                        cell.semesterLabel.isHidden = false
+                        cell.semesterLabel.text = "2020-21"
+                    } else {
+                        cell.semesterLabel.isHidden = true
+                    }
                     cell.courseName.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
                     let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("read = NO")
                     let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("modname = %@", "forum").first
@@ -562,7 +563,13 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     }
                 } else {
                     cell.courseName.text = courseList[indexPath.row].courseCode
-                    cell.courseFullName.text = courseList[indexPath.row].courseName.cleanUp()
+                    cell.courseFullName.text = courseList[indexPath.row].courseName.cleanUp().removeSemester()
+                    if courseList[indexPath.row].courseName.contains("FIRST SEMESTER 2020-21") {
+                        cell.semesterLabel.isHidden = false
+                        cell.semesterLabel.text = "2020-21"
+                    } else {
+                        cell.semesterLabel.isHidden = true
+                    }
                     cell.courseName.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
                     let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("read = NO")
                     let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("modname = %@", "forum").first
@@ -668,25 +675,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         banner.dismiss()
     }
     
-    func animateTable() {
-        tableView.reloadData()
-        let cells = tableView.visibleCells
-        let tableHeight = tableView.bounds.size.height
-        
-        for i in cells {
-            let cell: UITableViewCell = i as UITableViewCell
-            cell.transform = CGAffineTransform(translationX: 0, y: tableHeight)
-        }
-        
-        var index = 0
-        for m in cells {
-            let cell: UITableViewCell = m as UITableViewCell
-            UIView.animate(withDuration: 0.8, delay: 0.05*Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [], animations: {
-                cell.transform = CGAffineTransform.identity;
-            }, completion: nil)
-            index+=1
-        }
-    }
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         tableView.reloadData()
         //        refreshData()

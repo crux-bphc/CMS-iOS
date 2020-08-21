@@ -12,6 +12,12 @@ extension String {
     
     func cleanUp() -> String {
         let clean = self.replacingOccurrences(of: "&amp;", with: "&")
+//        clean = clean.replacingOccurrences(of: "FIRST SEMESTER 2020-21", with: "")
+        return clean
+    }
+    
+    func removeSemester() -> String {
+        let clean = self.replacingOccurrences(of: "FIRST SEMESTER 2020-21", with: "")
         return clean
     }
     

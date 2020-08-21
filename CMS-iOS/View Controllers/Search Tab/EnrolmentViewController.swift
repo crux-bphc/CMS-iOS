@@ -22,7 +22,7 @@ class EnrolmentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        enrolButton.layer.cornerRadius = 10
+        enrolButton.layer.cornerRadius = 15
         courseLabel.text = enrolmentCourse.displayname.cleanUp()
         instructorLabel.text = enrolmentCourse.faculty
         self.navigationItem.largeTitleDisplayMode = .never
