@@ -131,14 +131,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         if Reachability.isConnectedToNetwork() {
             let bkgObj = BackgroundFetch()
-            bkgObj.sendNotification(title: "Testing", body: "Attempting to fetch data in background", identifier: "a")
             bkgObj.downloadModules { newModulesFound in
                 let realm = try! Realm()
                 let discussionModules = realm.objects(Module.self).filter("modname = %@", "forum")
                 bkgObj.downloadDiscussions(discussionModules: discussionModules) { (newDiscussionsFound) in
                     completionHandler(newDiscussionsFound || newModulesFound ? .newData : .noData)
                     NSLog(newDiscussionsFound || newModulesFound ? "found new data" : "no new data found")
-                    bkgObj.sendNotification(title: "Result", body: newDiscussionsFound || newModulesFound ? "found new data" : "no new data found", identifier: "b")
                 }
             }
         } else {
