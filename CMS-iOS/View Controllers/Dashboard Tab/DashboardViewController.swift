@@ -26,6 +26,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var selectedCourse = Course()
     var selectedModule = Module()
     var selectedAnnouncement = Discussion()
+    var shouldHideSemester = false
     var searching : Bool = false
     private let gradientLoadingBar = GradientActivityIndicatorView()
     var filteredCourseList = [Course]()
@@ -37,6 +38,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var searchAnnouncements = [FilterDiscussion]()
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.shouldHideSemester = UserDefaults.standard.bool(forKey: "hidesSemester")
         setupGradientLoadingBar()
         let realm = try! Realm()
         if let currentUser = realm.objects(User.self).first {
@@ -74,6 +76,11 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     override func viewDidAppear(_ animated: Bool) {
         //        tableView.reloadData()
         UIApplication.shared.applicationIconBadgeNumber = 0
+        let newVal = UserDefaults.standard.bool(forKey: "hidesSemester")
+        if newVal != self.shouldHideSemester {
+            self.shouldHideSemester = newVal
+            self.tableView.reloadData()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -544,7 +551,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     cell.courseName.text = filteredCourseList[indexPath.row].courseCode
                     
                     cell.courseFullName.text = filteredCourseList[indexPath.row].courseName.cleanUp().removeSemester()
-                    if filteredCourseList[indexPath.row].courseName.contains("FIRST SEMESTER 2020-21") {
+                    if filteredCourseList[indexPath.row].courseName.contains("FIRST SEMESTER 2020-21") && !self.shouldHideSemester {
                         cell.semesterLabel.isHidden = false
                         cell.semesterLabel.text = "2020-21"
                     } else {
@@ -564,7 +571,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 } else {
                     cell.courseName.text = courseList[indexPath.row].courseCode
                     cell.courseFullName.text = courseList[indexPath.row].courseName.cleanUp().removeSemester()
-                    if courseList[indexPath.row].courseName.contains("FIRST SEMESTER 2020-21") {
+                    if courseList[indexPath.row].courseName.contains("FIRST SEMESTER 2020-21") && !self.shouldHideSemester {
                         cell.semesterLabel.isHidden = false
                         cell.semesterLabel.text = "2020-21"
                     } else {

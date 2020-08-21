@@ -13,7 +13,7 @@ import SwiftKeychainWrapper
 class ExtrasTableViewController: UITableViewController {
     
     fileprivate let cellId = "ExtrasCell"
-    let items = [["T.D. Website"], ["Profile", "Logout"], ["About", "Report Bug", "Rate"]]
+    let items = [["T.D. Website"], ["Profile", "Logout"], ["Hide Semester On Dashboard"], ["About", "Report Bug", "Rate"]]
     let constants = Constants.Global.self
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +38,12 @@ class ExtrasTableViewController: UITableViewController {
         cell.textLabel?.text = item
         if item == "Logout" {
             cell.textLabel?.textColor = .systemRed
+        } else if item == "Hide Semester On Dashboard" {
+            let switchView = UISwitch(frame: .zero)
+            switchView.setOn(UserDefaults.standard.bool(forKey: "hidesSemester"), animated: true)
+            switchView.tag = indexPath.row // for detect which row switch Changed
+            switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
+            cell.accessoryView = switchView
         } else {
             cell.accessoryType = .disclosureIndicator
             cell.imageView?.image = UIImage(named: item)
@@ -85,7 +91,7 @@ class ExtrasTableViewController: UITableViewController {
                 break
             }
             break
-        case 2:
+        case 3:
             switch indexPath.row {
             case 0:
                 // about page
@@ -132,4 +138,11 @@ extension ExtrasTableViewController {
     func setupNavBar() {
         self.navigationController?.navigationBar.prefersLargeTitles = true
     }
+    
+    @objc func switchChanged(_ sender : UISwitch!){
+        let defaults = UserDefaults.standard
+        defaults.setValue(sender.isOn, forKey: "hidesSemester")
+    }
+    
 }
+ 
