@@ -922,6 +922,13 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     } else {
                         totalDone += 1
                     }
+                } else {
+                    print("Discussion error:/")
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Discussion error", message: "Error downloading discussions", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
+                        self.present(alert, animated: true)
+                    }
                 }
             }
         }
