@@ -13,7 +13,7 @@ import SwiftKeychainWrapper
 class ExtrasTableViewController: UITableViewController {
     
     fileprivate let cellId = "ExtrasCell"
-    let items = [["T.D. Website"], ["Hide Semester On Dashboard"], ["About", "Report Bug", "Rate"], ["Logout"]]
+    let items = [["Hide Semester On Dashboard"], ["T.D. Website"], ["About", "Report Bug", "Rate"], ["Logout"]]
     let constants = Constants.Global.self
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,7 +74,7 @@ class ExtrasTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         switch indexPath.section {
-        case 0:
+        case 1:
             switch indexPath.row {
             case 0:
                 // T.D. Website
