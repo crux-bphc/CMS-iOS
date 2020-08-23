@@ -30,6 +30,7 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
     
     let realm = try! Realm()
     let ql = QLPreviewController()
+    let defaults = UserDefaults.standard
     
     fileprivate let cellId = "ExtrasCell"
     let pickerController = UIImagePickerController()
@@ -77,6 +78,7 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
             cell.imageView?.image = nil
         } else if item == "My Timetable" {
             cell.accessoryType = .detailButton
+            cell.imageView?.image = UIImage(named: "Timetable")
         }
         else {
             cell.accessoryType = .disclosureIndicator
@@ -126,10 +128,10 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
             break
         case 2:
             print("Clicked on tt")
-            if realm.objects(User.self).first?.timetableUrl != "" {
-                print("Bruh this opened: \(realm.objects(User.self).first!.timetableUrl)")
-                
+            if defaults.string(forKey: "timetableURL") != "" {
+                print("Bruh this opened: \(defaults.string(forKey: "timetableURL"))")
                 self.present(ql, animated: true, completion: nil)
+                
             } else {
                 present(pickerController, animated: true, completion: nil)
             }
@@ -199,15 +201,11 @@ extension ExtrasTableViewController {
         
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             
-            let imageData = pickedImage.jpegData(compressionQuality: 0.75)
+            let imageData = pickedImage.jpegData(compressionQuality: 1.00)
             try! imageData?.write(to: imagePath!)
 
             pickerController.dismiss(animated: true) {
-                if let user = self.realm.objects(User.self).first{
-                    try! self.realm.write{
-                        user.timetableUrl = imagePath!.absoluteString
-                    }
-                }
+                self.defaults.set(imagePath!.absoluteString, forKey: "timetableURL")
             }
         }
     }
@@ -231,7 +229,6 @@ extension ExtrasTableViewController {
     }
     
     @objc func switchChanged(_ sender : UISwitch!){
-        let defaults = UserDefaults.standard
         defaults.setValue(sender.isOn, forKey: "hidesSemester")
     }
     
