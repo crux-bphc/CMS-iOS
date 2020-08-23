@@ -16,4 +16,5 @@ class User : Object{
     @objc dynamic var token : String = ""
     @objc dynamic var loggedIn : Bool = false
     @objc dynamic var isConnected : Bool = false
+    @objc dynamic var timetableUrl : String = ""
 }
