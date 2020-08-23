@@ -13,16 +13,19 @@ import IQKeyboardManagerSwift
 import UserNotifications
 import SDDownloadManager
 import SafariServices
+import CoreSpotlight
+
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     var window: UIWindow?
     
     let notificationCenter = UNUserNotificationCenter.current()
-    let realm = try! Realm()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+//        UIApplication.shared.registerForRemoteNotifications()
         application.setMinimumBackgroundFetchInterval(900)
+        
         let options : UNAuthorizationOptions = [.alert, .sound, .badge]
         notificationCenter.requestAuthorization(options: options) { (didAllow, error) in
             guard didAllow else {return}
@@ -33,7 +36,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                BackgroundFetch().setCategories()
 //            }
         }
-        
+        // Code for realm migration, update this when realm schema is changed
+
+        let config = Realm.Configuration(
+            schemaVersion: 1, // version to change schema to
+            // Set the block which will be called automatically when opening a Realm with
+            // a schema version lower than the one set above
+            migrationBlock: { migration, oldSchemaVersion in
+                if (oldSchemaVersion < 1) {
+                    // change properties based on new schema
+                }
+            })
+
+        // Tell Realm to use this new configuration object for the default Realm
+        Realm.Configuration.defaultConfiguration = config
+    
+        let realm = try! Realm()
+        UIApplication.shared.registerForRemoteNotifications()
         IQKeyboardManager.shared.enable = true
         if let realmUser = realm.objects(User.self).first {
             if Reachability.isConnectedToNetwork() {
@@ -50,6 +69,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             
         }
+        
+        
         return true
     }
     
@@ -65,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        
+        let realm = try! Realm()
         if let realmUser = realm.objects(User.self).first {
             if Reachability.isConnectedToNetwork() {
                 try! realm.write {
@@ -91,10 +112,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         
-        let message = url.host
+        guard let message = url.host else { return true }
         let loginViewController = self.window?.rootViewController as! LoginViewController
-        loginViewController.loginWithGoogle(input: message!)
+        loginViewController.loginWithGoogle(input: message)
         loginViewController.safariVC.dismiss(animated: true)
+        
         return true
     }
     
@@ -109,12 +131,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         if Reachability.isConnectedToNetwork() {
             let bkgObj = BackgroundFetch()
-            bkgObj.updateCourseContents { (newModulesFound) in
-                
-                let discussionModules = self.realm.objects(Module.self).filter("modname = %@", "forum")
+            bkgObj.downloadModules { newModulesFound in
+                let realm = try! Realm()
+                let discussionModules = realm.objects(Module.self).filter("modname = %@", "forum")
                 bkgObj.downloadDiscussions(discussionModules: discussionModules) { (newDiscussionsFound) in
                     completionHandler(newDiscussionsFound || newModulesFound ? .newData : .noData)
-                    print(newDiscussionsFound || newModulesFound ? "found new data" : "no new data found")
+                    NSLog(newDiscussionsFound || newModulesFound ? "found new data" : "no new data found")
                 }
             }
         } else {
@@ -122,9 +144,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("failed to background fetch")
         }
     }
-}
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        
+        let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+        print("device token = \(token)")
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        
+        
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+            if response.actionIdentifier == "Mark as Read" {
 
-extension AppDelegate: UNUserNotificationCenterDelegate {
+                //Mark as read function
+            } else if response.actionIdentifier == "Open" {
+    //            Open file
+            }
+        }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
@@ -133,13 +172,59 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         UNUserNotificationCenter.current().delegate = self
         // Print full message.
     }
-
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        if response.actionIdentifier == "Mark as Read" {
-
-            //Mark as read function
-        } else if response.actionIdentifier == "Open" {
-//            Open file
+    // handle opening with spotlight search
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        if userActivity.activityType == CSSearchableItemActionType {
+            if let uniqueIdentifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String {
+                let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+                
+                if var topController = keyWindow?.rootViewController {
+                    while let presentedViewController = topController.presentedViewController {
+                        topController = presentedViewController
+                    }
+                    
+                    // topController should now be your topmost view controller
+                    if let bubbleTabVC = topController as? BubbleTabBarController {
+                        // app is already open
+                        guard let navigationVC = bubbleTabVC.viewControllers?.first as? UINavigationController else { return true }
+                        let params = getTypeAndId(string: uniqueIdentifier)
+                        let redirectType = String(params!.keys.first!)
+                        let redirectId = Int(params!.values.first!)
+                        let realm = try! Realm()
+                        switch redirectType {
+                        case "course":
+                            guard let course = realm.objects(Course.self).filter("courseid = %@", redirectId).first else { return true }
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let courseContentsVC = storyboard.instantiateViewController(withIdentifier: "Course Contents") as! CourseDetailsViewController
+                            courseContentsVC.currentCourse = course
+                            navigationVC.pushViewController(courseContentsVC, animated: true)
+                            
+                        default:
+                            break
+                        }
+                        
+                    } else {
+                        // app is not open, proceed with login vc
+                        guard let loginVC = topController as? LoginViewController else { return true }
+                        loginVC.redirectTo = getTypeAndId(string: uniqueIdentifier)
+                        
+                    }
+                    
+                }
+            }
         }
+        
+        return true
     }
+    
+    private func getTypeAndId(string: String) -> [String: Int]? {
+        let comps = string.components(separatedBy: "=")
+        let first = comps.first
+        let last = Int(comps.last!)
+        if first != nil && last != nil {
+            return [first!: last!]
+        }
+        return nil
+    }
+    
 }

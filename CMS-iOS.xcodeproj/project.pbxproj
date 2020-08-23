@@ -10,8 +10,6 @@
 		0A03483623166C2D00552F69 /* DiscussionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A03483523166C2D00552F69 /* DiscussionTableViewController.swift */; };
 		0A2B472C23083C1A005879D6 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2B472B23083C1A005879D6 /* SearchViewController.swift */; };
 		0A2FD035236059A800917BE7 /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2FD034236059A800917BE7 /* Regex.swift */; };
-		0A2FD03823619E9A00917BE7 /* ExtrasTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2FD03623619E9A00917BE7 /* ExtrasTableViewCell.swift */; };
-		0A2FD03923619E9A00917BE7 /* ExtrasTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2FD03723619E9A00917BE7 /* ExtrasTableViewCell.xib */; };
 		0A3DEAF322FDCA69001B6BFD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3DEAF222FDCA69001B6BFD /* AppDelegate.swift */; };
 		0A3DEAF522FDCA69001B6BFD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3DEAF422FDCA69001B6BFD /* LoginViewController.swift */; };
 		0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A3DEAFB22FDCA6A001B6BFD /* LaunchScreen.storyboard */; };
@@ -46,7 +44,9 @@
 		3B34F1132358B3B300F59536 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B34F1122358B3B300F59536 /* Colors.xcassets */; };
 		E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */; };
 		E61F0E9A236EFEB300A9C9DA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */; };
+		E640E69924B4B3A3008C30E2 /* SpotlightIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E69824B4B3A3008C30E2 /* SpotlightIndex.swift */; };
 		E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */; };
+		E6AF0DA424547AB8001FEACB /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6AF0DA324547AB8001FEACB /* StringExtension.swift */; };
 		E6B205F7237C3FED00D0F69F /* AttributedStringFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */; };
 		E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6C61630235DA91F00FFC2E4 /* Main.storyboard */; };
 /* End PBXBuildFile section */
@@ -56,8 +56,6 @@
 		0A2B03AF2305971900CC51A4 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		0A2B472B23083C1A005879D6 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		0A2FD034236059A800917BE7 /* Regex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Regex.swift; sourceTree = "<group>"; };
-		0A2FD03623619E9A00917BE7 /* ExtrasTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrasTableViewCell.swift; sourceTree = "<group>"; };
-		0A2FD03723619E9A00917BE7 /* ExtrasTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExtrasTableViewCell.xib; sourceTree = "<group>"; };
 		0A3DEAEF22FDCA69001B6BFD /* CMS BPHC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CMS BPHC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A3DEAF222FDCA69001B6BFD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A3DEAF422FDCA69001B6BFD /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -96,7 +94,10 @@
 		A384C530B8684AA813E94380 /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderContentViewController.swift; sourceTree = "<group>"; };
 		E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		E640E69824B4B3A3008C30E2 /* SpotlightIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotlightIndex.swift; sourceTree = "<group>"; };
+		E6951E6F23EF172E00C9CC3D /* CMS BPHC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "CMS BPHC.entitlements"; sourceTree = "<group>"; };
 		E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLPreviewItemSubclass.swift; sourceTree = "<group>"; };
+		E6AF0DA324547AB8001FEACB /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringFontExtension.swift; sourceTree = "<group>"; };
 		E6C61630235DA91F00FFC2E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +136,7 @@
 		0A3DEAF122FDCA69001B6BFD /* CMS-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				E6951E6F23EF172E00C9CC3D /* CMS BPHC.entitlements */,
 				0A9A960723572D62004ABB2F /* BubbleTabBar */,
 				0AC43B562350B11700A4ED1B /* New Group */,
 				0A58544F230163E9008FB370 /* Support */,
@@ -178,6 +180,8 @@
 				0A2FD034236059A800917BE7 /* Regex.swift */,
 				E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */,
 				0A646D7923D188150023572B /* Colours.swift */,
+				E6AF0DA324547AB8001FEACB /* StringExtension.swift */,
+				E640E69824B4B3A3008C30E2 /* SpotlightIndex.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -241,8 +245,6 @@
 		0AC43B562350B11700A4ED1B /* New Group */ = {
 			isa = PBXGroup;
 			children = (
-				0A2FD03623619E9A00917BE7 /* ExtrasTableViewCell.swift */,
-				0A2FD03723619E9A00917BE7 /* ExtrasTableViewCell.xib */,
 				0AF805C3234F43A3008D9B25 /* CourseTableViewCell.swift */,
 				0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */,
 				0A54509223E48025009B8177 /* DiscussionTableViewCell.swift */,
@@ -349,7 +351,6 @@
 			files = (
 				E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */,
 				0AF805C6234F43A3008D9B25 /* CourseTableViewCell.xib in Resources */,
-				0A2FD03923619E9A00917BE7 /* ExtrasTableViewCell.xib in Resources */,
 				0A54509523E48025009B8177 /* DiscussionTableViewCell.xib in Resources */,
 				0A3DEAFD22FDCA6A001B6BFD /* LaunchScreen.storyboard in Resources */,
 				0AC33B6723022453004AE385 /* Assets.xcassets in Resources */,
@@ -418,6 +419,7 @@
 				0A3DEAF322FDCA69001B6BFD /* AppDelegate.swift in Sources */,
 				0A9A960D23572E93004ABB2F /* BubbleTabBarController.swift in Sources */,
 				0A7F90BC2300753E00683867 /* DashboardViewController.swift in Sources */,
+				E640E69924B4B3A3008C30E2 /* SpotlightIndex.swift in Sources */,
 				0A2B472C23083C1A005879D6 /* SearchViewController.swift in Sources */,
 				0A646D7A23D188150023572B /* Colours.swift in Sources */,
 				0A03483623166C2D00552F69 /* DiscussionTableViewController.swift in Sources */,
@@ -432,12 +434,12 @@
 				E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */,
 				0A9A960B23572E93004ABB2F /* CBTabBarButton.swift in Sources */,
 				0A54509423E48025009B8177 /* DiscussionTableViewCell.swift in Sources */,
-				0A2FD03823619E9A00917BE7 /* ExtrasTableViewCell.swift in Sources */,
 				0AC33B6923022B2C004AE385 /* CourseContentsViewController.swift in Sources */,
 				0A8EFC6523100F9D00CD6BAD /* Reachability.swift in Sources */,
 				0AF20A2F230B2F17001C0CB1 /* ExtrasTableViewController.swift in Sources */,
 				0A4AF7B423819C0100C6EBA1 /* BackgroundFetch.swift in Sources */,
 				E6B205F7237C3FED00D0F69F /* AttributedStringFontExtension.swift in Sources */,
+				E6AF0DA424547AB8001FEACB /* StringExtension.swift in Sources */,
 				0AC33B6B2302EDD6004AE385 /* CourseSection.swift in Sources */,
 				0AF20A32230B3D9F001C0CB1 /* SiteNewsTableViewController.swift in Sources */,
 			);
@@ -578,8 +580,9 @@
 			baseConfigurationReference = A384C530B8684AA813E94380 /* Pods-CMS-iOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "CMS-iOS/CMS BPHC.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 8NXR4FCN3L;
 				INFOPLIST_FILE = "CMS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -587,7 +590,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.crux-bphc.CMS-iOS";
 				PRODUCT_NAME = "CMS BPHC";
 				SWIFT_ENABLE_BATCH_MODE = NO;
@@ -601,8 +604,9 @@
 			baseConfigurationReference = 1C4EB617C056F8D14EB41B19 /* Pods-CMS-iOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "CMS-iOS/CMS BPHC.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 8NXR4FCN3L;
 				INFOPLIST_FILE = "CMS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -610,7 +614,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.crux-bphc.CMS-iOS";
 				PRODUCT_NAME = "CMS BPHC";
 				SWIFT_ENABLE_BATCH_MODE = NO;

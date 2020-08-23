@@ -21,7 +21,6 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
     var selectedModule = Module()
     var destinationURL = URL(string: "")
     var locationToCopy = URL(string: "")
-    var task = URLSessionDownloadTask()
     let constants = Constants.Global.self
     
     @IBOutlet weak var descriptionText: UITextView!
@@ -34,6 +33,7 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.largeTitleDisplayMode = .never
         descriptionText.layer.cornerRadius = 10
         openButton.layer.cornerRadius = 10
         quickLookController.dataSource = self
@@ -58,7 +58,6 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        task.cancel()
         constants.downloadManager.cancelAllDownloads()
         self.progressBar.isHidden = true
         self.downloadProgressLabel.isHidden = true
