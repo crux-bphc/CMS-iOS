@@ -12,21 +12,6 @@ import SwiftKeychainWrapper
 import QuickLook
 
 class ExtrasTableViewController: UITableViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate, QLPreviewControllerDataSource {
-    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-        return 1
-    }
-    
-    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-        let item = PreviewItem()
-        let fileManager = FileManager()
-        let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
-        let imagePath = documentsPath?.appendingPathComponent("image.jpg")
-        
-        item.previewItemURL = imagePath
-        item.previewItemTitle = "Timetable"
-        return item
-    }
-    
     
     let realm = try! Realm()
     let ql = QLPreviewController()
@@ -197,18 +182,39 @@ extension ExtrasTableViewController {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let fileManager = FileManager.default
         let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
-        let imagePath = documentsPath?.appendingPathComponent("image.jpg")
+        let imagePath = documentsPath!.appendingPathComponent("image.jpg")
         
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             
             let imageData = pickedImage.jpegData(compressionQuality: 1.00)
-            try! imageData?.write(to: imagePath!)
+            try! imageData?.write(to: imagePath)
 
             pickerController.dismiss(animated: true) {
-                self.defaults.set(imagePath!.absoluteString, forKey: "timetableURL")
+                self.defaults.set(imagePath.absoluteString, forKey: "timetableURL")
             }
         }
     }
+}
+
+// MARK: - Quick Look Functions
+
+extension ExtrasTableViewController {
+    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+        return 1
+    }
+    
+    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+        let item = PreviewItem()
+        let fileManager = FileManager()
+        let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+        let imagePath = documentsPath!.appendingPathComponent("image.jpg")
+        
+        item.previewItemURL = imagePath
+        item.previewItemTitle = "Timetable"
+        return item
+    }
+    
+    
 }
 
 // MARK: - User functions
