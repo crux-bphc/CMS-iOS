@@ -14,6 +14,7 @@ import RealmSwift
 import UserNotifications
 import NotificationBannerSwift
 import GradientLoadingBar
+import SafariServices
 
 class DashboardViewController : UITableViewController, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate {
     
@@ -177,12 +178,36 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 warning.addAction(cancelAction)
                 self.present(warning, animated: true, completion: nil)
             }
+            let unenrollAction = UIAlertAction(title: "Unenroll from Website", style: .destructive) { (_) in
+                let courseId = self.searchController.isActive ? self.filteredCourseList[indexPath!.row].courseid : self.courseList[indexPath!.row].courseid
+                let alertShownBefore = UserDefaults.standard.bool(forKey: "unenrollAlertShown")
+                if !alertShownBefore {
+                    let alert = UIAlertController(title: "Important", message: "Since the Moodle API doesn't support unenrolling from a course, you will be redirected to the course page on the CMS website where you can unenroll. You may need to log in.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
+                        UserDefaults.standard.setValue(true, forKey: "unenrollAlertShown")
+                        self.presentUnenrollVC(for: courseId)
+                    }))
+                    self.present(alert, animated: true)
+                } else {
+                    self.presentUnenrollVC(for: courseId)
+                }
+                
+            }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             actionSheet.addAction(downloadAction)
+            actionSheet.addAction(unenrollAction)
             actionSheet.addAction(markAllRead)
             actionSheet.addAction(cancelAction)
             present(actionSheet, animated: true, completion: nil)
         }
+    }
+    
+    func presentUnenrollVC(for courseId: Int) {
+        let url = URL(string: "https://td.bits-hyderabad.ac.in/moodle/course/view.php?id=\(courseId)")
+        let safariVC = SFSafariViewController(url: url!)
+        safariVC.delegate = self
+        self.present(safariVC, animated: true, completion: nil)
     }
     
     func filterItemsForSearch(string: String) {
@@ -945,5 +970,11 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func redirectToFolderModule() {
         self.performSegue(withIdentifier: "goToFolderModuleDirectly", sender: self)
+    }
+}
+
+extension DashboardViewController: SFSafariViewControllerDelegate {
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        self.refreshData()
     }
 }
