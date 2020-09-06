@@ -903,7 +903,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         let discussionModules = realm.objects(Module.self).filter("modname = %@", "forum")
         let totalCount = discussionModules.count
         var totalDone = 0
-        for x in 0..<discussionModules.count {
+        for x in 0..<totalCount {
             let constants = Constants.Global.self
             let moduleId = discussionModules[x].id
             let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(discussionModules[x].id)]
@@ -911,49 +911,36 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON(queue: DispatchQueue.global(qos: .userInteractive)) { (response) in
                 if response.result.isSuccess {
                     let discussionResponse = JSON(response.value as Any)
-                    if discussionResponse["discussions"].count != 0 {
-                        for i in 0 ..< discussionResponse["discussions"].count {
-                            let discussion = Discussion()
-                            discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
-                            discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
-                            discussion.date = discussionResponse["discussions"][i]["created"].int!
-                            discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
-                            discussion.id = discussionResponse["discussions"][i]["id"].int!
-                            discussion.moduleId = moduleId
-                            if discussionResponse["discussions"][i]["attachment"].string! != "0" {
-                                if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
-                                    discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
-                                } else {
-                                    discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
-                                }
-                                
-                                discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
-                                discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
+                    for i in 0 ..< discussionResponse["discussions"].count {
+                        let discussion = Discussion()
+                        discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
+                        discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
+                        discussion.date = discussionResponse["discussions"][i]["created"].int!
+                        discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
+                        discussion.id = discussionResponse["discussions"][i]["id"].int!
+                        discussion.moduleId = moduleId
+                        if discussionResponse["discussions"][i]["attachment"].string! != "0" {
+                            if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
+                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                            } else {
+                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
                             }
-                            let bkgRealm = try! Realm()
-                            if bkgRealm.objects(Discussion.self).filter("id = %@", discussion.id).count == 0 {
-                                try! bkgRealm.write {
-                                    bkgRealm.add(discussion)
-                                }
-                            }
-                            if i == discussionResponse["discussions"].count - 1 {
-                                totalDone += 1
-                                if totalDone == totalCount {
-                                    print("Completed loading discussions")
-                                    completion()
-                                }
+                            
+                            discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
+                            discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
+                        }
+                        let bkgRealm = try! Realm()
+                        if bkgRealm.objects(Discussion.self).filter("id = %@", discussion.id).count == 0 {
+                            try! bkgRealm.write {
+                                bkgRealm.add(discussion)
                             }
                         }
-                    } else {
-                        totalDone += 1
                     }
-                } else {
-                    print("Discussion error:/")
-                    DispatchQueue.main.async {
-                        let alert = UIAlertController(title: "Discussion error", message: "Error downloading discussions", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
-                        self.present(alert, animated: true)
-                    }
+                }
+                totalDone += 1
+                if totalDone >= totalCount {
+                    print("Completed loading discussions")
+                    completion()
                 }
             }
         }
