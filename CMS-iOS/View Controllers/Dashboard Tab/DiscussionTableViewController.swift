@@ -17,7 +17,6 @@ class DiscussionTableViewController: UITableViewController {
     
     private let gradientLoadingBar = GradientActivityIndicatorView()
     let constants = Constants.Global.self
-//    var discussionArray = [Discussion]()
     var currentDiscussion = Discussion()
     var discussionViewModels = [DiscussionViewModel]()
     var currentModule = Module()
@@ -91,22 +90,10 @@ class DiscussionTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "discussionCell", for: indexPath) as! DiscussionTableViewCell
-//        cell.timeLabel.text = epochConvert(epoch: self.discussionArray[indexPath.row].date)
         let discussionVM = self.discussionViewModels[indexPath.row]
         cell.timeLabel.text = discussionVM.date
-//        cell.contentPreviewLabel.text = discussionArray[indexPath.row].message.html2String
         cell.contentPreviewLabel.text = discussionVM.description.html2String
-//        cell.titleLabel.text = discussionArray[indexPath.row].name
         cell.titleLabel.text = discussionVM.name
-//        if !discussionArray[indexPath.row].read {
-//            cell.titleLabel.font = UIFont.systemFont(ofSize: 17.0, weight: .bold)
-//            cell.timeLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .semibold)
-//            cell.contentPreviewLabel.font = UIFont.systemFont(ofSize: 14.0, weight: .semibold)
-//        } else {
-//            cell.titleLabel.font = UIFont.systemFont(ofSize: 17.0, weight: .medium)
-//            cell.timeLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .regular)
-//            cell.contentPreviewLabel.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
-//        }
         cell.timeLabel.font = discussionVM.dateFont
         cell.titleLabel.font = discussionVM.titleFont
         cell.contentPreviewLabel.font = discussionVM.desciptionFont
@@ -127,7 +114,7 @@ class DiscussionTableViewController: UITableViewController {
     }
     
     @objc func refreshData() {
-//        gradientLoadingBar.fadeIn()
+        gradientLoadingBar.fadeIn()
         getNewCourseDiscussions { (discussionViewModels) in
             self.discussionViewModels = discussionViewModels
             self.refreshControl?.endRefreshing()
@@ -136,11 +123,6 @@ class DiscussionTableViewController: UITableViewController {
                 self.tableView.reloadData()
             })
         }
-//        getCourseDiscussions {
-//            self.refreshControl?.endRefreshing()
-//            self.tableView.reloadData()
-//            self.gradientLoadingBar.fadeOut()
-//        }
     }
     
     func loadOfflineDiscussions(completion: @escaping ([DiscussionViewModel]) -> Void) {
@@ -217,74 +199,6 @@ class DiscussionTableViewController: UITableViewController {
             }
         }
     }
-    
-//    func getCourseDiscussions(completion: @escaping () -> Void) {
-//
-//        if Reachability.isConnectedToNetwork() {
-//            let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
-//            let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
-//            gradientLoadingBar.fadeIn()
-//            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
-//                if response.result.isSuccess {
-//                    self.discussionArray.removeAll()
-//                    let discussionResponse = JSON(response.value as Any)
-//                    if discussionResponse["discussions"].count == 0 {
-//                        completion()
-//                    } else {
-//                        let realm = try! Realm()
-//                        var readDiscussionIds = [Int]()
-//                        let readDiscussions = realm.objects(Discussion.self).filter("read = YES")
-//                        for i in 0..<readDiscussions.count {
-//                            readDiscussionIds.append(readDiscussions[i].id)
-//                        }
-//                        try! realm.write {
-//                            realm.delete(realm.objects(Discussion.self).filter("moduleId = %@", self.currentModule.id))
-//                        }
-//                        for i in 0 ..< discussionResponse["discussions"].count {
-//                            let discussion = Discussion()
-//                            if discussionResponse["discussions"][i]["pinned"].bool! {
-//                               discussion.name = "📌 " + (discussionResponse["discussions"][i]["name"].string ?? "No Name")
-//                            } else {
-//                                discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
-//                            }
-//
-//                            discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
-//                            discussion.date = discussionResponse["discussions"][i]["created"].int!
-//                            discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
-//                            discussion.id = discussionResponse["discussions"][i]["id"].int!
-//                            discussion.read = readDiscussionIds.contains(discussion.id) ? true : false
-//                            discussion.moduleId = self.currentModule.id
-//                            if discussionResponse["discussions"][i]["attachment"].string! != "0" {
-//                                if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
-//                                    discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
-//                                } else {
-//                                    discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
-//                                }
-//
-//                                discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
-//                                discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
-//                            }
-//                            try! realm.write {
-//                                realm.add(discussion, update: .modified)
-//                            }
-//
-//                            self.discussionArray.append(discussion)
-//                        }
-//                        completion()
-//                    }
-//                }
-//            }
-//        } else {
-//            let realm = try! Realm()
-//            let realmDiscussions = realm.objects(Discussion.self).filter("moduleId = %@", self.currentModule.id)
-//            self.discussionArray.removeAll()
-//            for i in 0..<realmDiscussions.count {
-//                discussionArray.append(realmDiscussions[i])
-//            }
-//        }
-//
-//
-//    }
     
     func canAddDiscussion() {
         let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
