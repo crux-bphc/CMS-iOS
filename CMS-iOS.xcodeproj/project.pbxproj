@@ -49,6 +49,7 @@
 		E6AF0DA424547AB8001FEACB /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6AF0DA324547AB8001FEACB /* StringExtension.swift */; };
 		E6B205F7237C3FED00D0F69F /* AttributedStringFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */; };
 		E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6C61630235DA91F00FFC2E4 /* Main.storyboard */; };
+		E6DD7D742525C8F000514D81 /* DiscussionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DD7D732525C8F000514D81 /* DiscussionViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +101,7 @@
 		E6AF0DA324547AB8001FEACB /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringFontExtension.swift; sourceTree = "<group>"; };
 		E6C61630235DA91F00FFC2E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		E6DD7D732525C8F000514D81 /* DiscussionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +235,7 @@
 		0AC33B6523021591004AE385 /* Data Models */ = {
 			isa = PBXGroup;
 			children = (
+				E6DD7D722525C8B600514D81 /* View Models */,
 				0AC33B632302153C004AE385 /* Course.swift */,
 				0A5ECD7D2306B23000723365 /* Discussion.swift */,
 				0A8E02D62300207900724899 /* User.swift */,
@@ -287,6 +290,14 @@
 				94C16E7BA1B34B3DCB650F95 /* Pods_CMS_iOS.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E6DD7D722525C8B600514D81 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				E6DD7D732525C8F000514D81 /* DiscussionViewModel.swift */,
+			);
+			path = "View Models";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -425,6 +436,7 @@
 				0A03483623166C2D00552F69 /* DiscussionTableViewController.swift in Sources */,
 				0A2FD035236059A800917BE7 /* Regex.swift in Sources */,
 				0AF20A35230B48AD001C0CB1 /* DiscussionViewController.swift in Sources */,
+				E6DD7D742525C8F000514D81 /* DiscussionViewModel.swift in Sources */,
 				0A5ECD7C2306A98800723365 /* AboutPageViewController.swift in Sources */,
 				E61F0E9A236EFEB300A9C9DA /* ColorExtension.swift in Sources */,
 				E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */,
