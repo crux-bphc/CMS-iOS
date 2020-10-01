@@ -155,6 +155,7 @@ class SiteNewsTableViewController: UITableViewController {
         } else {
             // display offline banner
             showOfflineMessage()
+            self.refreshControl?.endRefreshing()
         }
         
     }
