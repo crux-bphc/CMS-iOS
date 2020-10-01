@@ -35,6 +35,7 @@ class DiscussionTableViewController: UITableViewController {
         gradientLoadingBar.fadeOut()
         canAddDiscussion()
         self.title = currentModule.name
+        self.loadOfflineDiscussions()
         getCourseDiscussions {
             self.tableView.reloadData()
             self.gradientLoadingBar.fadeOut()
@@ -135,6 +136,14 @@ class DiscussionTableViewController: UITableViewController {
             self.tableView.reloadData()
             self.gradientLoadingBar.fadeOut()
         }
+    }
+    
+    func loadOfflineDiscussions() {
+        if !Reachability.isConnectedToNetwork() { return }
+        let realm = try! Realm()
+        let offlineDiscussions = realm.objects(Discussion.self).filter("moduleId == %@", currentModule.id)
+        self.discussionArray = Array(offlineDiscussions)
+        self.tableView.reloadData()
     }
     
     func getCourseDiscussions(completion: @escaping () -> Void) {
