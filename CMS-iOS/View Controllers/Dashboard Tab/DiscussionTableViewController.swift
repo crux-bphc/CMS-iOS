@@ -27,6 +27,9 @@ class DiscussionTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "DiscussionTableViewCell", bundle: nil), forCellReuseIdentifier: "discussionCell")
+        self.refreshControl = UIRefreshControl()
+        self.tableView.refreshControl = self.refreshControl
+        self.refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         self.addDiscussionButton.isEnabled = false
         setupGradientLoadingBar()
         gradientLoadingBar.fadeOut()
@@ -125,6 +128,15 @@ class DiscussionTableViewController: UITableViewController {
         }
     }
     
+    @objc func refreshData() {
+        gradientLoadingBar.fadeIn()
+        getCourseDiscussions {
+            self.refreshControl?.endRefreshing()
+            self.tableView.reloadData()
+            self.gradientLoadingBar.fadeOut()
+        }
+    }
+    
     func getCourseDiscussions(completion: @escaping () -> Void) {
         
         if Reachability.isConnectedToNetwork() {
@@ -134,6 +146,7 @@ class DiscussionTableViewController: UITableViewController {
             
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
                 if response.result.isSuccess {
+                    self.discussionArray.removeAll()
                     let discussionResponse = JSON(response.value as Any)
                     if discussionResponse["discussions"].count == 0 {
                         completion()
