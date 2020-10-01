@@ -39,10 +39,15 @@ class DiscussionTableViewController: UITableViewController {
             self.discussionViewModels = discussionViewModels
             self.tableView.reloadData()
         }
-        self.getNewCourseDiscussions { (discussionViewModels) in
-            self.discussionViewModels = discussionViewModels
+        if Reachability.isConnectedToNetwork() {
+            self.getNewCourseDiscussions { (discussionViewModels) in
+                self.discussionViewModels = discussionViewModels
+                self.gradientLoadingBar.fadeOut()
+                self.tableView.reloadData()
+            }
+        } else {
+            self.refreshControl?.endRefreshing()
             self.gradientLoadingBar.fadeOut()
-            self.tableView.reloadData()
         }
     }
     
@@ -115,18 +120,22 @@ class DiscussionTableViewController: UITableViewController {
     
     @objc func refreshData() {
         gradientLoadingBar.fadeIn()
-        getNewCourseDiscussions { (discussionViewModels) in
-            self.discussionViewModels = discussionViewModels
+        if Reachability.isConnectedToNetwork() {
+            getNewCourseDiscussions { (discussionViewModels) in
+                self.discussionViewModels = discussionViewModels
+                self.refreshControl?.endRefreshing()
+                self.gradientLoadingBar.fadeOut()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75, execute: {
+                    self.tableView.reloadData()
+                })
+            }
+        } else {
             self.refreshControl?.endRefreshing()
             self.gradientLoadingBar.fadeOut()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75, execute: {
-                self.tableView.reloadData()
-            })
         }
     }
     
     func loadOfflineDiscussions(completion: @escaping ([DiscussionViewModel]) -> Void) {
-        if !Reachability.isConnectedToNetwork() { return }
         let moduleId = self.currentModule.id
         DispatchQueue.global(qos: .userInteractive).async {
             let realm = try! Realm()
