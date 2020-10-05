@@ -34,4 +34,9 @@ class DiscussionViewModel {
         }
     }
     
+    func markRead() {
+        titleFont = UIFont.systemFont(ofSize: 17.0, weight: .medium)
+        dateFont = UIFont.systemFont(ofSize: 12.0, weight: .regular)
+        desciptionFont = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+    }
 }

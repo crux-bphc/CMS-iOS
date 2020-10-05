@@ -80,6 +80,7 @@ class DiscussionTableViewController: UITableViewController {
         if discussionViewModels.count != 0 {
             let realm = try! Realm()
             self.currentDiscussion = realm.objects(Discussion.self).filter("id = %@", self.discussionViewModels[indexPath.row].id).first!
+            self.discussionViewModels[indexPath.row].markRead()
             try! realm.write {
                 self.currentDiscussion.read = true
             }
