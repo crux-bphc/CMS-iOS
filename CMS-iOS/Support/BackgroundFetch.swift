@@ -109,6 +109,7 @@ class BackgroundFetch {
         let password = realm.objects(User.self).first?.token
         let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
         var params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword") ?? password!]
+        let existingModuleIds: Set<Int> = Set(realm.objects(Module.self).map({ $0.id }))
         for x in 0..<subscribedCourses.count {
             let currentCourse = subscribedCourses[x]
             params["courseid"] = currentCourse.courseid
@@ -126,14 +127,18 @@ class BackgroundFetch {
                             }
                             let moduleJSONItemName = courseContent[i]["modules"][j]["name"].string!
                             // check module here
-                            if (realm.objects(Module.self).filter("coursename = %@", currentCourse.displayname).filter("id = \(moduleJSONItemId)").count == 0) {
-                                // this is a new module
-                                self.sendNotification(title: "\(moduleJSONItemName)", body: "New content in \(currentCourse.displayname)", identifier: "\(currentCourse.displayname + String(moduleJSONItemId))")
+//                            if (realm.objects(Module.self).filter("coursename = %@", currentCourse.displayname).filter("id = \(moduleJSONItemId)").count == 0) {
+//                                // this is a new module
+//                                self.sendNotification(title: "\(moduleJSONItemName)", body: "New content in \(currentCourse.displayname)", identifier: "\(currentCourse.displayname + String(moduleJSONItemId))")
+//                                foundNewData = true
+                            //                            }
+                            if !existingModuleIds.contains(moduleJSONItemId) {
+                                self.sendNotification(title: "\(moduleJSONItemName)", body: "New content in \(currentCourse.displayname.removeSemester().cleanUp())", identifier: "\(currentCourse.displayname + String(moduleJSONItemId))")
                                 foundNewData = true
                             }
                         }
                     }
-                    NSLog("done with course \(currentCourse.courseName)")
+//                    NSLog("done with course \(currentCourse.courseName)")
                     currentCount += 1
                     if currentCount == totalCount {
                         completion(foundNewData)
