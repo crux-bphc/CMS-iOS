@@ -20,9 +20,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     let banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
     let constant = Constants.Global.self
-    var courseList = [Course]()
-    var tempRealmCount = 0
-    var totalCourseCount = 0
+    var courseViewModels = [DashboardViewModel]()
     var userDetails = User()
     var selectedCourse = Course()
     var selectedModule = Module()
@@ -30,7 +28,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var shouldHideSemester = false
     var searching : Bool = false
     private let gradientLoadingBar = GradientActivityIndicatorView()
-    var filteredCourseList = [Course]()
+    var filteredCourseViewModels = [DashboardViewModel]()
     let searchController = UISearchController(searchResultsController: nil)
     var downloadArray : [URL] = []
     var localURLArray : [URL] = []
@@ -77,6 +75,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     override func viewDidAppear(_ animated: Bool) {
         //        tableView.reloadData()
         UIApplication.shared.applicationIconBadgeNumber = 0
+        self.reloadUnreadCounts()
         let newVal = UserDefaults.standard.bool(forKey: "hidesSemester")
         if newVal != self.shouldHideSemester {
             self.shouldHideSemester = newVal
@@ -128,11 +127,11 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             var actionSheet = UIAlertController()
             if searchController.isActive{
                 if let rowNo = indexPath?.row{
-                    actionSheet = UIAlertController(title: filteredCourseList[rowNo].displayname.cleanUp(), message: nil, preferredStyle: .actionSheet)
+                    actionSheet = UIAlertController(title: filteredCourseViewModels[rowNo].courseName.cleanUp(), message: nil, preferredStyle: .actionSheet)
                 }
             }else{
                 if let rowNo = indexPath?.row{
-                    actionSheet = UIAlertController(title: courseList[rowNo].displayname.cleanUp(), message: nil, preferredStyle: .actionSheet)
+                    actionSheet = UIAlertController(title: courseViewModels[rowNo].courseName.cleanUp(), message: nil, preferredStyle: .actionSheet)
                 }
             }
             let downloadAction = UIAlertAction(title: "Download Course", style: .default) { (action) in
@@ -141,7 +140,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     
                     var courseToDownload = Course()
                     if let rowNo = indexPath?.row{
-                        courseToDownload = self.searchController.isActive ? self.filteredCourseList[rowNo] : self.courseList[rowNo]
+                        let realm = try! Realm()
+                        let courseId = self.searchController.isActive ? self.filteredCourseViewModels[rowNo].courseId : self.courseViewModels[rowNo].courseId
+                        courseToDownload = realm.objects(Course.self).filter("courseId = %@", courseId).first!
                         self.downloadCourseData(course: courseToDownload) {
                         }
                     }
@@ -168,7 +169,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             }
                         }
                         DispatchQueue.main.async {
-                            self.tableView.reloadData()
+                            self.reloadUnreadCounts()
                             
                         }
                     }
@@ -179,7 +180,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 self.present(warning, animated: true, completion: nil)
             }
             let unenrollAction = UIAlertAction(title: "Unenroll from Website", style: .destructive) { (_) in
-                let courseId = self.searchController.isActive ? self.filteredCourseList[indexPath!.row].courseid : self.courseList[indexPath!.row].courseid
+                let courseId = self.searchController.isActive ? self.filteredCourseViewModels[indexPath!.row].courseId : self.courseViewModels[indexPath!.row].courseId
                 let alertShownBefore = UserDefaults.standard.bool(forKey: "unenrollAlertShown")
                 if !alertShownBefore {
                     let alert = UIAlertController(title: "Important", message: "Since the Moodle API doesn't support unenrolling from a course, you will be redirected to the course page on the CMS website where you can unenroll. You may need to log in.", preferredStyle: .alert)
@@ -212,7 +213,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func filterItemsForSearch(string: String) {
         
-        filteredCourseList = courseList.filter() {$0.displayname.contains(string.uppercased())}
+        filteredCourseViewModels = courseViewModels.filter() { $0.courseName.contains(string.uppercased()) }
         DispatchQueue.global(qos: .userInteractive).async {
             let realm = try! Realm()
             let filterModules = realm.objects(Module.self).filter("name CONTAINS[c] %@ AND modname != 'forum'", string.lowercased())
@@ -243,9 +244,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         self.filterItemsForSearch(string: searchController.searchBar.text!)
         if !searchController.isActive {
             self.tableView.reloadData()
-//            let topIndex = IndexPath(row: 0, section: 0)
-//            self.tableView.scrollToRow(at: topIndex, at: .top, animated: true)
-//            self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+
         }
     }
     
@@ -399,117 +398,43 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
     }
     
-    func getRegisteredCourses() {
-        
-        if Reachability.isConnectedToNetwork() {
-            let queue = DispatchQueue(label: "com.cruxbphc.getcoursetitles", qos: .userInteractive, attributes: .concurrent)
-            let params = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "userid" : userDetails.userid] as [String : Any]
-            let FINAL_URL : String = constant.BASE_URL + constant.GET_COURSES
-            var coursesRef: ThreadSafeReference<Results<Course>>?
-            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON (queue: queue) { (courseData) in
-                if courseData.result.isSuccess {
-                    let bkgRealm = try! Realm()
-                    var tempCourses : Results<Course>?
-                    let realmCourses = bkgRealm.objects(Course.self)
-                    if (realmCourses.count != 0) {
-                        try! bkgRealm.write {
-                            bkgRealm.delete(realmCourses)
-                        }
-                    }
-                    
-                    let courses = JSON(courseData.value as Any)
-                    self.totalCourseCount = courses.count
-                    self.courseList.removeAll()
-                    if let _ = courses[0]["id"].int {
-                        var currentColorsCourseCode = String()
-                        var currentColorsIndex = 0
-                        let colors = DashboardCellColours().light
-                        for i in 0 ..< courses.count{
-                            let currentCourse = Course()
-                            currentCourse.courseid = courses[i]["id"].int!
-                            currentCourse.displayname = courses[i]["displayname"].string!
-                            currentCourse.courseCode = Regex.match(pattern: "^[A-Z\\/]*[ ][A-Z][0-9][0-9][0-9]", text: currentCourse.displayname).first ?? ""
-                            currentCourse.courseName = currentCourse.displayname.replacingOccurrences(of: "\(currentCourse.courseCode) ", with: "")
-                            currentCourse.enrolled = true
-                            // color allotment
-                            if i == 0 {
-                                currentColorsIndex = 0
-                                currentColorsCourseCode = currentCourse.courseCode
-                            }
-                            if currentCourse.courseCode == currentColorsCourseCode {
-                                currentCourse.allotedColor = UIColor.StringFromUIColor(color: colors[currentColorsIndex])
-                            } else {
-                                currentColorsIndex += 1
-                                if currentColorsIndex == colors.count {
-                                    currentColorsIndex = 0
-                                }
-                                currentColorsCourseCode = currentCourse.courseCode
-                                currentCourse.allotedColor = UIColor.StringFromUIColor(color: colors[currentColorsIndex])
-                            }
-                            
-                            try! bkgRealm.write {
-                                bkgRealm.add(currentCourse, update: .modified)
-                            }
-                            self.downloadDashboardCourseContents(courseName: currentCourse.displayname, courseId: currentCourse.courseid)
-                        }
-                        tempCourses = bkgRealm.objects(Course.self)
-                        coursesRef = ThreadSafeReference(to: tempCourses!)
-                        DispatchQueue.main.async {
-                            let realm = try! Realm()
-                            guard let coursesRef = coursesRef, let temp2 = realm.resolve(coursesRef) else { return }
-                            self.courseList = Array(temp2)
-                            self.tableView.reloadData()
-                            
-                        }
-                    } else {
-                        let alert = UIAlertController(title: "Error downloading data", message: "The site may be down or your token may have been updated. You will be logged out, try logging in again.", preferredStyle: .alert)
-                        let okAction = UIAlertAction(title: "Ok", style: .default) { (_) in
-                            self.logoutCurrentUser()
-                            self.dismiss(animated: true, completion: nil)
-                        }
-                        alert.addAction(okAction)
-                        self.present(alert, animated: true, completion: nil)
-                    }
-                }
-            }
-        } else{
-            let realm = try! Realm()
-            courseList = [Course]()
-            let realmCourses = realm.objects(Course.self)
-            for x in 0..<realmCourses.count{
-                courseList.append(realmCourses[x])
-            }
-        }
-    }
-    
     func loadOfflineCourses() {
         let realm = try! Realm()
         let realmCourses = realm.objects(Course.self)
-        if realmCourses.count != 0 {
-            self.courseList = Array(realmCourses)
+        let offlineCourseViewModels = Array(realmCourses.map({ DashboardViewModel(courseCode: $0.courseCode, courseName: $0.courseName, courseId: $0.courseid, courseColor: UIColor.UIColorFromString(string: $0.allotedColor)) }))
+        DashboardDataManager.shared.calculateUnreadCounts(courseViewModels: offlineCourseViewModels) { (newOfflineViewModels) in
+            self.courseViewModels = offlineCourseViewModels
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
-//        if #available(iOS 12.0, *) {
-//            if self.traitCollection.userInterfaceStyle == .dark{
-//                //                self.setupColors(colors: DashboardCellColours().dark)
-//                self.setupColors(colors: DashboardCellColours().light)
-//            }else{
-//                self.setupColors(colors: DashboardCellColours().light)
-//            }
-//        } else {
-//            self.setupColors(colors: DashboardCellColours().light)
-//        }
     }
     
     @objc func refreshData() {
         gradientLoadingBar.fadeIn()
-        if !searchController.isActive {
+        if !searchController.isActive && Reachability.isConnectedToNetwork() {
             self.tableView.showsVerticalScrollIndicator = false
             gradientLoadingBar.fadeIn()
             self.refreshControl?.endRefreshing()
-            tempRealmCount = 0
-            totalCourseCount = 0
-            getRegisteredCourses()
-        }else{
+            DashboardDataManager.shared.getAndStoreCourses(userId: userDetails.userid) { (dashboardViewModels, shouldLogOut) in
+                if shouldLogOut {
+                    // show message
+                } else if dashboardViewModels != nil {
+                    DashboardDataManager.shared.getAndStoreModules {
+                        DashboardDataManager.shared.getAndStoreDiscussions {
+                            DashboardDataManager.shared.calculateUnreadCounts(courseViewModels: dashboardViewModels!) { (newCourseViewModels) in
+                                self.courseViewModels = newCourseViewModels
+                                DispatchQueue.main.async {
+                                    self.gradientLoadingBar.fadeOut()
+                                    self.tableView.reloadData()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+        } else {
             gradientLoadingBar.fadeOut()
             self.refreshControl?.endRefreshing()
         }
@@ -520,11 +445,20 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
     }
     
+    func reloadUnreadCounts() {
+        DashboardDataManager.shared.calculateUnreadCounts(courseViewModels: self.courseViewModels) { (newCourseViewModels) in
+            self.courseViewModels = newCourseViewModels
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if searchController.isActive {
             switch section {
             case 0:
-                if filteredCourseList.count > 0 {
+                if filteredCourseViewModels.count > 0 {
                     return "Courses"
                 }
             case 1:
@@ -549,7 +483,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return searchController.isActive ? filteredCourseList.count : courseList.count
+            return searchController.isActive ? filteredCourseViewModels.count : courseViewModels.count
         case 1:
             return searchModules.count
         case 2:
@@ -570,50 +504,33 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
             
             let realm = try! Realm()
-            let count = searchController.isActive ? filteredCourseList.count : courseList.count
+            let count = searchController.isActive ? filteredCourseViewModels.count : courseViewModels.count
             if indexPath.row < count {
                 if searchController.isActive {
-                    cell.courseName.text = filteredCourseList[indexPath.row].courseCode
+                    cell.courseName.text = filteredCourseViewModels[indexPath.row].courseCode
                     
-                    cell.courseFullName.text = filteredCourseList[indexPath.row].courseName.cleanUp().removeSemester()
-                    if filteredCourseList[indexPath.row].courseName.contains("FIRST SEMESTER 2020-21") && !self.shouldHideSemester {
+                    cell.courseFullName.text = filteredCourseViewModels[indexPath.row].courseName.cleanUp().removeSemester()
+                    if filteredCourseViewModels[indexPath.row].courseName.contains("FIRST SEMESTER 2020-21") && !self.shouldHideSemester {
                         cell.semesterLabel.isHidden = false
                         cell.semesterLabel.text = "2020-21"
                     } else {
                         cell.semesterLabel.isHidden = true
                     }
-                    cell.courseName.textColor = UIColor.UIColorFromString(string: filteredCourseList[indexPath.row].allotedColor)
-                    let unreadModules = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("read = NO")
-                    let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", filteredCourseList[indexPath.row].displayname).filter("modname = %@", "forum").first
-                    let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
-                    if unreadModules.count + unreadDiscussions.count == 0 {
-                        cell.unreadCounterLabel.isHidden = true
-                        cell.unreadCounterLabel.text = String(0)
-                    } else {
-                        cell.unreadCounterLabel.isHidden = false
-                        cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
-                    }
+                    cell.courseName.textColor = filteredCourseViewModels[indexPath.row].courseColor
+                    cell.unreadCounterLabel.text = String(filteredCourseViewModels[indexPath.row].unreadCount)
+                    cell.unreadCounterLabel.isHidden = !filteredCourseViewModels[indexPath.row].shouldShowUnreadCounter
                 } else {
-                    cell.courseName.text = courseList[indexPath.row].courseCode
-                    cell.courseFullName.text = courseList[indexPath.row].courseName.cleanUp().removeSemester()
-                    if courseList[indexPath.row].courseName.contains("FIRST SEMESTER 2020-21") && !self.shouldHideSemester {
+                    cell.courseName.text = courseViewModels[indexPath.row].courseCode
+                    cell.courseFullName.text = courseViewModels[indexPath.row].courseName.cleanUp().removeSemester()
+                    if courseViewModels[indexPath.row].courseName.contains("FIRST SEMESTER 2020-21") && !self.shouldHideSemester {
                         cell.semesterLabel.isHidden = false
                         cell.semesterLabel.text = "2020-21"
                     } else {
                         cell.semesterLabel.isHidden = true
                     }
-                    cell.courseName.textColor = UIColor.UIColorFromString(string: courseList[indexPath.row].allotedColor)
-                    let unreadModules = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("read = NO")
-                    let currentDiscussionModule = realm.objects(Module.self).filter("coursename = %@", courseList[indexPath.row].displayname).filter("modname = %@", "forum").first
-                    let unreadDiscussions = realm.objects(Discussion.self).filter("read = NO").filter("moduleId = %@", currentDiscussionModule?.id ?? 0)
-                    if unreadModules.count + unreadDiscussions.count == 0 {
-                        cell.unreadCounterLabel.isHidden = true
-                        cell.unreadCounterLabel.text = String(0)
-                    } else {
-                        cell.unreadCounterLabel.isHidden = false
-                        cell.unreadCounterLabel.text = String(unreadModules.count + unreadDiscussions.count)
-                    }
-                    
+                    cell.courseName.textColor = courseViewModels[indexPath.row].courseColor
+                    cell.unreadCounterLabel.text = String(courseViewModels[indexPath.row].unreadCount)
+                    cell.unreadCounterLabel.isHidden = !courseViewModels[indexPath.row].shouldShowUnreadCounter
                 }
             }
             
@@ -668,13 +585,14 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         stopTheDamnRequests()
         
         if indexPath.section == 0 {
-            if courseList.count > indexPath.row {
+            if courseViewModels.count > indexPath.row {
                 tableView.deselectRow(at: indexPath, animated: true)
+                let realm = try! Realm()
                 if searchController.isActive {
-                    self.selectedCourse = filteredCourseList[indexPath.row]
+                    self.selectedCourse = realm.objects(Course.self).filter("courseid = %@", filteredCourseViewModels[indexPath.row].courseId).first!
                 }
                 else {
-                    self.selectedCourse = courseList[indexPath.row]
+                    self.selectedCourse = realm.objects(Course.self).filter("courseid = %@", courseViewModels[indexPath.row].courseId).first!
                 }
                 performSegue(withIdentifier: "goToCourseContent", sender: self)
             }
@@ -727,152 +645,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
     }
-    func setupColors(colors: [UIColor]) {
-        let realm = try! Realm()
-        var currentCourseCode = String()
-        var currentIndex = 0
-        for i in 0..<courseList.count{
-            if i == 0{
-                currentCourseCode = courseList[0].courseCode
-                currentIndex = 0
-            }
-            if courseList[i].courseCode == currentCourseCode{
-                try! realm.write {
-                    courseList[i].allotedColor = UIColor.StringFromUIColor(color: colors[currentIndex])
-                }
-                
-            }else{
-                currentIndex+=1;
-                if currentIndex == colors.count{
-                    currentIndex = 0
-                }
-                currentCourseCode = courseList[i].courseCode
-                try! realm.write {
-                    courseList[i].allotedColor = UIColor.StringFromUIColor(color: colors[currentIndex])
-                }
-                
-            }
-            
-        }
-    }
-    func downloadDashboardCourseContents(courseName: String, courseId: Int) {
-        
-        
-        let FINAL_URL = constant.BASE_URL + constant.GET_COURSE_CONTENT
-        let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : courseId]
-        var readModuleIds = [Int]()
-        let queue = DispatchQueue.global(qos: .userInteractive)
-        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON (queue: queue) { (response) in
-            let realm = try! Realm()
-            if response.result.isSuccess {
-                let courseContent = JSON(response.value as Any)
-                let realmSections = realm.objects(CourseSection.self).filter("courseId = \(courseId)")
-                // get read status for all modules and add read ones to readModuleNames
-                for i in 0..<realmSections.count {
-                    for j in 0..<realmSections[i].modules.count {
-                        if realmSections[i].modules[j].read && !readModuleIds.contains(realmSections[i].modules[j].id) {
-                            readModuleIds.append(realmSections[i].modules[j].id)
-                        }
-                    }
-                }
-                if realmSections.count != 0{
-                    try! realm.write {
-                        realm.delete(realm.objects(Module.self).filter("coursename = %@", courseName))
-                        realm.delete(realm.objects(CourseSection.self).filter("courseId = \(courseId)"))
-                        
-                    }
-                }
-                
-                for i in 0 ..< courseContent.count {
-                    if courseContent[i]["modules"].count > 0 || courseContent[i]["summary"] != "" {
-                        let section = CourseSection()
-                        section.name = courseContent[i]["name"].string!
-                        if courseContent[i]["summary"] != "" {
-                            // create a summary module and load it in a discussion cell
-                            let summaryModule = Module()
-                            summaryModule.name = "Summary"
-                            summaryModule.coursename = courseName
-                            summaryModule.moduleDescription = courseContent[i]["summary"].string!
-                            summaryModule.modname = "summary"
-                            summaryModule.id = courseContent[i]["id"].int!
-                            summaryModule.read = true
-                            section.modules.append(summaryModule)
-                        } // add summary module
-                        for j in 0 ..< courseContent[i]["modules"].array!.count {
-                            let moduleData = Module()
-                            moduleData.modname = courseContent[i]["modules"][j]["modname"].string!
-                            moduleData.id = courseContent[i]["modules"][j]["id"].int!
-                            if moduleData.modname == "resource" {
-                                if (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("td.bits-hyderabad.ac.in") {
-                                    moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string! +
-                                        "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
-                                    moduleData.mimetype = courseContent[i]["modules"][j]["contents"][0]["mimetype"].string!
-                                    moduleData.filename = courseContent[i]["modules"][j]["contents"][0]["filename"].string!
-                                }
-                                else {
-                                    moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!)
-                                }
-                            } else if moduleData.modname == "forum" {
-                                readModuleIds.append(courseContent[i]["modules"][j]["instance"].int!)
-                                moduleData.id = courseContent[i]["modules"][j]["instance"].int!
-                                
-                                moduleData.read = true
-                            }else if moduleData.modname == "folder"{
-                                
-                                let itemCount = courseContent[i]["modules"][j]["contents"].count
-                                for a in 0..<itemCount{
-                                    let newModule = Module()
-                                    newModule.coursename = courseName
-                                    newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
-                                    newModule.read = true
-                                    
-                                    if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in") {
-                                        newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
-                                    }
-                                    newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
-                                    newModule.id = (moduleData.id * 1000) + a + 1
-                                    moduleData.fileModules.append(newModule)
-                                }
-                            } else if moduleData.modname == "url" {
-                                moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!)
-                            }
-                            
-                            moduleData.name = courseContent[i]["modules"][j]["name"].string!
-                            if readModuleIds.contains(courseContent[i]["modules"][j]["id"].int!) {
-                                moduleData.read = true
-                            }
-                            if courseContent[i]["modules"][j]["description"].string != nil {
-                                moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
-                            }
-                            moduleData.coursename = courseName
-                            section.modules.append(moduleData)
-                        }
-                        section.courseId = courseId
-                        section.key = String(courseId) + section.name
-                        section.dateCreated = Date().timeIntervalSince1970
-                        try! realm.write {
-                            realm.add(section, update: .modified)
-                            
-                        }
-                    }
-                }
-            }
-            self.tempRealmCount += 1
-            if self.tempRealmCount == self.totalCourseCount {
-                // download discussions here
-                //
-                self.downloadDiscussions {
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        self.gradientLoadingBar.fadeOut()
-                        SpotlightIndex.shared.indexItems(courses: self.courseList)
-                    }
-                }
-            }
-        }
-        
-    }
-    
     
     func stopTheDamnRequests() {
         if #available(iOS 9.0, *) {
@@ -896,55 +668,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
         SpotlightIndex.shared.deindexAllItems()
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
-    }
-    
-    func downloadDiscussions(completion : @escaping () -> Void) {
-        let realm = try! Realm()
-        let discussionModules = realm.objects(Module.self).filter("modname = %@", "forum")
-        let totalCount = discussionModules.count
-        var totalDone = 0
-        for x in 0..<totalCount {
-            let constants = Constants.Global.self
-            let moduleId = discussionModules[x].id
-            let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(discussionModules[x].id)]
-            let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
-            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON(queue: DispatchQueue.global(qos: .userInteractive)) { (response) in
-                if response.result.isSuccess {
-                    let discussionResponse = JSON(response.value as Any)
-                    for i in 0 ..< discussionResponse["discussions"].count {
-                        let discussion = Discussion()
-                        discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
-                        discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
-                        discussion.date = discussionResponse["discussions"][i]["created"].int!
-                        discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
-                        discussion.id = discussionResponse["discussions"][i]["id"].int!
-                        discussion.moduleId = moduleId
-                        if discussionResponse["discussions"][i]["attachment"].string! != "0" {
-                            if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
-                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
-                            } else {
-                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
-                            }
-                            
-                            discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
-                            discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
-                        }
-                        let bkgRealm = try! Realm()
-                        if bkgRealm.objects(Discussion.self).filter("id = %@", discussion.id).count == 0 {
-                            try! bkgRealm.write {
-                                bkgRealm.add(discussion)
-                            }
-                        }
-                    }
-                }
-                totalDone += 1
-                if totalDone >= totalCount {
-                    print("Completed loading discussions")
-                    completion()
-                }
-            }
-        }
-        
     }
     
     func redirectToModule() {
