@@ -35,6 +35,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     let sessionManager = Alamofire.SessionManager.default
     var searchModules = [FilterModule]()
     var searchAnnouncements = [FilterDiscussion]()
+    var isLoading = false
     override func viewDidLoad() {
         super.viewDidLoad()
         self.shouldHideSemester = UserDefaults.standard.bool(forKey: "hidesSemester")
@@ -87,6 +88,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         super.viewDidDisappear(animated)
         //        refreshControl?.endRefreshing()
         gradientLoadingBar.fadeOut()
+        isLoading = false
+        stopTheDamnRequests()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -412,10 +415,13 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     @objc func refreshData() {
         gradientLoadingBar.fadeIn()
+        stopTheDamnRequests()
         if !searchController.isActive && Reachability.isConnectedToNetwork() {
+            self.refreshControl?.endRefreshing()
+            if isLoading { return }
+            isLoading = true
             self.tableView.showsVerticalScrollIndicator = false
             gradientLoadingBar.fadeIn()
-            self.refreshControl?.endRefreshing()
             DashboardDataManager.shared.getAndStoreCourses(userId: userDetails.userid) { (dashboardViewModels, shouldLogOut) in
                 if shouldLogOut {
                     // show message
@@ -424,6 +430,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         DashboardDataManager.shared.getAndStoreDiscussions {
                             DashboardDataManager.shared.calculateUnreadCounts(courseViewModels: dashboardViewModels!) { (newCourseViewModels) in
                                 self.courseViewModels = newCourseViewModels
+                                self.isLoading = false
                                 DispatchQueue.main.async {
                                     self.gradientLoadingBar.fadeOut()
                                     self.tableView.reloadData()
@@ -648,6 +655,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func stopTheDamnRequests() {
         if #available(iOS 9.0, *) {
+            
             Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
                 tasks.forEach{ $0.cancel() }
             }
