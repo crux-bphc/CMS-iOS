@@ -18,45 +18,28 @@ class SiteNewsTableViewController: UITableViewController {
     
     let banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
     let constants = Constants.Global.self
-    var discussionArray = [Discussion]()
+    var discussionViewModels = [DiscussionViewModel]()
     var currentDiscussion = Discussion()
     private let gradientLoadingBar = GradientActivityIndicatorView()
-    
-    let refreshController = UIRefreshControl()
-    
+        
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        
         self.tableView.register(UINib(nibName: "DiscussionTableViewCell", bundle: nil), forCellReuseIdentifier: "discussionCell")
-        
         setupNavBar()
         setupGradientLoadingBar()
-        
-        if #available(iOS 13.0, *) {
-            refreshController.tintColor = .label
-        } else {
-            // Fallback on earlier versions
-            refreshController.tintColor = .black
-            
+        self.refreshControl = UIRefreshControl()
+        tableView.refreshControl = self.refreshControl
+        refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        self.getOfflineSiteNews { (discussionViewModels) in
+            self.discussionViewModels = discussionViewModels
+            self.tableView.reloadData()
         }
-        refreshController.addTarget(self, action: #selector(refreshData), for: .valueChanged)
-        tableView.refreshControl = refreshController
-        
         if Reachability.isConnectedToNetwork() {
-            getSiteNews {
+            gradientLoadingBar.fadeIn()
+            self.getSiteNews { (discussionViewModels) in
                 self.gradientLoadingBar.fadeOut()
+                self.discussionViewModels = discussionViewModels
                 self.tableView.reloadData()
-            }
-        } else {
-            // load from realm
-            let realm = try! Realm()
-            let realmDiscussions = realm.objects(Discussion.self).filter("moduleId = %@", 0)
-            if realmDiscussions.count > 0 {
-                discussionArray.removeAll()
-                for discussion in realmDiscussions {
-                    discussionArray.append(discussion)
-                }
             }
         }
         
@@ -76,7 +59,7 @@ class SiteNewsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return discussionArray.count
+        return discussionViewModels.count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -85,14 +68,16 @@ class SiteNewsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "discussionCell", for: indexPath) as! DiscussionTableViewCell
-        cell.timeLabel.text = epochConvert(epoch: self.discussionArray[indexPath.row].date)
-        cell.contentPreviewLabel.text = discussionArray[indexPath.row].message.html2String
-        cell.titleLabel.text = discussionArray[indexPath.row].name
+        let discussionVM = discussionViewModels[indexPath.row]
+        cell.timeLabel.text = discussionVM.date
+        cell.contentPreviewLabel.text = discussionVM.description.html2String
+        cell.titleLabel.text = discussionVM.name
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.currentDiscussion = discussionArray[indexPath.row]
+        let realm = try! Realm()
+        self.currentDiscussion = realm.objects(Discussion.self).filter("id = %@", self.discussionViewModels[indexPath.row].id).first!
         performSegue(withIdentifier: "goToDiscussion", sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -102,18 +87,30 @@ class SiteNewsTableViewController: UITableViewController {
         destinationVC.selectedDiscussion = self.currentDiscussion
     }
     
-    func getSiteNews(completion: @escaping () -> Void) {
-        gradientLoadingBar.fadeIn()
+    func getOfflineSiteNews(completion: @escaping ([DiscussionViewModel]) -> Void) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let realm = try! Realm()
+            let realmDiscussions = realm.objects(Discussion.self).filter("moduleId = %@", 0)
+            let discussionViewModels = Array(realmDiscussions.map({ DiscussionViewModel(name: $0.name, id: $0.id, description: $0.message, date: self.epochConvert(epoch: $0.date), read: true) }))
+            DispatchQueue.main.async {
+                completion(discussionViewModels)
+            }
+        }
+        
+    }
+    
+    func getSiteNews(completion: @escaping ([DiscussionViewModel]) -> Void) {
         let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!]
         let FINAL_URL : String = constants.BASE_URL + constants.GET_SITE_NEWS
-        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
+        let queue = DispatchQueue.global(qos: .userInteractive)
+        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON(queue: queue) { (response) in
             if response.result.isSuccess {
                 let siteNews = JSON(response.value as Any)
-                self.discussionArray.removeAll()
                 let realm = try! Realm()
                 try! realm.write {
                     realm.delete(realm.objects(Discussion.self).filter("moduleId = %@", 0)) // removes all site news since they dont have a module id
                 }
+                var closureVMs = [DiscussionViewModel]()
                 for i in 0 ..< siteNews["discussions"].count {
                     let discussion = Discussion()
                     discussion.name = siteNews["discussions"][i]["name"].string ?? "No Name"
@@ -131,27 +128,34 @@ class SiteNewsTableViewController: UITableViewController {
                         discussion.filename = siteNews["discussions"][i]["attachments"][0]["filename"].string ?? ""
                         discussion.mimetype = siteNews["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
                     }
-                    self.discussionArray.append(discussion)
+                    closureVMs.append(DiscussionViewModel(name: discussion.name, id: discussion.id, description: discussion.message, date: self.epochConvert(epoch: discussion.date), read: true))
                     try! realm.write {
                         realm.add(discussion, update: .modified)
                     }
                 }
-                completion()
+                DispatchQueue.main.async {
+                    completion(closureVMs)
+                }
             }
         }
         
     }
     
     @objc func refreshData() {
-        self.refreshControl!.endRefreshing()
         if Reachability.isConnectedToNetwork() {
-            getSiteNews {
+            gradientLoadingBar.fadeIn()
+            self.getSiteNews { (discussionViewModels) in
+                self.discussionViewModels = discussionViewModels
                 self.gradientLoadingBar.fadeOut()
                 self.tableView.reloadData()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    self.refreshControl?.endRefreshing()
+                }
             }
         } else {
             // display offline banner
             showOfflineMessage()
+            self.refreshControl?.endRefreshing()
         }
         
     }

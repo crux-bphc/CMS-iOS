@@ -56,6 +56,9 @@
 		E6AF0DA424547AB8001FEACB /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6AF0DA324547AB8001FEACB /* StringExtension.swift */; };
 		E6B205F7237C3FED00D0F69F /* AttributedStringFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */; };
 		E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6C61630235DA91F00FFC2E4 /* Main.storyboard */; };
+		E6DD7D742525C8F000514D81 /* DiscussionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DD7D732525C8F000514D81 /* DiscussionViewModel.swift */; };
+		E6E41900254007B700CCA829 /* CourseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E418FF254007B700CCA829 /* CourseViewModel.swift */; };
+		E6E419032540085000CCA829 /* DashboardDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E419022540085000CCA829 /* DashboardDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,6 +141,9 @@
 		E6AF0DA324547AB8001FEACB /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringFontExtension.swift; sourceTree = "<group>"; };
 		E6C61630235DA91F00FFC2E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		E6DD7D732525C8F000514D81 /* DiscussionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionViewModel.swift; sourceTree = "<group>"; };
+		E6E418FF254007B700CCA829 /* CourseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseViewModel.swift; sourceTree = "<group>"; };
+		E6E419022540085000CCA829 /* DashboardDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardDataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,6 +237,7 @@
 				0A646D7923D188150023572B /* Colours.swift */,
 				E6AF0DA324547AB8001FEACB /* StringExtension.swift */,
 				E640E69824B4B3A3008C30E2 /* SpotlightIndex.swift */,
+				E6E419022540085000CCA829 /* DashboardDataManager.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -282,6 +289,7 @@
 		0AC33B6523021591004AE385 /* Data Models */ = {
 			isa = PBXGroup;
 			children = (
+				E6DD7D722525C8B600514D81 /* View Models */,
 				0AC33B632302153C004AE385 /* Course.swift */,
 				0A5ECD7D2306B23000723365 /* Discussion.swift */,
 				0A8E02D62300207900724899 /* User.swift */,
@@ -349,6 +357,15 @@
 				0AD26A8524F378DE00C4E406 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E6DD7D722525C8B600514D81 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				E6DD7D732525C8F000514D81 /* DiscussionViewModel.swift */,
+				E6E418FF254007B700CCA829 /* CourseViewModel.swift */,
+			);
+			path = "View Models";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -518,12 +535,14 @@
 				0A03483623166C2D00552F69 /* DiscussionTableViewController.swift in Sources */,
 				0A2FD035236059A800917BE7 /* Regex.swift in Sources */,
 				0AF20A35230B48AD001C0CB1 /* DiscussionViewController.swift in Sources */,
+				E6DD7D742525C8F000514D81 /* DiscussionViewModel.swift in Sources */,
 				0A5ECD7C2306A98800723365 /* AboutPageViewController.swift in Sources */,
 				E61F0E9A236EFEB300A9C9DA /* ColorExtension.swift in Sources */,
 				E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */,
 				0A8F492B23313A3800E7A94C /* AddDiscussionViewController.swift in Sources */,
 				0AD26A8F24F378DF00C4E406 /* CMSWidget.intentdefinition in Sources */,
 				0A585453230168E7008FB370 /* Constants.swift in Sources */,
+				E6E419032540085000CCA829 /* DashboardDataManager.swift in Sources */,
 				0A67E5DC23091B4700E18E99 /* EnrolmentViewController.swift in Sources */,
 				E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */,
 				0A9A960B23572E93004ABB2F /* CBTabBarButton.swift in Sources */,
@@ -534,6 +553,7 @@
 				0A4AF7B423819C0100C6EBA1 /* BackgroundFetch.swift in Sources */,
 				E6B205F7237C3FED00D0F69F /* AttributedStringFontExtension.swift in Sources */,
 				E6AF0DA424547AB8001FEACB /* StringExtension.swift in Sources */,
+				E6E41900254007B700CCA829 /* CourseViewModel.swift in Sources */,
 				0AC33B6B2302EDD6004AE385 /* CourseSection.swift in Sources */,
 				0AF20A32230B3D9F001C0CB1 /* SiteNewsTableViewController.swift in Sources */,
 			);

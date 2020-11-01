@@ -17,8 +17,8 @@ class DiscussionTableViewController: UITableViewController {
     
     private let gradientLoadingBar = GradientActivityIndicatorView()
     let constants = Constants.Global.self
-    var discussionArray = [Discussion]()
     var currentDiscussion = Discussion()
+    var discussionViewModels = [DiscussionViewModel]()
     var currentModule = Module()
     let sessionManager = Alamofire.SessionManager.default
     
@@ -27,13 +27,26 @@ class DiscussionTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "DiscussionTableViewCell", bundle: nil), forCellReuseIdentifier: "discussionCell")
+        self.refreshControl = UIRefreshControl()
+        self.tableView.refreshControl = self.refreshControl
+        self.refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         self.addDiscussionButton.isEnabled = false
         setupGradientLoadingBar()
-        gradientLoadingBar.fadeOut()
+        gradientLoadingBar.fadeIn()
         canAddDiscussion()
         self.title = currentModule.name
-        getCourseDiscussions {
+        self.loadOfflineDiscussions { (discussionViewModels) in
+            self.discussionViewModels = discussionViewModels
             self.tableView.reloadData()
+        }
+        if Reachability.isConnectedToNetwork() {
+            self.getNewCourseDiscussions { (discussionViewModels) in
+                self.discussionViewModels = discussionViewModels
+                self.gradientLoadingBar.fadeOut()
+                self.tableView.reloadData()
+            }
+        } else {
+            self.refreshControl?.endRefreshing()
             self.gradientLoadingBar.fadeOut()
         }
     }
@@ -49,11 +62,7 @@ class DiscussionTableViewController: UITableViewController {
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if discussionArray.count == 0 {
-            return 0
-        } else {
-            return discussionArray.count
-        }
+        return discussionViewModels.count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -68,11 +77,12 @@ class DiscussionTableViewController: UITableViewController {
             downloadTasks.forEach { $0.cancel() }
         }
         
-        if discussionArray.count != 0 {
-            self.currentDiscussion = discussionArray[indexPath.row]
+        if discussionViewModels.count != 0 {
             let realm = try! Realm()
+            self.currentDiscussion = realm.objects(Discussion.self).filter("id = %@", self.discussionViewModels[indexPath.row].id).first!
+            self.discussionViewModels[indexPath.row].markRead()
             try! realm.write {
-                    discussionArray[indexPath.row].read = true
+                self.currentDiscussion.read = true
             }
             
             performSegue(withIdentifier: "goToDiscussionDetails", sender: self)
@@ -86,30 +96,14 @@ class DiscussionTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "discussionCell", for: indexPath) as! DiscussionTableViewCell
-        
-//        let cell = UITableViewCell(reuseIdentifier: "discussionCell") as! DiscussionTableViewCell
-        if discussionArray.count == 0 {
-//            cell.textLabel?.text = "No discussions"
-//            cell.textLabel?.textAlignment = .center
-//            self.tableView.separatorStyle = .none
-        } else {
-//            cell.textLabel?.text = discussionArray[indexPath.row].name
-//            cell.cellDiscussion = discussionArray[indexPath.row]
-            cell.timeLabel.text = epochConvert(epoch: self.discussionArray[indexPath.row].date)
-//            print(self.discussionArray[indexPath.row].date)
-            cell.contentPreviewLabel.text = discussionArray[indexPath.row].message.html2String
-            cell.titleLabel.text = discussionArray[indexPath.row].name
-            if !discussionArray[indexPath.row].read {
-                cell.titleLabel.font = UIFont.systemFont(ofSize: 17.0, weight: .bold)
-                cell.timeLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .semibold)
-                cell.contentPreviewLabel.font = UIFont.systemFont(ofSize: 14.0, weight: .semibold)
-            } else {
-                cell.titleLabel.font = UIFont.systemFont(ofSize: 17.0, weight: .medium)
-                cell.timeLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .regular)
-                cell.contentPreviewLabel.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
-            }
-            self.tableView.separatorStyle = .singleLine
-        }
+        let discussionVM = self.discussionViewModels[indexPath.row]
+        cell.timeLabel.text = discussionVM.date
+        cell.contentPreviewLabel.text = discussionVM.description.html2String
+        cell.titleLabel.text = discussionVM.name
+        cell.timeLabel.font = discussionVM.dateFont
+        cell.titleLabel.font = discussionVM.titleFont
+        cell.contentPreviewLabel.font = discussionVM.desciptionFont
+        self.tableView.separatorStyle = .singleLine
         return cell
     }
     
@@ -125,72 +119,95 @@ class DiscussionTableViewController: UITableViewController {
         }
     }
     
-    func getCourseDiscussions(completion: @escaping () -> Void) {
-        
+    @objc func refreshData() {
+        gradientLoadingBar.fadeIn()
         if Reachability.isConnectedToNetwork() {
-            let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
-            let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
-            gradientLoadingBar.fadeIn()
-            
-            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
-                if response.result.isSuccess {
-                    let discussionResponse = JSON(response.value as Any)
-                    if discussionResponse["discussions"].count == 0 {
-                        completion()
-                    } else {
-                        let realm = try! Realm()
-                        var readDiscussionIds = [Int]()
-                        let readDiscussions = realm.objects(Discussion.self).filter("read = YES")
-                        for i in 0..<readDiscussions.count {
-                            readDiscussionIds.append(readDiscussions[i].id)
-                        }
-                        try! realm.write {
-                            realm.delete(realm.objects(Discussion.self).filter("moduleId = %@", self.currentModule.id))
-                        }
-                        for i in 0 ..< discussionResponse["discussions"].count {
-                            let discussion = Discussion()
-                            if discussionResponse["discussions"][i]["pinned"].bool! {
-                               discussion.name = "📌 " + (discussionResponse["discussions"][i]["name"].string ?? "No Name")
-                            } else {
-                                discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
-                            }
-                            
-                            discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
-                            discussion.date = discussionResponse["discussions"][i]["created"].int!
-                            discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
-                            discussion.id = discussionResponse["discussions"][i]["id"].int!
-                            discussion.read = readDiscussionIds.contains(discussion.id) ? true : false
-                            discussion.moduleId = self.currentModule.id
-                            if discussionResponse["discussions"][i]["attachment"].string! != "0" {
-                                if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
-                                    discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
-                                } else {
-                                    discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
-                                }
-                                
-                                discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
-                                discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
-                            }
-                            try! realm.write {
-                                realm.add(discussion, update: .modified)
-                            }
-                            
-                            self.discussionArray.append(discussion)
-                        }
-                        completion()
-                    }
-                }
+            getNewCourseDiscussions { (discussionViewModels) in
+                self.discussionViewModels = discussionViewModels
+                self.refreshControl?.endRefreshing()
+                self.gradientLoadingBar.fadeOut()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75, execute: {
+                    self.tableView.reloadData()
+                })
             }
         } else {
+            self.refreshControl?.endRefreshing()
+            self.gradientLoadingBar.fadeOut()
+        }
+    }
+    
+    func loadOfflineDiscussions(completion: @escaping ([DiscussionViewModel]) -> Void) {
+        let moduleId = self.currentModule.id
+        DispatchQueue.global(qos: .userInteractive).async {
             let realm = try! Realm()
-            let realmDiscussions = realm.objects(Discussion.self).filter("moduleId = %@", self.currentModule.id)
-            self.discussionArray.removeAll()
-            for i in 0..<realmDiscussions.count {
-                discussionArray.append(realmDiscussions[i])
+            let offlineDiscussions = realm.objects(Discussion.self).filter("moduleId == %@", moduleId)
+            let discussionViewModels = Array(offlineDiscussions.map({ DiscussionViewModel(name: $0.name, id: $0.id, description: $0.message, date: self.epochConvert(epoch: $0.date), read: $0.read) }))
+            DispatchQueue.main.async {
+                completion(discussionViewModels)
             }
         }
-        
-        
+    }
+    
+    func getNewCourseDiscussions(completion: @escaping ([DiscussionViewModel]) -> Void) {
+
+        if !Reachability.isConnectedToNetwork() { return }
+        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
+        let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
+        let queue = DispatchQueue.global(qos: .userInteractive)
+        let currentModuleId = self.currentModule.id
+        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON(queue: queue) { (response) in
+            if !response.result.isSuccess {
+                DispatchQueue.main.async { completion([]) }
+                return
+            }
+            let discussionResponse = JSON(response.value as Any)
+            var closureDiscussionViewModels = [DiscussionViewModel]()
+            let realm = try! Realm()
+            var readDiscussionIds = [Int]()
+            let readDiscussions = realm.objects(Discussion.self).filter("read = YES")
+            for i in 0..<readDiscussions.count {
+                readDiscussionIds.append(readDiscussions[i].id)
+            }
+            try! realm.write {
+                realm.delete(realm.objects(Discussion.self).filter("moduleId = %@", currentModuleId))
+            }
+            for i in 0 ..< discussionResponse["discussions"].count {
+                let discussion = Discussion()
+                if discussionResponse["discussions"][i]["pinned"].bool! {
+                    discussion.name = "📌 " + (discussionResponse["discussions"][i]["name"].string ?? "No Name")
+                    
+                } else {
+                    discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
+                }
+                
+                discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
+                discussion.date = discussionResponse["discussions"][i]["created"].int!
+                discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
+                discussion.id = discussionResponse["discussions"][i]["id"].int!
+                discussion.read = readDiscussionIds.contains(discussion.id) ? true : false
+                discussion.moduleId = currentModuleId
+                if discussionResponse["discussions"][i]["attachment"].string! != "0" {
+                    if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
+                        discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                    } else {
+                        discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
+                    }
+                    
+                    discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
+                    discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
+                }
+                
+                let discussionViewModel = DiscussionViewModel(name: discussion.name, id: discussion.id, description: discussion.message, date: self.epochConvert(epoch: discussion.date), read: discussion.read)
+                closureDiscussionViewModels.append(discussionViewModel)
+                
+                try! realm.write {
+                    realm.add(discussion, update: .modified)
+                }
+            }
+            DispatchQueue.main.async {
+                completion(closureDiscussionViewModels)
+            }
+        }
     }
     
     func canAddDiscussion() {
