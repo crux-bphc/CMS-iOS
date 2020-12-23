@@ -35,13 +35,6 @@
 		0AC33B6B2302EDD6004AE385 /* CourseSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC33B6A2302EDD6004AE385 /* CourseSection.swift */; };
 		0AC33B6D2302EF18004AE385 /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC33B6C2302EF18004AE385 /* Module.swift */; };
 		0AC33B6F2304306C004AE385 /* ModuleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC33B6E2304306C004AE385 /* ModuleViewController.swift */; };
-		0AD26A8424F378DE00C4E406 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD26A8324F378DE00C4E406 /* WidgetKit.framework */; };
-		0AD26A8624F378DE00C4E406 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD26A8524F378DE00C4E406 /* SwiftUI.framework */; };
-		0AD26A8924F378DE00C4E406 /* CMSWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD26A8824F378DE00C4E406 /* CMSWidget.swift */; };
-		0AD26A8C24F378DF00C4E406 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AD26A8B24F378DF00C4E406 /* Assets.xcassets */; };
-		0AD26A8E24F378DF00C4E406 /* CMSWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0AD26A8A24F378DE00C4E406 /* CMSWidget.intentdefinition */; };
-		0AD26A8F24F378DF00C4E406 /* CMSWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0AD26A8A24F378DE00C4E406 /* CMSWidget.intentdefinition */; };
-		0AD26A9224F378DF00C4E406 /* CMSWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0AD26A8224F378DE00C4E406 /* CMSWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0AF20A2F230B2F17001C0CB1 /* ExtrasTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF20A2E230B2F17001C0CB1 /* ExtrasTableViewController.swift */; };
 		0AF20A32230B3D9F001C0CB1 /* SiteNewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF20A31230B3D9F001C0CB1 /* SiteNewsTableViewController.swift */; };
 		0AF20A35230B48AD001C0CB1 /* DiscussionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF20A34230B48AD001C0CB1 /* DiscussionViewController.swift */; };
@@ -61,16 +54,6 @@
 		E6E419032540085000CCA829 /* DashboardDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E419022540085000CCA829 /* DashboardDataManager.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		0AD26A9024F378DF00C4E406 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0A3DEAE722FDCA69001B6BFD /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0AD26A8124F378DE00C4E406;
-			remoteInfo = CMSWidgetExtension;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		0AD26A9324F378DF00C4E406 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -78,7 +61,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				0AD26A9224F378DF00C4E406 /* CMSWidgetExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -117,13 +99,8 @@
 		0AC33B6A2302EDD6004AE385 /* CourseSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSection.swift; sourceTree = "<group>"; };
 		0AC33B6C2302EF18004AE385 /* Module.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
 		0AC33B6E2304306C004AE385 /* ModuleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleViewController.swift; sourceTree = "<group>"; };
-		0AD26A8224F378DE00C4E406 /* CMSWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CMSWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AD26A8324F378DE00C4E406 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		0AD26A8524F378DE00C4E406 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		0AD26A8824F378DE00C4E406 /* CMSWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMSWidget.swift; sourceTree = "<group>"; };
-		0AD26A8A24F378DE00C4E406 /* CMSWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = CMSWidget.intentdefinition; sourceTree = "<group>"; };
-		0AD26A8B24F378DF00C4E406 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		0AD26A8D24F378DF00C4E406 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0AF20A2E230B2F17001C0CB1 /* ExtrasTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrasTableViewController.swift; sourceTree = "<group>"; };
 		0AF20A31230B3D9F001C0CB1 /* SiteNewsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteNewsTableViewController.swift; sourceTree = "<group>"; };
 		0AF20A34230B48AD001C0CB1 /* DiscussionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionViewController.swift; sourceTree = "<group>"; };
@@ -155,15 +132,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0AD26A7F24F378DE00C4E406 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0AD26A8624F378DE00C4E406 /* SwiftUI.framework in Frameworks */,
-				0AD26A8424F378DE00C4E406 /* WidgetKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -172,7 +140,6 @@
 			children = (
 				0A3DEAF122FDCA69001B6BFD /* CMS-iOS */,
 				CA6329F197F899A3DCF66141 /* Pods */,
-				0AD26A8724F378DE00C4E406 /* CMSWidget */,
 				D102A9AAD55443ACB0B6B7DF /* Frameworks */,
 				0A4AF7B223819B2100C6EBA1 /* Recovered References */,
 			);
@@ -182,7 +149,6 @@
 			isa = PBXGroup;
 			children = (
 				0A3DEAEF22FDCA69001B6BFD /* CMS BPHC.app */,
-				0AD26A8224F378DE00C4E406 /* CMSWidgetExtension.appex */,
 			);
 			name = Products;
 			path = ..;
@@ -310,17 +276,6 @@
 			path = "New Group";
 			sourceTree = "<group>";
 		};
-		0AD26A8724F378DE00C4E406 /* CMSWidget */ = {
-			isa = PBXGroup;
-			children = (
-				0AD26A8824F378DE00C4E406 /* CMSWidget.swift */,
-				0AD26A8A24F378DE00C4E406 /* CMSWidget.intentdefinition */,
-				0AD26A8B24F378DF00C4E406 /* Assets.xcassets */,
-				0AD26A8D24F378DF00C4E406 /* Info.plist */,
-			);
-			path = CMSWidget;
-			sourceTree = "<group>";
-		};
 		0AF20A30230B2F2A001C0CB1 /* Extras Tab */ = {
 			isa = PBXGroup;
 			children = (
@@ -385,29 +340,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				0AD26A9124F378DF00C4E406 /* PBXTargetDependency */,
 			);
 			name = "CMS-iOS";
 			productName = "CMS-iOS";
 			productReference = 0A3DEAEF22FDCA69001B6BFD /* CMS BPHC.app */;
 			productType = "com.apple.product-type.application";
-		};
-		0AD26A8124F378DE00C4E406 /* CMSWidgetExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0AD26A9624F378DF00C4E406 /* Build configuration list for PBXNativeTarget "CMSWidgetExtension" */;
-			buildPhases = (
-				0AD26A7E24F378DE00C4E406 /* Sources */,
-				0AD26A7F24F378DE00C4E406 /* Frameworks */,
-				0AD26A8024F378DE00C4E406 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = CMSWidgetExtension;
-			productName = CMSWidgetExtension;
-			productReference = 0AD26A8224F378DE00C4E406 /* CMSWidgetExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -421,9 +358,6 @@
 				TargetAttributes = {
 					0A3DEAEE22FDCA69001B6BFD = {
 						CreatedOnToolsVersion = 10.3;
-					};
-					0AD26A8124F378DE00C4E406 = {
-						CreatedOnToolsVersion = 12.0;
 					};
 				};
 			};
@@ -441,7 +375,6 @@
 			projectRoot = "";
 			targets = (
 				0A3DEAEE22FDCA69001B6BFD /* CMS-iOS */,
-				0AD26A8124F378DE00C4E406 /* CMSWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -458,14 +391,6 @@
 				0AC33B6723022453004AE385 /* Assets.xcassets in Resources */,
 				0A3DEB0622FDCD26001B6BFD /* SF-Pro-Display-Heavy.otf in Resources */,
 				3B34F1132358B3B300F59536 /* Colors.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0AD26A8024F378DE00C4E406 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0AD26A8C24F378DF00C4E406 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -540,7 +465,6 @@
 				E61F0E9A236EFEB300A9C9DA /* ColorExtension.swift in Sources */,
 				E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */,
 				0A8F492B23313A3800E7A94C /* AddDiscussionViewController.swift in Sources */,
-				0AD26A8F24F378DF00C4E406 /* CMSWidget.intentdefinition in Sources */,
 				0A585453230168E7008FB370 /* Constants.swift in Sources */,
 				E6E419032540085000CCA829 /* DashboardDataManager.swift in Sources */,
 				0A67E5DC23091B4700E18E99 /* EnrolmentViewController.swift in Sources */,
@@ -559,24 +483,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0AD26A7E24F378DE00C4E406 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0AD26A8E24F378DF00C4E406 /* CMSWidget.intentdefinition in Sources */,
-				0AD26A8924F378DE00C4E406 /* CMSWidget.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		0AD26A9124F378DF00C4E406 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0AD26A8124F378DE00C4E406 /* CMSWidgetExtension */;
-			targetProxy = 0AD26A9024F378DF00C4E406 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		0A3DEAFB22FDCA6A001B6BFD /* LaunchScreen.storyboard */ = {
@@ -756,52 +663,6 @@
 			};
 			name = Release;
 		};
-		0AD26A9424F378DF00C4E406 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8NXR4FCN3L;
-				INFOPLIST_FILE = CMSWidget/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.crux-bphc.CMS-iOS.CMSWidget";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		0AD26A9524F378DF00C4E406 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8NXR4FCN3L;
-				INFOPLIST_FILE = CMSWidget/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.crux-bphc.CMS-iOS.CMSWidget";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -819,15 +680,6 @@
 			buildConfigurations = (
 				0A3DEB0222FDCA6A001B6BFD /* Debug */,
 				0A3DEB0322FDCA6A001B6BFD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		0AD26A9624F378DF00C4E406 /* Build configuration list for PBXNativeTarget "CMSWidgetExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0AD26A9424F378DF00C4E406 /* Debug */,
-				0AD26A9524F378DF00C4E406 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
