@@ -208,7 +208,7 @@ class LoginViewController: UIViewController {
     
     @IBAction func googleLoginPressed(_ sender: UIButton) {
         self.view.isUserInteractionEnabled = false
-        guard let url = URL(string: "https://td.bits-hyderabad.ac.in/moodle/admin/tool/mobile/launch.php?service=moodle_mobile_app&passport=144.05993500117754&urlscheme=cruxcmsios&oauthsso=1")else{ return }
+        guard let url = URL(string: "https://cms.bits-hyderabad.ac.in/admin/tool/mobile/launch.php?service=moodle_mobile_app&passport=144.05993500117754&urlscheme=cruxcmsios&oauthsso=1")else{ return }
         safariVC = SFSafariViewController(url: url)
         present(safariVC, animated: true, completion: nil)
         

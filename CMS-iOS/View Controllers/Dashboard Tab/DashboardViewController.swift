@@ -208,7 +208,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     func presentUnenrollVC(for courseId: Int) {
-        let url = URL(string: "https://td.bits-hyderabad.ac.in/moodle/course/view.php?id=\(courseId)")
+        let url = URL(string: "https://cms.bits-hyderabad.ac.in/course/view.php?id=\(courseId)")
         let safariVC = SFSafariViewController(url: url!)
         safariVC.delegate = self
         self.present(safariVC, animated: true, completion: nil)
@@ -272,7 +272,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         module.modname = courseData[i]["modules"][j]["modname"].string!
                         module.id = courseData[i]["modules"][j]["id"].int!
                         if courseData[i]["modules"][j]["modname"].string! == "resource" {
-                            if (courseData[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("td.bits-hyderabad.ac.in") {
+                            if (courseData[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("cms.bits-hyderabad.ac.in") {
                                 module.fileurl = (courseData[i]["modules"][j]["contents"][0]["fileurl"].string! +
                                     "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
                                 module.mimetype = courseData[i]["modules"][j]["contents"][0]["mimetype"].string!
@@ -292,7 +292,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                 let newModule = Module()
                                 newModule.filename = courseData[i]["modules"][j]["contents"][u]["filename"].string!
                                 
-                                if courseData[i]["modules"][j]["contents"][u]["fileurl"].string!.contains("td.bits-hyderabad.ac.in") {
+                                if courseData[i]["modules"][j]["contents"][u]["fileurl"].string!.contains("cms.bits-hyderabad.ac.in") {
                                     newModule.fileurl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                 }
                                 newModule.mimetype = courseData[i]["modules"][j]["contents"][u]["mimetype"].string!

@@ -84,7 +84,7 @@ class BackgroundFetch {
                             discussion.id = discussionResponse["discussions"][i]["id"].int!
                             discussion.moduleId = discussionModule.id
                             if discussionResponse["discussions"][i]["attachment"].string! != "0" {
-                                if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
+                                if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("cms.bits-hyderabad.ac.in") ?? false {
                                     discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                 } else {
                                     discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
