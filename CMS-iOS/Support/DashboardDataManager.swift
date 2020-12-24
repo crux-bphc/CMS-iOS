@@ -82,13 +82,12 @@ class DashboardDataManager {
         let FINAL_URL = constant.BASE_URL + constant.GET_COURSE_CONTENT
         let realmOuter = try! Realm()
         let courses = realmOuter.objects(Course.self)
-        let readModuleIdSet: Set<Int> = Set(realmOuter.objects(Module.self).filter("read == YES").map({ $0.id }))
         let totalCourseCount = courses.count
         var current = 0
         for course in courses {
             let courseId = course.courseid
             let courseName = course.displayname
-            
+            let readModuleIdSet: Set<Int> = Set(realmOuter.objects(Module.self).filter("coursename == %@ AND read == YES", courseName).map({ $0.id }))
             let params : [String:Any] = ["wstoken": KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid": courseId]
             let queue = DispatchQueue.global(qos: .userInteractive)
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON (queue: queue) { (response) in
@@ -188,11 +187,11 @@ class DashboardDataManager {
     func getAndStoreDiscussions(completion: @escaping () -> Void) {
         let realm = try! Realm()
         let discussionModules = realm.objects(Module.self).filter("modname = %@", "forum")
-        let readDiscussionIdSet: Set<Int> = Set(realm.objects(Discussion.self).filter("read == YES").map({ $0.id }))
         let totalCount = discussionModules.count
         var current = 0
         for x in 0..<discussionModules.count {
             let discussionModule = discussionModules[x]
+            let readDiscussionIdSet: Set<Int> = Set(realm.objects(Discussion.self).filter("moduleId = %@ AND read == YES", discussionModule.id).map({ $0.id }))
             let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(discussionModule.id)]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_FORUM_DISCUSSIONS
             let queue = DispatchQueue.global(qos: .userInteractive)

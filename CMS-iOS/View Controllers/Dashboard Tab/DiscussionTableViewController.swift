@@ -140,7 +140,8 @@ class DiscussionTableViewController: UITableViewController {
         let moduleId = self.currentModule.id
         DispatchQueue.global(qos: .userInteractive).async {
             let realm = try! Realm()
-            let offlineDiscussions = realm.objects(Discussion.self).filter("moduleId == %@", moduleId)
+            let offlineDiscussions = realm.objects(Discussion.self).filter("moduleId == %@", moduleId).sorted(byKeyPath: "id", ascending: false)
+            print(offlineDiscussions)
             let discussionViewModels = Array(offlineDiscussions.map({ DiscussionViewModel(name: $0.name, id: $0.id, description: $0.message, date: self.epochConvert(epoch: $0.date), read: $0.read) }))
             DispatchQueue.main.async {
                 completion(discussionViewModels)

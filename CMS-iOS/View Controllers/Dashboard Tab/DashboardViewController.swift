@@ -403,7 +403,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func loadOfflineCourses() {
         let realm = try! Realm()
-        let realmCourses = realm.objects(Course.self)
+        let realmCourses = realm.objects(Course.self).sorted(byKeyPath: "displayname", ascending: true)
         let offlineCourseViewModels = Array(realmCourses.map({ DashboardViewModel(courseCode: $0.courseCode, courseName: $0.courseName, courseId: $0.courseid, courseColor: UIColor.UIColorFromString(string: $0.allotedColor)) }))
         DashboardDataManager.shared.calculateUnreadCounts(courseViewModels: offlineCourseViewModels) { (newOfflineViewModels) in
             self.courseViewModels = offlineCourseViewModels
