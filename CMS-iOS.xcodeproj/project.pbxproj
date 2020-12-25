@@ -46,6 +46,7 @@
 		E61F0E9A236EFEB300A9C9DA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */; };
 		E640E69924B4B3A3008C30E2 /* SpotlightIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E69824B4B3A3008C30E2 /* SpotlightIndex.swift */; };
 		E65B154B2595BF0900CD7A28 /* CourseUnenroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65B154A2595BF0900CD7A28 /* CourseUnenroller.swift */; };
+		E65B154E2595C5FB00CD7A28 /* UnenrollWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65B154D2595C5FB00CD7A28 /* UnenrollWebViewController.swift */; };
 		E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */; };
 		E6AF0DA424547AB8001FEACB /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6AF0DA324547AB8001FEACB /* StringExtension.swift */; };
 		E6B205F7237C3FED00D0F69F /* AttributedStringFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */; };
@@ -115,6 +116,7 @@
 		E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		E640E69824B4B3A3008C30E2 /* SpotlightIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotlightIndex.swift; sourceTree = "<group>"; };
 		E65B154A2595BF0900CD7A28 /* CourseUnenroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseUnenroller.swift; sourceTree = "<group>"; };
+		E65B154D2595C5FB00CD7A28 /* UnenrollWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnenrollWebViewController.swift; sourceTree = "<group>"; };
 		E6951E6F23EF172E00C9CC3D /* CMS BPHC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "CMS BPHC.entitlements"; sourceTree = "<group>"; };
 		E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLPreviewItemSubclass.swift; sourceTree = "<group>"; };
 		E6AF0DA324547AB8001FEACB /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				0A7F90BB2300753E00683867 /* DashboardViewController.swift */,
+				E65B154D2595C5FB00CD7A28 /* UnenrollWebViewController.swift */,
 				0AC33B6823022B2C004AE385 /* CourseContentsViewController.swift */,
 				0A03483523166C2D00552F69 /* DiscussionTableViewController.swift */,
 				0AC33B6E2304306C004AE385 /* ModuleViewController.swift */,
@@ -454,6 +457,7 @@
 				0A3DEAF522FDCA69001B6BFD /* LoginViewController.swift in Sources */,
 				0AF805C5234F43A3008D9B25 /* CourseTableViewCell.swift in Sources */,
 				0AC33B6D2302EF18004AE385 /* Module.swift in Sources */,
+				E65B154E2595C5FB00CD7A28 /* UnenrollWebViewController.swift in Sources */,
 				0A3DEAF322FDCA69001B6BFD /* AppDelegate.swift in Sources */,
 				0A9A960D23572E93004ABB2F /* BubbleTabBarController.swift in Sources */,
 				0A7F90BC2300753E00683867 /* DashboardViewController.swift in Sources */,
