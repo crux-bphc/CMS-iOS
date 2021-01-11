@@ -20,22 +20,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     var window: UIWindow?
     
-    let notificationCenter = UNUserNotificationCenter.current()
+//    let notificationCenter = UNUserNotificationCenter.current()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //        UIApplication.shared.registerForRemoteNotifications()
-        application.setMinimumBackgroundFetchInterval(900)
+//        application.setMinimumBackgroundFetchInterval(900)
         
-        let options : UNAuthorizationOptions = [.alert, .sound, .badge]
-        notificationCenter.requestAuthorization(options: options) { (didAllow, error) in
-            guard didAllow else {return}
-            BackgroundFetch().setCategories()
-//            if !didAllow {
-//                print("The user denied notification permission.")
-//            } else if didAllow {
-//                BackgroundFetch().setCategories()
-//            }
-        }
+//        let options : UNAuthorizationOptions = [.alert, .sound, .badge]
+//        notificationCenter.requestAuthorization(options: options) { (didAllow, error) in
+//            guard didAllow else {return}
+//            BackgroundFetch().setCategories()
+////            if !didAllow {
+////                print("The user denied notification permission.")
+////            } else if didAllow {
+////                BackgroundFetch().setCategories()
+////            }
+//        }
         // Code for realm migration, update this when realm schema is changed
 
         let config = Realm.Configuration(
@@ -128,22 +128,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SDDownloadManager.shared.backgroundCompletionHandler = completionHandler
     }
     
-    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        if Reachability.isConnectedToNetwork() {
-            let bkgObj = BackgroundFetch()
-            bkgObj.downloadModules { newModulesFound in
-                let realm = try! Realm()
-                let discussionModules = realm.objects(Module.self).filter("modname = %@", "forum")
-                bkgObj.downloadDiscussions(discussionModules: discussionModules) { (newDiscussionsFound) in
-                    completionHandler(newDiscussionsFound || newModulesFound ? .newData : .noData)
-                    NSLog(newDiscussionsFound || newModulesFound ? "found new data" : "no new data found")
-                }
-            }
-        } else {
-            completionHandler(.failed)
-            print("failed to background fetch")
-        }
-    }
+//    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+//        if Reachability.isConnectedToNetwork() {
+//            let bkgObj = BackgroundFetch()
+//            bkgObj.downloadModules { newModulesFound in
+//                let realm = try! Realm()
+//                let discussionModules = realm.objects(Module.self).filter("modname = %@", "forum")
+//                bkgObj.downloadDiscussions(discussionModules: discussionModules) { (newDiscussionsFound) in
+//                    completionHandler(newDiscussionsFound || newModulesFound ? .newData : .noData)
+//                    NSLog(newDiscussionsFound || newModulesFound ? "found new data" : "no new data found")
+//                }
+//            }
+//        } else {
+//            completionHandler(.failed)
+//            print("failed to background fetch")
+//        }
+//    }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         

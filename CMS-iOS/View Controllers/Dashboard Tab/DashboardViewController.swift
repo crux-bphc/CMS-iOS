@@ -245,7 +245,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         module.modname = courseData[i]["modules"][j]["modname"].string!
                         module.id = courseData[i]["modules"][j]["id"].int!
                         if courseData[i]["modules"][j]["modname"].string! == "resource" {
-                            if (courseData[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("td.bits-hyderabad.ac.in") {
+                            if (courseData[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("cms.bits-hyderabad.ac.in") {
                                 module.fileurl = (courseData[i]["modules"][j]["contents"][0]["fileurl"].string! +
                                     "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
                                 module.mimetype = courseData[i]["modules"][j]["contents"][0]["mimetype"].string!
@@ -265,7 +265,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                 let newModule = Module()
                                 newModule.filename = courseData[i]["modules"][j]["contents"][u]["filename"].string!
                                 
-                                if courseData[i]["modules"][j]["contents"][u]["fileurl"].string!.contains("td.bits-hyderabad.ac.in") {
+                                if courseData[i]["modules"][j]["contents"][u]["fileurl"].string!.contains("cms.bits-hyderabad.ac.in") {
                                     newModule.fileurl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                 }
                                 newModule.mimetype = courseData[i]["modules"][j]["contents"][u]["mimetype"].string!
@@ -778,7 +778,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             moduleData.modname = courseContent[i]["modules"][j]["modname"].string!
                             moduleData.id = courseContent[i]["modules"][j]["id"].int!
                             if moduleData.modname == "resource" {
-                                if (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("td.bits-hyderabad.ac.in") {
+                                if (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("cms.bits-hyderabad.ac.in") {
                                     moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string! +
                                         "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
                                     moduleData.mimetype = courseContent[i]["modules"][j]["contents"][0]["mimetype"].string!
@@ -801,7 +801,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                     newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
                                     newModule.read = true
                                     
-                                    if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("td.bits-hyderabad.ac.in") {
+                                    if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("cms.bits-hyderabad.ac.in") {
                                         newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                     }
                                     newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
@@ -896,7 +896,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                             discussion.id = discussionResponse["discussions"][i]["id"].int!
                             discussion.moduleId = moduleId
                             if discussionResponse["discussions"][i]["attachment"].string! != "0" {
-                                if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("td.bits-hyderabad.ac.in") ?? false {
+                                if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("cms.bits-hyderabad.ac.in") ?? false {
                                     discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                                 } else {
                                     discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
