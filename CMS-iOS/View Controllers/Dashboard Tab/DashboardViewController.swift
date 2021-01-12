@@ -182,19 +182,20 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 warning.addAction(cancelAction)
                 self.present(warning, animated: true, completion: nil)
             }
-            let unenrollAction = UIAlertAction(title: "Unenroll from Website", style: .destructive) { (_) in
+            let unenrollAction = UIAlertAction(title: "Unenroll", style: .destructive) { (_) in
                 let courseId = self.searchController.isActive ? self.filteredCourseViewModels[indexPath!.row].courseId : self.courseViewModels[indexPath!.row].courseId
                 let alertShownBefore = UserDefaults.standard.bool(forKey: "unenrollAlertShown")
                 if !alertShownBefore {
-                    let alert = UIAlertController(title: "Important", message: "Since the Moodle API doesn't support unenrolling from a course, you will be redirected to the course page on the CMS website where you can unenroll. You may need to log in.", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Notice", message: "Since the Moodle API does not support unenrolling, requests will be sent repicating the ones sent by the website to unenroll. To do so, the MoodleSession cookie needs to be saved. The first time you do this, a web view will be shown where you will need to login with your Bits Mail/credentials. Once the cookie has been saved, you will need to attempt to uneroll again. The cookie will expire in a few hours and you may need to login again.", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
                         UserDefaults.standard.setValue(true, forKey: "unenrollAlertShown")
-                        self.presentUnenrollVC(for: courseId)
+                        self.tryToUneroll(courseId: courseId, indexPath: indexPath!)
                     }))
                     self.present(alert, animated: true)
                 } else {
-                    self.presentUnenrollVC(for: courseId)
+//                    self.presentUnenrollVC(for: courseId)
+                    self.tryToUneroll(courseId: courseId, indexPath: indexPath!)
                 }
                 
             }
@@ -207,11 +208,22 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
     }
     
-    func presentUnenrollVC(for courseId: Int) {
-        let url = URL(string: "https://cms.bits-hyderabad.ac.in/course/view.php?id=\(courseId)")
-        let safariVC = SFSafariViewController(url: url!)
-        safariVC.delegate = self
-        self.present(safariVC, animated: true, completion: nil)
+    func tryToUneroll(courseId: Int, indexPath: IndexPath) {
+        gradientLoadingBar.fadeIn()
+        CourseUnenroller.shared.attemptUnenroll(courseId: courseId) { (shouldShowLoginView, completed) in
+            self.gradientLoadingBar.fadeOut()
+            if shouldShowLoginView {
+                self.present(UnenrollWebViewController(), animated: true, completion: nil)
+            } else {
+                if completed {
+                    let banner = NotificationBanner(title: "Success", subtitle: "You have been unenrolled from this course successfully", style: .success)
+                    banner.show()
+                    self.courseViewModels.remove(at: indexPath.row)
+                    self.tableView.deleteRows(at: [indexPath], with: .automatic)
+//                                self.tableView.reloadData()
+                }
+            }
+        }
     }
     
     func filterItemsForSearch(string: String) {
@@ -676,6 +688,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
         SpotlightIndex.shared.deindexAllItems()
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
+        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "MoodleSession")
     }
     
     func redirectToModule() {
@@ -688,11 +701,5 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func redirectToFolderModule() {
         self.performSegue(withIdentifier: "goToFolderModuleDirectly", sender: self)
-    }
-}
-
-extension DashboardViewController: SFSafariViewControllerDelegate {
-    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        self.refreshData()
     }
 }

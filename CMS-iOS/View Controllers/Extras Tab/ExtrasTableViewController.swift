@@ -19,7 +19,7 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
     
     fileprivate let cellId = "ExtrasCell"
     let pickerController = UIImagePickerController()
-    let items = [["Hide Semester On Dashboard"], ["T.D. Website"], ["My Timetable"], ["About", "Report Bug", "Rate"], ["Logout"]]
+    let items = [["Hide Semester On Dashboard"], ["CMS Website"], ["My Timetable"], ["About", "Report Bug", "Rate"], ["Logout"]]
     let constants = Constants.Global.self
     
     override func viewDidLoad() {
@@ -49,6 +49,13 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         
+        if #available(iOS 13.0, *) {
+            cell.textLabel?.textColor = .label
+        } else {
+            // Fallback on earlier versions
+            cell.textLabel?.textColor = .black
+        }
+        
         let item = items[indexPath.section][indexPath.row]
         cell.textLabel?.text = item
         if item == "Logout" {
@@ -68,13 +75,6 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
         else {
             cell.accessoryType = .disclosureIndicator
             cell.imageView?.image = UIImage(named: item)
-        }
-        
-        if #available(iOS 13.0, *) {
-            cell.textLabel?.textColor = .label
-        } else {
-            // Fallback on earlier versions
-            cell.textLabel?.textColor = .black
         }
         
         return cell
@@ -228,6 +228,7 @@ extension ExtrasTableViewController {
         }
         SpotlightIndex.shared.deindexAllItems()
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
+        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "MoodleSession")
     }
     
     func setupNavBar() {

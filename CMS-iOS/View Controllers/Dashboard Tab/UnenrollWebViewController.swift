@@ -21,6 +21,7 @@ class UnenrollWebViewController: UIViewController {
             self.isModalInPresentation = true
         }
         self.view = webView
+        webView.customUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.2 Mobile/15E148 Safari/604.1"
         webView.load(URLRequest(url: URL(string: "https://cms.bits-hyderabad.ac.in/login/index.php")!))
         webView.allowsBackForwardNavigationGestures = false
         
