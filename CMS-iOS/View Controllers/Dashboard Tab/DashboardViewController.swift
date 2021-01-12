@@ -71,15 +71,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
         super.viewWillAppear(animated)
-        print("Testing view will appear")
-        let realm = try! Realm()
-        let shittyDiscussion = realm.objects(Discussion.self).filter("id = 17630").first
-        if shittyDiscussion != nil {
-            print("weird discussion exists")
-            print("weird discussion read:", shittyDiscussion!.read)
-        } else {
-            print("weird discussion does not exist")
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

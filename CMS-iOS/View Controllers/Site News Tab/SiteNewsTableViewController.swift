@@ -90,7 +90,7 @@ class SiteNewsTableViewController: UITableViewController {
     func getOfflineSiteNews(completion: @escaping ([DiscussionViewModel]) -> Void) {
         DispatchQueue.global(qos: .userInteractive).async {
             let realm = try! Realm()
-            let realmDiscussions = realm.objects(Discussion.self).filter("moduleId = %@", 0)
+            let realmDiscussions = realm.objects(Discussion.self).filter("moduleId = %@", 0).sorted(byKeyPath: "date", ascending: false)
             let discussionViewModels = Array(realmDiscussions.map({ DiscussionViewModel(name: $0.name, id: $0.id, description: $0.message, date: self.epochConvert(epoch: $0.date), read: true) }))
             DispatchQueue.main.async {
                 completion(discussionViewModels)
