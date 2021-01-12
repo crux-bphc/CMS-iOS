@@ -87,7 +87,7 @@ class DashboardDataManager {
         for course in courses {
             let courseId = course.courseid
             let courseName = course.displayname
-            let readModuleIdSet: Set<Int> = Set(realmOuter.objects(Module.self).filter("coursename == %@ AND read == YES", courseName).map({ $0.id }))
+//            let readModuleIdSet: Set<Int> = Set(realmOuter.objects(Module.self).filter("coursename == %@ AND read == YES", courseName).map({ $0.id }))
             let params : [String:Any] = ["wstoken": KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid": courseId]
             let queue = DispatchQueue.global(qos: .userInteractive)
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON (queue: queue) { (response) in
@@ -96,12 +96,14 @@ class DashboardDataManager {
                     completion()
                 }
                 
+//                let readModuleIdSet: Set<Int> = Set(realm.objects(Module.self).filter("coursename == %@ AND read == YES", courseName).map({ $0.id }))
+                
                 let courseContent = JSON(response.value as Any)
-                try! realm.write {
-                    realm.delete(realm.objects(Module.self).filter("coursename = %@", courseName))
-                    realm.delete(realm.objects(CourseSection.self).filter("courseId = %@", courseId))
-                    
-                }
+//                try! realm.write {
+//                    realm.delete(realm.objects(Module.self).filter("coursename = %@", courseName))
+//                    realm.delete(realm.objects(CourseSection.self).filter("courseId = %@", courseId))
+//
+//                }
                 
                 for i in 0 ..< courseContent.count {
                     if courseContent[i]["modules"].count > 0 || courseContent[i]["summary"] != "" {
@@ -156,9 +158,10 @@ class DashboardDataManager {
                             }
                             
                             moduleData.name = courseContent[i]["modules"][j]["name"].string!
-                            if readModuleIdSet.contains(moduleData.id) {
-                                moduleData.read = true
-                            }
+//                            if readModuleIdSet.contains(moduleData.id) {
+//                                moduleData.read = true
+//                            }
+                            moduleData.read = realm.objects(Module.self).filter("id = %@", moduleData.id).first?.read ?? false
                             if courseContent[i]["modules"][j]["description"].string != nil {
                                 moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
                             }
@@ -168,6 +171,15 @@ class DashboardDataManager {
                         section.courseId = courseId
                         section.key = String(courseId) + section.name
                         section.dateCreated = Date().timeIntervalSince1970
+                        
+                        try! realm.write {
+//                            realm.delete(realm.objects(CourseSection.self).filter("key = %@", section.key))
+                            if let prevSection = realm.objects(CourseSection.self).filter("key = %@", section.key).first {
+                                realm.delete(prevSection.modules)
+                                realm.delete(prevSection)
+                            }
+                        }
+
                         try! realm.write {
                             realm.add(section, update: .modified)
                             
@@ -175,7 +187,7 @@ class DashboardDataManager {
                     }
                 }
                 current += 1
-                print("Done course \(courseName)")
+//                print("Done course \(courseName)")
                 if current == totalCourseCount {
                     print("Done")
                     completion()
@@ -191,17 +203,23 @@ class DashboardDataManager {
         var current = 0
         for x in 0..<discussionModules.count {
             let discussionModule = discussionModules[x]
-            let readDiscussionIdSet: Set<Int> = Set(realm.objects(Discussion.self).filter("moduleId = %@ AND read == YES", discussionModule.id).map({ $0.id }))
+//            let readDiscussionIdSet: Set<Int> = Set(realm.objects(Discussion.self).filter("moduleId = %@ AND read == YES", discussionModule.id).map({ $0.id }))
             let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(discussionModule.id)]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_FORUM_DISCUSSIONS
             let queue = DispatchQueue.global(qos: .userInteractive)
             let moduleId = discussionModule.id
+//            let coursename = discussionModule.coursename
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON(queue: queue) { (response) in
                 if response.result.isSuccess {
                     let realmNew = try! Realm()
-                    try! realmNew.write {
-                        realmNew.delete(realmNew.objects(Discussion.self).filter("moduleId = %@", moduleId))
-                    }
+//                    let readDiscussionIdSet: Set<Int> = Set(realmNew.objects(Discussion.self).filter("moduleId = %@ AND read == YES", moduleId).map({ $0.id }))
+//                    let readDiscussionIdSet: [Int] = Array(realmNew.objects(Discussion.self).filter("moduleId = %@ AND read == YES", moduleId).map({ $0.id }))
+//                    if (coursename == "CS/ECE/EEE/INSTR F215 DIGITAL DESIGN FIRST SEMESTER 2020-21 L") {
+//                        print(readDiscussionIdSet)
+//                    }
+//                    try! realmNew.write {
+//                        realmNew.delete(realmNew.objects(Discussion.self).filter("moduleId = %@", moduleId))
+//                    }
                     let discussionResponse = JSON(response.value as Any)
                     for i in 0 ..< discussionResponse["discussions"].count {
                         let discussion = Discussion()
@@ -210,7 +228,14 @@ class DashboardDataManager {
                         discussion.date = discussionResponse["discussions"][i]["created"].int!
                         discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
                         discussion.id = discussionResponse["discussions"][i]["id"].int!
-                        discussion.read = readDiscussionIdSet.contains(discussionResponse["discussions"][i]["id"].int!)
+//                        discussion.read = readDiscussionIdSet.contains(discussionResponse["discussions"][i]["id"].int!)
+                        let oldDiscussion = realmNew.objects(Discussion.self).filter("id = %@", discussion.id).first
+                        discussion.read = oldDiscussion?.read ?? false
+//                        print(readDiscussionIdSet.count)
+//                        if !readDiscussionIdSet.contains(discussionResponse["discussions"][i]["id"].int!) {
+//                            print(discussionResponse["discussions"][i])
+//
+//                        }
                         discussion.moduleId = moduleId
                         if discussionResponse["discussions"][i]["attachment"].string! != "0" {
                             if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("cms.bits-hyderabad.ac.in") ?? false {
@@ -222,9 +247,11 @@ class DashboardDataManager {
                             discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
                             discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
                         }
-                        let queueRealm = try! Realm()
-                        try! queueRealm.write {
-                            queueRealm.add(discussion, update: .modified)
+                        try! realmNew.write {
+                            if oldDiscussion != nil {
+                                realmNew.delete(oldDiscussion!)
+                            }
+                            realmNew.add(discussion, update: .modified)
                         }
                     }
                 }

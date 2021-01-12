@@ -107,8 +107,10 @@ class SiteNewsTableViewController: UITableViewController {
             if response.result.isSuccess {
                 let siteNews = JSON(response.value as Any)
                 let realm = try! Realm()
+                print(realm.objects(Discussion.self).filter("moduleId == 0"))
                 try! realm.write {
                     realm.delete(realm.objects(Discussion.self).filter("moduleId = %@", 0)) // removes all site news since they dont have a module id
+                    
                 }
                 var closureVMs = [DiscussionViewModel]()
                 for i in 0 ..< siteNews["discussions"].count {
@@ -117,7 +119,8 @@ class SiteNewsTableViewController: UITableViewController {
                     discussion.author = siteNews["discussions"][i]["userfullname"].string?.capitalized ?? ""
                     discussion.date = siteNews["discussions"][i]["created"].int!
                     discussion.message = siteNews["discussions"][i]["message"].string ?? "No Content"
-                    discussion.id = siteNews["discussions"][i]["discussion"].int ?? 0
+                    // sometimes site news and course discussions may have the same ids, leading to weird errors, so a factor of 1000 is multiplied to site news ids to keep the ids different to prevent these errors
+                    discussion.id = (siteNews["discussions"][i]["discussion"].int ?? 0) * 1000
                     if siteNews["discussions"][i]["attachment"].string! != "0" {
                         //                        discussion.attachment = (siteNews["discussions"][i]["attachments"][0]["fileurl"].string ?? "") + "?token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
                         if siteNews["discussions"][i]["attachments"][0]["fileurl"].string != nil {
