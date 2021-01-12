@@ -107,7 +107,6 @@ class SiteNewsTableViewController: UITableViewController {
             if response.result.isSuccess {
                 let siteNews = JSON(response.value as Any)
                 let realm = try! Realm()
-                print(realm.objects(Discussion.self).filter("moduleId == 0"))
                 try! realm.write {
                     realm.delete(realm.objects(Discussion.self).filter("moduleId = %@", 0)) // removes all site news since they dont have a module id
                     

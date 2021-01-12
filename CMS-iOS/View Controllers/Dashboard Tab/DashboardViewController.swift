@@ -154,7 +154,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     if let rowNo = indexPath?.row{
                         let realm = try! Realm()
                         let courseId = self.searchController.isActive ? self.filteredCourseViewModels[rowNo].courseId : self.courseViewModels[rowNo].courseId
-                        courseToDownload = realm.objects(Course.self).filter("courseId = %@", courseId).first!
+                        courseToDownload = realm.objects(Course.self).filter("courseid = %@", courseId).first!
                         self.downloadCourseData(course: courseToDownload) {
                         }
                     }
