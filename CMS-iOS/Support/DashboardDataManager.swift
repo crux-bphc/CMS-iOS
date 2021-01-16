@@ -70,6 +70,7 @@ class DashboardDataManager {
                     let currentCourseViewModel = DashboardViewModel(courseCode: currentCourse.courseCode, courseName: currentCourse.courseName, courseId: currentCourse.courseid, courseColor: UIColor.UIColorFromString(string: currentCourse.allotedColor))
                     courseViewModels.append(currentCourseViewModel)
                 }
+                SpotlightIndex.shared.indexItems(courses: courseViewModels)
                 completion(courseViewModels, false)
             } else {
                 completion(nil, true)
@@ -87,7 +88,7 @@ class DashboardDataManager {
         for course in courses {
             let courseId = course.courseid
             let courseName = course.displayname
-//            let readModuleIdSet: Set<Int> = Set(realmOuter.objects(Module.self).filter("coursename == %@ AND read == YES", courseName).map({ $0.id }))
+            //            let readModuleIdSet: Set<Int> = Set(realmOuter.objects(Module.self).filter("coursename == %@ AND read == YES", courseName).map({ $0.id }))
             let params : [String:Any] = ["wstoken": KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid": courseId]
             let queue = DispatchQueue.global(qos: .userInteractive)
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON (queue: queue) { (response) in
@@ -96,14 +97,14 @@ class DashboardDataManager {
                     completion()
                 }
                 
-//                let readModuleIdSet: Set<Int> = Set(realm.objects(Module.self).filter("coursename == %@ AND read == YES", courseName).map({ $0.id }))
+                //                let readModuleIdSet: Set<Int> = Set(realm.objects(Module.self).filter("coursename == %@ AND read == YES", courseName).map({ $0.id }))
                 
                 let courseContent = JSON(response.value as Any)
-//                try! realm.write {
-//                    realm.delete(realm.objects(Module.self).filter("coursename = %@", courseName))
-//                    realm.delete(realm.objects(CourseSection.self).filter("courseId = %@", courseId))
-//
-//                }
+                //                try! realm.write {
+                //                    realm.delete(realm.objects(Module.self).filter("coursename = %@", courseName))
+                //                    realm.delete(realm.objects(CourseSection.self).filter("courseId = %@", courseId))
+                //
+                //                }
                 
                 for i in 0 ..< courseContent.count {
                     if courseContent[i]["modules"].count > 0 || courseContent[i]["summary"] != "" {
@@ -159,9 +160,9 @@ class DashboardDataManager {
                             }
                             
                             moduleData.name = courseContent[i]["modules"][j]["name"].string!
-//                            if readModuleIdSet.contains(moduleData.id) {
-//                                moduleData.read = true
-//                            }
+                            //                            if readModuleIdSet.contains(moduleData.id) {
+                            //                                moduleData.read = true
+                            //                            }
                             if courseContent[i]["modules"][j]["description"].string != nil {
                                 moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
                             }
@@ -173,13 +174,13 @@ class DashboardDataManager {
                         section.dateCreated = Date().timeIntervalSince1970
                         
                         try! realm.write {
-//                            realm.delete(realm.objects(CourseSection.self).filter("key = %@", section.key))
+                            //                            realm.delete(realm.objects(CourseSection.self).filter("key = %@", section.key))
                             if let prevSection = realm.objects(CourseSection.self).filter("key = %@", section.key).first {
                                 realm.delete(prevSection.modules)
                                 realm.delete(prevSection)
                             }
                         }
-
+                        
                         try! realm.write {
                             realm.add(section, update: .modified)
                             
@@ -187,7 +188,7 @@ class DashboardDataManager {
                     }
                 }
                 current += 1
-//                print("Done course \(courseName)")
+                //                print("Done course \(courseName)")
                 if current == totalCourseCount {
                     print("Done")
                     completion()
@@ -203,23 +204,23 @@ class DashboardDataManager {
         var current = 0
         for x in 0..<discussionModules.count {
             let discussionModule = discussionModules[x]
-//            let readDiscussionIdSet: Set<Int> = Set(realm.objects(Discussion.self).filter("moduleId = %@ AND read == YES", discussionModule.id).map({ $0.id }))
+            //            let readDiscussionIdSet: Set<Int> = Set(realm.objects(Discussion.self).filter("moduleId = %@ AND read == YES", discussionModule.id).map({ $0.id }))
             let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(discussionModule.id)]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_FORUM_DISCUSSIONS
             let queue = DispatchQueue.global(qos: .userInteractive)
             let moduleId = discussionModule.id
-//            let coursename = discussionModule.coursename
+            //            let coursename = discussionModule.coursename
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON(queue: queue) { (response) in
                 if response.result.isSuccess {
                     let realmNew = try! Realm()
-//                    let readDiscussionIdSet: Set<Int> = Set(realmNew.objects(Discussion.self).filter("moduleId = %@ AND read == YES", moduleId).map({ $0.id }))
-//                    let readDiscussionIdSet: [Int] = Array(realmNew.objects(Discussion.self).filter("moduleId = %@ AND read == YES", moduleId).map({ $0.id }))
-//                    if (coursename == "CS/ECE/EEE/INSTR F215 DIGITAL DESIGN FIRST SEMESTER 2020-21 L") {
-//                        print(readDiscussionIdSet)
-//                    }
-//                    try! realmNew.write {
-//                        realmNew.delete(realmNew.objects(Discussion.self).filter("moduleId = %@", moduleId))
-//                    }
+                    //                    let readDiscussionIdSet: Set<Int> = Set(realmNew.objects(Discussion.self).filter("moduleId = %@ AND read == YES", moduleId).map({ $0.id }))
+                    //                    let readDiscussionIdSet: [Int] = Array(realmNew.objects(Discussion.self).filter("moduleId = %@ AND read == YES", moduleId).map({ $0.id }))
+                    //                    if (coursename == "CS/ECE/EEE/INSTR F215 DIGITAL DESIGN FIRST SEMESTER 2020-21 L") {
+                    //                        print(readDiscussionIdSet)
+                    //                    }
+                    //                    try! realmNew.write {
+                    //                        realmNew.delete(realmNew.objects(Discussion.self).filter("moduleId = %@", moduleId))
+                    //                    }
                     let discussionResponse = JSON(response.value as Any)
                     for i in 0 ..< discussionResponse["discussions"].count {
                         let discussion = Discussion()
@@ -228,14 +229,14 @@ class DashboardDataManager {
                         discussion.date = discussionResponse["discussions"][i]["created"].int!
                         discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
                         discussion.id = discussionResponse["discussions"][i]["id"].int!
-//                        discussion.read = readDiscussionIdSet.contains(discussionResponse["discussions"][i]["id"].int!)
+                        //                        discussion.read = readDiscussionIdSet.contains(discussionResponse["discussions"][i]["id"].int!)
                         let oldDiscussion = realmNew.objects(Discussion.self).filter("id = %@", discussion.id).first
                         discussion.read = oldDiscussion?.read ?? false
-//                        print(readDiscussionIdSet.count)
-//                        if !readDiscussionIdSet.contains(discussionResponse["discussions"][i]["id"].int!) {
-//                            print(discussionResponse["discussions"][i])
-//
-//                        }
+                        //                        print(readDiscussionIdSet.count)
+                        //                        if !readDiscussionIdSet.contains(discussionResponse["discussions"][i]["id"].int!) {
+                        //                            print(discussionResponse["discussions"][i])
+                        //
+                        //                        }
                         discussion.moduleId = moduleId
                         if discussionResponse["discussions"][i]["attachment"].string! != "0" {
                             if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("cms.bits-hyderabad.ac.in") ?? false {
@@ -263,6 +264,56 @@ class DashboardDataManager {
             }
         }
         
+    }
+    
+    // this will get and store discussions only for one course, useful for when discussion notification is clicked
+    static func getAndStoreDiscussions(forCourse courseId: Int, completion: @escaping () -> Void) {
+        let realm = try! Realm()
+        guard let courseName = realm.objects(Course.self).filter("courseid = %@", courseId).first?.displayname else { return }
+        guard let discussionModule = realm.objects(Module.self).filter("modname = %@ AND coursename = %@", "forum", courseName).first else { return }
+        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(discussionModule.id)]
+        let FINAL_URL : String = Constants.Global.self.BASE_URL + Constants.Global.self.GET_FORUM_DISCUSSIONS
+        let moduleId = discussionModule.id
+        let queue = DispatchQueue.global(qos: .userInitiated)
+        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: Constants.Global.self.headers).responseJSON(queue: queue) { (response) in
+            if response.result.isSuccess {
+                print("received response")
+                let realmNew = try! Realm()
+                let discussionResponse = JSON(response.value as Any)
+                print(discussionResponse)
+                for i in 0 ..< discussionResponse["discussions"].count {
+                    let discussion = Discussion()
+                    discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"
+                    discussion.author = discussionResponse["discussions"][i]["userfullname"].string?.capitalized ?? ""
+                    discussion.date = discussionResponse["discussions"][i]["created"].int!
+                    discussion.message = discussionResponse["discussions"][i]["message"].string ?? "No Content"
+                    discussion.id = discussionResponse["discussions"][i]["id"].int!
+                    let oldDiscussion = realmNew.objects(Discussion.self).filter("id = %@", discussion.id).first
+                    discussion.read = oldDiscussion?.read ?? false
+                    discussion.moduleId = moduleId
+                    if discussionResponse["discussions"][i]["attachment"].string! != "0" {
+                        if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("cms.bits-hyderabad.ac.in") ?? false {
+                            discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                        } else {
+                            discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
+                        }
+                        
+                        discussion.filename = discussionResponse["discussions"][i]["attachments"][0]["filename"].string ?? ""
+                        discussion.mimetype = discussionResponse["discussions"][i]["attachments"][0]["mimetype"].string ?? ""
+                    }
+                    try! realmNew.write {
+                        if oldDiscussion != nil {
+                            realmNew.delete(oldDiscussion!)
+                        }
+                        realmNew.add(discussion, update: .modified)
+                    }
+                }
+                print("completing")
+                completion()
+            } else {
+                print("error")
+            }
+        }
     }
     
     func calculateUnreadCounts(courseViewModels: [DashboardViewModel], completion: @escaping ([DashboardViewModel]) -> Void) {

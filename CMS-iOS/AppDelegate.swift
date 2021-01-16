@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let options : UNAuthorizationOptions = [.alert, .sound, .badge]
         notificationCenter.requestAuthorization(options: options) { (didAllow, error) in
             guard didAllow else {return}
-            BackgroundFetch().setCategories()
+//            BackgroundFetch().setCategories()
 //            if !didAllow {
 //                print("The user denied notification permission.")
 //            } else if didAllow {
@@ -71,7 +71,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
         }
         
-        
+//        if let userInfo = launchOptions?[.remoteNotification] as? [AnyHashable: Any] {
+////            manageNotificationPayload(userInfo: userInfo)
+//        }
         return true
     }
     
@@ -181,41 +183,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         if userActivity.activityType == CSSearchableItemActionType {
             if let uniqueIdentifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String {
-                let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+                guard let typeId = getTypeAndId(string: uniqueIdentifier) else { return true }
+                self.manageRedirection(redirectType: typeId.keys.first!, id: typeId.values.first!)
                 
-                if var topController = keyWindow?.rootViewController {
-                    while let presentedViewController = topController.presentedViewController {
-                        topController = presentedViewController
-                    }
-                    
-                    // topController should now be your topmost view controller
-                    if let bubbleTabVC = topController as? BubbleTabBarController {
-                        // app is already open
-                        guard let navigationVC = bubbleTabVC.viewControllers?.first as? UINavigationController else { return true }
-                        let params = getTypeAndId(string: uniqueIdentifier)
-                        let redirectType = String(params!.keys.first!)
-                        let redirectId = Int(params!.values.first!)
-                        let realm = try! Realm()
-                        switch redirectType {
-                        case "course":
-                            guard let course = realm.objects(Course.self).filter("courseid = %@", redirectId).first else { return true }
-                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                            let courseContentsVC = storyboard.instantiateViewController(withIdentifier: "Course Contents") as! CourseDetailsViewController
-                            courseContentsVC.currentCourse = course
-                            navigationVC.pushViewController(courseContentsVC, animated: true)
-                            
-                        default:
-                            break
-                        }
-                        
-                    } else {
-                        // app is not open, proceed with login vc
-                        guard let loginVC = topController as? LoginViewController else { return true }
-                        loginVC.redirectTo = getTypeAndId(string: uniqueIdentifier)
-                        
-                    }
-                    
-                }
             }
         }
         
@@ -234,10 +204,100 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
 }
 
+// Managing Notifications
 extension AppDelegate {
+    
+    func manageRedirection(redirectType: String, id: Int) {
+        let keyWindow = UIApplication.shared.windows.filter { $0.isKeyWindow }.first
+        
+        if var topController = keyWindow?.rootViewController {
+            while let presentedViewController = topController.presentedViewController {
+                topController = presentedViewController
+            }
+            
+            // topController should now be your topmost view controller
+            if let bubbleTabVC = topController as? BubbleTabBarController {
+                // app is already open
+                guard let navigationVC = bubbleTabVC.viewControllers?.first as? UINavigationController else { return }
+                let realm = try! Realm()
+                switch redirectType {
+                case "course":
+                    guard let course = realm.objects(Course.self).filter("courseid = %@", id).first else { return }
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let courseContentsVC = storyboard.instantiateViewController(withIdentifier: "Course Contents") as! CourseDetailsViewController
+                    courseContentsVC.currentCourse = course
+                    navigationVC.pushViewController(courseContentsVC, animated: true)
+                case "module":
+                    break
+                case "discussion":
+                    // get the discussion object
+                    guard let discussion = realm.objects(Discussion.self).filter("id = %@", id).first else { return }
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let discussionVC = storyboard.instantiateViewController(withIdentifier: "Discussions") as! DiscussionViewController
+                    discussionVC.selectedDiscussion = discussion
+                    navigationVC.pushViewController(discussionVC, animated: true)
+                    break
+                case "section":
+                    break
+                default:
+                    break
+                }
+                return
+                
+            } else {
+                // app is not open, proceed with login vc
+                guard let loginVC = topController as? LoginViewController else { return }
+                loginVC.redirectTo = [redirectType: id]
+                
+            }
+            
+        }
+    }
+    
+    func manageNotificationPayload(userInfo: [AnyHashable: Any]) {
+        guard let respDict = userInfo["aps"] as? NSDictionary else { return }
+        if let courseIdString = (respDict["data"] as? NSDictionary)?["courseid"] as? String {
+            guard let courseId = Int(courseIdString) else { return }
+            print("Received notification with  course id:", courseId)
+            let notificationType = "discussion" // incomplete! deletect the type here
+            switch notificationType {
+            case "discussion":
+                guard let contextURL = (respDict["data"] as? NSDictionary)?["contexturl"] as? String else { return }
+                guard let discussionIdString = Regex.match(pattern: "#p[0-9]+", text: contextURL).first?.replacingOccurrences(of: "#p", with: "") else { return }
+                guard let discussionId = Int(discussionIdString) else { return }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { // this delay is required, otherwise it doesnt work when notification launches app
+                    DashboardDataManager.getAndStoreDiscussions(forCourse: courseId) {
+                        DispatchQueue.main.async {
+                            self.manageRedirection(redirectType: notificationType, id: discussionId)
+                        }
+                    }
+                }
+                
+                break
+            default:
+                break
+            }
+        }
+    }
+    
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         print(userInfo)
+        
+        if application.applicationState == .active {
+            
+            // app is currently active
+            
+        } else if application.applicationState == .background {
+            
+            //app is in background, if content-available key of your notification is set to 1, poll to your backend to retrieve data and update your interface here
+            
+        } else if application.applicationState == .inactive {
+            // user tapped on the notification, do all the stuff here
+            manageNotificationPayload(userInfo: userInfo)
+            
+        }
+        
         
     }
         

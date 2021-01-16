@@ -100,11 +100,29 @@ class LoginViewController: UIViewController {
             let destinationVC = nextVC.topViewController as! DashboardViewController
             destinationVC.userDetails = self.currentUser
             if redirectTo != nil {
-                if redirectTo?.keys.first! == "course" {
+                switch redirectTo?.keys.first! {
+                case "course":
                     // this is a course
                     guard let course = realm.objects(Course.self).filter("courseid = %@", redirectTo!.values.first!).first else { return }
                     destinationVC.selectedCourse = course
                     destinationVC.performSegue(withIdentifier: "goToCourseContent", sender: destinationVC.self)
+                    break
+                case "discussion":
+                    // this is a discussion
+                    guard let discussion = realm.objects(Discussion.self).filter("id = %@", redirectTo!.values.first!).first else { return }
+                    destinationVC.selectedAnnouncement = discussion
+                    destinationVC.redirectToAnnouncement()
+                    
+                    print("going once")
+                    break
+                case "module":
+                    // this is a module
+                    break
+                case "section":
+                    // this is a section
+                    break
+                default:
+                    break
                 }
             }
         default:

@@ -12,7 +12,7 @@ import MobileCoreServices
 class SpotlightIndex {
     
     static let shared = SpotlightIndex()
-    func indexItems(courses: [Course]) {
+    func indexItems(courses: [DashboardViewModel]) {
         var items = [CSSearchableItem]()
         
         for course in courses {
@@ -20,7 +20,7 @@ class SpotlightIndex {
             attributeSet.title = course.courseName
             attributeSet.contentDescription = course.courseCode
 
-            let item = CSSearchableItem(uniqueIdentifier: "course=\(course.courseid)", domainIdentifier: "com.crux-bphc", attributeSet: attributeSet)
+            let item = CSSearchableItem(uniqueIdentifier: "course=\(course.courseId)", domainIdentifier: "com.crux-bphc", attributeSet: attributeSet)
             items.append(item)
         }
         
@@ -35,7 +35,7 @@ class SpotlightIndex {
     
     func deindexAllItems() {
         CSSearchableIndex.default().deleteAllSearchableItems { (error) in
-            print(error)
+            print(error ?? "Error")
         }
     }
     
