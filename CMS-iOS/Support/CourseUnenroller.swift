@@ -10,6 +10,7 @@ import Foundation
 import Alamofire
 import SwiftKeychainWrapper
 import WebKit
+import RealmSwift
 
 class CourseUnenroller {
     
@@ -58,6 +59,33 @@ class CourseUnenroller {
         Alamofire.request(url, method: .post, headers: headers).responseData { (response) in
             completion()
         }
+    }
+    
+    func clearLocalStorage(forCourseWith courseId: Int) {
+        // delete modules
+        let realm = try! Realm()
+        guard let course = realm.objects(Course.self).filter("courseid = %@", courseId).first else { return }
+        let courseName = course.displayname
+        if let discussionModuleId = realm.objects(Module.self).filter("coursename = %@ AND modname contains 'forum'", courseName).first?.id {
+            let discussions = realm.objects(Discussion.self).filter("moduleId = %@", discussionModuleId)
+            print("Deleting \(discussions.count) discussions")
+            try! realm.write {
+                realm.delete(discussions)
+            }
+        }
+        let modules = realm.objects(Module.self).filter("coursename = %@", courseName)
+        let sections = realm.objects(CourseSection.self).filter("courseId = %@", courseId)
+        
+        
+        print("Deleting \(modules.count) modules")
+        print("Deleting \(sections.count) sections")
+        try! realm.write {
+            realm.delete(modules)
+            realm.delete(sections)
+            // finally delete the course
+            realm.delete(course)
+        }
+        
     }
     
     func removeAllCookies() {

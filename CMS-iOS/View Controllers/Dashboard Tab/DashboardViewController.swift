@@ -25,6 +25,8 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var selectedCourse = Course()
     var selectedModule = Module()
     var selectedAnnouncement = Discussion()
+    var unenrollCourseId: Int? = nil
+    var unenrollIndexPath: IndexPath? = nil
     var shouldHideSemester = false
     var searching : Bool = false
     private let gradientLoadingBar = GradientActivityIndicatorView()
@@ -44,6 +46,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         if let currentUser = realm.objects(User.self).first {
             userDetails = currentUser
         }
+        
+        // add unenroll notification observer
+        NotificationCenter.default.addObserver(self, selector: #selector(unenrollObserver), name: NSNotification.Name(rawValue: "com.crux-bphc.CMS-iOS.unenroll"), object: nil)
         
         setupNavBar()
         loadOfflineCourses()
@@ -189,20 +194,25 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 self.present(warning, animated: true, completion: nil)
             }
             let unenrollAction = UIAlertAction(title: "Unenroll", style: .destructive) { (_) in
-                let courseId = self.searchController.isActive ? self.filteredCourseViewModels[indexPath!.row].courseId : self.courseViewModels[indexPath!.row].courseId
-                let alertShownBefore = UserDefaults.standard.bool(forKey: "unenrollAlertShown")
-                if !alertShownBefore {
-                    let alert = UIAlertController(title: "Notice", message: "Since the Moodle API does not support unenrolling, requests will be sent repicating the ones sent by the website to unenroll. To do so, the MoodleSession cookie needs to be saved. The first time you do this, a web view will be shown where you will need to login with your Bits Mail/credentials. Once the cookie has been saved, you will need to attempt to uneroll again. The cookie will expire in a few hours and you may need to login again.", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
-                        UserDefaults.standard.setValue(true, forKey: "unenrollAlertShown")
+                let confirmationAlert = UIAlertController(title: "Confirm", message: "Are you sure you want to unenroll from this course?", preferredStyle: .actionSheet)
+                confirmationAlert.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: { (_) in
+                    let courseId = self.searchController.isActive ? self.filteredCourseViewModels[indexPath!.row].courseId : self.courseViewModels[indexPath!.row].courseId
+                    let alertShownBefore = UserDefaults.standard.bool(forKey: "unenrollAlertShown")
+                    if !alertShownBefore {
+                        let alert = UIAlertController(title: "Notice", message: "Since the Moodle API does not support unenrolling, requests will be sent repicating the ones sent by the website to unenroll. To do so, the MoodleSession cookie needs to be saved. The first time you do this, a web view will be shown where you will need to login with your Bits Mail/credentials. Once the cookie has been saved, the unenrollment requests will be made.\n\nNote: You may get an email telling of you of login activity on your Google account on a new device. This is completely normal as you will be logging in a fresh web view. Your Google credentials are not read or stored.", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
+                            UserDefaults.standard.setValue(true, forKey: "unenrollAlertShown")
+                            self.tryToUneroll(courseId: courseId, indexPath: indexPath!)
+                        }))
+                        self.present(alert, animated: true)
+                    } else {
+    //                    self.presentUnenrollVC(for: courseId)
                         self.tryToUneroll(courseId: courseId, indexPath: indexPath!)
-                    }))
-                    self.present(alert, animated: true)
-                } else {
-//                    self.presentUnenrollVC(for: courseId)
-                    self.tryToUneroll(courseId: courseId, indexPath: indexPath!)
-                }
+                    }
+                }))
+                confirmationAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                self.present(confirmationAlert, animated: true, completion: nil)
                 
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -219,17 +229,27 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         CourseUnenroller.shared.attemptUnenroll(courseId: courseId) { (shouldShowLoginView, completed) in
             self.gradientLoadingBar.fadeOut()
             if shouldShowLoginView {
+                self.unenrollCourseId = courseId
+                self.unenrollIndexPath = indexPath
                 CourseUnenroller.shared.removeAllCookies()
-                self.present(UnenrollWebViewController(), animated: true, completion: nil)
+                self.performSegue(withIdentifier: "goToLoginUnenroll", sender: self)
             } else {
                 if completed {
                     let banner = NotificationBanner(title: "Success", subtitle: "You have been unenrolled from this course successfully", style: .success)
                     banner.show()
+                    self.unenrollIndexPath = nil
+                    self.unenrollIndexPath = nil
                     self.courseViewModels.remove(at: indexPath.row)
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
-//                                self.tableView.reloadData()
+                    CourseUnenroller.shared.clearLocalStorage(forCourseWith: courseId)
                 }
             }
+        }
+    }
+    
+    @objc func unenrollObserver() {
+        if unenrollCourseId != nil && unenrollIndexPath != nil {
+            self.tryToUneroll(courseId: self.unenrollCourseId!, indexPath: self.unenrollIndexPath!)
         }
     }
     

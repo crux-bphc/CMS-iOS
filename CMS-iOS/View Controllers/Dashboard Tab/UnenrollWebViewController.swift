@@ -12,15 +12,16 @@ import SwiftKeychainWrapper
 
 class UnenrollWebViewController: UIViewController {
 
-    let webView = WKWebView()
+    @IBOutlet weak var webView: WKWebView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        self.view = webView
+        
         if #available(iOS 13.0, *) {
             self.isModalInPresentation = true
         }
-        self.view = webView
         webView.customUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.2 Mobile/15E148 Safari/604.1"
         webView.load(URLRequest(url: URL(string: "https://cms.bits-hyderabad.ac.in/login/index.php")!))
         webView.allowsBackForwardNavigationGestures = false
@@ -40,11 +41,16 @@ class UnenrollWebViewController: UIViewController {
                         let cookieVal = cookie.value
                         print("MoodleSession: \(cookieVal)")
                         KeychainWrapper.standard.set(cookieVal, forKey: "MoodleSession")
+                        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "com.crux-bphc.CMS-iOS.unenroll")))
                         self.dismiss(animated: true, completion: nil)
                     }
                 }
             }
         }
     }
-
+    
+    @IBAction func cancelButtonPressed(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
 }
