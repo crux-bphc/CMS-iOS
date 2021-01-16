@@ -228,6 +228,12 @@ extension AppDelegate {
                     courseContentsVC.currentCourse = course
                     navigationVC.pushViewController(courseContentsVC, animated: true)
                 case "module":
+                    // get the module and push it
+                    guard let module = realm.objects(Module.self).filter("id = %@", id).first else { return }
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let moduleVC = storyboard.instantiateViewController(withIdentifier: "Module View Controller") as! ModuleViewController
+                    moduleVC.selectedModule = module
+                    navigationVC.pushViewController(moduleVC, animated: true)
                     break
                 case "discussion":
                     // get the discussion object
@@ -259,21 +265,35 @@ extension AppDelegate {
         if let courseIdString = (respDict["data"] as? NSDictionary)?["courseid"] as? String {
             guard let courseId = Int(courseIdString) else { return }
             print("Received notification with  course id:", courseId)
-            let notificationType = "discussion" // incomplete! deletect the type here
+            guard let contextURL = (respDict["data"] as? NSDictionary)?["contexturl"] as? String else { return }
+            var notificationType = "" // incomplete! deletect the type here
+            if contextURL.contains("discuss.php") {
+                notificationType = "discussion"
+            } else if contextURL.contains("/mod/") {
+                notificationType = "module"
+            }
             switch notificationType {
             case "discussion":
-                guard let contextURL = (respDict["data"] as? NSDictionary)?["contexturl"] as? String else { return }
                 guard let discussionIdString = Regex.match(pattern: "#p[0-9]+", text: contextURL).first?.replacingOccurrences(of: "#p", with: "") else { return }
                 guard let discussionId = Int(discussionIdString) else { return }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { // this delay is required, otherwise it doesnt work when notification launches app
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // this delay is required, otherwise it doesnt work when notification launches app
                     DashboardDataManager.getAndStoreDiscussions(forCourse: courseId) {
                         DispatchQueue.main.async {
                             self.manageRedirection(redirectType: notificationType, id: discussionId)
                         }
                     }
                 }
-                
                 break
+            case "module":
+                guard let moduleIdString = Regex.match(pattern: "id=[0-9]+", text: contextURL).first?.replacingOccurrences(of: "id=", with: "") else { return }
+                guard let moduleId = Int(moduleIdString) else { return }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    DashboardDataManager.shared.getAndStoreModules(forCourse: courseId) {
+                        DispatchQueue.main.async {
+                            self.manageRedirection(redirectType: notificationType, id: moduleId)
+                        }
+                    }
+                }
             default:
                 break
             }

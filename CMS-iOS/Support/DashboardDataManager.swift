@@ -204,6 +204,7 @@ class DashboardDataManager {
         var current = 0
         for x in 0..<discussionModules.count {
             let discussionModule = discussionModules[x]
+            let courseName = discussionModule.coursename
             //            let readDiscussionIdSet: Set<Int> = Set(realm.objects(Discussion.self).filter("moduleId = %@ AND read == YES", discussionModule.id).map({ $0.id }))
             let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(discussionModule.id)]
             let FINAL_URL : String = constant.BASE_URL + constant.GET_FORUM_DISCUSSIONS
@@ -256,6 +257,7 @@ class DashboardDataManager {
                         }
                     }
                 }
+                //                print("done discussions:", courseName)
                 current += 1
                 if current == totalCount {
                     print("Done with discussions")
@@ -314,6 +316,116 @@ class DashboardDataManager {
                 print("error")
             }
         }
+    }
+    
+    func getAndStoreModules(forCourse courseId: Int, completion: @escaping () -> Void) {
+        let FINAL_URL = constant.BASE_URL + constant.GET_COURSE_CONTENT
+        let realmOuter = try! Realm()
+        guard let course = realmOuter.objects(Course.self).filter("courseid = %@", courseId).first else { return }
+        
+        let courseName = course.displayname
+        //            let readModuleIdSet: Set<Int> = Set(realmOuter.objects(Module.self).filter("coursename == %@ AND read == YES", courseName).map({ $0.id }))
+        let params : [String:Any] = ["wstoken": KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid": courseId]
+        let queue = DispatchQueue.global(qos: .userInteractive)
+        Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON (queue: queue) { (response) in
+            let realm = try! Realm()
+            if !response.result.isSuccess {
+                completion()
+            }
+            
+            //                let readModuleIdSet: Set<Int> = Set(realm.objects(Module.self).filter("coursename == %@ AND read == YES", courseName).map({ $0.id }))
+            
+            let courseContent = JSON(response.value as Any)
+            //                try! realm.write {
+            //                    realm.delete(realm.objects(Module.self).filter("coursename = %@", courseName))
+            //                    realm.delete(realm.objects(CourseSection.self).filter("courseId = %@", courseId))
+            //
+            //                }
+            
+            for i in 0 ..< courseContent.count {
+                if courseContent[i]["modules"].count > 0 || courseContent[i]["summary"] != "" {
+                    let section = CourseSection()
+                    section.name = courseContent[i]["name"].string!
+                    if courseContent[i]["summary"] != "" {
+                        // create a summary module and load it in a discussion cell
+                        let summaryModule = Module()
+                        summaryModule.name = "Summary"
+                        summaryModule.coursename = courseName
+                        summaryModule.moduleDescription = courseContent[i]["summary"].string!
+                        summaryModule.modname = "summary"
+                        summaryModule.id = courseContent[i]["id"].int!
+                        summaryModule.read = true
+                        section.modules.append(summaryModule)
+                    } // add summary module
+                    for j in 0 ..< courseContent[i]["modules"].array!.count {
+                        let moduleData = Module()
+                        moduleData.modname = courseContent[i]["modules"][j]["modname"].string!
+                        moduleData.id = courseContent[i]["modules"][j]["id"].int!
+                        moduleData.read = realm.objects(Module.self).filter("id = %@", moduleData.id).first?.read ?? false
+                        if moduleData.modname == "resource" {
+                            if (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("cms.bits-hyderabad.ac.in") {
+                                moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string! +
+                                                        "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
+                                moduleData.mimetype = courseContent[i]["modules"][j]["contents"][0]["mimetype"].string!
+                                moduleData.filename = courseContent[i]["modules"][j]["contents"][0]["filename"].string!
+                            }
+                            else {
+                                moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!)
+                            }
+                        } else if moduleData.modname == "forum" {
+                            moduleData.id = courseContent[i]["modules"][j]["instance"].int!
+                            moduleData.read = true
+                        } else if moduleData.modname == "folder" {
+                            
+                            let itemCount = courseContent[i]["modules"][j]["contents"].count
+                            for a in 0..<itemCount{
+                                let newModule = Module()
+                                newModule.coursename = courseName
+                                newModule.filename = courseContent[i]["modules"][j]["contents"][a]["filename"].string!
+                                newModule.read = true
+                                
+                                if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("cms.bits-hyderabad.ac.in") {
+                                    newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                }
+                                newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
+                                newModule.id = (moduleData.id * 1000) + a + 1
+                                moduleData.fileModules.append(newModule)
+                            }
+                        } else if moduleData.modname == "url" {
+                            moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!)
+                        }
+                        
+                        moduleData.name = courseContent[i]["modules"][j]["name"].string!
+                        //                            if readModuleIdSet.contains(moduleData.id) {
+                        //                                moduleData.read = true
+                        //                            }
+                        if courseContent[i]["modules"][j]["description"].string != nil {
+                            moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
+                        }
+                        moduleData.coursename = courseName
+                        section.modules.append(moduleData)
+                    }
+                    section.courseId = courseId
+                    section.key = String(courseId) + section.name
+                    section.dateCreated = Date().timeIntervalSince1970
+                    
+                    try! realm.write {
+                        //                            realm.delete(realm.objects(CourseSection.self).filter("key = %@", section.key))
+                        if let prevSection = realm.objects(CourseSection.self).filter("key = %@", section.key).first {
+                            realm.delete(prevSection.modules)
+                            realm.delete(prevSection)
+                        }
+                    }
+                    
+                    try! realm.write {
+                        realm.add(section, update: .modified)
+                        
+                    }
+                }
+            }
+            completion()
+        }
+        
     }
     
     func calculateUnreadCounts(courseViewModels: [DashboardViewModel], completion: @escaping ([DashboardViewModel]) -> Void) {
