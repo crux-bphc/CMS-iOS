@@ -124,6 +124,7 @@ class DashboardDataManager {
                             let moduleData = Module()
                             moduleData.modname = courseContent[i]["modules"][j]["modname"].string!
                             moduleData.id = courseContent[i]["modules"][j]["id"].int!
+                            moduleData.read = realm.objects(Module.self).filter("id = %@", moduleData.id).first?.read ?? false
                             if moduleData.modname == "resource" {
                                 if (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("cms.bits-hyderabad.ac.in") {
                                     moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string! +
@@ -161,7 +162,6 @@ class DashboardDataManager {
 //                            if readModuleIdSet.contains(moduleData.id) {
 //                                moduleData.read = true
 //                            }
-                            moduleData.read = realm.objects(Module.self).filter("id = %@", moduleData.id).first?.read ?? false
                             if courseContent[i]["modules"][j]["description"].string != nil {
                                 moduleData.moduleDescription = courseContent[i]["modules"][j]["description"].string!
                             }
