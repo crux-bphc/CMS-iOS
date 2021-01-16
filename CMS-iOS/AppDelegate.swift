@@ -14,6 +14,7 @@ import UserNotifications
 import SDDownloadManager
 import SafariServices
 import CoreSpotlight
+import SwiftKeychainWrapper
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -149,6 +150,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         print("device token = \(token)")
+        KeychainWrapper.standard.set(token, forKey: "deviceToken")
+//        NotificationManager.shared.registerDevice(deviceToken: token) {
+            
+//        }
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -227,4 +232,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return nil
     }
     
+}
+
+extension AppDelegate {
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print(userInfo)
+        
+    }
+        
 }

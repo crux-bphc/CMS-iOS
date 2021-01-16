@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import SwiftKeychainWrapper
+import WebKit
 
 class CourseUnenroller {
     
@@ -56,6 +57,13 @@ class CourseUnenroller {
         let headers: HTTPHeaders = ["Cookie": "MoodleSession=\(cookie!)"]
         Alamofire.request(url, method: .post, headers: headers).responseData { (response) in
             completion()
+        }
+    }
+    
+    func removeAllCookies() {
+        let dataStore = WKWebsiteDataStore.default()
+        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: records) { }
         }
     }
     

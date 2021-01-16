@@ -227,6 +227,10 @@ extension ExtrasTableViewController {
             realm.deleteAll()
         }
         SpotlightIndex.shared.deindexAllItems()
+        let wstoken = KeychainWrapper.standard.string(forKey: "userPassword") ?? ""
+        NotificationManager.shared.deregisterDevice(wstoken: wstoken) {
+            
+        }
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "MoodleSession")
     }

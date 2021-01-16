@@ -48,7 +48,13 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         setupNavBar()
         loadOfflineCourses()
         refreshData()
+        let notificationDeviceToken = KeychainWrapper.standard.string(forKey: "deviceToken")
         
+        if notificationDeviceToken != nil {
+            NotificationManager.shared.registerDevice(deviceToken: notificationDeviceToken!) {
+                print("Notification token sent")
+            }
+        }
         if #available(iOS 13.0, *) {
             refreshControl?.tintColor = .secondaryLabel
         } else {
@@ -213,6 +219,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         CourseUnenroller.shared.attemptUnenroll(courseId: courseId) { (shouldShowLoginView, completed) in
             self.gradientLoadingBar.fadeOut()
             if shouldShowLoginView {
+                CourseUnenroller.shared.removeAllCookies()
                 self.present(UnenrollWebViewController(), animated: true, completion: nil)
             } else {
                 if completed {
