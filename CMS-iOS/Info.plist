@@ -57,7 +57,6 @@
 	<string>Allow access to camera roll to pick photo.</string>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UIFileSharingEnabled</key>

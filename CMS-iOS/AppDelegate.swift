@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //        UIApplication.shared.registerForRemoteNotifications()
-        application.setMinimumBackgroundFetchInterval(900)
+//        application.setMinimumBackgroundFetchInterval(900)
         
         let options : UNAuthorizationOptions = [.alert, .sound, .badge]
         notificationCenter.requestAuthorization(options: options) { (didAllow, error) in
@@ -131,22 +131,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SDDownloadManager.shared.backgroundCompletionHandler = completionHandler
     }
     
-    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        if Reachability.isConnectedToNetwork() {
-            let bkgObj = BackgroundFetch()
-            bkgObj.downloadModules { newModulesFound in
-                let realm = try! Realm()
-                let discussionModules = realm.objects(Module.self).filter("modname = %@", "forum")
-                bkgObj.downloadDiscussions(discussionModules: discussionModules) { (newDiscussionsFound) in
-                    completionHandler(newDiscussionsFound || newModulesFound ? .newData : .noData)
-                    NSLog(newDiscussionsFound || newModulesFound ? "found new data" : "no new data found")
-                }
-            }
-        } else {
-            completionHandler(.failed)
-            print("failed to background fetch")
-        }
-    }
+//    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+//        if Reachability.isConnectedToNetwork() {
+//            let bkgObj = BackgroundFetch()
+//            bkgObj.downloadModules { newModulesFound in
+//                let realm = try! Realm()
+//                let discussionModules = realm.objects(Module.self).filter("modname = %@", "forum")
+//                bkgObj.downloadDiscussions(discussionModules: discussionModules) { (newDiscussionsFound) in
+//                    completionHandler(newDiscussionsFound || newModulesFound ? .newData : .noData)
+//                    NSLog(newDiscussionsFound || newModulesFound ? "found new data" : "no new data found")
+//                }
+//            }
+//        } else {
+//            completionHandler(.failed)
+//            print("failed to background fetch")
+//        }
+//    }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         
