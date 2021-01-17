@@ -691,6 +691,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
     }
+
     
     func stopTheDamnRequests() {
         if #available(iOS 9.0, *) {

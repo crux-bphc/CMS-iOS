@@ -148,6 +148,7 @@ class LoginViewController: UIViewController {
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON { (response) in
             if response.result.isSuccess {
                 let userData = JSON(response.value as Any)
+                print(userData)
                 if (userData["exception"].string != nil) {
                     let alert = UIAlertController(title: "Invalid key", message: "The key that you have entered is invalid. Please check and try again.", preferredStyle: .alert)
                     let dismiss = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
@@ -156,6 +157,8 @@ class LoginViewController: UIViewController {
                     self.present(alert, animated: true, completion: {
                         self.keyField.text = ""
                     })
+                    SVProgressHUD.dismiss()
+                    self.view.isUserInteractionEnabled = true
                     print("Enter the key again.")
                 } else {
                     if loggedin == false {

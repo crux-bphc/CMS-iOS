@@ -14,7 +14,7 @@ import SwiftyJSON
 import UserNotifications
 
 class BackgroundFetch {
-    
+
     public func downloadModules(completion: @escaping (Bool) -> Void) {
         let realm = try! Realm()
         let constants = Constants.Global.self
