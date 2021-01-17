@@ -9,6 +9,7 @@
 import UIKit
 import SVProgressHUD
 import QuickLook
+import RealmSwift
 
 class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
     
@@ -35,6 +36,10 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
         self.navigationItem.largeTitleDisplayMode = .never
         if selectedDiscussion.attachment == "" {
             self.openButton.isHidden = true
+        }
+        let realm = try! Realm()
+        try! realm.write {
+            selectedDiscussion.read = true
         }
 
     }

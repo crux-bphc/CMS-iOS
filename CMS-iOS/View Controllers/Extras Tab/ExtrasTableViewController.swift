@@ -9,17 +9,32 @@
 import UIKit
 import RealmSwift
 import SwiftKeychainWrapper
+import QuickLook
 
-class ExtrasTableViewController: UITableViewController {
+class ExtrasTableViewController: UITableViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate, QLPreviewControllerDataSource {
+    
+    let realm = try! Realm()
+    let ql = QLPreviewController()
+    let defaults = UserDefaults.standard
     
     fileprivate let cellId = "ExtrasCell"
-    let items = [["Hide Semester On Dashboard"], ["T.D. Website"], ["About", "Report Bug", "Rate"], ["Logout"]]
+    let pickerController = UIImagePickerController()
+    let items = [["Hide Semester On Dashboard"], ["CMS Website"], ["My Timetable"], ["About", "Report Bug", "Rate"], ["Logout"]]
     let constants = Constants.Global.self
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        pickerController.delegate = self
+        pickerController.allowsEditing = false
+        pickerController.mediaTypes = ["public.image"]
+        pickerController.sourceType = .photoLibrary
+        ql.dataSource = self
+        
         setupNavBar()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
     }
+    
+    
     
     // MARK: - Table view data source
     
@@ -34,6 +49,13 @@ class ExtrasTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         
+        if #available(iOS 13.0, *) {
+            cell.textLabel?.textColor = .label
+        } else {
+            // Fallback on earlier versions
+            cell.textLabel?.textColor = .black
+        }
+        
         let item = items[indexPath.section][indexPath.row]
         cell.textLabel?.text = item
         if item == "Logout" {
@@ -46,25 +68,30 @@ class ExtrasTableViewController: UITableViewController {
             switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
             cell.accessoryView = switchView
             cell.imageView?.image = nil
-            if #available(iOS 13.0, *) {
-                cell.textLabel?.textColor = .label
-            } else {
-                // Fallback on earlier versions
-                cell.textLabel?.textColor = .black
-            }
-        } else {
+        } else if item == "My Timetable" {
+            cell.accessoryType = .detailButton
+            cell.imageView?.image = UIImage(named: "Timetable")
+        }
+        else {
             cell.accessoryType = .disclosureIndicator
             cell.imageView?.image = UIImage(named: item)
-            if #available(iOS 13.0, *) {
-                cell.textLabel?.textColor = .label
-            } else {
-                // Fallback on earlier versions
-                cell.textLabel?.textColor = .black
-            }
-
         }
+        
         return cell
-
+        
+    }
+    
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        if indexPath.section == 2 {
+            let warning = UIAlertController()
+            let changeImage = UIAlertAction(title: "Update Timetable Image", style: .default) { (action) in
+                self.present(self.pickerController, animated: true, completion: nil)
+            }
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            warning.addAction(changeImage)
+            warning.addAction(cancel)
+            self.present(warning, animated: true, completion: nil)
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -85,6 +112,16 @@ class ExtrasTableViewController: UITableViewController {
             }
             break
         case 2:
+            print("Clicked on tt")
+            if defaults.string(forKey: "timetableURL") != "" {
+                print("Bruh this opened: \(defaults.string(forKey: "timetableURL"))")
+                self.present(ql, animated: true, completion: nil)
+                
+            } else {
+                present(pickerController, animated: true, completion: nil)
+            }
+            break
+        case 3:
             switch indexPath.row {
             case 0:
                 // about page
@@ -97,15 +134,15 @@ class ExtrasTableViewController: UITableViewController {
             case 2:
                 // rate
                 if let url = URL(string: "itms-apps://itunes.apple.com/app/\(constants.APP_ID)"), UIApplication.shared.canOpenURL(url) {
-                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
-
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    
                 }
                 break
             default:
                 break
             }
             break
-        case 3:
+        case 4:
             switch indexPath.row {
             case 0:
                 // logout
@@ -130,7 +167,7 @@ class ExtrasTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return ["Options", "Website", "App", ""][section]
+        return ["Options", "Website", "Timetable", "App", ""][section]
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -138,17 +175,64 @@ class ExtrasTableViewController: UITableViewController {
     }
 }
 
+
+// MARK: - ImagePicker Delegate Functions
+
+extension ExtrasTableViewController {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let fileManager = FileManager.default
+        let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+        let imagePath = documentsPath!.appendingPathComponent("image.jpg")
+        
+        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            
+            let imageData = pickedImage.jpegData(compressionQuality: 1.00)
+            try! imageData?.write(to: imagePath)
+
+            pickerController.dismiss(animated: true) {
+                self.defaults.set(imagePath.absoluteString, forKey: "timetableURL")
+            }
+        }
+    }
+}
+
+// MARK: - Quick Look Functions
+
+extension ExtrasTableViewController {
+    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+        return 1
+    }
+    
+    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+        let item = PreviewItem()
+        let fileManager = FileManager()
+        let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+        let imagePath = documentsPath!.appendingPathComponent("image.jpg")
+        
+        item.previewItemURL = imagePath
+        item.previewItemTitle = "Timetable"
+        return item
+    }
+    
+    
+}
+
 // MARK: - User functions
 
 extension ExtrasTableViewController {
     
     func logout() {
-        let realm = try! Realm()
+        //        let realm = try! Realm()
         try! realm.write {
             realm.deleteAll()
         }
         SpotlightIndex.shared.deindexAllItems()
+        let wstoken = KeychainWrapper.standard.string(forKey: "userPassword") ?? ""
+        NotificationManager.shared.deregisterDevice(wstoken: wstoken) {
+            
+        }
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
+        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "MoodleSession")
     }
     
     func setupNavBar() {
@@ -156,9 +240,8 @@ extension ExtrasTableViewController {
     }
     
     @objc func switchChanged(_ sender : UISwitch!){
-        let defaults = UserDefaults.standard
         defaults.setValue(sender.isOn, forKey: "hidesSemester")
     }
     
 }
- 
+

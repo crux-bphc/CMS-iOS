@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17147" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17120"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -250,7 +250,7 @@
         <!--Discussion View Controller-->
         <scene sceneID="r3e-Io-Mxb">
             <objects>
-                <viewController id="exB-Lj-j3Y" customClass="DiscussionViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Discussions" id="exB-Lj-j3Y" customClass="DiscussionViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ulu-h6-aXL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -261,6 +261,7 @@
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OVG-jf-hSN">
                                 <rect key="frame" x="16" y="679" width="343" height="40"/>
@@ -462,6 +463,56 @@
             </objects>
             <point key="canvasLocation" x="5960.8000000000002" y="-897.04433497536945"/>
         </scene>
+        <!--Unenroll Web View Controller-->
+        <scene sceneID="Vg0-kz-Tnc">
+            <objects>
+                <viewController id="NOB-N6-lfY" customClass="UnenrollWebViewController" customModule="CMS_BPHC" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0cc-Dc-xx9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nx3-8C-5NQ">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                                <items>
+                                    <navigationItem title="Login to Unenroll" id="xH1-T7-GQE">
+                                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="ssM-wq-y8m">
+                                            <connections>
+                                                <action selector="cancelButtonPressed:" destination="NOB-N6-lfY" id="2ec-St-KJn"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h59-jK-WPS">
+                                <rect key="frame" x="0.0" y="56" width="375" height="702"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="dYt-iS-jKM"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="h59-jK-WPS" firstAttribute="leading" secondItem="dYt-iS-jKM" secondAttribute="leading" id="FJb-tB-UHq"/>
+                            <constraint firstItem="Nx3-8C-5NQ" firstAttribute="leading" secondItem="dYt-iS-jKM" secondAttribute="leading" id="eW1-nC-Eln"/>
+                            <constraint firstAttribute="bottom" secondItem="h59-jK-WPS" secondAttribute="bottom" id="gu5-9w-QfM"/>
+                            <constraint firstItem="Nx3-8C-5NQ" firstAttribute="trailing" secondItem="dYt-iS-jKM" secondAttribute="trailing" id="kPC-aP-T3a"/>
+                            <constraint firstItem="h59-jK-WPS" firstAttribute="trailing" secondItem="dYt-iS-jKM" secondAttribute="trailing" id="kgu-Hg-W3S"/>
+                            <constraint firstItem="h59-jK-WPS" firstAttribute="top" secondItem="Nx3-8C-5NQ" secondAttribute="bottom" id="wja-JQ-JtQ"/>
+                            <constraint firstItem="Nx3-8C-5NQ" firstAttribute="top" secondItem="dYt-iS-jKM" secondAttribute="top" id="zuT-p9-PbN"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="2Ux-uN-UZI"/>
+                    <connections>
+                        <outlet property="webView" destination="h59-jK-WPS" id="lzc-5N-BWI"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wIm-lo-8mA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2892" y="-1556.1576354679803"/>
+        </scene>
         <!--Dashboard-->
         <scene sceneID="bx0-Re-ZoF">
             <objects>
@@ -495,6 +546,7 @@
                         <segue destination="sHh-GJ-T8A" kind="show" identifier="goToModuleDirectly" id="lTA-yO-kuB"/>
                         <segue destination="exB-Lj-j3Y" kind="show" identifier="goToDiscussionDirectly" id="nQq-Vr-otz"/>
                         <segue destination="Aeb-vz-2Hs" kind="show" identifier="goToFolderModuleDirectly" id="Cv0-T4-e1a"/>
+                        <segue destination="NOB-N6-lfY" kind="presentation" identifier="goToLoginUnenroll" id="9gS-gs-2LD"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Mr-0O-5t6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -562,6 +614,7 @@
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pK6-fB-GCI">
                                 <rect key="frame" x="16" y="634" width="343" height="40"/>
@@ -882,10 +935,10 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="IgU-80-XSP"/>
-        <segue reference="bDO-Ye-r9b"/>
+        <segue reference="lTA-yO-kuB"/>
+        <segue reference="wt5-J4-7yV"/>
         <segue reference="r0O-gx-IAp"/>
-        <segue reference="Xc1-RL-VNF"/>
+        <segue reference="Cv0-T4-e1a"/>
         <segue reference="nQq-Vr-otz"/>
     </inferredMetricsTieBreakers>
     <resources>
@@ -912,12 +965,6 @@
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
-        <systemColor name="groupTableViewBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="groupTableViewBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
@@ -932,9 +979,6 @@
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="tableCellGroupedBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="tableCellGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

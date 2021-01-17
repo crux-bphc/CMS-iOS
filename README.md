@@ -2,8 +2,10 @@
 
 This is the iOS version on the CMS app, written in Swift. The app utilises the API endpoints provided by Moodle from the server hosted on the [CMS Website](https://td.bits-hyderabad.ac.in/moodle/).
 
-[Download on the App Store](https://apps.apple.com/in/app/cms-bphc/id1489946522)
-  
+<a href="https://apps.apple.com/in/app/cms-bphc/id1489946522">
+  <img height="40" src="https://user-images.githubusercontent.com/7317008/43209852-4ca39622-904b-11e8-8ce1-cdc3aee76ae9.png">
+</a>
+
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

@@ -90,11 +90,12 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                 let realm = try! Realm()
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
-                    let realmModules = realm.objects(Module.self).filter("coursename = %@" ,self.currentCourse.displayname)
+                    let realmModules = realm.objects(Module.self).filter("coursename = %@", self.currentCourse.displayname)
+                    print(self.currentCourse.displayname)
                     for i in 0..<realmModules.count {
                         if realmModules[i].read && !readModuleIds.contains(realmModules[i].id) {
-                                readModuleIds.append(realmModules[i].id)
-                            }
+                            readModuleIds.append(realmModules[i].id)
+                        }
                         
                     }
                     let realmSections = realm.objects(CourseSection.self).filter("courseId = \(self.currentCourse.courseid)")
@@ -166,9 +167,9 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                 if readModuleIds.contains(moduleData.id) {
                                     moduleData.read = true
                                     
-                                }else if moduleData.name == "Announcements"{
+                                } else if moduleData.name == "Announcements" {
                                     moduleData.read = true
-                                }else{
+                                } else {
                                     moduleData.read = false
                                 }
                                 if courseContent[i]["modules"][j]["description"].string != nil {

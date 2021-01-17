@@ -4,12 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.1] - 2020-02-19
+## [1.2] - 20201-01-17
+
 ### Added
-- Support for viewing forum module description
+- Support for push notifications
+- Redirection to module/discussion when notifications are clicked
+- Unenrolling feature
+- Support for adding image of timetable
+- Quick loading of cached discussions and site news
+- Refresh control for discussions
+- View models for cells of Dashboard courses, discussions and site news
+
 ### Fixed
-- Crash on downloading modules on iOS 13
-- HTML entities showing up on course content page
+- Random numbers showing up in Dashboard course cell badges
+- Some course discussions being marked unread after reloading site news due to matching ids
+
+
+## [1.1.1] - 2021-01-12
+### Added
+- Support for CMS on AWS by adding new base URL.
+
+### Removed
+- Notifications using background fetch.
 
 ## [1.1] - 2020-08-23
 ### Added
@@ -33,4 +49,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Crash on opening the app using URL schemes
 
 ### Removed
-- Incinsistent and buggy table view animation
+- Inconsistent and buggy table view animation
+
+## [1.0.1] - 2020-02-19
+### Added
+- Support for viewing forum module description
+### Fixed
+- Crash on downloading modules on iOS 13
+- HTML entities showing up on course content page

@@ -24,6 +24,9 @@ class Constants: NSObject {
         static let GET_FORUM_DISCUSSIONS : String = "webservice/rest/server.php?wsfunction=mod_forum_get_forum_discussions_paginated&moodlewsrestformat=json&sortby=timemodified&sortdirection=DESC"
         static let CAN_ADD_DISCUSSIONS : String = "webservice/rest/server.php?moodlewsrestformat=json&wsfunction=mod_forum_can_add_discussion"
         static let ADD_DISCUSSION : String = "webservice/rest/server.php?moodlewsrestformat=json&wsfunction=mod_forum_add_discussion"
+        static let REGISTER_DEVICE: String = "webservice/rest/server.php?wsfunction=core_user_add_user_device&moodlewsrestformat=json"
+        static let DEREGISTER_DEVICE: String = "webservice/rest/server.php?wsfunction=core_user_remove_user_device&moodlewsrestformat=json"
+        
         static let headers : HTTPHeaders = ["Accept" : "application/json"]
         static let GITHUB_URL = "https://github.com/crux-bphc/CMS-iOS"
         static let APP_ID = "id1489946522" // app store app id
