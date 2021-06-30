@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     var window: UIWindow?
     
-//    let notificationCenter = UNUserNotificationCenter.current()
+    let notificationCenter = UNUserNotificationCenter.current()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //        UIApplication.shared.registerForRemoteNotifications()

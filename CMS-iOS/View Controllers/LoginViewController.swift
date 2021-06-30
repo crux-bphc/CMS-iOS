@@ -200,6 +200,10 @@ class LoginViewController: UIViewController {
         let decodedUserIDSub = (decodedString[start..<end])
         let decodedUserID = String(decodedUserIDSub)
         print("decoded = \(decodedUserID)")
+        let privateTokenStart = decodedString.index(decodedString.startIndex, offsetBy: 68)
+        let privateTokenEnd = decodedString.endIndex
+        let privateToken = String(decodedString[privateTokenStart..<privateTokenEnd]).replacingOccurrences(of: "::", with: "")
+        KeychainWrapper.standard.set(privateToken, forKey: "privateToken")
         logIn (password: decodedUserID, loggedin: false) {
             print("Password Retrieved. Logging in.")
             self.view.isUserInteractionEnabled = true

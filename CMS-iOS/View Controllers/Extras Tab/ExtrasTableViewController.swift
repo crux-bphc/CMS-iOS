@@ -233,6 +233,9 @@ extension ExtrasTableViewController {
         }
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "MoodleSession")
+        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "privateToken")
+        
+        UserDefaults.standard.removeObject(forKey: "sessionTimestamp")
     }
     
     func setupNavBar() {
