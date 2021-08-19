@@ -3,7 +3,7 @@
 //  CMS-iOS
 //
 //  Created by Hridik Punukollu on 11/08/19.
-//  Copyright © 2019 Hridik Punukollu. All rights reserved.
+//  Copyright © 2019 Crux BPHC. All rights reserved.
 //
 
 import UIKit
@@ -533,24 +533,12 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     cell.courseName.text = filteredCourseViewModels[indexPath.row].courseCode
                     
                     cell.courseFullName.text = filteredCourseViewModels[indexPath.row].courseName.cleanUp().removeSemester()
-                    if filteredCourseViewModels[indexPath.row].courseName.contains("FIRST SEMESTER 2020-21") && !self.shouldHideSemester {
-                        cell.semesterLabel.isHidden = false
-                        cell.semesterLabel.text = "2020-21"
-                    } else {
-                        cell.semesterLabel.isHidden = true
-                    }
                     cell.courseName.textColor = filteredCourseViewModels[indexPath.row].courseColor
                     cell.unreadCounterLabel.text = String(filteredCourseViewModels[indexPath.row].unreadCount)
                     cell.unreadCounterLabel.isHidden = !filteredCourseViewModels[indexPath.row].shouldShowUnreadCounter
                 } else {
                     cell.courseName.text = courseViewModels[indexPath.row].courseCode
                     cell.courseFullName.text = courseViewModels[indexPath.row].courseName.cleanUp().removeSemester()
-                    if courseViewModels[indexPath.row].courseName.contains("FIRST SEMESTER 2020-21") && !self.shouldHideSemester {
-                        cell.semesterLabel.isHidden = false
-                        cell.semesterLabel.text = "2020-21"
-                    } else {
-                        cell.semesterLabel.isHidden = true
-                    }
                     cell.courseName.textColor = courseViewModels[indexPath.row].courseColor
                     cell.unreadCounterLabel.text = String(courseViewModels[indexPath.row].unreadCount)
                     cell.unreadCounterLabel.isHidden = !courseViewModels[indexPath.row].shouldShowUnreadCounter
