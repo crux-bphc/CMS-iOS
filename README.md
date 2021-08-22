@@ -13,8 +13,10 @@ This is the iOS version on the CMS app, written in Swift. The app utilises the A
 
 - Token based as well as **Google** login.
 - Offline access to course contents.
-- Enrolment to new courses.
+- Enrollment to new courses.
+- Unenrollment from existing courses.
 - Local storage of attachments for external access from Files app.
+- Push Notifications
 
 ## Installation
 
