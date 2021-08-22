@@ -3,7 +3,7 @@
 //  CMS-iOS
 //
 //  Created by Hridik Punukollu on 28/08/19.
-//  Copyright © 2019 Hridik Punukollu. All rights reserved.
+//  Copyright © 2019 Crux BPHC. All rights reserved.
 //
 
 import UIKit

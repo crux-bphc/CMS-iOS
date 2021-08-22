@@ -3,7 +3,7 @@
 //  CMS-iOS
 //
 //  Created by Hridik Punukollu on 12/08/19.
-//  Copyright © 2019 Hridik Punukollu. All rights reserved.
+//  Copyright © 2019 Crux BPHC. All rights reserved.
 //
 
 import UIKit
@@ -26,6 +26,7 @@ class Constants: NSObject {
         static let ADD_DISCUSSION : String = "webservice/rest/server.php?moodlewsrestformat=json&wsfunction=mod_forum_add_discussion"
         static let REGISTER_DEVICE: String = "webservice/rest/server.php?wsfunction=core_user_add_user_device&moodlewsrestformat=json"
         static let DEREGISTER_DEVICE: String = "webservice/rest/server.php?wsfunction=core_user_remove_user_device&moodlewsrestformat=json"
+        static let AUTOLOGIN: String = "webservice/rest/server.php?wsfunction=tool_mobile_get_autologin_key&moodlewsrestformat=json"
         
         static let headers : HTTPHeaders = ["Accept" : "application/json"]
         static let GITHUB_URL = "https://github.com/crux-bphc/CMS-iOS"

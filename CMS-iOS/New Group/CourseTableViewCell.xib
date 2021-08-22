@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19150" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19134"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -31,7 +32,7 @@
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="badgeColor">
-                                        <color key="value" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="value" systemColor="systemRedColor"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                         <real key="value" value="15"/>
@@ -45,7 +46,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEST F111" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jb8-52-F4v">
-                                <rect key="frame" x="16" y="22" width="102.5" height="22"/>
+                                <rect key="frame" x="16" y="22" width="101.5" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="22" id="PqV-wz-f8e"/>
                                 </constraints>
@@ -53,14 +54,8 @@
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SEM I" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="aRM-hT-jU6">
-                                <rect key="frame" x="122.5" y="24.5" width="38" height="17"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
-                                <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                        <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="jb8-52-F4v" firstAttribute="top" secondItem="In3-Lu-Tqa" secondAttribute="top" constant="22" id="Ilb-nT-5q4"/>
                             <constraint firstItem="tjO-gw-hV7" firstAttribute="top" secondItem="jb8-52-F4v" secondAttribute="bottom" constant="2" id="Jqw-pM-cPX"/>
@@ -68,15 +63,12 @@
                             <constraint firstItem="zo5-Rh-0en" firstAttribute="leading" secondItem="tjO-gw-hV7" secondAttribute="trailing" constant="8" id="NLb-BS-dLC"/>
                             <constraint firstItem="jb8-52-F4v" firstAttribute="leading" secondItem="In3-Lu-Tqa" secondAttribute="leading" constant="16" id="U1t-Ua-dAP"/>
                             <constraint firstAttribute="bottom" secondItem="tjO-gw-hV7" secondAttribute="bottom" constant="22" id="hym-vd-ap1"/>
-                            <constraint firstItem="aRM-hT-jU6" firstAttribute="leading" secondItem="jb8-52-F4v" secondAttribute="trailing" constant="4" id="mmD-Tv-IFT"/>
                             <constraint firstAttribute="trailing" secondItem="zo5-Rh-0en" secondAttribute="trailing" constant="20" id="ms2-6q-laW"/>
-                            <constraint firstItem="aRM-hT-jU6" firstAttribute="centerY" secondItem="jb8-52-F4v" secondAttribute="centerY" id="ohc-6W-sHt"/>
                             <constraint firstItem="tjO-gw-hV7" firstAttribute="leading" secondItem="In3-Lu-Tqa" secondAttribute="leading" constant="16" id="q7n-1D-2I9"/>
-                            <constraint firstItem="zo5-Rh-0en" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="aRM-hT-jU6" secondAttribute="trailing" constant="2" id="tGO-5z-ozW"/>
                         </constraints>
                     </view>
                 </subviews>
-                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="In3-Lu-Tqa" secondAttribute="bottom" constant="4.5" id="1kT-Pd-KPi"/>
                     <constraint firstItem="In3-Lu-Tqa" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="7" id="NhZ-nE-K37"/>
@@ -89,10 +81,25 @@
                 <outlet property="containView" destination="In3-Lu-Tqa" id="gkE-Di-g0i"/>
                 <outlet property="courseFullName" destination="tjO-gw-hV7" id="n6Y-Dw-BkX"/>
                 <outlet property="courseName" destination="jb8-52-F4v" id="hVz-I5-Pn0"/>
-                <outlet property="semesterLabel" destination="aRM-hT-jU6" id="fNH-lh-qbO"/>
                 <outlet property="unreadCounterLabel" destination="zo5-Rh-0en" id="Inh-Cb-OVT"/>
             </connections>
             <point key="canvasLocation" x="140.57971014492756" y="117.1875"/>
         </tableViewCell>
     </objects>
+    <designables>
+        <designable name="zo5-Rh-0en">
+            <size key="intrinsicContentSize" width="27" height="22"/>
+        </designable>
+    </designables>
+    <resources>
+        <systemColor name="groupTableViewBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="tableCellGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

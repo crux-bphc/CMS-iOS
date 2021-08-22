@@ -363,7 +363,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1200;
 				LastUpgradeCheck = 1030;
-				ORGANIZATIONNAME = "Hridik Punukollu";
+				ORGANIZATIONNAME = "Crux BPHC";
 				TargetAttributes = {
 					0A3DEAEE22FDCA69001B6BFD = {
 						CreatedOnToolsVersion = 10.3;

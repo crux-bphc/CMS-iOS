@@ -3,7 +3,7 @@
 //  CMS-iOS
 //
 //  Created by Aryan Chaubal on 12/25/20.
-//  Copyright © 2020 Hridik Punukollu. All rights reserved.
+//  Copyright © 2020 Crux BPHC. All rights reserved.
 //
 
 import Foundation
@@ -11,23 +11,70 @@ import Alamofire
 import SwiftKeychainWrapper
 import WebKit
 import RealmSwift
+import SwiftyJSON
 
 class CourseUnenroller {
     
     static let shared = CourseUnenroller()
     
     // put this in dashboard
-    func attemptUnenroll(courseId: Int, completion: @escaping (_ shouldShowLoginView: Bool, _ completed: Bool) -> Void) {
-        CourseUnenroller.shared.fetchEnrollIdSessKey(courseId: courseId) { (enrollId, sessKey) in
-            if enrollId == nil || sessKey == nil {
-                // show web view and set the cookie in keychain
-                // ....
+    func attemptUnenroll(courseId: Int, userId: Int, completion: @escaping (_ shouldAskToRelogin: Bool, _ completed: Bool) -> Void) {
+        let sessionTimestamp = UserDefaults.standard.integer(forKey: "sessionTimestamp")
+        if sessionTimestamp != 0 {
+            let passedTime = Int(Date().timeIntervalSince1970) - sessionTimestamp
+            if (passedTime > 360) {
+                createAndStoreSessionDetails(userId: userId) { storedSuccessfully in
+                    self.unenrollFlow(courseId: courseId) { completed in
+                        completion(false, completed)
+                    }
+                }
+            } else {
+                self.unenrollFlow(courseId: courseId) { completed in
+                    completion(false, completed)
+                }
+            }
+        } else {
+            if KeychainWrapper.standard.string(forKey: "privateToken") == nil {
                 completion(true, false)
                 return
             }
-            CourseUnenroller.shared.sendUnenrollRequest(enrollId: enrollId!, sessKey: sessKey!) {
-                completion(false, true)
+            createAndStoreSessionDetails(userId: userId) { storedSuccessfully in
+                if storedSuccessfully {
+                    // moodle session is stored and not expired for sure
+                    self.unenrollFlow(courseId: courseId) { completed in
+                        completion(false, completed)
+                    }
+                } else {
+                    // not stored successfully
+                    completion(false, false)
+                }
             }
+        }
+    }
+    
+    func unenrollFlow(courseId: Int, completion: @escaping (Bool) -> Void) {
+        CourseUnenroller.shared.fetchEnrollIdSessKey(courseId: courseId) { (enrollId, sessKey) in
+            if enrollId == nil || sessKey == nil {
+                completion(false)
+                return
+            }
+            CourseUnenroller.shared.sendUnenrollRequest(enrollId: enrollId!, sessKey: sessKey!) {
+                completion(true)
+            }
+            
+        }
+    }
+    
+    
+    func createAndStoreSessionDetails(userId: Int, completion: @escaping (Bool) -> Void) {
+        CourseUnenroller.shared.createMoodleSessionFromPrivateToken(userId: userId) { moodleSession, newSessionTimestamp in
+            if moodleSession == nil || newSessionTimestamp == nil {
+                completion(false)
+                return
+            }
+            KeychainWrapper.standard.set(moodleSession!, forKey: "MoodleSession")
+            UserDefaults.standard.set(newSessionTimestamp!, forKey: "sessionTimestamp")
+            completion(true)
             
         }
     }
@@ -50,6 +97,43 @@ class CourseUnenroller {
             completion(enrollId, sessKey)
         }
     }
+    
+    func createMoodleSessionFromPrivateToken(userId: Int, completion: @escaping (_ moodleSessionCookie: String?, _ cookieCreatedTimestamp: Int?) -> Void) {
+        let url = Constants.Global.self.BASE_URL + Constants.Global.self.AUTOLOGIN
+        guard let privateToken = KeychainWrapper.standard.string(forKey: "privateToken") else {
+            completion(nil, nil)
+            return
+        }
+        guard let wstoken = KeychainWrapper.standard.string(forKey: "userPassword") else {
+            completion(nil, nil)
+            return
+        }
+        let params = ["wstoken": wstoken, "privatetoken": privateToken]
+        Alamofire.request(url, method: .post, parameters: params, headers: ["User-Agent": "MoodleMobile"]).responseJSON { response in
+            if !response.result.isSuccess || response.data == nil {
+                completion(nil, nil)
+                return
+            }
+            let jsonData = JSON(response.data!)
+            print(jsonData)
+            guard let key = jsonData["key"].string else { return }
+            guard let autoLoginURL = jsonData["autologinurl"].string else { return }
+            let paramsAutoLogin: [String: Any] = ["userid": userId, "key": key]
+            Alamofire.request(autoLoginURL, method: .get, parameters: paramsAutoLogin)
+                .responseData { response in
+                    if !response.result.isSuccess || response.data == nil { return }
+                    for cookie in HTTPCookieStorage.shared.cookies! {
+                        if cookie.name == "MoodleSession" {
+                            let moodleSession = cookie.value
+                            let ts = Int(Date().timeIntervalSince1970)
+                            completion(moodleSession, ts)
+                            return
+                        }
+                    }
+                }
+        }
+    }
+    
     
     func sendUnenrollRequest(enrollId: String, sessKey: String, completion: @escaping () -> Void) {
         let cookie = KeychainWrapper.standard.string(forKey: "MoodleSession")

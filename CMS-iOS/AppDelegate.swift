@@ -3,7 +3,7 @@
 //  CMS-iOS
 //
 //  Created by Hridik Punukollu on 09/08/19.
-//  Copyright © 2019 Hridik Punukollu. All rights reserved.
+//  Copyright © 2019 Crux BPHC. All rights reserved.
 //
 
 import UIKit
@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     var window: UIWindow?
     
-//    let notificationCenter = UNUserNotificationCenter.current()
+    let notificationCenter = UNUserNotificationCenter.current()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //        UIApplication.shared.registerForRemoteNotifications()

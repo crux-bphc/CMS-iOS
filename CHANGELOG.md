@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2] - 20201-01-17
+## [1.3] - 2021-08-22
+
+### Fixed
+- Fixed unenrollment process, removed need for sign in through web view using a private token obtained during Google Login
+
+### Removed
+- Semester label in Dashboard cell and option to show/hide it
+
+## [1.2] - 2021-01-17
 
 ### Added
 - Support for push notifications

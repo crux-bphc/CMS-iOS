@@ -3,7 +3,7 @@
 //  CMS-iOS
 //
 //  Created by Aryan Chaubal on 4/25/20.
-//  Copyright © 2020 Hridik Punukollu. All rights reserved.
+//  Copyright © 2020 Crux BPHC. All rights reserved.
 //
 
 import Foundation

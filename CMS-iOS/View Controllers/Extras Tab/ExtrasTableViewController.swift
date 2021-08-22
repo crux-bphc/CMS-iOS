@@ -3,7 +3,7 @@
 //  CMS-iOS
 //
 //  Created by Hridik Punukollu on 20/08/19.
-//  Copyright © 2019 Hridik Punukollu. All rights reserved.
+//  Copyright © 2019 Crux BPHC. All rights reserved.
 //
 
 import UIKit
@@ -19,7 +19,7 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
     
     fileprivate let cellId = "ExtrasCell"
     let pickerController = UIImagePickerController()
-    let items = [["Hide Semester On Dashboard"], ["CMS Website"], ["My Timetable"], ["About", "Report Bug", "Rate"], ["Logout"]]
+    let items = [["CMS Website"], ["My Timetable"], ["About", "Report Bug", "Rate"], ["Logout"]]
     let constants = Constants.Global.self
     
     override func viewDidLoad() {
@@ -61,13 +61,6 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
         if item == "Logout" {
             cell.textLabel?.textColor = .systemRed
             cell.imageView?.image = nil
-        } else if item == "Hide Semester On Dashboard" {
-            let switchView = UISwitch(frame: .zero)
-            switchView.setOn(UserDefaults.standard.bool(forKey: "hidesSemester"), animated: true)
-            switchView.tag = indexPath.row // for detect which row switch Changed
-            switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
-            cell.accessoryView = switchView
-            cell.imageView?.image = nil
         } else if item == "My Timetable" {
             cell.accessoryType = .detailButton
             cell.imageView?.image = UIImage(named: "Timetable")
@@ -82,7 +75,7 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
     }
     
     override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        if indexPath.section == 2 {
+        if indexPath.section == 1 {
             let warning = UIAlertController()
             let changeImage = UIAlertAction(title: "Update Timetable Image", style: .default) { (action) in
                 self.present(self.pickerController, animated: true, completion: nil)
@@ -101,7 +94,7 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         switch indexPath.section {
-        case 1:
+        case 0:
             switch indexPath.row {
             case 0:
                 // T.D. Website
@@ -111,17 +104,15 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
                 break
             }
             break
-        case 2:
-            print("Clicked on tt")
+        case 1:
             if defaults.string(forKey: "timetableURL") != "" {
-                print("Bruh this opened: \(defaults.string(forKey: "timetableURL"))")
                 self.present(ql, animated: true, completion: nil)
                 
             } else {
                 present(pickerController, animated: true, completion: nil)
             }
             break
-        case 3:
+        case 2:
             switch indexPath.row {
             case 0:
                 // about page
@@ -142,7 +133,7 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
                 break
             }
             break
-        case 4:
+        case 3:
             switch indexPath.row {
             case 0:
                 // logout
@@ -167,7 +158,7 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return ["Options", "Website", "Timetable", "App", ""][section]
+        return ["Website", "Timetable", "App", ""][section]
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -233,6 +224,9 @@ extension ExtrasTableViewController {
         }
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "MoodleSession")
+        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "privateToken")
+        
+        UserDefaults.standard.removeObject(forKey: "sessionTimestamp")
     }
     
     func setupNavBar() {
