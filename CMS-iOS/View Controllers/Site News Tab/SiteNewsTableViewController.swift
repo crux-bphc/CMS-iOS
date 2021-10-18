@@ -70,7 +70,7 @@ class SiteNewsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "discussionCell", for: indexPath) as! DiscussionTableViewCell
         let discussionVM = discussionViewModels[indexPath.row]
         cell.timeLabel.text = discussionVM.date
-        cell.contentPreviewLabel.text = discussionVM.description.html2String
+        cell.contentPreviewLabel.text = discussionVM.description
         cell.titleLabel.text = discussionVM.name
         return cell
     }
