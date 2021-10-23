@@ -98,7 +98,7 @@ class DiscussionTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "discussionCell", for: indexPath) as! DiscussionTableViewCell
         let discussionVM = self.discussionViewModels[indexPath.row]
         cell.timeLabel.text = discussionVM.date
-        cell.contentPreviewLabel.text = discussionVM.description.html2String
+        cell.contentPreviewLabel.text = discussionVM.description
         cell.titleLabel.text = discussionVM.name
         cell.timeLabel.font = discussionVM.dateFont
         cell.titleLabel.font = discussionVM.titleFont
@@ -141,7 +141,6 @@ class DiscussionTableViewController: UITableViewController {
         DispatchQueue.global(qos: .userInteractive).async {
             let realm = try! Realm()
             let offlineDiscussions = realm.objects(Discussion.self).filter("moduleId == %@", moduleId).sorted(byKeyPath: "id", ascending: false)
-            print(offlineDiscussions)
             let discussionViewModels = Array(offlineDiscussions.map({ DiscussionViewModel(name: $0.name, id: $0.id, description: $0.message, date: self.epochConvert(epoch: $0.date), read: $0.read) }))
             DispatchQueue.main.async {
                 completion(discussionViewModels)

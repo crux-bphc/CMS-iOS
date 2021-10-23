@@ -64,27 +64,26 @@ open class BubbleTabBar: UITabBar {
     
     private func configure() {
         if #available(iOS 12.0, *) {
-            if self.traitCollection.userInterfaceStyle == .dark {
-                if #available(iOS 13.0, *) {
-//                    backgroundColor = UIColor.systemBackground
-                    backgroundColor = .clear
+            if #available(iOS 13.0, *) {
+                backgroundColor = .clear
                 isTranslucent = true
-                    barTintColor = UIColor.systemBackground
+                let appearance = UITabBarAppearance()
+                appearance.configureWithDefaultBackground()
+                appearance.backgroundColor = .systemBackground
+                self.standardAppearance = appearance
+                if #available(iOS 15.0, *) {
+                    self.scrollEdgeAppearance = appearance
                 } else {
-//                    backgroundColor = UIColor.darkGray
-                    backgroundColor = .clear
-                    isTranslucent = true
-                    barTintColor = UIColor.darkGray
+                    // Fallback on earlier versions
                 }
             } else {
-//                backgroundColor = UIColor.white
                 backgroundColor = .clear
-                isTranslucent = false
-                barTintColor = UIColor.white
+                isTranslucent = true
+                barTintColor = UIColor.darkGray
             }
         } else {
             // Fallback on earlier versions
-//            backgroundColor = UIColor.white
+            //            backgroundColor = UIColor.white
             backgroundColor = .clear
             isTranslucent = false
             barTintColor = UIColor.white
@@ -213,32 +212,7 @@ open class BubbleTabBar: UITabBar {
     }
     
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        if #available(iOS 12.0, *) {
-                    if self.traitCollection.userInterfaceStyle == .dark {
-                        if #available(iOS 13.0, *) {
-        //                    backgroundColor = UIColor.systemBackground
-                            backgroundColor = .clear
-                        isTranslucent = true
-                            barTintColor = UIColor.systemBackground
-                        } else {
-        //                    backgroundColor = UIColor.darkGray
-                            backgroundColor = .clear
-                            isTranslucent = true
-                            barTintColor = UIColor.darkGray
-                        }
-                    } else {
-        //                backgroundColor = UIColor.white
-                        backgroundColor = .clear
-                        isTranslucent = false
-                        barTintColor = UIColor.white
-                    }
-                } else {
-                    // Fallback on earlier versions
-        //            backgroundColor = UIColor.white
-                    backgroundColor = .clear
-                    isTranslucent = false
-                    barTintColor = UIColor.white
-                }
+        configure()
     }
     
 }
