@@ -1,0 +1,70 @@
+PODS:
+  - Alamofire (4.9.0)
+  - BadgeSwift (8.0.0)
+  - GradientLoadingBar (2.2.2):
+    - LightweightObservable (~> 2.1)
+  - IQKeyboardManagerSwift (6.5.6)
+  - LightweightObservable (2.1.2)
+  - MarqueeLabel (4.0.5)
+  - NotificationBannerSwift (3.0.6):
+    - MarqueeLabel (~> 4.0.5)
+    - SnapKit (~> 5.0.1)
+  - Realm (10.17.0):
+    - Realm/Headers (= 10.17.0)
+  - Realm/Headers (10.17.0)
+  - RealmSwift (10.17.0):
+    - Realm (= 10.17.0)
+  - SDDownloadManager (1.1.0)
+  - SnapKit (5.0.1)
+  - SVProgressHUD (2.2.5)
+  - SwiftKeychainWrapper (4.0.1)
+  - SwiftyJSON (5.0.1)
+
+DEPENDENCIES:
+  - Alamofire (= 4.9)
+  - BadgeSwift (~> 8.0)
+  - GradientLoadingBar (~> 2.0)
+  - IQKeyboardManagerSwift
+  - NotificationBannerSwift
+  - RealmSwift
+  - SDDownloadManager
+  - SVProgressHUD
+  - SwiftKeychainWrapper
+  - SwiftyJSON
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - BadgeSwift
+    - GradientLoadingBar
+    - IQKeyboardManagerSwift
+    - LightweightObservable
+    - MarqueeLabel
+    - NotificationBannerSwift
+    - Realm
+    - RealmSwift
+    - SDDownloadManager
+    - SnapKit
+    - SVProgressHUD
+    - SwiftKeychainWrapper
+    - SwiftyJSON
+
+SPEC CHECKSUMS:
+  Alamofire: afc3e7c6db61476cb45cdd23fed06bad03bbc321
+  BadgeSwift: a81547ffde1f462bb5fc02e3fa3fdcbc1b888354
+  GradientLoadingBar: 1592b9e0825057fe100a6364b6af6b19556825ab
+  IQKeyboardManagerSwift: c7df9d2deb356c04522f5c4b7b6e4ce4d8ed94fe
+  LightweightObservable: c5ac85423a5edbed9a920b4d5c7b8f94ab3688c4
+  MarqueeLabel: 00cc0bcd087111dca575878b3531af980559707d
+  NotificationBannerSwift: 7021be2338f8f29cf424b0aca43da462bf9e2a1a
+  Realm: 9533276bd76f66aa2fd0d3ffe700c1f6023dcab6
+  RealmSwift: 57f5d59aa29852587aad1e861989e7af139894b5
+  SDDownloadManager: 62a9339c03ea27606effefd9aa1800e4127e3a52
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
+  SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
+
+PODFILE CHECKSUM: 2b192a5cdcb52d11ec7bcf259c6e6280180db4ef
+
+COCOAPODS: 1.11.2

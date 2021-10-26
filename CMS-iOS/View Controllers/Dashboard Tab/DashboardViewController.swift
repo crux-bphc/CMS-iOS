@@ -104,11 +104,11 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             let destinationVC = segue.destination as! CourseDetailsViewController
             destinationVC.currentCourse = selectedCourse
         case "goToModuleDirectly":
-                let destinationVC = segue.destination as! ModuleViewController
-                destinationVC.selectedModule = selectedModule
+            let destinationVC = segue.destination as! ModuleViewController
+            destinationVC.selectedModule = selectedModule
         case "goToFolderModuleDirectly":
-                let destinationVC = segue.destination as! FolderContentViewController
-                destinationVC.currentModule = self.selectedModule
+            let destinationVC = segue.destination as! FolderContentViewController
+            destinationVC.currentModule = self.selectedModule
         case "goToDiscussionDirectly":
             let destinationVC = segue.destination as! DiscussionViewController
             destinationVC.selectedDiscussion = selectedAnnouncement
@@ -134,75 +134,77 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
             selectionFeedbackGenerator.selectionChanged()
             var actionSheet = UIAlertController()
-            if searchController.isActive{
-                if let rowNo = indexPath?.row{
-                    actionSheet = UIAlertController(title: filteredCourseViewModels[rowNo].courseName.cleanUp(), message: nil, preferredStyle: .actionSheet)
-                }
-            }else{
-                if let rowNo = indexPath?.row{
-                    actionSheet = UIAlertController(title: courseViewModels[rowNo].courseName.cleanUp(), message: nil, preferredStyle: .actionSheet)
-                }
-            }
-            let downloadAction = UIAlertAction(title: "Download Course", style: .default) { (action) in
-                
-                if Reachability.isConnectedToNetwork() {
-                    
-                    var courseToDownload = Course()
-                    if let rowNo = indexPath?.row{
-                        let realm = try! Realm()
-                        let courseId = self.searchController.isActive ? self.filteredCourseViewModels[rowNo].courseId : self.courseViewModels[rowNo].courseId
-                        courseToDownload = realm.objects(Course.self).filter("courseid = %@", courseId).first!
-                        self.downloadCourseData(course: courseToDownload) {
-                        }
+            if (indexPath?.section == 0) {
+                if searchController.isActive {
+                    if let rowNo = indexPath?.row {
+                        actionSheet = UIAlertController(title: filteredCourseViewModels[rowNo].courseName.cleanUp(), message: nil, preferredStyle: .actionSheet)
                     }
                 } else {
-                    self.showOfflineMessage()
-                }
-            }
-            let markAllRead = UIAlertAction(title: "Mark Everything Read", style: .destructive) { (_) in
-                let warning = UIAlertController(title: "Confirmation", message: "Are you sure you want to mark all modules and announcements as read?", preferredStyle: .actionSheet)
-                let doItAction = UIAlertAction(title: "Yes", style: .destructive) { (_) in
-                    DispatchQueue.global(qos: .userInteractive).async {
-                        
-                        let realm = try! Realm()
-                        let allUnreadModules = realm.objects(Module.self).filter("read = NO")
-                        while (allUnreadModules.count > 0) {
-                            try! realm.write {
-                                allUnreadModules[0].read = true
-                            }
-                        }
-                        let allUnreadDiscussions = realm.objects(Discussion.self).filter("read = NO")
-                        while (allUnreadDiscussions.count > 0) {
-                            try! realm.write {
-                                allUnreadDiscussions[0].read = true
-                            }
-                        }
-                        DispatchQueue.main.async {
-                            self.reloadUnreadCounts()
-                            
-                        }
+                    if let rowNo = indexPath?.row{
+                        actionSheet = UIAlertController(title: courseViewModels[rowNo].courseName.cleanUp(), message: nil, preferredStyle: .actionSheet)
                     }
                 }
+                let downloadAction = UIAlertAction(title: "Download Course", style: .default) { (action) in
+                    
+                    if Reachability.isConnectedToNetwork() {
+                        
+                        var courseToDownload = Course()
+                        if let rowNo = indexPath?.row{
+                            let realm = try! Realm()
+                            let courseId = self.searchController.isActive ? self.filteredCourseViewModels[rowNo].courseId : self.courseViewModels[rowNo].courseId
+                            courseToDownload = realm.objects(Course.self).filter("courseid = %@", courseId).first!
+                            self.downloadCourseData(course: courseToDownload) {
+                            }
+                        }
+                    } else {
+                        self.showOfflineMessage()
+                    }
+                }
+                let markAllRead = UIAlertAction(title: "Mark Everything Read", style: .destructive) { (_) in
+                    let warning = UIAlertController(title: "Confirmation", message: "Are you sure you want to mark all modules and announcements as read?", preferredStyle: .actionSheet)
+                    let doItAction = UIAlertAction(title: "Yes", style: .destructive) { (_) in
+                        DispatchQueue.global(qos: .userInteractive).async {
+                            
+                            let realm = try! Realm()
+                            let allUnreadModules = realm.objects(Module.self).filter("read = NO")
+                            while (allUnreadModules.count > 0) {
+                                try! realm.write {
+                                    allUnreadModules[0].read = true
+                                }
+                            }
+                            let allUnreadDiscussions = realm.objects(Discussion.self).filter("read = NO")
+                            while (allUnreadDiscussions.count > 0) {
+                                try! realm.write {
+                                    allUnreadDiscussions[0].read = true
+                                }
+                            }
+                            DispatchQueue.main.async {
+                                self.reloadUnreadCounts()
+                                
+                            }
+                        }
+                    }
+                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    warning.addAction(doItAction)
+                    warning.addAction(cancelAction)
+                    self.present(warning, animated: true, completion: nil)
+                }
+                let unenrollAction = UIAlertAction(title: "Unenroll", style: .destructive) { (_) in
+                    let confirmationAlert = UIAlertController(title: "Confirm", message: "Are you sure you want to unenroll from this course?", preferredStyle: .actionSheet)
+                    confirmationAlert.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: { (_) in
+                        let courseId = self.searchController.isActive ? self.filteredCourseViewModels[indexPath!.row].courseId : self.courseViewModels[indexPath!.row].courseId
+                        self.tryToUneroll(courseId: courseId, indexPath: indexPath!)
+                    }))
+                    confirmationAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                    self.present(confirmationAlert, animated: true, completion: nil)
+                }
                 let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                warning.addAction(doItAction)
-                warning.addAction(cancelAction)
-                self.present(warning, animated: true, completion: nil)
+                actionSheet.addAction(downloadAction)
+                actionSheet.addAction(unenrollAction)
+                actionSheet.addAction(markAllRead)
+                actionSheet.addAction(cancelAction)
+                present(actionSheet, animated: true, completion: nil)
             }
-            let unenrollAction = UIAlertAction(title: "Unenroll", style: .destructive) { (_) in
-                let confirmationAlert = UIAlertController(title: "Confirm", message: "Are you sure you want to unenroll from this course?", preferredStyle: .actionSheet)
-                confirmationAlert.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: { (_) in
-                    let courseId = self.searchController.isActive ? self.filteredCourseViewModels[indexPath!.row].courseId : self.courseViewModels[indexPath!.row].courseId
-                    self.tryToUneroll(courseId: courseId, indexPath: indexPath!)
-                }))
-                confirmationAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                self.present(confirmationAlert, animated: true, completion: nil)
-            }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            actionSheet.addAction(downloadAction)
-            actionSheet.addAction(unenrollAction)
-            actionSheet.addAction(markAllRead)
-            actionSheet.addAction(cancelAction)
-            present(actionSheet, animated: true, completion: nil)
         }
     }
     
@@ -263,12 +265,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         self.filterItemsForSearch(string: searchController.searchBar.text!)
         if !searchController.isActive {
             self.tableView.reloadData()
-
         }
     }
     
-    
-        
     func downloadCourseData(course: Course, completion: @escaping() -> Void) {
         
         let params : [String:String] = ["courseid": String(course.courseid), "wstoken": KeychainWrapper.standard.string(forKey: "userPassword")!]
@@ -290,7 +289,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         if courseData[i]["modules"][j]["modname"].string! == "resource" {
                             if (courseData[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("cms.bits-hyderabad.ac.in") {
                                 module.fileurl = (courseData[i]["modules"][j]["contents"][0]["fileurl"].string! +
-                                    "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
+                                                  "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
                                 module.mimetype = courseData[i]["modules"][j]["contents"][0]["mimetype"].string!
                                 module.filename = courseData[i]["modules"][j]["contents"][0]["filename"].string!
                             }
@@ -656,7 +655,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
     }
-
+    
     
     func stopTheDamnRequests() {
         if #available(iOS 9.0, *) {

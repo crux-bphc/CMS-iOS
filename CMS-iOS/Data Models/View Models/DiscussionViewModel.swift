@@ -20,7 +20,7 @@ class DiscussionViewModel {
     
     init(name: String, id: Int, description: String, date: String, read: Bool) {
         self.name = name
-        self.description = description
+        self.description = description.html2String
         self.id = id
         self.date = date
         if !read {
