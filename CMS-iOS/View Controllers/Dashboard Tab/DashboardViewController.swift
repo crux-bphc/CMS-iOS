@@ -36,6 +36,15 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var searchModules = [FilterModule]()
     var searchAnnouncements = [FilterDiscussion]()
     var isLoading = false
+    
+    enum DashboardState {
+        case loading
+        case empty
+        case hasContent
+    }
+    
+    var dashboardState: DashboardState = .loading
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.shouldHideSemester = UserDefaults.standard.bool(forKey: "hidesSemester")
@@ -420,6 +429,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         let realm = try! Realm()
         let realmCourses = realm.objects(Course.self).sorted(byKeyPath: "displayname", ascending: true)
         let offlineCourseViewModels = Array(realmCourses.map({ DashboardViewModel(courseCode: $0.courseCode, courseName: $0.courseName, courseId: $0.courseid, courseColor: UIColor.UIColorFromString(string: $0.allotedColor)) }))
+        self.dashboardState = .hasContent
         DashboardDataManager.shared.calculateUnreadCounts(courseViewModels: offlineCourseViewModels) { (newOfflineViewModels) in
             self.courseViewModels = offlineCourseViewModels
             DispatchQueue.main.async {
@@ -440,18 +450,31 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             DashboardDataManager.shared.getAndStoreCourses(userId: userDetails.userid) { (dashboardViewModels, shouldLogOut) in
                 if shouldLogOut {
                     // show message
+                    self.isLoading = false
+                    DispatchQueue.main.async {
+                        self.showLogoutAlert()
+                    }
                 } else if dashboardViewModels != nil {
                     DashboardDataManager.shared.getAndStoreModules {
                         DashboardDataManager.shared.getAndStoreDiscussions {
                             DashboardDataManager.shared.calculateUnreadCounts(courseViewModels: dashboardViewModels!) { (newCourseViewModels) in
                                 self.courseViewModels = newCourseViewModels
                                 self.isLoading = false
+                                self.dashboardState = .hasContent
                                 DispatchQueue.main.async {
                                     self.gradientLoadingBar.fadeOut()
                                     self.tableView.reloadData()
                                 }
                             }
                         }
+                    }
+                } else {
+                    // no courses
+                    DispatchQueue.main.async {
+                        self.isLoading = false
+                        self.dashboardState = .empty
+                        self.gradientLoadingBar.fadeOut()
+                        self.tableView.reloadData()
                     }
                 }
             }
@@ -499,21 +522,39 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return searchController.isActive ? 3 : 1
+        switch dashboardState {
+        case .loading:
+            return 1
+        case .empty:
+            return 1
+        case .hasContent:
+            return searchController.isActive ? 3 : 1
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return searchController.isActive ? filteredCourseViewModels.count : courseViewModels.count
-        case 1:
-            return searchModules.count
-        case 2:
-            return searchAnnouncements.count
-        default:
+        tableView.restore()
+        if dashboardState == .hasContent {
+            switch section {
+            case 0:
+                return searchController.isActive ? filteredCourseViewModels.count : courseViewModels.count
+            case 1:
+                return searchModules.count
+            case 2:
+                return searchAnnouncements.count
+            default:
+                return 0
+            }
+        } else if dashboardState == .empty {
+            tableView.setEmptyView(title: "No Courses", message: "Click on the search icon, search for your courses and then enroll in them for them to show up here.") {
+                self.dashboardState = .loading
+                self.tableView.reloadData()
+                self.refreshData()
+            }
+            return 0
+        } else {
             return 0
         }
-        
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -521,7 +562,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
             
@@ -567,7 +607,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             
             return cell
         }
-        
         return UITableViewCell()
     }
     
@@ -629,6 +668,15 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     func showOfflineMessage() {
         banner.show()
         self.perform(#selector(dismissOfflineBanner), with: nil, afterDelay: 1)
+    }
+    
+    func showLogoutAlert() {
+        let alert = UIAlertController(title: "Unauthorized", message: "It seems that your token has expired or the site is down. You will be logged out, please try logging in again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { _ in
+            self.logoutCurrentUser()
+            self.dismiss(animated: true, completion: nil)
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @objc func dismissOfflineBanner() {

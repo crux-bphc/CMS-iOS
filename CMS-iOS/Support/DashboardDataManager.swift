@@ -37,6 +37,9 @@ class DashboardDataManager {
             }
             
             let courses = JSON(courseData.value as Any)
+            if let _ = courses["exception"].string {
+                completion(nil, true)
+            }
             if let _ = courses[0]["id"].int {
                 var currentColorsCourseCode = String()
                 var currentColorsIndex = 0
@@ -73,7 +76,7 @@ class DashboardDataManager {
                 SpotlightIndex.shared.indexItems(courses: courseViewModels)
                 completion(courseViewModels, false)
             } else {
-                completion(nil, true)
+                completion(nil, false)
             }
         }
     }
