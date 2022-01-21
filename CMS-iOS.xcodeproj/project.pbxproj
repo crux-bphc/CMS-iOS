@@ -48,6 +48,8 @@
 		E65B154B2595BF0900CD7A28 /* CourseUnenroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65B154A2595BF0900CD7A28 /* CourseUnenroller.swift */; };
 		E65B154E2595C5FB00CD7A28 /* UnenrollWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65B154D2595C5FB00CD7A28 /* UnenrollWebViewController.swift */; };
 		E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */; };
+		E69D93CB279AF0100059E690 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69D93C9279AF0100059E690 /* UIButtonExtension.swift */; };
+		E69D93CC279AF0100059E690 /* TableViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69D93CA279AF0100059E690 /* TableViewExtension.swift */; };
 		E6AF0DA424547AB8001FEACB /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6AF0DA324547AB8001FEACB /* StringExtension.swift */; };
 		E6B205F7237C3FED00D0F69F /* AttributedStringFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */; };
 		E6C61631235DA92000FFC2E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6C61630235DA91F00FFC2E4 /* Main.storyboard */; };
@@ -120,6 +122,8 @@
 		E65B154D2595C5FB00CD7A28 /* UnenrollWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnenrollWebViewController.swift; sourceTree = "<group>"; };
 		E6951E6F23EF172E00C9CC3D /* CMS BPHC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "CMS BPHC.entitlements"; sourceTree = "<group>"; };
 		E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLPreviewItemSubclass.swift; sourceTree = "<group>"; };
+		E69D93C9279AF0100059E690 /* UIButtonExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
+		E69D93CA279AF0100059E690 /* TableViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewExtension.swift; sourceTree = "<group>"; };
 		E6AF0DA324547AB8001FEACB /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringFontExtension.swift; sourceTree = "<group>"; };
 		E6C61630235DA91F00FFC2E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -206,6 +210,8 @@
 				0A585452230168E7008FB370 /* Constants.swift */,
 				0A2FD034236059A800917BE7 /* Regex.swift */,
 				E6B205F6237C3FED00D0F69F /* AttributedStringFontExtension.swift */,
+				E69D93CA279AF0100059E690 /* TableViewExtension.swift */,
+				E69D93C9279AF0100059E690 /* UIButtonExtension.swift */,
 				0A646D7923D188150023572B /* Colours.swift */,
 				E6AF0DA324547AB8001FEACB /* StringExtension.swift */,
 				E640E69824B4B3A3008C30E2 /* SpotlightIndex.swift */,
@@ -455,6 +461,7 @@
 				0A5ECD7E2306B23000723365 /* Discussion.swift in Sources */,
 				0AC33B6F2304306C004AE385 /* ModuleViewController.swift in Sources */,
 				0A8E02D72300207900724899 /* User.swift in Sources */,
+				E69D93CC279AF0100059E690 /* TableViewExtension.swift in Sources */,
 				0AC33B642302153C004AE385 /* Course.swift in Sources */,
 				0A9A960C23572E93004ABB2F /* BubbleTabBar.swift in Sources */,
 				0A3DEAF522FDCA69001B6BFD /* LoginViewController.swift in Sources */,
@@ -478,6 +485,7 @@
 				E695AC9A2358D4C500757AB8 /* QLPreviewItemSubclass.swift in Sources */,
 				0A8F492B23313A3800E7A94C /* AddDiscussionViewController.swift in Sources */,
 				0A585453230168E7008FB370 /* Constants.swift in Sources */,
+				E69D93CB279AF0100059E690 /* UIButtonExtension.swift in Sources */,
 				E6E419032540085000CCA829 /* DashboardDataManager.swift in Sources */,
 				0A67E5DC23091B4700E18E99 /* EnrolmentViewController.swift in Sources */,
 				E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */,
