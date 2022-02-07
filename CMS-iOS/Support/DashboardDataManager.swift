@@ -73,7 +73,6 @@ class DashboardDataManager {
                     let currentCourseViewModel = DashboardViewModel(courseCode: currentCourse.courseCode, courseName: currentCourse.courseName, courseId: currentCourse.courseid, courseColor: UIColor.UIColorFromString(string: currentCourse.allotedColor))
                     courseViewModels.append(currentCourseViewModel)
                 }
-                SpotlightIndex.shared.indexItems(courses: courseViewModels)
                 completion(courseViewModels, false)
             } else {
                 completion(nil, false)
@@ -86,29 +85,32 @@ class DashboardDataManager {
         let FINAL_URL = constant.BASE_URL + constant.GET_COURSE_CONTENT
         let realmOuter = try! Realm()
         let courses = realmOuter.objects(Course.self)
-        let totalCourseCount = courses.count
-        var current = 0
+        let queue = DispatchQueue.global(qos: .userInteractive)
+        let group = DispatchGroup()
         for course in courses {
             let courseId = course.courseid
             let courseName = course.displayname
             //            let readModuleIdSet: Set<Int> = Set(realmOuter.objects(Module.self).filter("coursename == %@ AND read == YES", courseName).map({ $0.id }))
             let params : [String:Any] = ["wstoken": KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid": courseId]
-            let queue = DispatchQueue.global(qos: .userInteractive)
-            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON (queue: queue) { (response) in
+            group.enter()
+            Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON(queue: queue) { (response) in
+                defer {
+                    group.leave()
+                }
                 let realm = try! Realm()
                 if !response.result.isSuccess {
-                    completion()
+                    print("Failed for \(courseName)")
+//                    completion()
                 }
-                
-                //                let readModuleIdSet: Set<Int> = Set(realm.objects(Module.self).filter("coursename == %@ AND read == YES", courseName).map({ $0.id }))
-                
+//
+//                //                let readModuleIdSet: Set<Int> = Set(realm.objects(Module.self).filter("coursename == %@ AND read == YES", courseName).map({ $0.id }))
+//
                 let courseContent = JSON(response.value as Any)
                 //                try! realm.write {
                 //                    realm.delete(realm.objects(Module.self).filter("coursename = %@", courseName))
                 //                    realm.delete(realm.objects(CourseSection.self).filter("courseId = %@", courseId))
                 //
                 //                }
-                
                 for i in 0 ..< courseContent.count {
                     if courseContent[i]["modules"].count > 0 || courseContent[i]["summary"] != "" {
                         let section = CourseSection()
@@ -190,21 +192,19 @@ class DashboardDataManager {
                         }
                     }
                 }
-                current += 1
-                //                print("Done course \(courseName)")
-                if current == totalCourseCount {
-                    print("Done")
-                    completion()
-                }
             }
+        }
+        group.notify(queue: .main) {
+            print("Done loading all modules.")
+            completion()
+            return
         }
     }
     
     func getAndStoreDiscussions(completion: @escaping () -> Void) {
         let realm = try! Realm()
         let discussionModules = realm.objects(Module.self).filter("modname = %@", "forum")
-        let totalCount = discussionModules.count
-        var current = 0
+        let group = DispatchGroup()
         for x in 0..<discussionModules.count {
             let discussionModule = discussionModules[x]
             let courseName = discussionModule.coursename
@@ -214,7 +214,11 @@ class DashboardDataManager {
             let queue = DispatchQueue.global(qos: .userInteractive)
             let moduleId = discussionModule.id
             //            let coursename = discussionModule.coursename
+            group.enter()
             Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constant.headers).responseJSON(queue: queue) { (response) in
+                defer {
+                    group.leave()
+                }
                 if response.result.isSuccess {
                     let realmNew = try! Realm()
                     //                    let readDiscussionIdSet: Set<Int> = Set(realmNew.objects(Discussion.self).filter("moduleId = %@ AND read == YES", moduleId).map({ $0.id }))
@@ -259,14 +263,15 @@ class DashboardDataManager {
                             realmNew.add(discussion, update: .modified)
                         }
                     }
-                }
-                //                print("done discussions:", courseName)
-                current += 1
-                if current == totalCount {
-                    print("Done with discussions")
-                    completion()
+                } else {
+                    
                 }
             }
+        }
+        group.notify(queue: .main) {
+            print("Done loading all discussions.")
+            completion()
+            return
         }
         
     }
@@ -285,7 +290,6 @@ class DashboardDataManager {
                 print("received response")
                 let realmNew = try! Realm()
                 let discussionResponse = JSON(response.value as Any)
-                print(discussionResponse)
                 for i in 0 ..< discussionResponse["discussions"].count {
                     let discussion = Discussion()
                     discussion.name = discussionResponse["discussions"][i]["name"].string ?? "No Name"

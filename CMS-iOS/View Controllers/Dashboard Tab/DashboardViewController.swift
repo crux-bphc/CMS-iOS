@@ -25,7 +25,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var selectedCourse = Course()
     var selectedModule = Module()
     var selectedAnnouncement = Discussion()
-    var shouldHideSemester = false
     var searching : Bool = false
     private let gradientLoadingBar = GradientActivityIndicatorView()
     var filteredCourseViewModels = [DashboardViewModel]()
@@ -47,7 +46,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.shouldHideSemester = UserDefaults.standard.bool(forKey: "hidesSemester")
         setupGradientLoadingBar()
         let realm = try! Realm()
         if let currentUser = realm.objects(User.self).first {
@@ -89,14 +87,10 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        //        tableView.reloadData()
+        super.viewDidAppear(animated)
+        tableView.reloadData()
         UIApplication.shared.applicationIconBadgeNumber = 0
         self.reloadUnreadCounts()
-        let newVal = UserDefaults.standard.bool(forKey: "hidesSemester")
-        if newVal != self.shouldHideSemester {
-            self.shouldHideSemester = newVal
-            self.tableView.reloadData()
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -104,7 +98,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         //        refreshControl?.endRefreshing()
         gradientLoadingBar.fadeOut()
         isLoading = false
-        stopTheDamnRequests()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -439,11 +432,11 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     @objc func refreshData() {
+        self.refreshControl?.endRefreshing()
+        if isLoading { return }
+        URLCache.shared.removeAllCachedResponses()
         gradientLoadingBar.fadeIn()
-        stopTheDamnRequests()
         if !searchController.isActive && Reachability.isConnectedToNetwork() {
-            self.refreshControl?.endRefreshing()
-            if isLoading { return }
             isLoading = true
             self.tableView.showsVerticalScrollIndicator = false
             gradientLoadingBar.fadeIn()
@@ -464,6 +457,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                 DispatchQueue.main.async {
                                     self.gradientLoadingBar.fadeOut()
                                     self.tableView.reloadData()
+                                }
+                                DispatchQueue.global(qos: .background).async {
+                                    SpotlightIndex.shared.indexItems(courses: self.courseViewModels)
                                 }
                             }
                         }
@@ -631,7 +627,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             uploadTasks.forEach { $0.cancel() }
             downloadTasks.forEach { $0.cancel() }
         }
-        stopTheDamnRequests()
         
         if indexPath.section == 0 {
             if courseViewModels.count > indexPath.row {
@@ -702,22 +697,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
-    }
-    
-    
-    func stopTheDamnRequests() {
-        if #available(iOS 9.0, *) {
-            
-            Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
-                tasks.forEach{ $0.cancel() }
-            }
-        } else {
-            Alamofire.SessionManager.default.session.getTasksWithCompletionHandler { (sessionDataTask, uploadData, downloadData) in
-                sessionDataTask.forEach { $0.cancel() }
-                uploadData.forEach { $0.cancel() }
-                downloadData.forEach { $0.cancel() }
-            }
-        }
     }
     
     func logoutCurrentUser() {

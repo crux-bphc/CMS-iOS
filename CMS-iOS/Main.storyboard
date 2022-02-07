@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19150" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19134"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -904,7 +904,7 @@
                             <outlet property="delegate" destination="Opn-i5-N4W" id="YhK-dP-Zzp"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Site News" image="folded-newspaper" selectedImage="folded-newspaper" id="8sY-3q-xrJ"/>
+                    <tabBarItem key="tabBarItem" title="Site News" image="Site News" selectedImage="Site News" id="8sY-3q-xrJ"/>
                     <navigationItem key="navigationItem" title="Site News" id="CkA-Q8-4wD"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -939,7 +939,7 @@
         <segue reference="wt5-J4-7yV"/>
         <segue reference="r0O-gx-IAp"/>
         <segue reference="Cv0-T4-e1a"/>
-        <segue reference="nQq-Vr-otz"/>
+        <segue reference="AhJ-kj-ro0"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Dashboard" width="30" height="30"/>
@@ -947,7 +947,6 @@
         <image name="Search" width="30" height="30"/>
         <image name="Site News" width="30" height="30"/>
         <image name="dashboard" width="21.333333969116211" height="21.333333969116211"/>
-        <image name="folded-newspaper" width="21.333333969116211" height="21.333333969116211"/>
         <image name="google logo white" width="654" height="665"/>
         <image name="logo" width="8000" height="8000"/>
         <namedColor name="Course Colourset">

@@ -15,6 +15,7 @@ import SDDownloadManager
 import SafariServices
 import CoreSpotlight
 import SwiftKeychainWrapper
+import Alamofire
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -48,10 +49,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     // change properties based on new schema
                 }
             })
-
+        Alamofire.SessionManager.default.delegate.taskWillPerformHTTPRedirection = nil
+        
         // Tell Realm to use this new configuration object for the default Realm
         Realm.Configuration.defaultConfiguration = config
-    
         let realm = try! Realm()
         UIApplication.shared.registerForRemoteNotifications()
         IQKeyboardManager.shared.enable = true
