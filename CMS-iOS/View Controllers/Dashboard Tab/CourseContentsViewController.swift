@@ -63,13 +63,13 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
         
     }
     override func viewWillAppear(_ animated: Bool) {
+        loadModulesFromMemory()
         tableView.reloadData()
     }
     
     func loadModulesFromMemory() {
         let realm = try! Realm()
         let sections = realm.objects(CourseSection.self).filter("courseId = \(currentCourse.courseid)").sorted(byKeyPath: "dateCreated", ascending: true)
-        print(sections.map({[$0.name, $0.dateCreated]}))
         if sections.count != 0 {
             sectionArray = Array(sections)
         } else {
@@ -82,7 +82,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
         
         if Reachability.isConnectedToNetwork() {
             let FINAL_URL = constants.BASE_URL + constants.GET_COURSE_CONTENT
-            let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : currentCourse.courseid]
+            let params : [String:Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword") ?? "", "courseid" : currentCourse.courseid]
             var readModuleIds = [Int]()
             gradientLoadingBar.fadeIn()
             
@@ -91,7 +91,6 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                 if response.result.isSuccess {
                     let courseContent = JSON(response.value as Any)
                     let realmModules = realm.objects(Module.self).filter("coursename = %@", self.currentCourse.displayname)
-                    print(self.currentCourse.displayname)
                     for i in 0..<realmModules.count {
                         if realmModules[i].read && !readModuleIds.contains(realmModules[i].id) {
                             readModuleIds.append(realmModules[i].id)
@@ -129,7 +128,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                 if moduleData.modname == "resource" {
                                     if (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("cms.bits-hyderabad.ac.in") {
                                         moduleData.fileurl = (courseContent[i]["modules"][j]["contents"][0]["fileurl"].string! +
-                                            "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
+                                            "&token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")")
                                         moduleData.mimetype = courseContent[i]["modules"][j]["contents"][0]["mimetype"].string!
                                         moduleData.filename = courseContent[i]["modules"][j]["contents"][0]["filename"].string!
                                     }
@@ -153,7 +152,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                                         newModule.read = true
                                         
                                         if courseContent[i]["modules"][j]["contents"][a]["fileurl"].string!.contains("cms.bits-hyderabad.ac.in") {
-                                            newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                            newModule.fileurl = courseContent[i]["modules"][j]["contents"][a]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")"
                                         }
                                         newModule.mimetype = courseContent[i]["modules"][j]["contents"][a]["mimetype"].string!
                                         newModule.id = (moduleData.id * 1000) + a + 1
@@ -469,7 +468,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
     }
     
     func downloadDiscussions(currentModule : Module, completion : @escaping () -> Void) {
-        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
+        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword") ?? "", "forumid" : String(currentModule.id)]
         let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in
             if response.result.isSuccess {
@@ -497,7 +496,7 @@ class CourseDetailsViewController : UITableViewController, UIGestureRecognizerDe
                         discussion.moduleId = currentModule.id
                         if discussionResponse["discussions"][i]["attachment"].string! != "0" {
                             if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("cms.bits-hyderabad.ac.in") ?? false {
-                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")"
                             } else {
                                 discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
                             }

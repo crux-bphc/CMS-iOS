@@ -15,7 +15,7 @@ class AboutPageViewController : UIViewController {
     }
     
     @IBAction func cruxButtonPressed(_ sender: UIButton) {
-         UIApplication.shared.open(URL(string: "https://crux-bphc.github.io/")!, options: [:], completionHandler: nil)
+         UIApplication.shared.open(URL(string: "https://crux-bphc.com")!, options: [:], completionHandler: nil)
     }
     
 }

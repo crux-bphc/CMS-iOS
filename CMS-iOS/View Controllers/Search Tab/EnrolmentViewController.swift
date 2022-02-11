@@ -36,7 +36,7 @@ class EnrolmentViewController: UIViewController {
     
     func enrolCourse (completion: @escaping () -> Void) {
         
-        let params : [String : Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "courseid" : enrolmentCourse.courseid]
+        let params : [String : Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword") ?? "", "courseid" : enrolmentCourse.courseid]
         let FINAL_URL = constants.BASE_URL + constants.SELF_ENROL_USER
         SVProgressHUD.show()
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON { (response) in

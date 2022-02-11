@@ -175,7 +175,6 @@ class LoginViewController: UIViewController {
                     user.email = self.currentUser.email
                     user.loggedIn = self.currentUser.loggedIn
                     user.userid = self.currentUser.userid
-                    user.isConnected = true
                     let realm = try! Realm()
                     try! realm.write {
                         
@@ -183,7 +182,10 @@ class LoginViewController: UIViewController {
                     }
                     
                     self.keyField.text = ""
-                    self.performSegue(withIdentifier: "goToDashboard", sender: self)
+                    SVProgressHUD.dismiss()
+                    self.dismiss(animated: true) {
+                        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "com.crux-bphc.CMS-iOS.login")))
+                    }
                     completion()
                 }
             }

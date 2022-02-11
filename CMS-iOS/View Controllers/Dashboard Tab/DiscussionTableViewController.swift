@@ -151,7 +151,7 @@ class DiscussionTableViewController: UITableViewController {
     func getNewCourseDiscussions(completion: @escaping ([DiscussionViewModel]) -> Void) {
 
         if !Reachability.isConnectedToNetwork() { return }
-        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
+        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword") ?? "", "forumid" : String(currentModule.id)]
         let FINAL_URL : String = constants.BASE_URL + constants.GET_FORUM_DISCUSSIONS
         let queue = DispatchQueue.global(qos: .userInteractive)
         let currentModuleId = self.currentModule.id
@@ -188,7 +188,7 @@ class DiscussionTableViewController: UITableViewController {
                 discussion.moduleId = currentModuleId
                 if discussionResponse["discussions"][i]["attachment"].string! != "0" {
                     if discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string?.contains("cms.bits-hyderabad.ac.in") ?? false {
-                        discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                        discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string! + "?&token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")"
                     } else {
                         discussion.attachment = discussionResponse["discussions"][i]["attachments"][0]["fileurl"].string ?? ""
                     }
@@ -211,7 +211,7 @@ class DiscussionTableViewController: UITableViewController {
     }
     
     func canAddDiscussion() {
-        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "forumid" : String(currentModule.id)]
+        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword") ?? "", "forumid" : String(currentModule.id)]
         let headers = constants.headers
         let FINAL_URL = constants.BASE_URL + constants.CAN_ADD_DISCUSSIONS
         

@@ -34,14 +34,23 @@ class DiscussionViewController: UIViewController, QLPreviewControllerDataSource{
             setMessage()
         }
         self.navigationItem.largeTitleDisplayMode = .never
-        if selectedDiscussion.attachment == "" {
+        if !selectedDiscussion.isInvalidated && selectedDiscussion.attachment == "" {
             self.openButton.isHidden = true
         }
         let realm = try! Realm()
-        try! realm.write {
-            selectedDiscussion.read = true
+        if !selectedDiscussion.isInvalidated {
+            try! realm.write {
+                selectedDiscussion.read = true
+                print("MARKED AS READ")
+            }
         }
 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if UIApplication.shared.applicationState == .active {
+            setMessage()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -38,6 +38,18 @@ open class BubbleTabBarController: UITabBarController {
             tabBar.select(itemAt: selectedIndex, animated: false)
         }
     }
+    
+    open override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "goToLogin":
+            guard let navVC = self.viewControllers?.first as? UINavigationController else { return }
+            guard let dashboardVC = navVC.viewControllers.first as? DashboardViewController else { return }
+            dashboardVC.loginViewController = segue.destination as? LoginViewController
+            break
+        default:
+            break
+        }
+    }
 
     open override func viewDidLoad() {
         super.viewDidLoad()

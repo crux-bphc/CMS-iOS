@@ -18,7 +18,8 @@ import SafariServices
 
 class DashboardViewController : UITableViewController, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate {
     
-    let banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
+    var banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
+    var loginViewController: LoginViewController?
     let constant = Constants.Global.self
     var courseViewModels = [DashboardViewModel]()
     var userDetails = User()
@@ -47,21 +48,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGradientLoadingBar()
-        let realm = try! Realm()
-        if let currentUser = realm.objects(User.self).first {
-            userDetails = currentUser
-        }
-        
         setupNavBar()
-        loadOfflineCourses()
-        refreshData()
-        let notificationDeviceToken = KeychainWrapper.standard.string(forKey: "deviceToken")
-        
-        if notificationDeviceToken != nil {
-            NotificationManager.shared.registerDevice(deviceToken: notificationDeviceToken!) {
-                print("Notification token sent")
-            }
-        }
         if #available(iOS 13.0, *) {
             refreshControl?.tintColor = .secondaryLabel
         } else {
@@ -79,6 +66,22 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         longPressGesture.minimumPressDuration = 0.5
         longPressGesture.delegate = self
         self.tableView.addGestureRecognizer(longPressGesture)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshAfterLogin), name: Notification.Name("com.crux-bphc.CMS-iOS.login"), object: nil)
+        let realm = try! Realm()
+        if let currentUser = realm.objects(User.self).first {
+            userDetails = currentUser
+        } else {
+            return
+        }
+        loadOfflineCourses()
+        refreshData()
+        let notificationDeviceToken = KeychainWrapper.standard.string(forKey: "deviceToken")
+        
+        if notificationDeviceToken != nil {
+            NotificationManager.shared.registerDevice(deviceToken: notificationDeviceToken!) {
+                print("Notification token sent")
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -88,6 +91,13 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        let realm = try! Realm()
+        if let currentUser = realm.objects(User.self).first {
+            userDetails = currentUser
+        } else {
+            (self.tabBarController as? BubbleTabBarController)?.performSegue(withIdentifier: "goToLogin", sender: self)
+            return
+        }
         tableView.reloadData()
         UIApplication.shared.applicationIconBadgeNumber = 0
         self.reloadUnreadCounts()
@@ -96,12 +106,16 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     override func viewWillDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         //        refreshControl?.endRefreshing()
+        self.reloadUnreadCounts()
         gradientLoadingBar.fadeOut()
-        isLoading = false
+//        isLoading = false
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
+        case "goToLogin":
+            let destinationVC = segue.destination as! LoginViewController
+            self.loginViewController = destinationVC
         case "goToCourseContent":
             let destinationVC = segue.destination as! CourseDetailsViewController
             destinationVC.currentCourse = selectedCourse
@@ -126,6 +140,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
+        banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
     }
     
     @objc func handleLongPress(longPressGesture: UILongPressGestureRecognizer) {
@@ -272,7 +287,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func downloadCourseData(course: Course, completion: @escaping() -> Void) {
         
-        let params : [String:String] = ["courseid": String(course.courseid), "wstoken": KeychainWrapper.standard.string(forKey: "userPassword")!]
+        let params : [String:String] = ["courseid": String(course.courseid), "wstoken": KeychainWrapper.standard.string(forKey: "userPassword") ?? ""]
         
         Alamofire.request((constant.BASE_URL + constant.GET_COURSE_CONTENT), method: .get, parameters: params, headers: constant.headers).responseJSON { (response) in
             let realm = try! Realm()
@@ -291,14 +306,14 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         if courseData[i]["modules"][j]["modname"].string! == "resource" {
                             if (courseData[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("cms.bits-hyderabad.ac.in") {
                                 module.fileurl = (courseData[i]["modules"][j]["contents"][0]["fileurl"].string! +
-                                                  "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
+                                                  "&token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")")
                                 module.mimetype = courseData[i]["modules"][j]["contents"][0]["mimetype"].string!
                                 module.filename = courseData[i]["modules"][j]["contents"][0]["filename"].string!
                             }
                             else {
                                 module.fileurl = (courseData[i]["modules"][j]["contents"][0]["fileurl"].string!)
                             }
-                            let downloadUrl = courseData[i]["modules"][j]["contents"][0]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                            let downloadUrl = courseData[i]["modules"][j]["contents"][0]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")"
                             let moduleToDownload = Module()
                             moduleToDownload.coursename = course.displayname
                             moduleToDownload.id = courseData[i]["modules"][j]["id"].int!
@@ -310,12 +325,12 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                 newModule.filename = courseData[i]["modules"][j]["contents"][u]["filename"].string!
                                 
                                 if courseData[i]["modules"][j]["contents"][u]["fileurl"].string!.contains("cms.bits-hyderabad.ac.in") {
-                                    newModule.fileurl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                    newModule.fileurl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")"
                                 }
                                 newModule.mimetype = courseData[i]["modules"][j]["contents"][u]["mimetype"].string!
                                 module.fileModules.append(newModule)
                                 let moduleToDownload = Module()
-                                let downloadUrl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                let downloadUrl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")"
                                 moduleToDownload.coursename = course.displayname
                                 moduleToDownload.id = u
                                 moduleToDownload.filename = courseData[i]["modules"][j]["contents"][u]["filename"].string!
@@ -431,10 +446,15 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
     }
     
+    @objc func refreshAfterLogin() {
+        self.courseViewModels = []
+        tableView.reloadData()
+        refreshData()
+    }
+    
     @objc func refreshData() {
         self.refreshControl?.endRefreshing()
         if isLoading { return }
-        URLCache.shared.removeAllCachedResponses()
         gradientLoadingBar.fadeIn()
         if !searchController.isActive && Reachability.isConnectedToNetwork() {
             isLoading = true
@@ -450,7 +470,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                 } else if dashboardViewModels != nil {
                     DashboardDataManager.shared.getAndStoreModules {
                         DashboardDataManager.shared.getAndStoreDiscussions {
-                            DashboardDataManager.shared.calculateUnreadCounts(courseViewModels: dashboardViewModels!) { (newCourseViewModels) in
+                            DashboardDataManager.shared.calculateUnreadCounts(courseViewModels: dashboardViewModels!.count > 0 ? dashboardViewModels ?? [] : self.courseViewModels) { (newCourseViewModels) in
                                 self.courseViewModels = newCourseViewModels
                                 self.isLoading = false
                                 self.dashboardState = .hasContent
@@ -668,8 +688,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     func showLogoutAlert() {
         let alert = UIAlertController(title: "Unauthorized", message: "It seems that your token has expired or the site is down. You will be logged out, please try logging in again.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { _ in
-            self.logoutCurrentUser()
-            self.dismiss(animated: true, completion: nil)
+            Authentication.shared.signOut {
+                self.tabBarController?.performSegue(withIdentifier: "goToLogin", sender: self)
+            }
         }))
         self.present(alert, animated: true, completion: nil)
     }
@@ -697,20 +718,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
-    }
-    
-    func logoutCurrentUser() {
-        let realm = try! Realm()
-        
-        try! realm.write {
-            realm.deleteAll()
-        }
-        SpotlightIndex.shared.deindexAllItems()
-        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
-        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "MoodleSession")
-        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "privateToken")
-        
-        UserDefaults.standard.removeObject(forKey: "sessionTimestamp")
     }
     
     func redirectToModule() {

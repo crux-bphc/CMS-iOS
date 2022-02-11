@@ -53,24 +53,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         // Tell Realm to use this new configuration object for the default Realm
         Realm.Configuration.defaultConfiguration = config
-        let realm = try! Realm()
         UIApplication.shared.registerForRemoteNotifications()
         IQKeyboardManager.shared.enable = true
-        if let realmUser = realm.objects(User.self).first {
-            if Reachability.isConnectedToNetwork() {
-                try! realm.write {
-                    realmUser.isConnected = true
-                    print("successfully set connected = true")
-                }
-            } else {
-                try! realm.write {
-                    realmUser.isConnected = false
-                }
-            }
-            print(realmUser.isConnected as Any)
-        } else {
-            
-        }
         
 //        if let userInfo = launchOptions?[.remoteNotification] as? [AnyHashable: Any] {
 ////            manageNotificationPayload(userInfo: userInfo)
@@ -88,22 +72,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
     
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        let realm = try! Realm()
-        if let realmUser = realm.objects(User.self).first {
-            if Reachability.isConnectedToNetwork() {
-                try! realm.write {
-                    realmUser.isConnected = true
-                }
-            } else {
-                try! realm.write {
-                    realmUser.isConnected = false
-                }
-            }
-            print(realmUser.isConnected as Any)
-        }
-    }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
@@ -117,9 +85,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         
         guard let message = url.host else { return true }
-        let loginViewController = self.window?.rootViewController as! LoginViewController
-        loginViewController.loginWithGoogle(input: message)
-        loginViewController.safariVC.dismiss(animated: true)
+        guard let tabVC = self.window?.rootViewController as? BubbleTabBarController else { return false }
+        tabVC.selectedIndex = 0
+        guard let navVC = tabVC.viewControllers?.first as? UINavigationController else { return false }
+        guard let dashboardVC = (navVC.viewControllers.first as? DashboardViewController) else { return false }
+        guard let loginVC = dashboardVC.loginViewController else { return false }
+        loginVC.loginWithGoogle(input: message)
+        loginVC.safariVC.dismiss(animated: true)
         
         return true
     }
@@ -219,6 +191,7 @@ extension AppDelegate {
             // topController should now be your topmost view controller
             if let bubbleTabVC = topController as? BubbleTabBarController {
                 // app is already open
+                bubbleTabVC.selectedIndex = 0
                 guard let navigationVC = bubbleTabVC.viewControllers?.first as? UINavigationController else { return }
                 let realm = try! Realm()
                 switch redirectType {
@@ -228,6 +201,7 @@ extension AppDelegate {
                     let courseContentsVC = storyboard.instantiateViewController(withIdentifier: "Course Contents") as! CourseDetailsViewController
                     courseContentsVC.currentCourse = course
                     navigationVC.pushViewController(courseContentsVC, animated: true)
+                    break
                 case "module":
                     // get the module and push it
                     guard let module = realm.objects(Module.self).filter("id = %@", id).first else { return }
@@ -277,11 +251,12 @@ extension AppDelegate {
             case "discussion":
                 guard let discussionIdString = Regex.match(pattern: "#p[0-9]+", text: contextURL).first?.replacingOccurrences(of: "#p", with: "") else { return }
                 guard let discussionId = Int(discussionIdString) else { return }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // this delay is required, otherwise it doesnt work when notification launches app
-                    DashboardDataManager.getAndStoreDiscussions(forCourse: courseId) {
-                        DispatchQueue.main.async {
-                            self.manageRedirection(redirectType: notificationType, id: discussionId)
-                        }
+                DashboardDataManager.shared.getAndStoreDiscussions(forCourse: courseId) {
+                    Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
+                        tasks.forEach{ $0.cancel() }
+                    }
+                    DispatchQueue.main.async {
+                        self.manageRedirection(redirectType: notificationType, id: discussionId)
                     }
                 }
                 break
@@ -295,6 +270,7 @@ extension AppDelegate {
                         }
                     }
                 }
+                break
             default:
                 break
             }

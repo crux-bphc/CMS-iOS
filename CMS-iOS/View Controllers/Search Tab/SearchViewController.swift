@@ -47,7 +47,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     func searchRequest (keyword: String, completion: @escaping() -> Void) {
         print("Made request to search for courses.")
         gradientLoadingBar.fadeIn()
-        let params : [String : Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!, "criteriavalue" : keyword, "page" : 1]
+        let params : [String : Any] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword") ?? "", "criteriavalue" : keyword, "page" : 1]
         let FINAL_URL : String = constants.BASE_URL + constants.SEARCH_COURSES
         let queue = DispatchQueue.global(qos: .userInteractive)
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: self.constants.headers).responseJSON(queue : queue) { (response) in

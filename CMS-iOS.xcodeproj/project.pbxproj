@@ -56,6 +56,7 @@
 		E6DD7D742525C8F000514D81 /* DiscussionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DD7D732525C8F000514D81 /* DiscussionViewModel.swift */; };
 		E6E41900254007B700CCA829 /* CourseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E418FF254007B700CCA829 /* CourseViewModel.swift */; };
 		E6E419032540085000CCA829 /* DashboardDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E419022540085000CCA829 /* DashboardDataManager.swift */; };
+		E6EABE7C27B6BD7200382720 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EABE7B27B6BD7200382720 /* Authentication.swift */; };
 		E6F4B55725AED6B0001FFE27 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F4B55625AED6B0001FFE27 /* NotificationManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -130,6 +131,7 @@
 		E6DD7D732525C8F000514D81 /* DiscussionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionViewModel.swift; sourceTree = "<group>"; };
 		E6E418FF254007B700CCA829 /* CourseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseViewModel.swift; sourceTree = "<group>"; };
 		E6E419022540085000CCA829 /* DashboardDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardDataManager.swift; sourceTree = "<group>"; };
+		E6EABE7B27B6BD7200382720 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
 		E6F4B55625AED6B0001FFE27 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -204,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				0A4AF7B323819C0100C6EBA1 /* BackgroundFetch.swift */,
+				E6EABE7B27B6BD7200382720 /* Authentication.swift */,
 				0A8EFC6423100F9D00CD6BAD /* Reachability.swift */,
 				E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */,
 				E695AC992358D4C500757AB8 /* QLPreviewItemSubclass.swift */,
@@ -464,6 +467,7 @@
 				E69D93CC279AF0100059E690 /* TableViewExtension.swift in Sources */,
 				0AC33B642302153C004AE385 /* Course.swift in Sources */,
 				0A9A960C23572E93004ABB2F /* BubbleTabBar.swift in Sources */,
+				E6EABE7C27B6BD7200382720 /* Authentication.swift in Sources */,
 				0A3DEAF522FDCA69001B6BFD /* LoginViewController.swift in Sources */,
 				0AF805C5234F43A3008D9B25 /* CourseTableViewCell.swift in Sources */,
 				0AC33B6D2302EF18004AE385 /* Module.swift in Sources */,
@@ -642,7 +646,7 @@
 				CODE_SIGN_ENTITLEMENTS = "CMS-iOS/CMS BPHC.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_TEAM = 8NXR4FCN3L;
 				INFOPLIST_FILE = "CMS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -650,7 +654,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.1;
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.crux-bphc.CMS-iOS";
 				PRODUCT_NAME = "CMS BPHC";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -669,7 +673,7 @@
 				CODE_SIGN_ENTITLEMENTS = "CMS-iOS/CMS BPHC.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_TEAM = 8NXR4FCN3L;
 				INFOPLIST_FILE = "CMS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -677,7 +681,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.1;
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.crux-bphc.CMS-iOS";
 				PRODUCT_NAME = "CMS BPHC";
 				PROVISIONING_PROFILE_SPECIFIER = "";
