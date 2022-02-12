@@ -17,7 +17,7 @@ extension String {
     }
     
     func removeSemester() -> String {
-        let clean = self.replacingOccurrences(of: "FIRST SEMESTER 2020-21 ", with: "")
+        let clean = self.replacingOccurrences(of: " Sem 2 2021-22", with: "")
         return clean
     }
     

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19150" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19134"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -54,6 +54,12 @@
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SEM II 2021-22" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wFy-VU-Yi8">
+                                <rect key="frame" x="122.5" y="24" width="104.5" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
                         <constraints>
@@ -61,9 +67,12 @@
                             <constraint firstItem="tjO-gw-hV7" firstAttribute="top" secondItem="jb8-52-F4v" secondAttribute="bottom" constant="2" id="Jqw-pM-cPX"/>
                             <constraint firstItem="zo5-Rh-0en" firstAttribute="centerY" secondItem="In3-Lu-Tqa" secondAttribute="centerY" id="MJN-3M-fBP"/>
                             <constraint firstItem="zo5-Rh-0en" firstAttribute="leading" secondItem="tjO-gw-hV7" secondAttribute="trailing" constant="8" id="NLb-BS-dLC"/>
+                            <constraint firstItem="wFy-VU-Yi8" firstAttribute="centerY" secondItem="jb8-52-F4v" secondAttribute="centerY" id="Sfh-BR-GE1"/>
                             <constraint firstItem="jb8-52-F4v" firstAttribute="leading" secondItem="In3-Lu-Tqa" secondAttribute="leading" constant="16" id="U1t-Ua-dAP"/>
+                            <constraint firstItem="wFy-VU-Yi8" firstAttribute="leading" secondItem="jb8-52-F4v" secondAttribute="trailing" constant="5" id="d4N-i1-klw"/>
                             <constraint firstAttribute="bottom" secondItem="tjO-gw-hV7" secondAttribute="bottom" constant="22" id="hym-vd-ap1"/>
                             <constraint firstAttribute="trailing" secondItem="zo5-Rh-0en" secondAttribute="trailing" constant="20" id="ms2-6q-laW"/>
+                            <constraint firstItem="zo5-Rh-0en" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="wFy-VU-Yi8" secondAttribute="trailing" constant="2" id="nDm-ex-yDi"/>
                             <constraint firstItem="tjO-gw-hV7" firstAttribute="leading" secondItem="In3-Lu-Tqa" secondAttribute="leading" constant="16" id="q7n-1D-2I9"/>
                         </constraints>
                     </view>
@@ -81,6 +90,7 @@
                 <outlet property="containView" destination="In3-Lu-Tqa" id="gkE-Di-g0i"/>
                 <outlet property="courseFullName" destination="tjO-gw-hV7" id="n6Y-Dw-BkX"/>
                 <outlet property="courseName" destination="jb8-52-F4v" id="hVz-I5-Pn0"/>
+                <outlet property="semesterLabel" destination="wFy-VU-Yi8" id="QsS-1Q-BXJ"/>
                 <outlet property="unreadCounterLabel" destination="zo5-Rh-0en" id="Inh-Cb-OVT"/>
             </connections>
             <point key="canvasLocation" x="140.57971014492756" y="117.1875"/>
@@ -94,6 +104,9 @@
     <resources>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

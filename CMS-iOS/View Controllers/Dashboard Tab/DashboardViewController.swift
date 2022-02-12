@@ -63,7 +63,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         tableView.register(UINib(nibName: "CourseTableViewCell", bundle: nil), forCellReuseIdentifier: "CourseTableViewCell")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ModuleTableViewCellSearching")
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
-        longPressGesture.minimumPressDuration = 0.5
+        longPressGesture.minimumPressDuration = 0.4
         longPressGesture.delegate = self
         self.tableView.addGestureRecognizer(longPressGesture)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshAfterLogin), name: Notification.Name("com.crux-bphc.CMS-iOS.login"), object: nil)
@@ -148,8 +148,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         let indexPath = self.tableView.indexPathForRow(at: pressLocation)
         if indexPath == nil {
         } else if longPressGesture.state == UIGestureRecognizer.State.began {
-            let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
-            selectionFeedbackGenerator.selectionChanged()
+            let generator = UIImpactFeedbackGenerator(style: .heavy)
+            generator.prepare()
+            generator.impactOccurred()
             var actionSheet = UIAlertController()
             if (indexPath?.section == 0) {
                 if searchController.isActive {
@@ -588,12 +589,24 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     cell.courseName.text = filteredCourseViewModels[indexPath.row].courseCode
                     
                     cell.courseFullName.text = filteredCourseViewModels[indexPath.row].courseName.cleanUp().removeSemester()
+                    if filteredCourseViewModels[indexPath.row].courseName.contains("Sem 2 2021-22") {
+                        cell.semesterLabel.isHidden = false
+                        cell.semesterLabel.text = "SEM II 2021-22"
+                    } else {
+                        cell.semesterLabel.isHidden = true
+                    }
                     cell.courseName.textColor = filteredCourseViewModels[indexPath.row].courseColor
                     cell.unreadCounterLabel.text = String(filteredCourseViewModels[indexPath.row].unreadCount)
                     cell.unreadCounterLabel.isHidden = !filteredCourseViewModels[indexPath.row].shouldShowUnreadCounter
                 } else {
                     cell.courseName.text = courseViewModels[indexPath.row].courseCode
                     cell.courseFullName.text = courseViewModels[indexPath.row].courseName.cleanUp().removeSemester()
+                    if courseViewModels[indexPath.row].courseName.contains("Sem 2 2021-22") {
+                        cell.semesterLabel.isHidden = false
+                        cell.semesterLabel.text = "SEM II 2021-22"
+                    } else {
+                        cell.semesterLabel.isHidden = true
+                    }
                     cell.courseName.textColor = courseViewModels[indexPath.row].courseColor
                     cell.unreadCounterLabel.text = String(courseViewModels[indexPath.row].unreadCount)
                     cell.unreadCounterLabel.isHidden = !courseViewModels[indexPath.row].shouldShowUnreadCounter
@@ -638,6 +651,32 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             return 0
         }
     }
+    
+    override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+            UIView.animate(withDuration: 0.25) {
+                if let cell = tableView.cellForRow(at: indexPath) as? CourseTableViewCell {
+                    cell.transform = .init(scaleX: 0.95, y: 0.95)
+                    if #available(iOS 13.0, *) {
+                        cell.containView.backgroundColor = .tertiarySystemBackground
+                    } else {
+                        // Fallback on earlier versions
+                    }
+                }
+            }
+        }
+        
+    override func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+            UIView.animate(withDuration: 0.5) {
+                if let cell = tableView.cellForRow(at: indexPath) as? CourseTableViewCell {
+                    cell.transform = .identity
+                    if #available(iOS 13.0, *) {
+                        cell.containView.backgroundColor = UIColor.secondarySystemGroupedBackground
+                    } else {
+                        // Fallback on earlier versions
+                    }
+                }
+            }
+        }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
