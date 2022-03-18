@@ -30,12 +30,7 @@ class DashboardDataManager {
                 completion([], false)
                 return
             }
-            // delete the previous courses
             let realm = try! Realm()
-            let previousCourses = realm.objects(Course.self)
-            try! realm.write {
-                realm.delete(previousCourses)
-            }
             
             let courses = JSON(courseData.value as Any)
             if let _ = courses["exception"].string {
@@ -67,12 +62,17 @@ class DashboardDataManager {
                         currentColorsCourseCode = currentCourse.courseCode
                         currentCourse.allotedColor = UIColor.StringFromUIColor(color: colors[currentColorsIndex])
                     }
-                    
+                    currentCourse.updateFlag = 1
                     try! realm.write {
                         realm.add(currentCourse, update: .modified)
                     }
                     let currentCourseViewModel = DashboardViewModel(courseCode: currentCourse.courseCode, courseName: currentCourse.courseName, courseId: currentCourse.courseid, courseColor: UIColor.UIColorFromString(string: currentCourse.allotedColor))
                     courseViewModels.append(currentCourseViewModel)
+                }
+                try! realm.write {
+                    let objectsToDelete = realm.objects(Course.self).filter("updateFlag = %@", 0)
+                    realm.delete(objectsToDelete)
+                    realm.objects(Course.self).setValue(0, forKey: "updateFlag")
                 }
                 completion(courseViewModels, false)
             } else {

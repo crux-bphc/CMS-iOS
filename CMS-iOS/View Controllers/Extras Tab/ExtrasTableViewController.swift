@@ -13,7 +13,6 @@ import QuickLook
 
 class ExtrasTableViewController: UITableViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate, QLPreviewControllerDataSource {
     
-    let realm = try! Realm()
     let ql = QLPreviewController()
     let defaults = UserDefaults.standard
     

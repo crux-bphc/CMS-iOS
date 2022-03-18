@@ -16,6 +16,7 @@ import SafariServices
 import CoreSpotlight
 import SwiftKeychainWrapper
 import Alamofire
+import SVProgressHUD
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -28,6 +29,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //        UIApplication.shared.registerForRemoteNotifications()
 //        application.setMinimumBackgroundFetchInterval(900)
         
+        // Code for realm migration, update this when realm schema is changed
+        
+        /*
+         Migration 2: Added update flag on courses
+         */
+
+        let config = Realm.Configuration(
+            schemaVersion: 2, // version to change schema to
+            // Set the block which will be called automatically when opening a Realm with
+            // a schema version lower than the one set above
+            migrationBlock: { migration, oldSchemaVersion in
+                if (oldSchemaVersion < 2) {
+                    // nothing to be done here, only property was added
+                }
+            })
+        
+        // Tell Realm to use this new configuration object for the default Realm
+        Realm.Configuration.defaultConfiguration = config
+        
         let options : UNAuthorizationOptions = [.alert, .sound, .badge]
         notificationCenter.requestAuthorization(options: options) { (didAllow, error) in
             guard didAllow else {return}
@@ -38,21 +58,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //                BackgroundFetch().setCategories()
 //            }
         }
-        // Code for realm migration, update this when realm schema is changed
-
-        let config = Realm.Configuration(
-            schemaVersion: 1, // version to change schema to
-            // Set the block which will be called automatically when opening a Realm with
-            // a schema version lower than the one set above
-            migrationBlock: { migration, oldSchemaVersion in
-                if (oldSchemaVersion < 1) {
-                    // change properties based on new schema
-                }
-            })
+        
+        // Set SVProgressHUD theme
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark{
+                SVProgressHUD.setDefaultStyle(.dark)
+            } else {
+                SVProgressHUD.setDefaultStyle(.light)
+            }
+        } else {
+            SVProgressHUD.setDefaultStyle(.dark)
+        }
+        
         Alamofire.SessionManager.default.delegate.taskWillPerformHTTPRedirection = nil
         
-        // Tell Realm to use this new configuration object for the default Realm
-        Realm.Configuration.defaultConfiguration = config
+        
         UIApplication.shared.registerForRemoteNotifications()
         IQKeyboardManager.shared.enable = true
         
@@ -219,6 +239,11 @@ extension AppDelegate {
                     navigationVC.pushViewController(discussionVC, animated: true)
                     break
                 case "section":
+                    guard let course = realm.objects(Course.self).filter("courseid = %@", id).first else { return }
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let courseContentsVC = storyboard.instantiateViewController(withIdentifier: "Course Contents") as! CourseDetailsViewController
+                    courseContentsVC.currentCourse = course
+                    navigationVC.pushViewController(courseContentsVC, animated: true)
                     break
                 default:
                     break
@@ -236,16 +261,25 @@ extension AppDelegate {
     }
     
     func manageNotificationPayload(userInfo: [AnyHashable: Any]) {
+        let keyWindow = UIApplication.shared.windows.filter { $0.isKeyWindow }.first
+        
+        guard let topController = keyWindow?.rootViewController else { return }
+        topController.showLoadingIndicator(message: "Loading...")
         guard let respDict = userInfo["aps"] as? NSDictionary else { return }
         if let courseIdString = (respDict["data"] as? NSDictionary)?["courseid"] as? String {
             guard let courseId = Int(courseIdString) else { return }
             print("Received notification with  course id:", courseId)
             guard let contextURL = (respDict["data"] as? NSDictionary)?["contexturl"] as? String else { return }
-            var notificationType = "" // incomplete! deletect the type here
-            if contextURL.contains("discuss.php") {
+            guard let name = (respDict["data"] as? NSDictionary)?["name"] as? String else { return }
+            var notificationType = ""
+            if courseId == 1 {
+                notificationType = "siteNews"
+            } else if contextURL.contains("discuss.php") {
                 notificationType = "discussion"
             } else if contextURL.contains("/mod/") {
                 notificationType = "module"
+            } else if contextURL.contains("/course/") {
+                notificationType = "section"
             }
             switch notificationType {
             case "discussion":
@@ -256,6 +290,7 @@ extension AppDelegate {
                         tasks.forEach{ $0.cancel() }
                     }
                     DispatchQueue.main.async {
+                        topController.dismissLoadingIndicator()
                         self.manageRedirection(redirectType: notificationType, id: discussionId)
                     }
                 }
@@ -263,15 +298,25 @@ extension AppDelegate {
             case "module":
                 guard let moduleIdString = Regex.match(pattern: "id=[0-9]+", text: contextURL).first?.replacingOccurrences(of: "id=", with: "") else { return }
                 guard let moduleId = Int(moduleIdString) else { return }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    DashboardDataManager.shared.getAndStoreModules(forCourse: courseId) {
-                        DispatchQueue.main.async {
-                            self.manageRedirection(redirectType: notificationType, id: moduleId)
-                        }
+                DashboardDataManager.shared.getAndStoreModules(forCourse: courseId) {
+                    DispatchQueue.main.async {
+                        topController.dismissLoadingIndicator()
+                        self.manageRedirection(redirectType: notificationType, id: moduleId)
                     }
                 }
                 break
+            case "section":
+                topController.dismissLoadingIndicator()
+                self.manageRedirection(redirectType: notificationType, id: courseId)
+                break
+            case "siteNews":
+                topController.dismissLoadingIndicator()
+                if let bubbleTabVC = topController as? BubbleTabBarController {
+                    bubbleTabVC.selectedIndex = 2
+                }
+                break
             default:
+                topController.dismissLoadingIndicator()
                 break
             }
         }

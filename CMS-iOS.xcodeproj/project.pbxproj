@@ -42,6 +42,7 @@
 		0AF805C6234F43A3008D9B25 /* CourseTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AF805C4234F43A3008D9B25 /* CourseTableViewCell.xib */; };
 		2EB82CEA56F2232563454BFF /* Pods_CMS_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3845DA49DDAF368592991CA5 /* Pods_CMS_iOS.framework */; };
 		3B34F1132358B3B300F59536 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B34F1122358B3B300F59536 /* Colors.xcassets */; };
+		E608469827E4B5B6001228FA /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E608469727E4B5B6001228FA /* UIViewControllerExtension.swift */; };
 		E60DF836232B8AAE00E5FCA1 /* FolderContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */; };
 		E61F0E9A236EFEB300A9C9DA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */; };
 		E640E69924B4B3A3008C30E2 /* SpotlightIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640E69824B4B3A3008C30E2 /* SpotlightIndex.swift */; };
@@ -116,6 +117,7 @@
 		3845DA49DDAF368592991CA5 /* Pods_CMS_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CMS_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B34F1122358B3B300F59536 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		7E28022EB43BBFA33C08F493 /* Pods-CMS-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CMS-iOS.debug.xcconfig"; path = "Target Support Files/Pods-CMS-iOS/Pods-CMS-iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		E608469727E4B5B6001228FA /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		E60DF835232B8AAE00E5FCA1 /* FolderContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderContentViewController.swift; sourceTree = "<group>"; };
 		E61F0E99236EFEB200A9C9DA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		E640E69824B4B3A3008C30E2 /* SpotlightIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotlightIndex.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 				E6E419022540085000CCA829 /* DashboardDataManager.swift */,
 				E65B154A2595BF0900CD7A28 /* CourseUnenroller.swift */,
 				E6F4B55625AED6B0001FFE27 /* NotificationManager.swift */,
+				E608469727E4B5B6001228FA /* UIViewControllerExtension.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -481,6 +484,7 @@
 				0A646D7A23D188150023572B /* Colours.swift in Sources */,
 				0A03483623166C2D00552F69 /* DiscussionTableViewController.swift in Sources */,
 				0A2FD035236059A800917BE7 /* Regex.swift in Sources */,
+				E608469827E4B5B6001228FA /* UIViewControllerExtension.swift in Sources */,
 				0AF20A35230B48AD001C0CB1 /* DiscussionViewController.swift in Sources */,
 				E6DD7D742525C8F000514D81 /* DiscussionViewModel.swift in Sources */,
 				0A5ECD7C2306A98800723365 /* AboutPageViewController.swift in Sources */,
@@ -646,7 +650,7 @@
 				CODE_SIGN_ENTITLEMENTS = "CMS-iOS/CMS BPHC.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_TEAM = 8NXR4FCN3L;
 				INFOPLIST_FILE = "CMS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -673,7 +677,7 @@
 				CODE_SIGN_ENTITLEMENTS = "CMS-iOS/CMS BPHC.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_TEAM = 8NXR4FCN3L;
 				INFOPLIST_FILE = "CMS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
