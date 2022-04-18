@@ -18,14 +18,14 @@ import SafariServices
 
 class DashboardViewController : UITableViewController, UISearchBarDelegate, UISearchResultsUpdating, UIGestureRecognizerDelegate {
     
-    let banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
+    var banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
+    var loginViewController: LoginViewController?
     let constant = Constants.Global.self
     var courseViewModels = [DashboardViewModel]()
     var userDetails = User()
     var selectedCourse = Course()
     var selectedModule = Module()
     var selectedAnnouncement = Discussion()
-    var shouldHideSemester = false
     var searching : Bool = false
     private let gradientLoadingBar = GradientActivityIndicatorView()
     var filteredCourseViewModels = [DashboardViewModel]()
@@ -36,25 +36,19 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     var searchModules = [FilterModule]()
     var searchAnnouncements = [FilterDiscussion]()
     var isLoading = false
+    
+    enum DashboardState {
+        case loading
+        case empty
+        case hasContent
+    }
+    
+    var dashboardState: DashboardState = .loading
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.shouldHideSemester = UserDefaults.standard.bool(forKey: "hidesSemester")
         setupGradientLoadingBar()
-        let realm = try! Realm()
-        if let currentUser = realm.objects(User.self).first {
-            userDetails = currentUser
-        }
-        
         setupNavBar()
-        loadOfflineCourses()
-        refreshData()
-        let notificationDeviceToken = KeychainWrapper.standard.string(forKey: "deviceToken")
-        
-        if notificationDeviceToken != nil {
-            NotificationManager.shared.registerDevice(deviceToken: notificationDeviceToken!) {
-                print("Notification token sent")
-            }
-        }
         if #available(iOS 13.0, *) {
             refreshControl?.tintColor = .secondaryLabel
         } else {
@@ -69,9 +63,25 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         tableView.register(UINib(nibName: "CourseTableViewCell", bundle: nil), forCellReuseIdentifier: "CourseTableViewCell")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ModuleTableViewCellSearching")
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
-        longPressGesture.minimumPressDuration = 0.5
+        longPressGesture.minimumPressDuration = 0.4
         longPressGesture.delegate = self
         self.tableView.addGestureRecognizer(longPressGesture)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshAfterLogin), name: Notification.Name("com.crux-bphc.CMS-iOS.login"), object: nil)
+        let realm = try! Realm()
+        if let currentUser = realm.objects(User.self).first {
+            userDetails = currentUser
+        } else {
+            return
+        }
+        loadOfflineCourses()
+        refreshData()
+        let notificationDeviceToken = KeychainWrapper.standard.string(forKey: "deviceToken")
+        
+        if notificationDeviceToken != nil {
+            NotificationManager.shared.registerDevice(deviceToken: notificationDeviceToken!) {
+                print("Notification token sent")
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -80,26 +90,32 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        //        tableView.reloadData()
+        super.viewDidAppear(animated)
+        let realm = try! Realm()
+        if let currentUser = realm.objects(User.self).first {
+            userDetails = currentUser
+        } else {
+            (self.tabBarController as? BubbleTabBarController)?.performSegue(withIdentifier: "goToLogin", sender: self)
+            return
+        }
+        tableView.reloadData()
         UIApplication.shared.applicationIconBadgeNumber = 0
         self.reloadUnreadCounts()
-        let newVal = UserDefaults.standard.bool(forKey: "hidesSemester")
-        if newVal != self.shouldHideSemester {
-            self.shouldHideSemester = newVal
-            self.tableView.reloadData()
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         //        refreshControl?.endRefreshing()
+        self.reloadUnreadCounts()
         gradientLoadingBar.fadeOut()
-        isLoading = false
-        stopTheDamnRequests()
+//        isLoading = false
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
+        case "goToLogin":
+            let destinationVC = segue.destination as! LoginViewController
+            self.loginViewController = destinationVC
         case "goToCourseContent":
             let destinationVC = segue.destination as! CourseDetailsViewController
             destinationVC.currentCourse = selectedCourse
@@ -124,6 +140,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
+        banner = NotificationBanner(title: "Offline", subtitle: nil, style: .danger)
     }
     
     @objc func handleLongPress(longPressGesture: UILongPressGestureRecognizer) {
@@ -131,8 +148,9 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         let indexPath = self.tableView.indexPathForRow(at: pressLocation)
         if indexPath == nil {
         } else if longPressGesture.state == UIGestureRecognizer.State.began {
-            let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
-            selectionFeedbackGenerator.selectionChanged()
+            let generator = UIImpactFeedbackGenerator(style: .heavy)
+            generator.prepare()
+            generator.impactOccurred()
             var actionSheet = UIAlertController()
             if (indexPath?.section == 0) {
                 if searchController.isActive {
@@ -270,7 +288,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     
     func downloadCourseData(course: Course, completion: @escaping() -> Void) {
         
-        let params : [String:String] = ["courseid": String(course.courseid), "wstoken": KeychainWrapper.standard.string(forKey: "userPassword")!]
+        let params : [String:String] = ["courseid": String(course.courseid), "wstoken": KeychainWrapper.standard.string(forKey: "userPassword") ?? ""]
         
         Alamofire.request((constant.BASE_URL + constant.GET_COURSE_CONTENT), method: .get, parameters: params, headers: constant.headers).responseJSON { (response) in
             let realm = try! Realm()
@@ -289,14 +307,14 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                         if courseData[i]["modules"][j]["modname"].string! == "resource" {
                             if (courseData[i]["modules"][j]["contents"][0]["fileurl"].string!).contains("cms.bits-hyderabad.ac.in") {
                                 module.fileurl = (courseData[i]["modules"][j]["contents"][0]["fileurl"].string! +
-                                                  "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)")
+                                                  "&token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")")
                                 module.mimetype = courseData[i]["modules"][j]["contents"][0]["mimetype"].string!
                                 module.filename = courseData[i]["modules"][j]["contents"][0]["filename"].string!
                             }
                             else {
                                 module.fileurl = (courseData[i]["modules"][j]["contents"][0]["fileurl"].string!)
                             }
-                            let downloadUrl = courseData[i]["modules"][j]["contents"][0]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                            let downloadUrl = courseData[i]["modules"][j]["contents"][0]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")"
                             let moduleToDownload = Module()
                             moduleToDownload.coursename = course.displayname
                             moduleToDownload.id = courseData[i]["modules"][j]["id"].int!
@@ -308,12 +326,12 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                                 newModule.filename = courseData[i]["modules"][j]["contents"][u]["filename"].string!
                                 
                                 if courseData[i]["modules"][j]["contents"][u]["fileurl"].string!.contains("cms.bits-hyderabad.ac.in") {
-                                    newModule.fileurl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                    newModule.fileurl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")"
                                 }
                                 newModule.mimetype = courseData[i]["modules"][j]["contents"][u]["mimetype"].string!
                                 module.fileModules.append(newModule)
                                 let moduleToDownload = Module()
-                                let downloadUrl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                                let downloadUrl = courseData[i]["modules"][j]["contents"][u]["fileurl"].string! + "&token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")"
                                 moduleToDownload.coursename = course.displayname
                                 moduleToDownload.id = u
                                 moduleToDownload.filename = courseData[i]["modules"][j]["contents"][u]["filename"].string!
@@ -420,6 +438,7 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         let realm = try! Realm()
         let realmCourses = realm.objects(Course.self).sorted(byKeyPath: "displayname", ascending: true)
         let offlineCourseViewModels = Array(realmCourses.map({ DashboardViewModel(courseCode: $0.courseCode, courseName: $0.courseName, courseId: $0.courseid, courseColor: UIColor.UIColorFromString(string: $0.allotedColor)) }))
+        self.dashboardState = .hasContent
         DashboardDataManager.shared.calculateUnreadCounts(courseViewModels: offlineCourseViewModels) { (newOfflineViewModels) in
             self.courseViewModels = offlineCourseViewModels
             DispatchQueue.main.async {
@@ -428,30 +447,51 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
     }
     
+    @objc func refreshAfterLogin() {
+        self.courseViewModels = []
+        tableView.reloadData()
+        refreshData()
+    }
+    
     @objc func refreshData() {
+        self.refreshControl?.endRefreshing()
+        if isLoading { return }
         gradientLoadingBar.fadeIn()
-        stopTheDamnRequests()
         if !searchController.isActive && Reachability.isConnectedToNetwork() {
-            self.refreshControl?.endRefreshing()
-            if isLoading { return }
             isLoading = true
             self.tableView.showsVerticalScrollIndicator = false
             gradientLoadingBar.fadeIn()
             DashboardDataManager.shared.getAndStoreCourses(userId: userDetails.userid) { (dashboardViewModels, shouldLogOut) in
                 if shouldLogOut {
                     // show message
+                    self.isLoading = false
+                    DispatchQueue.main.async {
+                        self.showLogoutAlert()
+                    }
                 } else if dashboardViewModels != nil {
                     DashboardDataManager.shared.getAndStoreModules {
                         DashboardDataManager.shared.getAndStoreDiscussions {
-                            DashboardDataManager.shared.calculateUnreadCounts(courseViewModels: dashboardViewModels!) { (newCourseViewModels) in
+                            DashboardDataManager.shared.calculateUnreadCounts(courseViewModels: dashboardViewModels!.count > 0 ? dashboardViewModels ?? [] : self.courseViewModels) { (newCourseViewModels) in
                                 self.courseViewModels = newCourseViewModels
                                 self.isLoading = false
+                                self.dashboardState = .hasContent
                                 DispatchQueue.main.async {
                                     self.gradientLoadingBar.fadeOut()
                                     self.tableView.reloadData()
                                 }
+                                DispatchQueue.global(qos: .background).async {
+                                    SpotlightIndex.shared.indexItems(courses: self.courseViewModels)
+                                }
                             }
                         }
+                    }
+                } else {
+                    // no courses
+                    DispatchQueue.main.async {
+                        self.isLoading = false
+                        self.dashboardState = .empty
+                        self.gradientLoadingBar.fadeOut()
+                        self.tableView.reloadData()
                     }
                 }
             }
@@ -499,21 +539,39 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return searchController.isActive ? 3 : 1
+        switch dashboardState {
+        case .loading:
+            return 1
+        case .empty:
+            return 1
+        case .hasContent:
+            return searchController.isActive ? 3 : 1
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return searchController.isActive ? filteredCourseViewModels.count : courseViewModels.count
-        case 1:
-            return searchModules.count
-        case 2:
-            return searchAnnouncements.count
-        default:
+        tableView.restore()
+        if dashboardState == .hasContent {
+            switch section {
+            case 0:
+                return searchController.isActive ? filteredCourseViewModels.count : courseViewModels.count
+            case 1:
+                return searchModules.count
+            case 2:
+                return searchAnnouncements.count
+            default:
+                return 0
+            }
+        } else if dashboardState == .empty {
+            tableView.setEmptyView(title: "No Courses", message: "Click on the search icon, search for your courses and then enroll in them for them to show up here.") {
+                self.dashboardState = .loading
+                self.tableView.reloadData()
+                self.refreshData()
+            }
+            return 0
+        } else {
             return 0
         }
-        
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -521,7 +579,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CourseTableViewCell", for: indexPath) as! CourseTableViewCell
             
@@ -532,12 +589,24 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
                     cell.courseName.text = filteredCourseViewModels[indexPath.row].courseCode
                     
                     cell.courseFullName.text = filteredCourseViewModels[indexPath.row].courseName.cleanUp().removeSemester()
+                    if filteredCourseViewModels[indexPath.row].courseName.contains("Sem 2 2021-22") {
+                        cell.semesterLabel.isHidden = false
+                        cell.semesterLabel.text = "SEM II 2021-22"
+                    } else {
+                        cell.semesterLabel.isHidden = true
+                    }
                     cell.courseName.textColor = filteredCourseViewModels[indexPath.row].courseColor
                     cell.unreadCounterLabel.text = String(filteredCourseViewModels[indexPath.row].unreadCount)
                     cell.unreadCounterLabel.isHidden = !filteredCourseViewModels[indexPath.row].shouldShowUnreadCounter
                 } else {
                     cell.courseName.text = courseViewModels[indexPath.row].courseCode
                     cell.courseFullName.text = courseViewModels[indexPath.row].courseName.cleanUp().removeSemester()
+                    if courseViewModels[indexPath.row].courseName.contains("Sem 2 2021-22") {
+                        cell.semesterLabel.isHidden = false
+                        cell.semesterLabel.text = "SEM II 2021-22"
+                    } else {
+                        cell.semesterLabel.isHidden = true
+                    }
                     cell.courseName.textColor = courseViewModels[indexPath.row].courseColor
                     cell.unreadCounterLabel.text = String(courseViewModels[indexPath.row].unreadCount)
                     cell.unreadCounterLabel.isHidden = !courseViewModels[indexPath.row].shouldShowUnreadCounter
@@ -567,7 +636,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             
             return cell
         }
-        
         return UITableViewCell()
     }
     
@@ -584,6 +652,32 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         }
     }
     
+    override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+            UIView.animate(withDuration: 0.25) {
+                if let cell = tableView.cellForRow(at: indexPath) as? CourseTableViewCell {
+                    cell.transform = .init(scaleX: 0.95, y: 0.95)
+                    if #available(iOS 13.0, *) {
+                        cell.containView.backgroundColor = .tertiarySystemBackground
+                    } else {
+                        // Fallback on earlier versions
+                    }
+                }
+            }
+        }
+        
+    override func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+            UIView.animate(withDuration: 0.5) {
+                if let cell = tableView.cellForRow(at: indexPath) as? CourseTableViewCell {
+                    cell.transform = .identity
+                    if #available(iOS 13.0, *) {
+                        cell.containView.backgroundColor = UIColor.secondarySystemGroupedBackground
+                    } else {
+                        // Fallback on earlier versions
+                    }
+                }
+            }
+        }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         self.tableView.deselectRow(at: indexPath, animated: true)
@@ -592,7 +686,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             uploadTasks.forEach { $0.cancel() }
             downloadTasks.forEach { $0.cancel() }
         }
-        stopTheDamnRequests()
         
         if indexPath.section == 0 {
             if courseViewModels.count > indexPath.row {
@@ -631,6 +724,16 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
         self.perform(#selector(dismissOfflineBanner), with: nil, afterDelay: 1)
     }
     
+    func showLogoutAlert() {
+        let alert = UIAlertController(title: "Unauthorized", message: "It seems that your token has expired or the site is down. You will be logged out, please try logging in again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { _ in
+            Authentication.shared.signOut {
+                self.tabBarController?.performSegue(withIdentifier: "goToLogin", sender: self)
+            }
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     @objc func dismissOfflineBanner() {
         banner.dismiss()
     }
@@ -654,36 +757,6 @@ class DashboardViewController : UITableViewController, UISearchBarDelegate, UISe
             gradientLoadingBar.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             gradientLoadingBar.heightAnchor.constraint(equalToConstant: 3.0)
         ])
-    }
-    
-    
-    func stopTheDamnRequests() {
-        if #available(iOS 9.0, *) {
-            
-            Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
-                tasks.forEach{ $0.cancel() }
-            }
-        } else {
-            Alamofire.SessionManager.default.session.getTasksWithCompletionHandler { (sessionDataTask, uploadData, downloadData) in
-                sessionDataTask.forEach { $0.cancel() }
-                uploadData.forEach { $0.cancel() }
-                downloadData.forEach { $0.cancel() }
-            }
-        }
-    }
-    
-    func logoutCurrentUser() {
-        let realm = try! Realm()
-        
-        try! realm.write {
-            realm.deleteAll()
-        }
-        SpotlightIndex.shared.deindexAllItems()
-        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
-        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "MoodleSession")
-        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "privateToken")
-        
-        UserDefaults.standard.removeObject(forKey: "sessionTimestamp")
     }
     
     func redirectToModule() {

@@ -15,6 +15,8 @@ import SDDownloadManager
 import SafariServices
 import CoreSpotlight
 import SwiftKeychainWrapper
+import Alamofire
+import SVProgressHUD
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -27,6 +29,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //        UIApplication.shared.registerForRemoteNotifications()
 //        application.setMinimumBackgroundFetchInterval(900)
         
+        // Code for realm migration, update this when realm schema is changed
+        
+        /*
+         Migration 2: Added update flag on courses
+         */
+
+        let config = Realm.Configuration(
+            schemaVersion: 2, // version to change schema to
+            // Set the block which will be called automatically when opening a Realm with
+            // a schema version lower than the one set above
+            migrationBlock: { migration, oldSchemaVersion in
+                if (oldSchemaVersion < 2) {
+                    // nothing to be done here, only property was added
+                }
+            })
+        
+        // Tell Realm to use this new configuration object for the default Realm
+        Realm.Configuration.defaultConfiguration = config
+        
         let options : UNAuthorizationOptions = [.alert, .sound, .badge]
         notificationCenter.requestAuthorization(options: options) { (didAllow, error) in
             guard didAllow else {return}
@@ -37,39 +58,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //                BackgroundFetch().setCategories()
 //            }
         }
-        // Code for realm migration, update this when realm schema is changed
-
-        let config = Realm.Configuration(
-            schemaVersion: 1, // version to change schema to
-            // Set the block which will be called automatically when opening a Realm with
-            // a schema version lower than the one set above
-            migrationBlock: { migration, oldSchemaVersion in
-                if (oldSchemaVersion < 1) {
-                    // change properties based on new schema
-                }
-            })
-
-        // Tell Realm to use this new configuration object for the default Realm
-        Realm.Configuration.defaultConfiguration = config
-    
-        let realm = try! Realm()
+        
+        // Set SVProgressHUD theme
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark{
+                SVProgressHUD.setDefaultStyle(.dark)
+            } else {
+                SVProgressHUD.setDefaultStyle(.light)
+            }
+        } else {
+            SVProgressHUD.setDefaultStyle(.dark)
+        }
+        
+        Alamofire.SessionManager.default.delegate.taskWillPerformHTTPRedirection = nil
+        
+        
         UIApplication.shared.registerForRemoteNotifications()
         IQKeyboardManager.shared.enable = true
-        if let realmUser = realm.objects(User.self).first {
-            if Reachability.isConnectedToNetwork() {
-                try! realm.write {
-                    realmUser.isConnected = true
-                    print("successfully set connected = true")
-                }
-            } else {
-                try! realm.write {
-                    realmUser.isConnected = false
-                }
-            }
-            print(realmUser.isConnected as Any)
-        } else {
-            
-        }
         
 //        if let userInfo = launchOptions?[.remoteNotification] as? [AnyHashable: Any] {
 ////            manageNotificationPayload(userInfo: userInfo)
@@ -87,22 +92,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
     
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        let realm = try! Realm()
-        if let realmUser = realm.objects(User.self).first {
-            if Reachability.isConnectedToNetwork() {
-                try! realm.write {
-                    realmUser.isConnected = true
-                }
-            } else {
-                try! realm.write {
-                    realmUser.isConnected = false
-                }
-            }
-            print(realmUser.isConnected as Any)
-        }
-    }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
@@ -116,9 +105,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         
         guard let message = url.host else { return true }
-        let loginViewController = self.window?.rootViewController as! LoginViewController
-        loginViewController.loginWithGoogle(input: message)
-        loginViewController.safariVC.dismiss(animated: true)
+        guard let tabVC = self.window?.rootViewController as? BubbleTabBarController else { return false }
+        tabVC.selectedIndex = 0
+        guard let navVC = tabVC.viewControllers?.first as? UINavigationController else { return false }
+        guard let dashboardVC = (navVC.viewControllers.first as? DashboardViewController) else { return false }
+        guard let loginVC = dashboardVC.loginViewController else { return false }
+        loginVC.loginWithGoogle(input: message)
+        loginVC.safariVC.dismiss(animated: true)
         
         return true
     }
@@ -218,6 +211,7 @@ extension AppDelegate {
             // topController should now be your topmost view controller
             if let bubbleTabVC = topController as? BubbleTabBarController {
                 // app is already open
+                bubbleTabVC.selectedIndex = 0
                 guard let navigationVC = bubbleTabVC.viewControllers?.first as? UINavigationController else { return }
                 let realm = try! Realm()
                 switch redirectType {
@@ -227,6 +221,7 @@ extension AppDelegate {
                     let courseContentsVC = storyboard.instantiateViewController(withIdentifier: "Course Contents") as! CourseDetailsViewController
                     courseContentsVC.currentCourse = course
                     navigationVC.pushViewController(courseContentsVC, animated: true)
+                    break
                 case "module":
                     // get the module and push it
                     guard let module = realm.objects(Module.self).filter("id = %@", id).first else { return }
@@ -244,6 +239,11 @@ extension AppDelegate {
                     navigationVC.pushViewController(discussionVC, animated: true)
                     break
                 case "section":
+                    guard let course = realm.objects(Course.self).filter("courseid = %@", id).first else { return }
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let courseContentsVC = storyboard.instantiateViewController(withIdentifier: "Course Contents") as! CourseDetailsViewController
+                    courseContentsVC.currentCourse = course
+                    navigationVC.pushViewController(courseContentsVC, animated: true)
                     break
                 default:
                     break
@@ -261,40 +261,62 @@ extension AppDelegate {
     }
     
     func manageNotificationPayload(userInfo: [AnyHashable: Any]) {
+        let keyWindow = UIApplication.shared.windows.filter { $0.isKeyWindow }.first
+        
+        guard let topController = keyWindow?.rootViewController else { return }
+        topController.showLoadingIndicator(message: "Loading...")
         guard let respDict = userInfo["aps"] as? NSDictionary else { return }
         if let courseIdString = (respDict["data"] as? NSDictionary)?["courseid"] as? String {
             guard let courseId = Int(courseIdString) else { return }
             print("Received notification with  course id:", courseId)
             guard let contextURL = (respDict["data"] as? NSDictionary)?["contexturl"] as? String else { return }
-            var notificationType = "" // incomplete! deletect the type here
-            if contextURL.contains("discuss.php") {
+            guard let name = (respDict["data"] as? NSDictionary)?["name"] as? String else { return }
+            var notificationType = ""
+            if courseId == 1 {
+                notificationType = "siteNews"
+            } else if contextURL.contains("discuss.php") {
                 notificationType = "discussion"
             } else if contextURL.contains("/mod/") {
                 notificationType = "module"
+            } else if contextURL.contains("/course/") {
+                notificationType = "section"
             }
             switch notificationType {
             case "discussion":
                 guard let discussionIdString = Regex.match(pattern: "#p[0-9]+", text: contextURL).first?.replacingOccurrences(of: "#p", with: "") else { return }
                 guard let discussionId = Int(discussionIdString) else { return }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // this delay is required, otherwise it doesnt work when notification launches app
-                    DashboardDataManager.getAndStoreDiscussions(forCourse: courseId) {
-                        DispatchQueue.main.async {
-                            self.manageRedirection(redirectType: notificationType, id: discussionId)
-                        }
+                DashboardDataManager.shared.getAndStoreDiscussions(forCourse: courseId) {
+                    Alamofire.SessionManager.default.session.getAllTasks { (tasks) in
+                        tasks.forEach{ $0.cancel() }
+                    }
+                    DispatchQueue.main.async {
+                        topController.dismissLoadingIndicator()
+                        self.manageRedirection(redirectType: notificationType, id: discussionId)
                     }
                 }
                 break
             case "module":
                 guard let moduleIdString = Regex.match(pattern: "id=[0-9]+", text: contextURL).first?.replacingOccurrences(of: "id=", with: "") else { return }
                 guard let moduleId = Int(moduleIdString) else { return }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    DashboardDataManager.shared.getAndStoreModules(forCourse: courseId) {
-                        DispatchQueue.main.async {
-                            self.manageRedirection(redirectType: notificationType, id: moduleId)
-                        }
+                DashboardDataManager.shared.getAndStoreModules(forCourse: courseId) {
+                    DispatchQueue.main.async {
+                        topController.dismissLoadingIndicator()
+                        self.manageRedirection(redirectType: notificationType, id: moduleId)
                     }
                 }
+                break
+            case "section":
+                topController.dismissLoadingIndicator()
+                self.manageRedirection(redirectType: notificationType, id: courseId)
+                break
+            case "siteNews":
+                topController.dismissLoadingIndicator()
+                if let bubbleTabVC = topController as? BubbleTabBarController {
+                    bubbleTabVC.selectedIndex = 2
+                }
+                break
             default:
+                topController.dismissLoadingIndicator()
                 break
             }
         }

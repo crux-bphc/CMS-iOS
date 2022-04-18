@@ -42,8 +42,6 @@ class NotificationManager {
         ] as [String : Any]
         Alamofire.request(url, method: .get, parameters: params).responseJSON { (response) in
             if response.result.isSuccess {
-                let jsonResponse = JSON(response.data!)
-                print(jsonResponse)
                 completion()
             } else {
                 print("Failed")

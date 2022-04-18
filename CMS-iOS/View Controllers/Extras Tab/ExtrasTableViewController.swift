@@ -13,7 +13,6 @@ import QuickLook
 
 class ExtrasTableViewController: UITableViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate, QLPreviewControllerDataSource {
     
-    let realm = try! Realm()
     let ql = QLPreviewController()
     let defaults = UserDefaults.standard
     
@@ -141,8 +140,9 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
                 let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                 warning.addAction(cancelAction)
                 let logOutAction = UIAlertAction(title: "Yes", style: .destructive) { (_) in
-                    self.logout()
-                    self.tabBarController?.dismiss(animated: true, completion: nil)
+                    Authentication.shared.signOut {
+                        self.tabBarController?.performSegue(withIdentifier: "goToLogin", sender: self)
+                    }
                     
                 }
                 warning.addAction(logOutAction)
@@ -211,23 +211,6 @@ extension ExtrasTableViewController {
 // MARK: - User functions
 
 extension ExtrasTableViewController {
-    
-    func logout() {
-        //        let realm = try! Realm()
-        try! realm.write {
-            realm.deleteAll()
-        }
-        SpotlightIndex.shared.deindexAllItems()
-        let wstoken = KeychainWrapper.standard.string(forKey: "userPassword") ?? ""
-        NotificationManager.shared.deregisterDevice(wstoken: wstoken) {
-            
-        }
-        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
-        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "MoodleSession")
-        let _: Bool = KeychainWrapper.standard.removeObject(forKey: "privateToken")
-        
-        UserDefaults.standard.removeObject(forKey: "sessionTimestamp")
-    }
     
     func setupNavBar() {
         self.navigationController?.navigationBar.prefersLargeTitles = true

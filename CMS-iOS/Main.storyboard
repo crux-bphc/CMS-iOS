@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19150" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PKq-G8-IPd">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19134"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -151,13 +151,12 @@
                         <outlet property="googleLoginBtn" destination="xzD-4z-MOW" id="0kn-Rp-n4q"/>
                         <outlet property="keyField" destination="kKf-Di-Hws" id="thH-oS-IZf"/>
                         <outlet property="loginLabel" destination="K8G-dj-eIY" id="N50-LF-c23"/>
-                        <segue destination="PKq-G8-IPd" kind="presentation" identifier="goToDashboard" modalPresentationStyle="fullScreen" id="TzI-QU-Ggw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <exit id="I0u-iS-F4i" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-307.24637681159425" y="837.72321428571422"/>
+            <point key="canvasLocation" x="-401" y="947"/>
         </scene>
         <!--Bubble Tab Bar Controller-->
         <scene sceneID="tH7-yD-jyj">
@@ -174,6 +173,7 @@
                         <segue destination="Opq-8y-v9e" kind="relationship" relationship="viewControllers" id="432-rl-dQO"/>
                         <segue destination="ocW-ZX-GbC" kind="relationship" relationship="viewControllers" id="mFA-Pl-Bk9"/>
                         <segue destination="yGr-rz-pvF" kind="relationship" relationship="viewControllers" id="dRz-9r-hPQ"/>
+                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="goToLogin" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="MDC-Dl-fkU"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2YS-HU-YYa" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -696,7 +696,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="kZv-mO-d0U" kind="relationship" relationship="rootViewController" id="ygl-XW-Nd1"/>
+                        <segue destination="kZv-mO-d0U" kind="relationship" relationship="rootViewController" id="2cq-Hi-Nr4"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jIL-8b-wBY" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -904,7 +904,7 @@
                             <outlet property="delegate" destination="Opn-i5-N4W" id="YhK-dP-Zzp"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Site News" image="folded-newspaper" selectedImage="folded-newspaper" id="8sY-3q-xrJ"/>
+                    <tabBarItem key="tabBarItem" title="Site News" image="Site News" selectedImage="Site News" id="8sY-3q-xrJ"/>
                     <navigationItem key="navigationItem" title="Site News" id="CkA-Q8-4wD"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -935,11 +935,11 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="lTA-yO-kuB"/>
+        <segue reference="IgU-80-XSP"/>
         <segue reference="wt5-J4-7yV"/>
         <segue reference="r0O-gx-IAp"/>
-        <segue reference="Cv0-T4-e1a"/>
-        <segue reference="nQq-Vr-otz"/>
+        <segue reference="Xc1-RL-VNF"/>
+        <segue reference="AhJ-kj-ro0"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Dashboard" width="30" height="30"/>
@@ -947,7 +947,6 @@
         <image name="Search" width="30" height="30"/>
         <image name="Site News" width="30" height="30"/>
         <image name="dashboard" width="21.333333969116211" height="21.333333969116211"/>
-        <image name="folded-newspaper" width="21.333333969116211" height="21.333333969116211"/>
         <image name="google logo white" width="654" height="665"/>
         <image name="logo" width="8000" height="8000"/>
         <namedColor name="Course Colourset">

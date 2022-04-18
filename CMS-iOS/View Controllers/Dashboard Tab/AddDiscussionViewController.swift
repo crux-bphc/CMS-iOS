@@ -39,7 +39,7 @@ class AddDiscussionViewController: UIViewController {
     func addDiscussion(completion: @escaping () -> Void) {
         
         let headers = constants.headers
-        let params : [String : String] = ["wstoken":KeychainWrapper.standard.string(forKey: "userPassword")!, "subject" : self.titleTextField.text!, "message" : self.messageBodyTextField.text!, "forumid" : self.currentForum]
+        let params : [String : String] = ["wstoken":KeychainWrapper.standard.string(forKey: "userPassword") ?? "", "subject" : self.titleTextField.text!, "message" : self.messageBodyTextField.text!, "forumid" : self.currentForum]
         let FINAL_URL = constants.BASE_URL + constants.ADD_DISCUSSION
         
         Alamofire.request(FINAL_URL, method: .post, parameters: params, headers: headers).responseJSON { (response) in

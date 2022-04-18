@@ -100,7 +100,7 @@ class SiteNewsTableViewController: UITableViewController {
     }
     
     func getSiteNews(completion: @escaping ([DiscussionViewModel]) -> Void) {
-        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword")!]
+        let params : [String : String] = ["wstoken" : KeychainWrapper.standard.string(forKey: "userPassword") ?? ""]
         let FINAL_URL : String = constants.BASE_URL + constants.GET_SITE_NEWS
         let queue = DispatchQueue.global(qos: .userInteractive)
         Alamofire.request(FINAL_URL, method: .get, parameters: params, headers: constants.headers).responseJSON(queue: queue) { (response) in
@@ -121,9 +121,9 @@ class SiteNewsTableViewController: UITableViewController {
                     // sometimes site news and course discussions may have the same ids, leading to weird errors, so a factor of 1000 is multiplied to site news ids to keep the ids different to prevent these errors
                     discussion.id = (siteNews["discussions"][i]["discussion"].int ?? 0) * 1000
                     if siteNews["discussions"][i]["attachment"].string! != "0" {
-                        //                        discussion.attachment = (siteNews["discussions"][i]["attachments"][0]["fileurl"].string ?? "") + "?token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                        //                        discussion.attachment = (siteNews["discussions"][i]["attachments"][0]["fileurl"].string ?? "") + "?token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")"
                         if siteNews["discussions"][i]["attachments"][0]["fileurl"].string != nil {
-                            discussion.attachment = siteNews["discussions"][i]["attachments"][0]["fileurl"].string! + "?token=\(KeychainWrapper.standard.string(forKey: "userPassword")!)"
+                            discussion.attachment = siteNews["discussions"][i]["attachments"][0]["fileurl"].string! + "?token=\(KeychainWrapper.standard.string(forKey: "userPassword") ?? "")"
                         } else {
                             discussion.attachment = ""
                         }

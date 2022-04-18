@@ -57,6 +57,12 @@ class ModuleViewController : UIViewController, QLPreviewControllerDataSource{
         cancelButton.isHidden = true
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        if UIApplication.shared.applicationState == .active {
+            setDescription()
+        }
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         constants.downloadManager.cancelAllDownloads()
         self.progressBar.isHidden = true

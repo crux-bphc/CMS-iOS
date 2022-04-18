@@ -4,13 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2022-04-16
+
+### Fixed
+- Dashboard crashes due to Realm object invalidation
+- Long course title label on Dashboard cells
+- Crashes on clicking a notification
+
+
+### Removed
+- Login view as initial view and replaced it with the Dashboard view
+
 ## [1.3.1] - 2021-10-24
 
 ### Fixed
 - Crash on long-pressing a module or discussion on Dashboard during search
 - HTML2String function, that caused issues on Site News page
 - Custom tab bar with black background in Light Mode
-
 
 ## [1.3] - 2021-08-22
 
