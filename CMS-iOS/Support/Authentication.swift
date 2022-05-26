@@ -32,6 +32,19 @@ class Authentication {
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "MoodleSession")
         let _: Bool = KeychainWrapper.standard.removeObject(forKey: "privateToken")
         
+        do {
+            let fileManager = FileManager()
+            let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+            let imagePath = documentsPath!.appendingPathComponent("timetable.jpg")
+            if fileManager.fileExists(atPath: imagePath.relativePath) {
+                try fileManager.removeItem(at: imagePath)
+            }
+        } catch {
+            print("Error asdfsdf")
+        }
+            
+        
+        UserDefaults.standard.removeObject(forKey: "timetableURL")
         UserDefaults.standard.removeObject(forKey: "sessionTimestamp")
         
         completion()

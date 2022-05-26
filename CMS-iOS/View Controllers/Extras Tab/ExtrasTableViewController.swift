@@ -104,7 +104,8 @@ class ExtrasTableViewController: UITableViewController, UIImagePickerControllerD
             }
             break
         case 1:
-            if defaults.string(forKey: "timetableURL") != "" {
+            if defaults.string(forKey: "timetableURL") != nil {
+                ql.dataSource = self
                 self.present(ql, animated: true, completion: nil)
                 
             } else {
@@ -173,7 +174,7 @@ extension ExtrasTableViewController {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let fileManager = FileManager.default
         let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
-        let imagePath = documentsPath!.appendingPathComponent("image.jpg")
+        let imagePath = documentsPath!.appendingPathComponent("timetable.jpg")
         
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             
@@ -198,7 +199,7 @@ extension ExtrasTableViewController {
         let item = PreviewItem()
         let fileManager = FileManager()
         let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
-        let imagePath = documentsPath!.appendingPathComponent("image.jpg")
+        let imagePath = documentsPath!.appendingPathComponent("timetable.jpg")
         
         item.previewItemURL = imagePath
         item.previewItemTitle = "Timetable"
